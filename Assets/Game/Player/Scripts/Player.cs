@@ -10,6 +10,8 @@ public class Player : MonoBehaviour, IDamageable
     public PlayerAnimator playerAnimator;
 
     #region IDamageable
+
+    public Team team => Team.Player;
     public int MaxHealth { get; private set; }
     public int CurrentHealth { get; private set; }
 
@@ -17,6 +19,8 @@ public class Player : MonoBehaviour, IDamageable
     {
         CurrentHealth -= damage;
         OnDamaged?.Invoke();
+        
+        playerAnimator.PlayHurtAnimation();
         
         if (CurrentHealth <= 0)
         {
@@ -26,7 +30,7 @@ public class Player : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        Timer.Stop();
+        //TODO
     }
 
     public event IDamageable.DamageAction OnDamaged;

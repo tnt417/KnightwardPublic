@@ -5,6 +5,7 @@ using UnityEngine.Events;
 
 public interface IDamageable
 {
+    Team team { get; }
     int MaxHealth { get; }
     int CurrentHealth { get; }
     void ApplyDamage(int damage);

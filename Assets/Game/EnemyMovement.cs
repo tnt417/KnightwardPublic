@@ -16,6 +16,6 @@ public class EnemyMovement : MonoBehaviour
 
     void FixedUpdate()
     {
-        _rigidbody2D.velocity = (_target.position - transform.position).normalized * speedMultiplier;
+        _rigidbody2D.transform.Translate((_target.position - transform.position).normalized * speedMultiplier * Time.fixedDeltaTime);
     }
 }

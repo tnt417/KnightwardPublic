@@ -16,7 +16,7 @@ public class PlayerMovement : MonoBehaviour
         //float dx = Input.GetAxis("Horizontal");
         float dy = (Input.GetKey(KeyCode.S) ? -1 : 0) + (Input.GetKey(KeyCode.W) ? 1 : 0);
         //float dy = Input.GetAxis("Vertical");
-        _rigidbody2D.velocity = new Vector2(dx, dy).normalized * speedMultiplier;
+        _rigidbody2D.transform.Translate(new Vector2(dx, dy).normalized * speedMultiplier * Time.fixedDeltaTime);
 
         if (dy > 0) player.playerAnimator.FacingDirection = Direction.Up;
         if (dy < 0) player.playerAnimator.FacingDirection = Direction.Down;
