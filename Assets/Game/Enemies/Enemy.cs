@@ -4,11 +4,12 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(EnemyMovement))]
+[RequireComponent(typeof(IEnemyMovement))]
 public class Enemy : MonoBehaviour, IDamageable
 {
     [SerializeField] private string hurtAnimationName;
     [SerializeField] private Animator animator;
+    [SerializeField] private int maxHealth;
     public Team team => Team.Enemy;
     public int MaxHealth { get; private set; }
     public int CurrentHealth { get; private set; }
@@ -33,7 +34,7 @@ public class Enemy : MonoBehaviour, IDamageable
 
     public void Awake()
     {
-        MaxHealth = 100;
+        MaxHealth = maxHealth;
         CurrentHealth = MaxHealth;
     }
 }

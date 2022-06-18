@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 3693051961952615885}
   - component: {fileID: 8781056707226574363}
   - component: {fileID: 5845596740268835868}
+  - component: {fileID: 3316639872177659979}
   m_Layer: 7
   m_Name: PlayerCombat
   m_TagString: Untagged
@@ -162,9 +163,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 05d66e6312421cd419fb6cced0178ff5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  combatAnimator: {fileID: 5845596740268835868}
-  slashObject: {fileID: 9117790826996819948}
-  attackTimerMax: 0.5
+  playerSlashController: {fileID: 3316639872177659979}
 --- !u!95 &5845596740268835868
 Animator:
   serializedVersion: 3
@@ -184,6 +183,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3316639872177659979
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1587193993602017114}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3e792ca4ad572d04bb44c7ebe2649b56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  combatAnimator: {fileID: 5845596740268835868}
+  slashObject: {fileID: 9117790826996819948}
+  attackTimerMax: 0.5
 --- !u!1 &2078632121062737528
 GameObject:
   m_ObjectHideFlags: 0

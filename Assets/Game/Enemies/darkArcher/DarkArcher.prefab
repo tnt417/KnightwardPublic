@@ -87,11 +87,12 @@ GameObject:
   - component: {fileID: 8842486409938031632}
   - component: {fileID: 647145178058711942}
   - component: {fileID: 1350999543182698430}
-  - component: {fileID: 283398075999000703}
   - component: {fileID: 1861465650550614146}
   - component: {fileID: 8823035108303224013}
+  - component: {fileID: 1762077459909771177}
+  - component: {fileID: 8256869462840257896}
   m_Layer: 8
-  m_Name: Enemy
+  m_Name: DarkArcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -154,7 +155,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Sprite: {fileID: 368543389579951487, guid: d60cc33038e33174cb6cf2a89c6bc955, type: 3}
+  m_Sprite: {fileID: 4580117880243553785, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -198,21 +199,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0e2acef1e60784c9f1cbb60f9a3759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hurtAnimationName: SlimeHurt
+  hurtAnimationName: DarkArcherHurt
   animator: {fileID: 1861465650550614146}
---- !u!114 &283398075999000703
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4155343733709524297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f0b58a02ac5a4c4e9fb755a95466347, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speedMultiplier: 2
+  maxHealth: 200
 --- !u!95 &1861465650550614146
 Animator:
   serializedVersion: 3
@@ -223,7 +212,7 @@ Animator:
   m_GameObject: {fileID: 4155343733709524297}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 54cdb3cb100dbe94baa6a5254c230175, type: 2}
+  m_Controller: {fileID: 9100000, guid: 0cf2d13aa46c6fa418893ecaef147472, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -248,6 +237,36 @@ CircleCollider2D:
   m_Offset: {x: 0, y: -0.27594638}
   serializedVersion: 2
   m_Radius: 0.22405362
+--- !u!114 &1762077459909771177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4155343733709524297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5f3ed0885843f046807d5859d224c50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strafeDistance: 4
+  strafeSpeed: 10
+  strafeCooldown: 2
+  animator: {fileID: 1861465650550614146}
+--- !u!114 &8256869462840257896
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4155343733709524297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5cc47d6eab2e6b49a7a8e1faff2f59b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  projectileTravelSpeed: 5
+  projectilePrefab: {fileID: 5620128404347004703, guid: 94c28aab9358af945b82cd2064b9ae5c, type: 3}
 --- !u!1 &5312045986445286273
 GameObject:
   m_ObjectHideFlags: 0
