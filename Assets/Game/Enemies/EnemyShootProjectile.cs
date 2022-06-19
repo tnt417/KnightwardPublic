@@ -2,21 +2,23 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Enemy))]
 public class EnemyShootProjectile : MonoBehaviour
 {
-    private Transform target;
+    private Transform Target => enemy.target;
     [SerializeField] private float projectileTravelSpeed;
     [SerializeField] private GameObject projectilePrefab;
+    [SerializeField] private Enemy enemy;
     // Start is called before the first frame update
     void Start()
     {
-        target = FindObjectOfType<Player>().transform;
+        enemy = GetComponent<Enemy>();
     }
 
-    public void ShootProjectile()
+    public void ShootProjectile() //Called through animation events
     {
-        Vector3 myPosition = transform.position;
-        Vector2 direction = (target.transform.position - myPosition).normalized;
+        var myPosition = transform.position;
+        Vector2 direction = (Target.transform.position - myPosition).normalized;
         var projectile = Instantiate(projectilePrefab);
         projectile.transform.position = myPosition;
         var rb = projectile.GetComponent<Rigidbody2D>();

@@ -5,4 +5,9 @@ using UnityEngine;
 public class PlayerCombat : MonoBehaviour
 {
     [SerializeField] private PlayerSlashController playerSlashController;
+
+    private void Update()
+    {
+        playerSlashController.enabled = Player.Instance.IsAlive;
+    }
 }

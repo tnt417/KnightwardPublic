@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Crystal : MonoBehaviour, IDamageable
 {
@@ -14,10 +15,11 @@ public class Crystal : MonoBehaviour, IDamageable
     public Team team => Team.Player;
     public int MaxHealth => 1000;
     public int CurrentHealth { get; private set; }
+    public bool IsAlive => CurrentHealth > 0;
     public void ApplyDamage(int damage)
     {
         CurrentHealth -= damage;
-        OnDamaged?.Invoke();
+        OnHealthChanged?.Invoke();
 
         if (CurrentHealth <= 0)
         {
@@ -28,9 +30,9 @@ public class Crystal : MonoBehaviour, IDamageable
     public void Die()
     {
         Timer.Stop();
-        Destroy(gameObject);
+        SceneManager.LoadScene("Scenes/GameOver");
     }
 
-    public event IDamageable.DamageAction OnDamaged;
+    public event IDamageable.HealthAction OnHealthChanged;
     #endregion
 }

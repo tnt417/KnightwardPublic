@@ -27,7 +27,7 @@ public class DamageComponent : MonoBehaviour
         damageTimer += Time.deltaTime;
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         //
         var damageable = other.gameObject.GetComponent<IDamageable>();
@@ -43,7 +43,7 @@ public class DamageComponent : MonoBehaviour
         
         if(rb != null) rb.AddForce(kb); //Apply the knockback
         
-        if (destroyOnApply) Destroy(this); //Destroy when done if that option is selected
+        if (destroyOnApply) Destroy(gameObject); //Destroy when done if that option is selected
     }
 
     private Vector2 GetKnockbackVector(GameObject go)

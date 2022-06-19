@@ -149,7 +149,7 @@ MonoBehaviour:
   team: 0
   destroyOnApply: 1
   knockbackForce: 300
-  damageCooldown: 0
+  damageCooldown: 0.1
 --- !u!96 &-4567278862790983507
 TrailRenderer:
   serializedVersion: 2

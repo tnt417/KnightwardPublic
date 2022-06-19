@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3712049683529497179}
   - component: {fileID: 4431944440452335117}
-  - component: {fileID: 6339335236051596824}
   m_Layer: 6
   m_Name: EnemyAttack
   m_TagString: Untagged
@@ -58,23 +57,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &6339335236051596824
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 124614862229678095}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd879a871c0f7974b89c47103732aefb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 25
-  team: 0
-  destroyOnApply: 0
-  knockbackForce: 500
-  damageCooldown: 1
 --- !u!1 &4155343733709524297
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,7 +183,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hurtAnimationName: DarkArcherHurt
   animator: {fileID: 1861465650550614146}
-  maxHealth: 200
+  maxHealth: 100
+  target: {fileID: 0}
 --- !u!95 &1861465650550614146
 Animator:
   serializedVersion: 3
@@ -252,6 +235,7 @@ MonoBehaviour:
   strafeDistance: 4
   strafeSpeed: 10
   strafeCooldown: 2
+  strafeRadius: 5
   animator: {fileID: 1861465650550614146}
 --- !u!114 &8256869462840257896
 MonoBehaviour:
@@ -265,8 +249,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5cc47d6eab2e6b49a7a8e1faff2f59b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  projectileTravelSpeed: 5
+  projectileTravelSpeed: 10
   projectilePrefab: {fileID: 5620128404347004703, guid: 94c28aab9358af945b82cd2064b9ae5c, type: 3}
+  enemy: {fileID: 0}
 --- !u!1 &5312045986445286273
 GameObject:
   m_ObjectHideFlags: 0

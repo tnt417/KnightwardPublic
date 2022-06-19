@@ -1,72 +1,78 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using UnityEngine;
 
-public class EnemyMovementPeriodicalStrafe : MonoBehaviour, IEnemyMovement
+public class EnemyMovementPeriodicalStrafe : EnemyMoveBase
 {
     [SerializeField] private float strafeDistance;
     [SerializeField] private float strafeSpeed;
     [SerializeField] private float strafeCooldown;
+    [SerializeField] private float strafeRadius;
     [SerializeField] private Animator animator;
-    private float strafeTimer;
-    private float strafeProgress;
-    private bool strafing;
-    private Vector2 direction;
-    
-    private void Start()
-    {
-        Target = FindObjectOfType<Player>().transform;
-    }
-    private void FixedUpdate()
-    {
-        UpdateMovement();
-    }
+    private float _strafeTimer;
+    private float _strafeProgress;
+    private bool _strafing;
+    private Vector2 _direction;
 
     private void StartStrafe()
     {
         animator.SetBool("shouldLand", false);
         animator.SetBool("shouldTravel",true);
-        strafing = true;
-        direction = (Target.transform.position - transform.position).normalized;
+        _strafing = true;
+        //_direction = (Target.transform.position - transform.position).normalized;
+        _direction = FindDirection();
     }
 
     private void EndStrafe()
     {
-        strafing = false;
-        strafeTimer = 0;
-        strafeProgress = 0;
+        _strafing = false;
+        _strafeTimer = 0;
+        _strafeProgress = 0;
         animator.SetBool("shouldTravel",false);
         animator.SetBool("shouldLand", true);
     }
 
-    #region IEnemyMovement
-    public bool DoMovement { get; }
-    public void UpdateMovement()
+    private Vector2 FindDirection()
     {
-        strafeTimer += Time.fixedDeltaTime;
-        if (strafeTimer >= strafeCooldown && !strafing)
+        var dist = Vector2.Distance(transform.position, Target.transform.position); //c
+        var angleA = Mathf.Acos(
+            Mathf.Clamp((Mathf.Pow(strafeDistance, 2f) + Mathf.Pow(dist, 2f) - Mathf.Pow(strafeRadius, 2f))/(2f*strafeDistance*dist), -1, 1));
+        var final = Rotate((Target.transform.position - transform.position).normalized, angleA); 
+        return final;
+    }
+    
+    private static Vector2 Rotate(Vector2 v, float radians) {
+        var sin = Mathf.Sin(radians);
+        var cos = Mathf.Cos(radians);
+         
+        var tx = v.x;
+        var ty = v.y;
+        v.x = (cos * tx) - (sin * ty);
+        v.y = (sin * tx) + (cos * ty);
+        return v;
+    }
+
+    #region IEnemyMovement
+    public override void UpdateMovement()
+    {
+        _strafeTimer += Time.fixedDeltaTime;
+        if (_strafeTimer >= strafeCooldown && !_strafing)
         {
             StartStrafe();
         }
-        else if (strafing)
+        else if (_strafing)
         {
-            var strafeVector = Vector2.Perpendicular(direction) * strafeSpeed * Time.fixedDeltaTime;
-            strafeProgress += strafeVector.magnitude;
+            var strafeVector = _direction * strafeSpeed * Time.fixedDeltaTime * SpeedMultiplier;
+            _strafeProgress += strafeVector.magnitude;
             transform.Translate(strafeVector);
         }
 
-        if (strafeProgress >= strafeDistance)
+        if (_strafeProgress >= strafeDistance)
         {
             EndStrafe();
         }
-    }
-
-    public float SpeedMultiplier { get; }
-    public Transform Target { get; private set; }
-    public void UpdateTarget()
-    {
-        throw new System.NotImplementedException();
     }
     #endregion
 }

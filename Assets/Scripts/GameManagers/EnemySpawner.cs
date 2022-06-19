@@ -21,7 +21,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void SpawnEnemy(Vector3 position, GameObject prefab)
     {
-        GameObject go = Instantiate(prefab, position, Quaternion.identity);
+        GameObject go = Instantiate(prefab, position, Quaternion.identity, transform);
     }
 
     private Vector3 GetSpawnpoint()

@@ -8,8 +8,9 @@ public interface IDamageable
     Team team { get; }
     int MaxHealth { get; }
     int CurrentHealth { get; }
+    bool IsAlive { get; }
     void ApplyDamage(int damage);
     void Die();
-    delegate void DamageAction();
-    event DamageAction OnDamaged;
+    delegate void HealthAction();
+    event HealthAction OnHealthChanged;
 }

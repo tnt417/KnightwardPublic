@@ -21,7 +21,7 @@ public class Healthbar : MonoBehaviour
         healthSlider.maxValue = attachedDamageable.MaxHealth;
         healthSlider.value = attachedDamageable.CurrentHealth;
 
-        attachedDamageable.OnDamaged += UpdateUI;
+        attachedDamageable.OnHealthChanged += UpdateUI;
     }
 
     private void UpdateUI()

@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.Experimental.Rendering.Universal;
 using UnityEngine.SubsystemsImplementation;
 
-public enum Direction
+public enum PlayerAnimState
 {
-    Up, Down, Left, Right, None
+    Up, Down, Left, Right, Idle, Dead
 }
 
 public class PlayerAnimator : MonoBehaviour
@@ -18,15 +18,15 @@ public class PlayerAnimator : MonoBehaviour
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private ParticleSystem playerWalkParticles;
 
-    private Direction _direction = Direction.None;
-    public Direction FacingDirection
+    private PlayerAnimState _playerAnimState = PlayerAnimState.Idle;
+    public PlayerAnimState PlayerAnimState
     {
-        get => _direction;
+        get => _playerAnimState;
         set
         {
-            if (_direction == value) return;
-            DirectionChanged(_direction, value);
-            _direction = value;
+            if (_playerAnimState == value) return;
+            DirectionChanged(_playerAnimState, value);
+            _playerAnimState = value;
         }
     }
 
@@ -39,29 +39,37 @@ public class PlayerAnimator : MonoBehaviour
     {
         playerSpriteRenderer.sprite = playerSprites[playerSpriteIndex];
 
-        switch (FacingDirection)
+        switch (PlayerAnimState)
         {
-            case Direction.Up:
+            case PlayerAnimState.Up:
                 playerAnimator.Play("WalkUp");
                 break;
-            case Direction.Down:
+            case PlayerAnimState.Down:
                 playerAnimator.Play("WalkDown");
                 break;
-            case Direction.Left:
+            case PlayerAnimState.Left:
                 playerAnimator.Play("WalkLeft");
                 break;
-            case Direction.Right:
+            case PlayerAnimState.Right:
                 playerAnimator.Play("WalkRight");
                 break;
-            case Direction.None:
+            case PlayerAnimState.Idle:
                 playerAnimator.Play("Idle");
+                break;
+            case PlayerAnimState.Dead:
+                playerAnimator.Play("PlayerDead");
                 break;
         }
     }
 
-    private void DirectionChanged(Direction oldDirection, Direction newDirection)
+    private void DirectionChanged(PlayerAnimState oldPlayerAnimState, PlayerAnimState newPlayerAnimState)
     {
-        if(newDirection == Direction.None) playerWalkParticles.Stop();
+        if(newPlayerAnimState == PlayerAnimState.Idle) playerWalkParticles.Stop();
         else playerWalkParticles.Play();
+    }
+
+    public void PlayDeadAnimation()
+    {
+        _playerAnimState = PlayerAnimState.Dead;
     }
 }
