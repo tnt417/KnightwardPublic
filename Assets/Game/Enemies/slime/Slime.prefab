@@ -71,10 +71,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 25
+  damageMultiplier: 0
+  damageCooldown: 1
   team: 0
   destroyOnApply: 0
   knockbackForce: 500
-  damageCooldown: 1
+  knockbackMultiplier: 0
 --- !u!1 &4155343733709524297
 GameObject:
   m_ObjectHideFlags: 0
@@ -213,7 +215,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f0b58a02ac5a4c4e9fb755a95466347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rigidbody2D: {fileID: 647145178058711942}
+  rb2D: {fileID: 647145178058711942}
   speedMultiplier: 2
 --- !u!95 &1861465650550614146
 Animator:

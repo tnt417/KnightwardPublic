@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class EnemyMovementChase : EnemyMoveBase
 {
-    [SerializeField] private Rigidbody2D rigidbody2D;
+    //Editor variables
+    [SerializeField] private Rigidbody2D rb2D;
     [SerializeField] private float speedMultiplier;
+    //
+    
     public override void UpdateMovement()
     {
-        rigidbody2D.transform.Translate((Target.position - transform.position).normalized * speedMultiplier * Time.fixedDeltaTime);
+        //Move towards the target
+        rb2D.transform.Translate((Target.position - transform.position).normalized * speedMultiplier * Time.fixedDeltaTime);
     }
 }

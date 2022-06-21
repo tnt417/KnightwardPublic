@@ -6,43 +6,53 @@ using UnityEngine;
 
 public class EnemyMovementPeriodicalStrafe : EnemyMoveBase
 {
+    //Editor variables
     [SerializeField] private float strafeDistance;
     [SerializeField] private float strafeSpeed;
     [SerializeField] private float strafeCooldown;
     [SerializeField] private float strafeRadius;
     [SerializeField] private Animator animator;
+    //
+    
     private float _strafeTimer;
     private float _strafeProgress;
     private bool _strafing;
     private Vector2 _direction;
 
-    private void StartStrafe()
+    private void StartStrafe() //Start a strafe
     {
+        //Update variables accordingly
         animator.SetBool("shouldLand", false);
         animator.SetBool("shouldTravel",true);
         _strafing = true;
-        //_direction = (Target.transform.position - transform.position).normalized;
-        _direction = FindDirection();
+        //
+        
+        _direction = FindDirection(); //Calculate the direction to strafe
     }
 
-    private void EndStrafe()
+    private void EndStrafe() //End a strafe
     {
+        //Update variables accordingly
         _strafing = false;
         _strafeTimer = 0;
         _strafeProgress = 0;
         animator.SetBool("shouldTravel",false);
         animator.SetBool("shouldLand", true);
+        //
     }
 
-    private Vector2 FindDirection()
+    private Vector2 FindDirection() //Some trigonometry to find a position a certain distance away from both the player and enemy
     {
-        var dist = Vector2.Distance(transform.position, Target.transform.position); //c
+        var posA = transform.position;
+        var posB = Target.transform.position;
+        var dist = Vector2.Distance(posA, posB);
         var angleA = Mathf.Acos(
             Mathf.Clamp((Mathf.Pow(strafeDistance, 2f) + Mathf.Pow(dist, 2f) - Mathf.Pow(strafeRadius, 2f))/(2f*strafeDistance*dist), -1, 1));
-        var final = Rotate((Target.transform.position - transform.position).normalized, angleA); 
+        var final = Rotate((posB - posA).normalized, angleA); 
         return final;
     }
     
+    //Helper function to rotate a vector by radians
     private static Vector2 Rotate(Vector2 v, float radians) {
         var sin = Mathf.Sin(radians);
         var cos = Mathf.Cos(radians);
@@ -54,6 +64,7 @@ public class EnemyMovementPeriodicalStrafe : EnemyMoveBase
         return v;
     }
 
+    //IEnemyMovement interface code
     #region IEnemyMovement
     public override void UpdateMovement()
     {

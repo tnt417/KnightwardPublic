@@ -10,6 +10,7 @@ public class Crystal : MonoBehaviour, IDamageable
         CurrentHealth = MaxHealth;
     }
     
+    //Interface code. Only abnormal thing is the game is over when the crystal dies.
     #region IDamageable
 
     public Team team => Team.Player;

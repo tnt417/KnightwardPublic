@@ -11,13 +11,15 @@ public enum PlayerAnimState
 
 public class PlayerAnimator : MonoBehaviour
 {
-
+    //Editor variables
     [SerializeField] private int playerSpriteIndex;
     [SerializeField] private Sprite[] playerSprites;
     [SerializeField] private SpriteRenderer playerSpriteRenderer;
     [SerializeField] private Animator playerAnimator;
     [SerializeField] private ParticleSystem playerWalkParticles;
+    //
 
+    //PlayerAnimState only structured like this to allow a method to be called when the direction is changed.
     private PlayerAnimState _playerAnimState = PlayerAnimState.Idle;
     public PlayerAnimState PlayerAnimState
     {
@@ -29,6 +31,7 @@ public class PlayerAnimator : MonoBehaviour
             _playerAnimState = value;
         }
     }
+    //
 
     public void PlayHurtAnimation()
     {
@@ -39,6 +42,7 @@ public class PlayerAnimator : MonoBehaviour
     {
         playerSpriteRenderer.sprite = playerSprites[playerSpriteIndex];
 
+        //Plays different animations depending on the animation state
         switch (PlayerAnimState)
         {
             case PlayerAnimState.Up:
@@ -60,14 +64,17 @@ public class PlayerAnimator : MonoBehaviour
                 playerAnimator.Play("PlayerDead");
                 break;
         }
+        //
     }
 
+    //This function poorly named. All it does is pause/play the walk particles when the player is not walking/walking.
     private void DirectionChanged(PlayerAnimState oldPlayerAnimState, PlayerAnimState newPlayerAnimState)
     {
         if(newPlayerAnimState == PlayerAnimState.Idle) playerWalkParticles.Stop();
         else playerWalkParticles.Play();
     }
 
+    //Sets the anim state to dead
     public void PlayDeadAnimation()
     {
         _playerAnimState = PlayerAnimState.Dead;

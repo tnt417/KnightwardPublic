@@ -291,7 +291,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd81ec3e36c9a284cad1a01b390613a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  direction: 0
+  wallObject: {fileID: 8790825127625291857}
+  open: 0
 --- !u!61 &3125665566379891712
 BoxCollider2D:
   m_ObjectHideFlags: 0

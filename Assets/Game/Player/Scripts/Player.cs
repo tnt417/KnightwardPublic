@@ -10,7 +10,6 @@ public class Player : MonoBehaviour, IDamageable
     
     //Sub-components of the player, for easy access.
     public PlayerMovement playerMovement;
-    public PlayerCombat playerCombat;
     public PlayerAnimator playerAnimator;
     public PlayerDeath playerDeath;
 
@@ -48,7 +47,7 @@ public class Player : MonoBehaviour, IDamageable
     {
         //Enable/disable parts of the player depending on if player is alive
         playerMovement.enabled = IsAlive;
-        playerCombat.gameObject.SetActive(IsAlive);
+        PlayerCombat.Instance.gameObject.SetActive(IsAlive);
     }
     
     public void Awake()
@@ -56,13 +55,16 @@ public class Player : MonoBehaviour, IDamageable
         //Singleton code
         if (Instance == null && Instance != this) Instance = this;
         else Destroy(this);
+        //
         
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject); //Player persists between scenes
+        
+        //Set the player's health. Hardcoded here.
         MaxHealth = 100;
         CurrentHealth = MaxHealth;
     }
 
-    public void SetHealth(int newHealth)
+    public void SetHealth(int newHealth) //TODO: If really picky, should convert this to be within the setters of the variable instead.
     {
         CurrentHealth = newHealth;
         OnHealthChanged?.Invoke();

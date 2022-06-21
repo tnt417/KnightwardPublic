@@ -153,12 +153,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6057a36ec2a2e4b44b9dd8c66a27882c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mapRadius: 2
+  mapRadius: 5
   roomOffset: {x: 20, y: 20}
   startRoomPrefab: {fileID: 4178251165929004475, guid: b71cf7820fc441448b35c6a9a7ed72a0, type: 3}
   generateRoomPrefabs:
-  - {fileID: 4178251165929004475, guid: b71cf7820fc441448b35c6a9a7ed72a0, type: 3}
-  - {fileID: 4178251165929004475, guid: f53d8bbe174ac4d4b84bb373fae6c2c2, type: 3}
+  - {fileID: 4178251165929004475, guid: 17f17f099c725e14f82d710c2e8efb6c, type: 3}
   roomManager: {fileID: 1652668931}
 --- !u!114 &1652668931
 MonoBehaviour:

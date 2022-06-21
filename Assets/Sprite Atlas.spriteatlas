@@ -67,6 +67,8 @@ SpriteAtlas:
   - {fileID: 6660450562344536842, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: 8469575070837897384, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: 2407573818178188240, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
+  - {fileID: 5045073161074915229, guid: 77232101e9d80754089e3481d34866da, type: 3}
+  - {fileID: -6834524911116659543, guid: 77232101e9d80754089e3481d34866da, type: 3}
   - {fileID: 21300000, guid: 2bf852e279ff4d24798c17b681247643, type: 3}
   - {fileID: 9033699428484915931, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: 4059640450490198499, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
@@ -101,6 +103,7 @@ SpriteAtlas:
   - {fileID: -362102696532039381, guid: 1bdc8b87d1fe7f94f921069c4a83685b, type: 3}
   - {fileID: 6698050867923296888, guid: 1bdc8b87d1fe7f94f921069c4a83685b, type: 3}
   - {fileID: 21300000, guid: 29dc1ac709c75eb4c8ea3ba8defaf8ae, type: 3}
+  - {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
   - {fileID: -3241743515495822150, guid: df58e7484986be1448443be92533111f, type: 3}
   - {fileID: 8387669789750386176, guid: df58e7484986be1448443be92533111f, type: 3}
   - {fileID: 7479642271789056252, guid: df58e7484986be1448443be92533111f, type: 3}
@@ -169,6 +172,8 @@ SpriteAtlas:
   - darkArcher_12
   - darkArcher_10
   - darkArcher_11
+  - chest_1
+  - chest_0
   - goldTile
   - SideWalk3
   - SideWalk2
@@ -203,6 +208,7 @@ SpriteAtlas:
   - woodTile_7
   - woodTile_6
   - darkArcherArrow
+  - sword
   - crystal_2
   - crystal_3
   - crystal_0

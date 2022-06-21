@@ -270,6 +270,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   direction: 2
+  wallObject: {fileID: 7082267800268935974}
+  open: 0
 --- !u!61 &3519164739486168951
 BoxCollider2D:
   m_ObjectHideFlags: 0
