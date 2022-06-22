@@ -10,10 +10,9 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private GameObject enemyPrefab;
     [SerializeField] private float range;
     [SerializeField] private float frequency = 0.5f;
-    [SerializeField] private int destroyAfterSpawns;
+    [SerializeField] public int destroyAfterSpawns;
     //
-    
-    private int _spawns;
+    public int Spawns { get; private set; }
     private float _timer;
 
     private void Awake()
@@ -46,10 +45,10 @@ public class EnemySpawner : MonoBehaviour
             return;
         }
         var go = Instantiate(prefab, position, Quaternion.identity, transform); //Instantiate the enemy
-        _spawns++; //Increase the spawn count
+        Spawns++; //Increase the spawn count
         
         //Destroy the script if enough enemies have been spawned
-        if (_spawns >= destroyAfterSpawns)
+        if (Spawns >= destroyAfterSpawns)
         {
             GameManager.EnemySpawners.Remove(this);
             Destroy(this);

@@ -19,12 +19,14 @@ public class Enemy : MonoBehaviour, IDamageable
     #region IDamageable
     public Team team => Team.Enemy;
     public int MaxHealth { get; private set; }
-    public int CurrentHealth { get; private set; }
+    public float CurrentHealth { get; private set; }
     public bool IsAlive => CurrentHealth > 0;
     [NonSerialized] public Transform Target;
     public void ApplyDamage(int damage)
     {
-        CurrentHealth -= damage;
+        var damageMultiplier = Mathf.Clamp01(1f - (Mathf.Log10(GameManager.EnemyDifficultyScale) - 0.5f)); //Enemies essentially gain damage resist as the difficulty scales.
+        Debug.Log(damageMultiplier);
+        CurrentHealth -= damage * damageMultiplier;
         OnHealthChanged?.Invoke();
         animator.Play(hurtAnimationName);
         

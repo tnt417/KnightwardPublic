@@ -12,6 +12,7 @@ public class GearUIController : MonoBehaviour
     [SerializeField] private Image weaponImage;
     [SerializeField] private TMP_Text weaponText;
     [SerializeField] private Image armorImage;
+    [SerializeField] private TMP_Text armorText;
     [SerializeField] private Image relic1Image;
     [SerializeField] private Image relic2Image;
     [SerializeField] private Image relic3Image;
@@ -27,12 +28,13 @@ public class GearUIController : MonoBehaviour
         //Update all the UI elements
         if (PlayerInventory.Instance.WeaponItem != null)
         {
-            weaponText.text = GetItemDescription(PlayerInventory.Instance.WeaponItem); //TODO: weapon text
+            weaponText.text = GetItemDescription(PlayerInventory.Instance.WeaponItem);
             weaponImage.sprite = PlayerInventory.Instance.WeaponItem.UISprite;
         }
 
         if (PlayerInventory.Instance.ArmorItem != null)
         {
+            armorText.text = GetItemDescription(PlayerInventory.Instance.ArmorItem);
             armorImage.sprite = PlayerInventory.Instance.ArmorItem.UISprite;
         }
 
@@ -57,10 +59,10 @@ public class GearUIController : MonoBehaviour
     {
         var stringBuilder = new StringBuilder();
         
-        stringBuilder.Append(PlayerInventory.Instance.WeaponItem.ItemName + "\n"); //Append the item name
-        foreach (var sb in PlayerInventory.Instance.WeaponItem.StatBonuses) //Append the stat bonuses
+        stringBuilder.Append(item.ItemName + "\n"); //Append the item name
+        foreach (var sb in item.StatBonuses) //Append the stat bonuses
         {
-            stringBuilder.Append(sb.stat + ": " + sb.strength + "\n");
+            stringBuilder.Append(sb.stat + ": " + sb.strength.ToString("F2") + "\n");
         }
 
         return stringBuilder.ToString(); //Return the string

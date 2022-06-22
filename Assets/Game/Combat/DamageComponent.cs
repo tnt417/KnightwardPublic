@@ -16,20 +16,24 @@ public class DamageComponent : MonoBehaviour
 {
     //Editor variables
     [SerializeField] private int damage;
-    [SerializeField] public float damageMultiplier = 0;
-    [SerializeField] private float damageCooldown;
+    [SerializeField] public float damageMultiplier = 1;
+    [SerializeField] public float damageCooldown;
     [SerializeField] private Team team;
     [SerializeField] private bool destroyOnApply;
     [SerializeField] private float knockbackForce;
-    [SerializeField] public float knockbackMultiplier = 0;
-
+    [SerializeField] public float knockbackMultiplier = 1;
     //
+    
     private float _damageTimer;
     [NonSerialized] public Vector2 knockbackVector = Vector2.zero;
 
     private void Update()
     {
         _damageTimer += Time.deltaTime;
+        if (team == Team.Enemy)
+        {
+            damageMultiplier = 1 + Mathf.Log10(GameManager.EnemyDifficultyScale) - 0.5f;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D other)
@@ -44,8 +48,8 @@ public class DamageComponent : MonoBehaviour
         
         _damageTimer = 0; //Reset the timer
 
-        Vector2 kb = GetKnockbackVector(other.gameObject) * knockbackForce * (1+knockbackMultiplier); //Calculate the knockback
-        
+        var kb = GetKnockbackVector(other.gameObject) * knockbackForce * knockbackMultiplier; //Calculate the knockback
+
         if(rb != null) rb.AddForce(kb); //Apply the knockback
         
         if (destroyOnApply) Destroy(gameObject); //Destroy when done if that option is selected

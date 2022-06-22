@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static List<Enemy> Enemies = new List<Enemy>();
-    public static List<EnemySpawner> EnemySpawners = new List<EnemySpawner>();
+    public static readonly List<Enemy> Enemies = new List<Enemy>();
+    public static readonly List<EnemySpawner> EnemySpawners = new List<EnemySpawner>();
+    public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
     private void Awake()
     {
         DontDestroyOnLoad(gameObject); //Persist between scenes
@@ -26,6 +27,7 @@ public class GameManager : MonoBehaviour
                     break;
                 case true:
                     TransitionController.Instance.LoadScene("CastleScene");
+                    Player.Instance.transform.position = Vector3.zero;
                     break;
             }
         }

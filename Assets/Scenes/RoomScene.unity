@@ -158,6 +158,9 @@ MonoBehaviour:
   startRoomPrefab: {fileID: 4178251165929004475, guid: b71cf7820fc441448b35c6a9a7ed72a0, type: 3}
   generateRoomPrefabs:
   - {fileID: 4178251165929004475, guid: 17f17f099c725e14f82d710c2e8efb6c, type: 3}
+  - {fileID: 4178251165929004475, guid: 5968f0faa2ba53b4d8092436ea9fcf4b, type: 3}
+  - {fileID: 4178251165929004475, guid: d8f80c69ab22d0149bed1097394f4e3d, type: 3}
+  - {fileID: 4178251165929004475, guid: 6bbcb435fabc7e44d994050086300d67, type: 3}
   roomManager: {fileID: 1652668931}
 --- !u!114 &1652668931
 MonoBehaviour:

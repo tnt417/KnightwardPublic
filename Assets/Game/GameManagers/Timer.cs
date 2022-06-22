@@ -8,7 +8,7 @@ public class Timer : MonoBehaviour
 {
     private static Timer Instance { get; set; }
     [SerializeField] private TMP_Text gameTimerText;
-    private static float _gameTimer;
+    public static float GameTimer;
     private static bool _paused = false;
 
     private void Awake()
@@ -25,8 +25,8 @@ public class Timer : MonoBehaviour
     
     private void Update()
     {
-        if(!_paused) _gameTimer += Time.deltaTime; //Tick timer if not paused
-        gameTimerText.text = FormatTimeFromSeconds(_gameTimer); //Update timer text
+        if(!_paused) GameTimer += Time.deltaTime; //Tick timer if not paused
+        gameTimerText.text = FormatTimeFromSeconds(GameTimer); //Update timer text
     }
 
     public static void Stop()

@@ -32,6 +32,7 @@ public class PlayerSlashController : MonoBehaviour
         slashObject.transform.localScale = Vector3.one + Vector3.one * PlayerStats.GetStatBonus(Stat.AoeSize); //TODO
         _slashDamageComponent.knockbackMultiplier = 1 + PlayerStats.GetStatBonus(Stat.Knockback); //TODO make all these have a PlayerCombat.Get method
         _slashDamageComponent.damageMultiplier = PlayerCombat.GetDamageMultiplier();
+        _slashDamageComponent.damageCooldown = 0.333333f / PlayerCombat.GetAttackSpeedMultipler();
         //
         
         if (Input.GetMouseButton(0) && _attackTimer >= attackTimerMax / PlayerCombat.GetAttackSpeedMultipler()) Attack(); //If left mouse button down and timer ready, attack.
@@ -41,6 +42,7 @@ public class PlayerSlashController : MonoBehaviour
     {
         _attackTimer = 0; //Reset attack timer
         UpdateSlashDirection(); //Rotate the slash object to face the cursor
+        combatAnimator.SetFloat("attackSpeed", PlayerCombat.GetAttackSpeedMultipler()); //Update the animation speed.
         combatAnimator.Play("SwordSlash"); //Play the slashing sprite animation
     }
 

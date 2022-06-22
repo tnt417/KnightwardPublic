@@ -13,7 +13,7 @@ public abstract class EnemyMoveBase : MonoBehaviour, IEnemyMovement
     }
     private void FixedUpdate()
     {
-        UpdateMovement(); //Call UpdateMovement
+        if(Target != null) UpdateMovement(); //Call UpdateMovement
     }
 
     public bool DoMovement { get; } = true;

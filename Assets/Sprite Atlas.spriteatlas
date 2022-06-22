@@ -69,6 +69,8 @@ SpriteAtlas:
   - {fileID: 2407573818178188240, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: 5045073161074915229, guid: 77232101e9d80754089e3481d34866da, type: 3}
   - {fileID: -6834524911116659543, guid: 77232101e9d80754089e3481d34866da, type: 3}
+  - {fileID: 21300000, guid: e27c4c6211681df41a38930130a81ec9, type: 3}
+  - {fileID: 21300000, guid: 21ed80a234edc954cb8cde6da8e8fdae, type: 3}
   - {fileID: 21300000, guid: 2bf852e279ff4d24798c17b681247643, type: 3}
   - {fileID: 9033699428484915931, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: 4059640450490198499, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
@@ -153,6 +155,7 @@ SpriteAtlas:
   - {fileID: 7519933191670736559, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: 1654864542332646423, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: -366055929809456832, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
+  - {fileID: 21300000, guid: ad60ecdfbd9093a4b939032260dd8ae6, type: 3}
   m_PackedSpriteNamesToIndex:
   - slime_0
   - slime_1
@@ -174,6 +177,8 @@ SpriteAtlas:
   - darkArcher_11
   - chest_1
   - chest_0
+  - glacialArmor
+  - crimsonArmor
   - goldTile
   - SideWalk3
   - SideWalk2
@@ -258,6 +263,7 @@ SpriteAtlas:
   - rugTile_14
   - rugTile_17
   - rugTile_16
+  - verdantArmor
   m_RenderDataMap: {}
   m_Tag: Sprite Atlas
   m_IsVariant: 0

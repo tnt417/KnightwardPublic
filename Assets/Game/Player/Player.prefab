@@ -5609,7 +5609,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 25
   damageMultiplier: 0
-  damageCooldown: 0.1
+  damageCooldown: 0.5
   team: 1
   destroyOnApply: 0
   knockbackForce: 1000

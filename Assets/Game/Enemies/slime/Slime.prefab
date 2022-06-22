@@ -71,12 +71,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 25
-  damageMultiplier: 0
+  damageMultiplier: 1
   damageCooldown: 1
   team: 0
   destroyOnApply: 0
   knockbackForce: 500
-  knockbackMultiplier: 0
+  knockbackMultiplier: 1
 --- !u!1 &4155343733709524297
 GameObject:
   m_ObjectHideFlags: 0

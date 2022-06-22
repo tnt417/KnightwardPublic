@@ -21,24 +21,24 @@ public class ItemGenerator
     public static Item GenerateItem(ItemType type, ItemRarity rarity)
     {
         //Instantiate local variables that will end up at the parameters for the generated item.
-        string itemName = string.Empty;
+        var itemName = string.Empty;
         Sprite sprite = null;
-        List<StatBonus> statBonuses = new List<StatBonus>();
+        var statBonuses = new List<StatBonus>();
         //
 
         //Set sprites and item names based on the item type
         switch (type)
         {
             case ItemType.Weapon:
-                sprite = _weaponSprites[Random.Range(0, _weaponSprites.Length-1)];
+                sprite = _weaponSprites[Random.Range(0, _weaponSprites.Length)];
                 itemName = "Sword";
                 break;
             case ItemType.Armor:
-                sprite = _armorSprites[Random.Range(0, _armorSprites.Length-1)];
+                sprite = _armorSprites[Random.Range(0, _armorSprites.Length)];
                 itemName = "Armor";
                 break;
             case ItemType.Relic:
-                sprite = _relicSprites[Random.Range(0, _relicSprites.Length-1)];
+                sprite = _relicSprites[Random.Range(0, _relicSprites.Length)];
                 itemName = "Relic";
                 break;
         }
@@ -46,7 +46,7 @@ public class ItemGenerator
         //Set stats based on the item type
         for (var i = 0; i < (int) rarity; i++)
         {
-            statBonuses.Add(new StatBonus(PlayerStats.GetValidStatForItem(type), Random.Range(0.01f, 1f), itemName));
+            statBonuses.Add(new StatBonus(PlayerStats.GetValidStatForItem(type), Mathf.Sqrt(GameManager.EnemyDifficultyScale)/2 * Random.Range(0.01f, 1f), itemName));
         }
         
         //Return a new item using all the variables this function has generated and/or been provided with
