@@ -18,6 +18,7 @@ public class PlayerInventory : MonoBehaviour
     private void Start()
     {
         InsertItem(ItemGenerator.GenerateItem(ItemType.Weapon, ItemRarity.Common)); //Add a starting sword to the player's inventory.
+        InsertItem(ItemGenerator.GenerateItem(ItemType.Armor, ItemRarity.Common)); //Add armor to inventory
     }
     
     private void Awake()

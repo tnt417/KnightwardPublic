@@ -2,13 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Enemy))]
+[RequireComponent(typeof(Enemy), typeof(EnemyAnimator))]
 public abstract class EnemyMoveBase : MonoBehaviour, IEnemyMovement
 {
     private Enemy _enemy; //The enemy attached to the movement script
+    protected EnemyAnimator EnemyAnimator; //The enemy animator;
+    public AnimationClip[] animations;
     private void Start() //Initialize components
     {
         _enemy = GetComponent<Enemy>();
+        EnemyAnimator = GetComponent<EnemyAnimator>();
         _enemy.UpdateTarget();
     }
     private void FixedUpdate()

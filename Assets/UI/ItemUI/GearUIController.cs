@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Text;
@@ -20,7 +21,7 @@ public class GearUIController : MonoBehaviour
     
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I)) //Toggle the inventory panel when I is pressed.
+        if (Input.GetKeyDown(KeyCode.Tab)) //Toggle the inventory panel when tab is pressed.
         {
             gearPanelObject.SetActive(!gearPanelObject.activeSelf);
         }
@@ -59,11 +60,8 @@ public class GearUIController : MonoBehaviour
     {
         var stringBuilder = new StringBuilder();
         
-        stringBuilder.Append(item.ItemName + "\n"); //Append the item name
-        foreach (var sb in item.StatBonuses) //Append the stat bonuses
-        {
-            stringBuilder.Append(sb.stat + ": " + sb.strength.ToString("F2") + "\n");
-        }
+        stringBuilder.AppendLine(item.ItemName); //Append the item name
+        stringBuilder.AppendLine(PlayerStats.GetStatsText(item.StatBonuses));
 
         return stringBuilder.ToString(); //Return the string
     }

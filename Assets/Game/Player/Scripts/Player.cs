@@ -28,7 +28,7 @@ public class Player : MonoBehaviour, IDamageable
         if (Random.Range(0f, 1f) < PlayerStats.GetStatBonus(Stat.Dodge)) return; //Don't apply damage is dodge rolls successful.
         CurrentHealth -=
             (int) Mathf.Clamp(
-                (damage - PlayerStats.GetStatBonus(Stat.Armor)) * (1f - PlayerStats.GetStatBonus(Stat.DamageReduction)),
+                (damage - PlayerStats.GetStatBonus(Stat.Armor) * 10f) * (1f - PlayerStats.GetStatBonus(Stat.DamageReduction)),
                 0, Mathf.Infinity); //Modify the incoming damage. Armor is a flat damage reduction, damage reduction is a percentage.
         OnHealthChanged?.Invoke();
         

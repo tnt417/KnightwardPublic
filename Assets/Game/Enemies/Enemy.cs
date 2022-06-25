@@ -10,8 +10,7 @@ using System.Linq;
 public class Enemy : MonoBehaviour, IDamageable
 {
     //Editor variables
-    [SerializeField] private string hurtAnimationName;
-    [SerializeField] private Animator animator;
+    [SerializeField] private EnemyAnimator enemyAnimator;
     [SerializeField] private int maxHealth;
     //
 
@@ -24,11 +23,12 @@ public class Enemy : MonoBehaviour, IDamageable
     [NonSerialized] public Transform Target;
     public void ApplyDamage(int damage)
     {
+        enemyAnimator.PlayAnimation(EnemyAnimationState.Hurt); //Play the hurt animation
         var damageMultiplier = Mathf.Clamp01(1f - (Mathf.Log10(GameManager.EnemyDifficultyScale) - 0.5f)); //Enemies essentially gain damage resist as the difficulty scales.
         Debug.Log(damageMultiplier);
         CurrentHealth -= damage * damageMultiplier;
         OnHealthChanged?.Invoke();
-        animator.Play(hurtAnimationName);
+        
         
         if (CurrentHealth <= 0)
         {

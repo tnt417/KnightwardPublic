@@ -23,7 +23,7 @@ public class TransitionController : MonoBehaviour
         _transitionAnimator = GetComponent<Animator>(); //Initialize animator component
         
         SceneManager.sceneLoaded += OnSceneLoaded; //Call OnSceneLoaded whenever a new scene is loaded.
-        LoadScene("CastleScene"); //Load the CastleScene initially
+        SceneManager.LoadScene("CastleScene"); //Load the CastleScene initially
     }
 
     public void FadeInOut() //Plays a fade out and fade in animation while transitioning to a new scene if valid

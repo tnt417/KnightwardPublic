@@ -5,8 +5,9 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static readonly List<Enemy> Enemies = new List<Enemy>();
-    public static readonly List<EnemySpawner> EnemySpawners = new List<EnemySpawner>();
+    public static float CrystalHealth = 1000f;
+    public static readonly List<Enemy> Enemies = new ();
+    public static readonly List<EnemySpawner> EnemySpawners = new ();
     public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
     private void Awake()
     {
@@ -30,6 +31,14 @@ public class GameManager : MonoBehaviour
                     Player.Instance.transform.position = Vector3.zero;
                     break;
             }
+        }
+
+        if (CrystalHealth <= 0)
+        {
+            Timer.Stop();
+            SceneManager.LoadScene("Scenes/GameOver");
+            Destroy(gameObject); //Destroy the DontDestroyOnLoad things
+            Destroy(FindObjectOfType<Player>().gameObject); //Destroy the Player
         }
     }
 }

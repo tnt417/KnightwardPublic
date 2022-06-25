@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using UnityEngine;
 
+[RequireComponent(typeof(EnemyAnimator))]
 public class EnemyMovementPeriodicalStrafe : EnemyMoveBase
 {
     //Editor variables
@@ -11,7 +12,6 @@ public class EnemyMovementPeriodicalStrafe : EnemyMoveBase
     [SerializeField] private float strafeSpeed;
     [SerializeField] private float strafeCooldown;
     [SerializeField] private float strafeRadius;
-    [SerializeField] private Animator animator;
     //
     
     private float _strafeTimer;
@@ -22,8 +22,7 @@ public class EnemyMovementPeriodicalStrafe : EnemyMoveBase
     private void StartStrafe() //Start a strafe
     {
         //Update variables accordingly
-        animator.SetBool("shouldLand", false);
-        animator.SetBool("shouldTravel",true);
+        EnemyAnimator.PlayAnimation(EnemyAnimationState.Move);
         _strafing = true;
         //
         
@@ -36,8 +35,7 @@ public class EnemyMovementPeriodicalStrafe : EnemyMoveBase
         _strafing = false;
         _strafeTimer = 0;
         _strafeProgress = 0;
-        animator.SetBool("shouldTravel",false);
-        animator.SetBool("shouldLand", true);
+        EnemyAnimator.PlayAnimation(EnemyAnimationState.Stop);
         //
     }
 

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Text;
 using Random = UnityEngine.Random;
 
 public enum Stat
@@ -52,6 +53,13 @@ public static class PlayerStats
         return _activeStatBonuses.Where(sb => sb.stat == stat).Sum(sb => sb.strength);
     }
 
+    public static IEnumerable<StatBonus> GetStatBonuses(Stat stat, bool returnEmptyBonus) //Returns an array of stat bonuses of stat specified. If returnEmptyBonus is true and no bonuses are found, empty ones will be created.
+    {
+        var foundBonuses = _activeStatBonuses.Where(sb => sb.stat == stat).ToArray();
+        if (foundBonuses.Length != 0) return foundBonuses;
+        return returnEmptyBonus ? new[] {new StatBonus(stat, 0, "Empty Bonus")} : foundBonuses;
+    }
+
     public static Stat GetValidStatForItem(ItemType type) //Returns a random stat, based on valid stat types for different item types
     {
         return type switch
@@ -61,5 +69,72 @@ public static class PlayerStats
             ItemType.Relic => (Stat) Random.Range(0, 13),
             _ => Stat.AttackSpeed //Returns attack speed by default.
         };
+    }
+
+    public static string GetStatsText(Stat[] stats) //Returns a text description of stats, based on the stats specified.
+    {
+        stats = stats.Distinct().ToArray();
+        var statBonuses = new List<StatBonus>();
+        foreach (var t in stats)
+        {
+            var statBonusArray = GetStatBonuses(t, true);
+            statBonuses.AddRange(statBonusArray);
+        }
+        return GetStatsText(statBonuses.ToArray());
+    }
+    public static string GetStatsText(IEnumerable<StatBonus> statBonuses) //Returns a text description of stats, based on the stat bonuses specified.
+    {
+        var sb = new StringBuilder();
+        foreach (var t in statBonuses)
+        {
+            var statBonus = t.strength;
+            switch (t.stat)
+            {
+                case Stat.Armor:
+                    sb.AppendLine("Armor: " + statBonus * 10f);
+                    break;
+                case Stat.Damage:
+                    sb.AppendLine("Damage: " + (100 + (int)(statBonus * 100f)) + "%");
+                    break;
+                case Stat.Dodge:
+                    sb.AppendLine("Dodge: " + (int)(statBonus * 100f) + "%");
+                    break;
+                case Stat.Health:
+                    sb.AppendLine("Max HP: " + (100 + (int)(statBonus * 100f)));
+                    break;
+                case Stat.Knockback:
+                    sb.AppendLine("Knockback: " + (100 + (int)(statBonus * 100f)) + "%");
+                    break;
+                case Stat.Stun:
+                    sb.AppendLine("Stun: " + (int)(statBonus * 100f) + "%");
+                    break;
+                case Stat.Tenacity:
+                    sb.AppendLine("Tenacity: " + (int)(statBonus * 100f) + "%");
+                    break;
+                case Stat.AoeSize:
+                    sb.AppendLine("AoE Size: " + (100 + (int)(statBonus * 100f)) + "%");
+                    break;
+                case Stat.AttackSpeed:
+                    sb.AppendLine("Atk Spd: " + (100 + (int)(statBonus * 100f)) + "%");
+                    break;
+                case Stat.CritChance:
+                    sb.AppendLine("Crit Chance: " + (int)(statBonus * 100f) + "%");
+                    break;
+                case Stat.CritDamage:
+                    sb.AppendLine("Crit Damage: " + (200 + (int)(statBonus * 100f)) + "%");
+                    break;
+                case Stat.DamageReduction:
+                    sb.AppendLine("Dmg Reduction: " + (int)(statBonus * 100f) + "%");
+                    break;
+                case Stat.HpRegen:
+                    sb.AppendLine("Regen: " + ( 1 + statBonus) + "HP/sec");
+                    break;
+                case Stat.MoveSpeed:
+                    sb.AppendLine("Speed: " + (100 + (int)(statBonus * 100f)) + "%");
+                    break;
+            }
+        }
+
+        return sb.ToString();
     }
 }

@@ -5,17 +5,16 @@ using UnityEngine.SceneManagement;
 
 public class Crystal : MonoBehaviour, IDamageable
 {
-    public void Awake()
-    {
-        CurrentHealth = MaxHealth;
-    }
-    
+
     //Interface code. Only abnormal thing is the game is over when the crystal dies.
     #region IDamageable
 
     public Team team => Team.Player;
     public int MaxHealth => 1000;
-    public float CurrentHealth { get; private set; }
+    public float CurrentHealth {
+        get => GameManager.CrystalHealth;
+        private set => GameManager.CrystalHealth = value;
+    }
     public bool IsAlive => CurrentHealth > 0;
     public void ApplyDamage(int damage)
     {
@@ -30,8 +29,7 @@ public class Crystal : MonoBehaviour, IDamageable
 
     public void Die()
     {
-        Timer.Stop();
-        SceneManager.LoadScene("Scenes/GameOver");
+        //This is managed in the GameManager class
     }
 
     public event IDamageable.HealthAction OnHealthChanged;

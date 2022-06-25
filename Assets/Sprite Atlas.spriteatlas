@@ -40,6 +40,7 @@ SpriteAtlas:
       allowAlphaSplitting: 0
       enableRotation: 1
       enableTightPacking: 1
+      enableAlphaDilation: 0
     secondaryTextureSettings: {}
     variantMultiplier: 1
     packables:
@@ -67,6 +68,7 @@ SpriteAtlas:
   - {fileID: 6660450562344536842, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: 8469575070837897384, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: 2407573818178188240, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
+  - {fileID: 21300000, guid: 19cd53e03b6a6784fa485bb207f6e5af, type: 3}
   - {fileID: 5045073161074915229, guid: 77232101e9d80754089e3481d34866da, type: 3}
   - {fileID: -6834524911116659543, guid: 77232101e9d80754089e3481d34866da, type: 3}
   - {fileID: 21300000, guid: e27c4c6211681df41a38930130a81ec9, type: 3}
@@ -175,6 +177,7 @@ SpriteAtlas:
   - darkArcher_12
   - darkArcher_10
   - darkArcher_11
+  - mysterySymbol
   - chest_1
   - chest_0
   - glacialArmor

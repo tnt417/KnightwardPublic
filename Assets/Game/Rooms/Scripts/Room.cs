@@ -11,8 +11,8 @@ public class Room : MonoBehaviour
     //Editor variables
     [SerializeField] private Grid grid;
     [SerializeField] private RoomDoor[] roomDoors;
-
     [SerializeField] private GameObject spawnPrefabOnClear;
+    public Sprite minimapIcon;
     //
 
     private Vector2Int _roomIndex;

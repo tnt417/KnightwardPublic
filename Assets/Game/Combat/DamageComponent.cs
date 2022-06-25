@@ -42,7 +42,7 @@ public class DamageComponent : MonoBehaviour
         var damageable = other.gameObject.GetComponent<IDamageable>();
         var rb = other.gameObject.GetComponent<Rigidbody2D>();
         //
-        if (damageable == null || damageable.team == team || _damageTimer <= damageCooldown) return; //Check if valid thing to hit
+        if (damageable == null || damageable.team == team || _damageTimer <= damageCooldown || !other.isTrigger) return; //Check if valid thing to hit
 
         damageable.ApplyDamage((int)(damage * damageMultiplier)); //Apply the damage
         

@@ -12,7 +12,8 @@ public class RoomManager : MonoBehaviour
     [SerializeField] private Room currentActiveRoom;
     [SerializeField] private RoomGenerator roomGenerator;
     //
-    
+
+    public int MapSize => roomGenerator.MapSize;
     public static RoomManager Instance;
     private SmoothCameraFollow _smoothCameraFollow;
     private Vector2Int _currentActiveRoomIndex;
@@ -32,12 +33,19 @@ public class RoomManager : MonoBehaviour
         _smoothCameraFollow = FindObjectOfType<SmoothCameraFollow>(); //Initialize the camera follow variables
         StartRoomPhase(); //Run starting code
     }
+
+    private void Update()
+    {
+        MinimapManager.Instance.SetPlayerPosition(Player.Instance.transform.position, roomGenerator.roomOffset);
+    }
+    
     private void StartRoomPhase()
     {
         Rooms = roomGenerator.Generate(); //Randomly generate rooms
         DoDoorClosing(); //Close doors that need closing
+        MinimapManager.Instance.UpdateMinimap(); //Update the minimap now that we generated rooms
         SetActiveRoom(roomGenerator.mapRadius, roomGenerator.mapRadius); //Activate the starting room
-        
+
         //Teleport the player to (0, 0)
         var playerTransform = Player.Instance.transform;
         var currentPlayerPos = playerTransform.position;
@@ -92,6 +100,7 @@ public class RoomManager : MonoBehaviour
         if(currentActiveRoom != null) currentActiveRoom.gameObject.SetActive(false); //Deactivate the current room
         currentActiveRoom = newRoom; //Update currentActiveRoom variable
         currentActiveRoom.gameObject.SetActive(true); //Activate the new room
+        MinimapManager.Instance.UncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
         _smoothCameraFollow.CameraBounds = currentActiveRoom.RoomRect; //Update the camera bounds
         _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
     }
