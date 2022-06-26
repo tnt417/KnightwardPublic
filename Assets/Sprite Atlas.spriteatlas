@@ -54,6 +54,9 @@ SpriteAtlas:
   - {fileID: -458641133534639524, guid: d60cc33038e33174cb6cf2a89c6bc955, type: 3}
   - {fileID: 2542698315722941828, guid: d60cc33038e33174cb6cf2a89c6bc955, type: 3}
   - {fileID: -3711818451352614709, guid: d60cc33038e33174cb6cf2a89c6bc955, type: 3}
+  - {fileID: -1410670289, guid: 4b0a3b5019c9d1c48a96720407a5c11e, type: 3}
+  - {fileID: -1236769487, guid: 4b0a3b5019c9d1c48a96720407a5c11e, type: 3}
+  - {fileID: 235405268, guid: 4b0a3b5019c9d1c48a96720407a5c11e, type: 3}
   - {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
   - {fileID: -2413445229882570830, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: -4931394179368020708, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
@@ -121,6 +124,7 @@ SpriteAtlas:
   - {fileID: -5672041578588515963, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: -4624211100485340682, guid: 4ff7f71d0da05ef499d8a7f0cad5961f, type: 3}
   - {fileID: -4533104311714419295, guid: 4ff7f71d0da05ef499d8a7f0cad5961f, type: 3}
+  - {fileID: 21300000, guid: ebc95e5db007b494a9b83ad51fccd6d0, type: 3}
   - {fileID: -7397968594281517993, guid: 9eae086de756a624dbf5eb480c577b45, type: 3}
   - {fileID: -2745584556601996421, guid: 9eae086de756a624dbf5eb480c577b45, type: 3}
   - {fileID: -2223819268950575365, guid: 9eae086de756a624dbf5eb480c577b45, type: 3}
@@ -132,6 +136,7 @@ SpriteAtlas:
   - {fileID: 4473523978737149865, guid: 9eae086de756a624dbf5eb480c577b45, type: 3}
   - {fileID: 21300000, guid: aa6d0bbd1484b3747892f7b3b5e0c1c4, type: 3}
   - {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
+  - {fileID: 21300000, guid: b8cf5e6e4483c834ca3cc04fd6a606b4, type: 3}
   - {fileID: 5030290666744600015, guid: 87a4f8eef52ce114496d21291d10c990, type: 3}
   - {fileID: 6557094435153962602, guid: 87a4f8eef52ce114496d21291d10c990, type: 3}
   - {fileID: 7509860518518112746, guid: 87a4f8eef52ce114496d21291d10c990, type: 3}
@@ -163,6 +168,9 @@ SpriteAtlas:
   - slime_1
   - slime_2
   - slime_3
+  - ballistaTurret_2
+  - ballistaTurret_0
+  - ballistaTurret_1
   - coinpile
   - darkArcher_7
   - darkArcher_6
@@ -230,6 +238,7 @@ SpriteAtlas:
   - hanginglantern_5
   - castleWall_0
   - castleWall_1
+  - ballistaTurretBase
   - testTile_2
   - testTile_3
   - testTile_0
@@ -241,6 +250,7 @@ SpriteAtlas:
   - testTile_8
   - shadow
   - necklace
+  - ballistaTurretBolt
   - torch_2
   - torch_3
   - torch_0

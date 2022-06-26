@@ -308,7 +308,7 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!43 &1209384832
+--- !u!43 &1147291646
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -530,7 +530,11 @@ PrefabInstance:
     - target: {fileID: 6748647268940057350, guid: c6b10b81ee146e24aa30281656690eb7, type: 3}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1209384832}
+      objectReference: {fileID: 1147291646}
+    - target: {fileID: 6748647268940057350, guid: c6b10b81ee146e24aa30281656690eb7, type: 3}
+      propertyPath: m_InstanceId
+      value: -8634
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c6b10b81ee146e24aa30281656690eb7, type: 3}
 --- !u!1001 &6313302411445643522
