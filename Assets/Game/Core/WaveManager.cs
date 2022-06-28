@@ -16,8 +16,6 @@ namespace TonyDev.Game.Core
     }
     public class WaveManager : MonoBehaviour
     {
-        public static WaveManager Instance;
-        
         //Editor variables
         [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private float spawnRadius;
@@ -25,27 +23,26 @@ namespace TonyDev.Game.Core
         [SerializeField] private float waveCooldown;
         //
         
-        private float DifficultyThreshold => 1000 * (1 + GameManager.EnemyDifficultyScale/2);
-        private float _waveTimer = 10000000;
-        public float wavesSpawned = 0;
+        private static float DifficultyThreshold => 1000 * (1 + GameManager.EnemyDifficultyScale/2);
+        private float _waveTimer = 0;
+        public int wavesSpawned = 0;
+        public int TimeUntilNextWaveSeconds => (int)(waveCooldown - _waveTimer);
 
-        private void Awake()
-        {
-            //Singleton code
-            if (Instance == null) Instance = this;
-            else Destroy(this);
-            //
-        }
-        
         private void Update()
         {
-            _waveTimer += Time.deltaTime;
-            if (_waveTimer >= waveCooldown) SpawnWave();
+            waveCooldown = wavesSpawned % 5 == 0 ? 300 : 30; //Every 5 waves, have a 5 minute break. Otherwise 30 seconds in between waves.
+            
+            _waveTimer += Time.deltaTime; //Tick the wave timer
+            if (_waveTimer >= waveCooldown) SpawnWave(); //Spawn a wave if cooldown is over
         }
 
+        //Spawns a wave of enemies
         private void SpawnWave()
         {
-            Debug.Log(DifficultyThreshold);
+            /* DESCRIPTION:
+             * Chooses random spawns of enemies to spawn in random locations until it runs out of difficulty allowance.
+             */
+
             float difficultyTotal = 0;
             
             while (difficultyTotal <= DifficultyThreshold)
@@ -62,6 +59,7 @@ namespace TonyDev.Game.Core
             wavesSpawned++;
         }
 
+        //Instantiates enemies from a group of prefabs
         private void SpawnEnemies(IEnumerable<GameObject> enemyPrefabs)
         {
             foreach (var e in enemyPrefabs)

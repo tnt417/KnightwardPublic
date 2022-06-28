@@ -207,6 +207,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAnimator: {fileID: 3599722337500889287}
   maxHealth: 100
+  moneyReward: 1
 --- !u!114 &283398075999000703
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -219,6 +220,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f0b58a02ac5a4c4e9fb755a95466347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animations: []
   rb2D: {fileID: 647145178058711942}
   speedMultiplier: 2
 --- !u!95 &1861465650550614146

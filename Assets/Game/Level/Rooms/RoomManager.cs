@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -9,18 +10,23 @@ namespace TonyDev.Game.Level.Rooms
 {
     public class RoomManager : MonoBehaviour
     {
+        public static RoomManager Instance; //Singleton instance
+        
         //Editor variables
         [SerializeField] private Room currentActiveRoom;
         [SerializeField] private RoomGenerator roomGenerator;
+        [SerializeField] private GameObject minimapObject;
         //
-
-        public int MapSize => roomGenerator.MapSize;
-        public static RoomManager Instance;
+        
         private SmoothCameraFollow _smoothCameraFollow;
+        
+        //Room-related variables
+        public int MapSize => roomGenerator.MapSize; //The shared width/height of the map
         private Vector2Int _currentActiveRoomIndex;
         public Room[,] Rooms { get; private set; }
-        public static bool InRoomsPhase => SceneManager.GetActiveScene().name == "RoomScene";
-
+        public bool InStartingRoom => _currentActiveRoomIndex == Vector2Int.one * roomGenerator.mapRadius;
+        //
+        
         private void Awake()
         {
             //Singleton code
@@ -30,13 +36,13 @@ namespace TonyDev.Game.Level.Rooms
         }
         private void Start()
         {
-            if (!InRoomsPhase) return; //Don't run this code when not in the proper scene
             _smoothCameraFollow = FindObjectOfType<SmoothCameraFollow>(); //Initialize the camera follow variables
             StartRoomPhase(); //Run starting code
         }
 
         private void Update()
         {
+            minimapObject.SetActive(GameManager.GamePhase == GamePhase.Dungeon);
             MinimapManager.Instance.SetPlayerPosition(Player.Instance.transform.position, roomGenerator.roomOffset);
         }
     
@@ -45,13 +51,6 @@ namespace TonyDev.Game.Level.Rooms
             Rooms = roomGenerator.Generate(); //Randomly generate rooms
             DoDoorClosing(); //Close doors that need closing
             MinimapManager.Instance.UpdateMinimap(); //Update the minimap now that we generated rooms
-            SetActiveRoom(roomGenerator.mapRadius, roomGenerator.mapRadius); //Activate the starting room
-
-            //Teleport the player to (0, 0)
-            var playerTransform = Player.Instance.transform;
-            var currentPlayerPos = playerTransform.position;
-            playerTransform.position = new Vector3(0f, 0f, currentPlayerPos.z);
-            //
         }
 
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.
@@ -88,12 +87,12 @@ namespace TonyDev.Game.Level.Rooms
         
             //Move the player into the newly activated room
             var playerTransform = Player.Instance.transform;
-            playerTransform.transform.Translate(dx * 3, dy * 3, 0);
+            playerTransform.transform.Translate(dx * 4, dy * 4, 0);
             Player.Instance.playerMovement.DoMovement = true;
             //
         }
 
-        private void SetActiveRoom(int x, int y)
+        public void SetActiveRoom(int x, int y)
         {
             var newRoom = Rooms[x, y]; //Get the new room from the array
             if (newRoom == null) return; //If it's null, do nothing
@@ -104,6 +103,18 @@ namespace TonyDev.Game.Level.Rooms
             MinimapManager.Instance.UncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
             _smoothCameraFollow.CameraBounds = currentActiveRoom.RoomRect; //Update the camera bounds
             _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
+        }
+
+        //Performs all actions necessary to disable the room phase.
+        public void DeactivateRoomPhase()
+        {
+            _currentActiveRoomIndex = Vector2Int.zero;
+            if(_smoothCameraFollow != null) _smoothCameraFollow.CameraBounds = Rect.zero;
+            if (currentActiveRoom != null)
+            {
+                currentActiveRoom.gameObject.SetActive(false);
+                currentActiveRoom = null;
+            }
         }
 
         private void DoDoorClosing()

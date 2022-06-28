@@ -161,6 +161,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyAnimator: {fileID: 8697749402955360018}
   maxHealth: 100
+  moneyReward: 2
 --- !u!95 &1861465650550614146
 Animator:
   serializedVersion: 4

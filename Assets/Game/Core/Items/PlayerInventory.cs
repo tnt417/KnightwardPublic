@@ -23,12 +23,8 @@ namespace TonyDev.Game.Core.Items
 
         private void Start()
         {
-            InsertItem(ItemGenerator.GenerateItem(ItemType.Weapon, ItemRarity.Common)); //Add a starting sword to the player's inventory.
-            InsertItem(ItemGenerator.GenerateItem(ItemType.Armor, ItemRarity.Common)); //Add armor to inventory
-            InsertTower(towerPrefab);
-            InsertTower(towerPrefab);
-            InsertTower(towerPrefab);
-            InsertTower(towerPrefab);
+            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Weapon, ItemRarity.Common)); //Add a starting sword to the player's inventory.
+            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Armor, ItemRarity.Common)); //Add armor to inventory
         }
     
         private void Awake()
@@ -41,6 +37,7 @@ namespace TonyDev.Game.Core.Items
 
         public void InsertTower(GameObject prefab) //Inserts a tower into the inventory and adds it to the UI
         {
+            if (prefab == null) return;
             TowerUIController.Instance.AddTower(prefab);
         }
 
@@ -48,7 +45,7 @@ namespace TonyDev.Game.Core.Items
         public Item InsertItem(Item item)
         {
             Item replacedItem = null; //Holds the replaced item to be returned at the end.
-            switch (item.ItemType)
+            switch (item.itemType)
             {
                 case ItemType.Weapon: //If it's a weapon, it goes in the weapon slot.
                     replacedItem = WeaponItem;
@@ -63,12 +60,16 @@ namespace TonyDev.Game.Core.Items
                     else if(RelicItem2 == null) RelicItem2 = item;
                     else if(RelicItem3 == null) RelicItem3 = item;
                     break;
-                default:
-                    break;
+                case ItemType.Tower: //If it's a tower, just insert the prefab
+                    if (item.IsSpawnable) InsertTower(item.spawnablePrefab);
+                    return null;
             }
 
-            if (replacedItem != null) PlayerStats.RemoveStatBonuses(replacedItem.ItemName); //Remove stat bonuses of the now removed item
-            PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
+            if (item.IsEquippable)
+            {
+                if (replacedItem != null) PlayerStats.RemoveStatBonuses(replacedItem.itemName); //Remove stat bonuses of the now removed item
+                PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
+            }
 
             return replacedItem; //Return the item that was replaced. If nothing was replaced, returns null.
         }

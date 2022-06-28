@@ -1,4 +1,5 @@
 using TonyDev.Game.Core.Items;
+using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,8 +9,10 @@ namespace TonyDev.Game.Level.Decorations.Chests
 {
     public class Chest : MonoBehaviour
     {
+        [SerializeField] private int rarityBoost;
         [SerializeField] private GameObject groundItemPrefab;
         [SerializeField] private Animator chestAnimator;
+        [SerializeField] private ItemData[] possibleTowerItems;
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player") && other.isTrigger)
@@ -20,23 +23,22 @@ namespace TonyDev.Game.Level.Decorations.Chests
 
         private void DropItems()
         {
-            //Roll for a random rarity
-            var rarityRoll = Random.Range(0, 100);
-            var itemRarity = rarityRoll switch
-            {
-                var n when n >= 95 => ItemRarity.Unique, //5% chance for unique
-                var n when n >= 75 => ItemRarity.Rare, //20% chance for rare
-                var n when n >= 40 => ItemRarity.Uncommon, //35% chance for uncommon
-                var n when n >= 0 => ItemRarity.Common, //40% chance for common
-                _ => ItemRarity.Common
-            };
-            //
 
-            var item = ItemGenerator.GenerateItem((ItemType) Random.Range(0, 2), itemRarity); //Generate an item to drop
-        
+            var itemType = Item.RandomItemType;
+
+            var item = itemType switch
+            {
+                ItemType.Weapon or ItemType.Armor or ItemType.Relic => ItemGenerator.GenerateEquippableItem(
+                    Item.RandomItemType, Item.RandomRarity(rarityBoost)),
+                ItemType.Tower => possibleTowerItems[Random.Range(0, possibleTowerItems.Length)].item,
+                _ => null
+            };
+
+            Debug.Log("Item type: " + item?.itemType + ", Item sprite: " + item?.uiSprite);
+
             //If in a room, make the room the parent of the new items
             Transform parentTransform = null;
-            Room parentRoom = GetComponentInParent<Room>();
+            var parentRoom = GetComponentInParent<Room>();
             if (parentRoom != null) parentTransform = parentRoom.transform;
             //
         

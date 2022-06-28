@@ -38,7 +38,7 @@ namespace TonyDev.Game.Core.Entities.Player
     
         public static void AddStatBonusesFromItem(Item item) //Adds a stat bonus to the list, taking data from an item.
         {
-            foreach (var sb in item.StatBonuses)
+            foreach (var sb in item.statBonuses)
             {
                 _activeStatBonuses.Add(new StatBonus(sb.stat, sb.strength, sb.source));
             }

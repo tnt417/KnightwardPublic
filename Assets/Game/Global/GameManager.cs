@@ -9,43 +9,60 @@ using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.Global
 {
+    public enum GamePhase{
+        Arena, Dungeon
+    }
     public class GameManager : MonoBehaviour
     {
         public static float CrystalHealth = 1000f;
+        public static int Money;
         public static readonly List<Enemy> Enemies = new ();
         public static readonly List<EnemySpawner> EnemySpawners = new ();
         public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
+        public static GamePhase GamePhase;
+
         private void Awake()
         {
             DontDestroyOnLoad(gameObject); //Persist between scenes
+            SceneManager.sceneLoaded += OnSceneLoaded;
         }
 
-        private void FixedUpdate()
+        private void Update()
         {
-            /*Description:
-         !TEMPORARY! This code switches between the rooms and castles, once all enemies and spawners are cleared.
-         */
-            return;
-            if ((WaveManager.Instance != null && WaveManager.Instance.wavesSpawned >= 5 || Enemies.Count == 0 && EnemySpawners.Count == 0) && !TransitionController.Instance.InSceneTransition)
-            {
-                switch (RoomManager.InRoomsPhase)
-                {
-                    case false:
-                        TransitionController.Instance.LoadScene("RoomScene");
-                        break;
-                    case true:
-                        TransitionController.Instance.LoadScene("CastleScene");
-                        Player.Instance.transform.position = Vector3.zero;
-                        break;
-                }
-            }
+            if (Input.GetKeyDown(KeyCode.R)) TogglePhase(); //Toggle the phase when R is pressed
 
-            if (CrystalHealth <= 0)
+            if (CrystalHealth <= 0) SceneManager.LoadScene("GameOver"); //Lose the game when the crystal dies
+        }
+
+        //Switches back and forth between Arena and Dungeon phases
+        private void TogglePhase()
+        {
+            if(GamePhase == GamePhase.Arena) EnterDungeonPhase();
+            else if(RoomManager.Instance.InStartingRoom) EnterArenaPhase();
+        }
+
+        //Teleports player to the arena and sets GamePhase to Arena.
+        private void EnterArenaPhase()
+        {
+            RoomManager.Instance.DeactivateRoomPhase();
+            GamePhase = GamePhase.Arena;
+            Player.Instance.gameObject.transform.position =
+                GameObject.FindGameObjectWithTag("Castle").transform.position;
+        }
+
+        //Teleports the player to the dungeon, sets the starting room as active, and sets the GamePhase to Dungeon.
+        private void EnterDungeonPhase()
+        {
+            GamePhase = GamePhase.Dungeon;
+            Player.Instance.gameObject.transform.position = Vector3.zero;
+            RoomManager.Instance.SetActiveRoom((RoomManager.Instance.MapSize-1)/2, (RoomManager.Instance.MapSize-1)/2);
+        }
+
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "CastleScene") //When the castle scene loads, start the arena phase.
             {
-                Timer.Stop();
-                SceneManager.LoadScene("Scenes/GameOver");
-                Destroy(gameObject); //Destroy the DontDestroyOnLoad things
-                Destroy(FindObjectOfType<Player>().gameObject); //Destroy the Player
+                EnterArenaPhase();
             }
         }
     }

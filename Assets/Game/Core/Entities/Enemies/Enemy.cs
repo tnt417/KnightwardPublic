@@ -12,6 +12,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //Editor variables
         [SerializeField] private EnemyAnimator enemyAnimator;
         [SerializeField] private int maxHealth;
+        [SerializeField] private int moneyReward;
         //
 
         //Contains all interface code for IDamageable
@@ -38,6 +39,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
         public void Die()
         {
+            GameManager.Money += moneyReward;
             GameManager.Enemies.Remove(this);
             Destroy(gameObject);
         }

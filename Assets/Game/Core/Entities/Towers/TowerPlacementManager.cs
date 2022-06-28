@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Towers;
+using TonyDev.Game.Global;
 using TonyDev.UI;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -31,6 +32,7 @@ namespace TonyDev
         
         private void Update()
         {
+            if(GameManager.GamePhase == GamePhase.Dungeon) towerPlacementIndicator.SetActive(false);
             if (!Placing) return; //Don't move on if not placing
 
             var mousePos = _mainCamera.ScreenToWorldPoint(Input.mousePosition); //Get the mouse position

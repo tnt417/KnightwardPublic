@@ -1,34 +1,63 @@
 using System.Collections;
+using TMPro;
+using TonyDev.Game.Global;
+using TonyDev.Game.Level.Decorations.Chests;
 using UnityEngine;
+using Random = System.Random;
 
 namespace TonyDev.Game.Core.Items
 {
     public class GroundItem : MonoBehaviour
     {
         //Editor variables
+        [SerializeField] private int rarityBoost;
         [SerializeField] private SpriteRenderer spriteRenderer;
         [SerializeField] private GameObject pickupIndicator;
+        [SerializeField] private GameObject moneyIcon;
+        [SerializeField] private TMP_Text moneyLabel;
+        [SerializeField] private int cost;
         //
-    
+        
         private Item _item;
         private bool _pickupAble = true;
+        private bool FromChest => GetComponentInParent<Chest>() != null;
 
         private void Awake()
         {
             spriteRenderer.sharedMaterial = new Material(spriteRenderer.sharedMaterial); //Create a copy of the renderer's material to allow temporary editing.
         }
+
+        private void Start()
+        {
+            if (!FromChest) SetItem(ItemGenerator.GenerateEquippableItem(Item.RandomItemType, Item.RandomRarity(rarityBoost)));
+            SetCost(FromChest ? 0 : ItemGenerator.GenerateCost(_item));
+        }
     
         //Set the GroundItem's item.
         private void SetItem(Item newItem)
         {
-            spriteRenderer.sprite = newItem.UISprite; //Update the sprite
+            if (newItem == null)
+            {
+                Destroy(gameObject);
+                return;
+            }
+            
+            spriteRenderer.sprite = newItem.uiSprite; //Update the sprite
             _item = newItem; //Update the item
             UpdateOutlineColor(); //Update the outline color
         }
 
+        private void SetCost(int newCost)
+        {
+            cost = newCost;
+            moneyIcon.SetActive(cost != 0);
+            moneyLabel.enabled = cost != 0;
+            moneyLabel.text = cost.ToString();
+        }
+
         private void UpdateOutlineColor()
         {
-            switch (_item.ItemRarity) //Set the material's outline color based on the rarity. These are hardcoded right now.
+            switch (_item.itemRarity) //Set the material's outline color based on the rarity. These are hardcoded right now.
             {
                 case ItemRarity.Common:
                     spriteRenderer.sharedMaterial.SetColor("_OutlineColor", Color.black);
@@ -53,11 +82,15 @@ namespace TonyDev.Game.Core.Items
         private void OnTriggerStay2D(Collider2D other)
         {
             if (!other.CompareTag("Player")) return;
-            if (Input.GetKey(KeyCode.E) && _pickupAble) //When the player presses E...
+            if (Input.GetKey(KeyCode.E) && _pickupAble && GameManager.Money >= cost) //When the player presses E and has sufficient money...
             {
                 var returnItem = PlayerInventory.Instance.InsertItem(_item); //...try to insert the item into the player's inventory
                 if(returnItem == null) Destroy(gameObject); //If no item was replaced, just destroy this GroundItem
-                else SetItem(returnItem); //Otherwise, replaced the item
+                else{
+                    SetItem(returnItem); //Otherwise, replaced the item
+                    GameManager.Money -= cost; //Subtract
+                    SetCost(0); //Don't make the player pay for their replaced item
+                }
                 StartCoroutine(DisablePickupForSeconds(0.5f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
             }
         }
