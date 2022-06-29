@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
 using TonyDev.Game.Core;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Items;
 using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
@@ -14,8 +16,13 @@ namespace TonyDev.Game.Global
     }
     public class GameManager : MonoBehaviour
     {
-        public static float CrystalHealth = 1000f;
-        public static int Money;
+        //Editor variables
+        [SerializeField] private List<ItemData> itemData;
+        //
+
+        public static List<Item> AllItems = new List<Item>();
+        public static float CrystalHealth = 50f;
+        public static int Money = 1000;
         public static readonly List<Enemy> Enemies = new ();
         public static readonly List<EnemySpawner> EnemySpawners = new ();
         public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
@@ -25,6 +32,8 @@ namespace TonyDev.Game.Global
         {
             DontDestroyOnLoad(gameObject); //Persist between scenes
             SceneManager.sceneLoaded += OnSceneLoaded;
+
+            if (AllItems.Count >= 0) AllItems = itemData.Select(t => t.item).ToList();
         }
 
         private void Update()

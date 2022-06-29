@@ -28,7 +28,7 @@ namespace TonyDev.Editor
             
             if(itemType is ItemType.Armor or ItemType.Weapon or ItemType.Relic) DisplayEquippableInfo(sp); //Show equippable-specific fields
             if(itemType is ItemType.Tower) DisplaySpawnableInfo(sp); //Show spawnable-specific fields
-            
+
             serializedObject.ApplyModifiedProperties();
         }
 
@@ -36,6 +36,7 @@ namespace TonyDev.Editor
         {
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.uiSprite)));
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemName)));
+            EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemDescription)));
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemRarity)));
         }
 
@@ -43,6 +44,7 @@ namespace TonyDev.Editor
         {
             EditorGUILayout.LabelField("Equippable Item Data:", EditorStyles.largeLabel);
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.statBonuses)));
+            EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemEffects)));
         }
 
         private void DisplaySpawnableInfo(SerializedProperty sp)

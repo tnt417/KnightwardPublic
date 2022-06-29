@@ -31,32 +31,40 @@ namespace TonyDev.UI.ItemUI
             }
         
             //Update all the UI elements
-            if (PlayerInventory.Instance.WeaponItem != null)
+            var weaponItem = PlayerInventory.Instance.WeaponItem;
+            if (weaponItem != null)
             {
-                weaponText.text = GetItemDescription(PlayerInventory.Instance.WeaponItem);
-                weaponImage.sprite = PlayerInventory.Instance.WeaponItem.uiSprite;
+                weaponText.text = weaponItem.itemDescription + "\n" + GetItemDescription(weaponItem);
+                weaponImage.sprite = weaponItem.uiSprite;
             }
 
-            if (PlayerInventory.Instance.ArmorItem != null)
+            var armorItem = PlayerInventory.Instance.ArmorItem;
+            if (armorItem != null)
             {
-                armorText.text = GetItemDescription(PlayerInventory.Instance.ArmorItem);
-                armorImage.sprite = PlayerInventory.Instance.ArmorItem.uiSprite;
+                armorText.text = armorItem.itemDescription + "\n" + GetItemDescription(armorItem);
+                armorImage.sprite = armorItem.uiSprite;
             }
 
-            if (PlayerInventory.Instance.RelicItem1 != null)
+            if (PlayerInventory.Instance.RelicItems.Count >= 3)
             {
-                relic1Image.sprite = PlayerInventory.Instance.RelicItem1.uiSprite;
+                relic3Image.enabled = true;
+                relic3Image.sprite = PlayerInventory.Instance.RelicItems.ToArray()[2].uiSprite;
             }
+            else relic3Image.enabled = false;
 
-            if (PlayerInventory.Instance.RelicItem2 != null)
+            if (PlayerInventory.Instance.RelicItems.Count >= 2)
             {
-                relic2Image.sprite = PlayerInventory.Instance.RelicItem2.uiSprite;
+                relic2Image.enabled = true;
+                relic2Image.sprite = PlayerInventory.Instance.RelicItems.ToArray()[1].uiSprite;
             }
-
-            if (PlayerInventory.Instance.RelicItem3 != null)
+            else relic2Image.enabled = false;
+            
+            if (PlayerInventory.Instance.RelicItems.Count >= 1)
             {
-                relic3Image.sprite = PlayerInventory.Instance.RelicItem3.uiSprite;
+                relic1Image.enabled = true;
+                relic1Image.sprite = PlayerInventory.Instance.RelicItems.ToArray()[0].uiSprite;
             }
+            else relic1Image.enabled = false;
             //
 
             moneyText.text = GameManager.Money.ToString();
@@ -67,8 +75,9 @@ namespace TonyDev.UI.ItemUI
             var stringBuilder = new StringBuilder();
             
             stringBuilder.AppendLine(item.itemName); //Append the item name
-            
-            if(item.IsEquippable) stringBuilder.AppendLine(PlayerStats.GetStatsText(item.statBonuses));
+            stringBuilder.AppendLine(item.itemDescription + "\n");
+
+            if(item.IsEquippable) stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsText(item.statBonuses) + "</color>" + "\n");
 
             return stringBuilder.ToString(); //Return the string
         }

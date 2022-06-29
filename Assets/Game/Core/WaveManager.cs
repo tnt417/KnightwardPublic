@@ -30,7 +30,7 @@ namespace TonyDev.Game.Core
 
         private void Update()
         {
-            waveCooldown = wavesSpawned % 5 == 0 ? 300 : 30; //Every 5 waves, have a 5 minute break. Otherwise 30 seconds in between waves.
+            waveCooldown = wavesSpawned % 5 == 0 ? 30 : 30; //Every 5 waves, have a 0.5 minute break. Otherwise 30 seconds in between waves.
             
             _waveTimer += Time.deltaTime; //Tick the wave timer
             if (_waveTimer >= waveCooldown) SpawnWave(); //Spawn a wave if cooldown is over

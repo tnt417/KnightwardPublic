@@ -29,20 +29,20 @@ namespace TonyDev.Game.Core.Combat
             _attackTimer += Time.deltaTime; //Tick the attack timer.
         
             //TEMPORARY: Set some variabes to scale off of player stats
-            slashObject.transform.localScale = Vector3.one + Vector3.one * PlayerStats.GetStatBonus(Stat.AoeSize); //TODO
-            _slashDamageComponent.knockbackMultiplier = 1 + PlayerStats.GetStatBonus(Stat.Knockback); //TODO make all these have a PlayerCombat.Get method
-            _slashDamageComponent.damageMultiplier = PlayerCombat.GetDamageMultiplier();
-            _slashDamageComponent.damageCooldown = 0.333333f / PlayerCombat.GetAttackSpeedMultipler();
+            slashObject.transform.localScale = Vector3.one * PlayerStats.AoEMultiplier; //TODO
+            _slashDamageComponent.knockbackMultiplier = PlayerStats.KnockbackMultiplier; //TODO make all these have a PlayerCombat.Get method
+            _slashDamageComponent.damageMultiplier = PlayerStats.OutgoingDamageMultiplierWithCrit;
+            _slashDamageComponent.damageCooldown = 0.333333f / PlayerStats.AttackSpeedMultiplier;
             //
         
-            if (Input.GetMouseButton(0) && _attackTimer >= attackTimerMax / PlayerCombat.GetAttackSpeedMultipler()) Attack(); //If left mouse button down and timer ready, attack.
+            if (Input.GetMouseButton(0) && _attackTimer >= attackTimerMax / PlayerStats.AttackSpeedMultiplier) Attack(); //If left mouse button down and timer ready, attack.
         }
 
         private void Attack()
         {
             _attackTimer = 0; //Reset attack timer
             UpdateSlashDirection(); //Rotate the slash object to face the cursor
-            combatAnimator.SetFloat("attackSpeed", PlayerCombat.GetAttackSpeedMultipler()); //Update the animation speed.
+            combatAnimator.SetFloat("attackSpeed", PlayerStats.AttackSpeedMultiplier); //Update the animation speed.
             combatAnimator.Play("SwordSlash"); //Play the slashing sprite animation
         }
 

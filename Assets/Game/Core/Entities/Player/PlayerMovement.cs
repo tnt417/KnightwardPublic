@@ -21,7 +21,7 @@ namespace TonyDev.Game.Core.Entities.Player
             float dy = (Input.GetKey(KeyCode.S) ? -1 : 0) + (Input.GetKey(KeyCode.W) ? 1 : 0);
         
             //Add force, applying the movement.
-            rb2D.AddForce(new Vector2(dx, dy).normalized * speedMultiplier * Time.fixedDeltaTime * (1f+PlayerStats.GetStatBonus(Stat.MoveSpeed)));
+            rb2D.AddForce(new Vector2(dx, dy).normalized * speedMultiplier * Time.fixedDeltaTime * PlayerStats.MoveSpeedMultiplier);
         
             //Set animation directions based on the keys that were pressed.
             if (dy > 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Up;

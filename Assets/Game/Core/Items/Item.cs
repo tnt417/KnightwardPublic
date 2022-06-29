@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Items.ItemEffects;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -26,10 +28,13 @@ namespace TonyDev.Game.Core.Items
         //Editor variables
         public Sprite uiSprite;
         public string itemName;
+        [TextArea(3,3)]
+        public string itemDescription;
         public ItemType itemType;
         public ItemRarity itemRarity;
         public StatBonus[] statBonuses;
         public GameObject spawnablePrefab;
+        public ItemEffect[] itemEffects;
         //
 
         public static ItemRarity RandomRarity(int rarityBoost)

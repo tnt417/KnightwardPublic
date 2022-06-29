@@ -7,7 +7,7 @@ using UnityEngine;
 //Provides functionality for randomly generating items
 namespace TonyDev.Game.Core.Items
 {
-    public class ItemGenerator
+    public static class ItemGenerator
     {
         private static Sprite[] _weaponSprites; //Possible weapon sprites to pick from
         private static Sprite[] _armorSprites; //Possible armor sprites to pick from
@@ -22,6 +22,8 @@ namespace TonyDev.Game.Core.Items
             _relicSprites = SpriteDictionary.Sprites.Where(s => s.Key.StartsWith("ri_")).Select(s => s.Value).ToArray();
         }
 
+        public static Item RandomCustomItem => Tools.SelectRandom(GameManager.AllItems.ToArray());
+        
         //Returns a randomly generated item based on input parameters
         public static Item GenerateEquippableItem(ItemType type, ItemRarity rarity)
         {
@@ -35,17 +37,15 @@ namespace TonyDev.Game.Core.Items
             switch (type)
             {
                 case ItemType.Weapon:
-                    sprite = _weaponSprites[Random.Range(0, _weaponSprites.Length)];
+                    sprite = Tools.SelectRandom(_weaponSprites);
                     itemName = "Sword";
                     break;
                 case ItemType.Armor:
-                    sprite = _armorSprites[Random.Range(0, _armorSprites.Length)];
+                    sprite = Tools.SelectRandom(_armorSprites);
                     itemName = "Armor";
                     break;
                 case ItemType.Relic:
-                    sprite = _relicSprites[Random.Range(0, _relicSprites.Length)];
-                    itemName = "Relic";
-                    break;
+                    return Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Relic));
             }
 
             //Set stats based on the item type

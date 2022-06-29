@@ -73,7 +73,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 25
   damageMultiplier: 1
-  damageCooldown: 1
+  damageCooldown: 0.25
   team: 0
   destroyOnApply: 0
   knockbackForce: 500

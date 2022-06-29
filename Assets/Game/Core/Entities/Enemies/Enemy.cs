@@ -26,7 +26,6 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             enemyAnimator.PlayAnimation(EnemyAnimationState.Hurt); //Play the hurt animation
             var damageMultiplier = Mathf.Clamp01(1f - (Mathf.Log10(GameManager.EnemyDifficultyScale) - 0.5f)); //Enemies essentially gain damage resist as the difficulty scales.
-            Debug.Log(damageMultiplier);
             CurrentHealth -= damage * damageMultiplier;
             OnHealthChanged?.Invoke();
         

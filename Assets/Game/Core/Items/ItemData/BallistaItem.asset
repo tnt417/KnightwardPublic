@@ -15,7 +15,9 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 235405268, guid: 4b0a3b5019c9d1c48a96720407a5c11e, type: 3}
     itemName: Ballista Tower
+    itemDescription: A ballista turret.
     itemType: 3
     itemRarity: 0
     statBonuses: []
     spawnablePrefab: {fileID: 1150477889065159250, guid: 4984220720a15ef42bdfeff35a0e4b40, type: 3}
+    customEffectNames: []

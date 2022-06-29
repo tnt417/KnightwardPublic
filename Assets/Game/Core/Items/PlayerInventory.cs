@@ -9,30 +9,34 @@ namespace TonyDev.Game.Core.Items
     public class PlayerInventory : MonoBehaviour
     {
         public static PlayerInventory Instance;
-    
+
         //5 item variables, 1 for each inventory slot. A bit inefficient but works for now.
         public Item WeaponItem { get; private set; }
-        public Item ArmorItem{ get; private set; }
-        public Item RelicItem1{ get; private set; }
-        public Item RelicItem2{ get; private set; }
-        public Item RelicItem3{ get; private set; }
-        //
-        
-        //TODO TEMPORARY
-        [SerializeField] private GameObject towerPrefab;
+        public Item ArmorItem { get; private set; }
+
+        public Queue<Item> RelicItems { get; private set; } = new Queue<Item>();
 
         private void Start()
         {
-            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Weapon, ItemRarity.Common)); //Add a starting sword to the player's inventory.
-            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Armor, ItemRarity.Common)); //Add armor to inventory
+            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Weapon,
+                ItemRarity.Common)); //Add a starting sword to the player's inventory.
+            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Armor,
+                ItemRarity.Common)); //Add armor to inventory
         }
-    
+
         private void Awake()
         {
             //Singleton code
             if (Instance == null && Instance != this) Instance = this;
             else Destroy(this);
             //
+        }
+
+        private void Update()
+        {
+            foreach (var r in RelicItems)
+                foreach (var ie in r.itemEffects)
+                    ie.OnUpdate(); //Call OnUpdate for every item effect on the equipped relics
         }
 
         public void InsertTower(GameObject prefab) //Inserts a tower into the inventory and adds it to the UI
@@ -43,6 +47,31 @@ namespace TonyDev.Game.Core.Items
 
         //Replaces/inserts items into inventory and returns the item that was replaced, if any.
         public Item InsertItem(Item item)
+        {
+            if (item.itemType == ItemType.Tower)
+            {
+                InsertTower(item.spawnablePrefab); //If it's a tower, just insert the prefab
+                return null;
+            }
+
+            var replacedItem = SwapSlot(item); //Holds the replaced item to be returned at the end.
+
+            if (item.IsEquippable)
+            {
+                if (replacedItem != null)
+                {
+                    ItemEffectManager.OnEffectsRemoved(replacedItem.itemEffects);
+                    PlayerStats.RemoveStatBonuses(replacedItem.itemName); //Remove stat bonuses of the now removed item
+                }
+
+                ItemEffectManager.OnEffectsAdded(item.itemEffects);
+                PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
+            }
+
+            return replacedItem; //Return the item that was replaced. If nothing was replaced, returns null.
+        }
+
+        private Item SwapSlot(Item item)
         {
             Item replacedItem = null; //Holds the replaced item to be returned at the end.
             switch (item.itemType)
@@ -55,23 +84,15 @@ namespace TonyDev.Game.Core.Items
                     replacedItem = ArmorItem;
                     ArmorItem = item;
                     break;
-                case ItemType.Relic: //If it's a relic, it goes in the relic slot. //TODO: figure out relic replacing
-                    if(RelicItem1 == null) RelicItem1 = item;
-                    else if(RelicItem2 == null) RelicItem2 = item;
-                    else if(RelicItem3 == null) RelicItem3 = item;
+                case ItemType.Relic: //If it's a relic, it goes in the relic slot.
+                    RelicItems.Enqueue(item);
+                    if (RelicItems.Count > 3) replacedItem = RelicItems.Dequeue();
                     break;
-                case ItemType.Tower: //If it's a tower, just insert the prefab
-                    if (item.IsSpawnable) InsertTower(item.spawnablePrefab);
+                case ItemType.Tower:
                     return null;
             }
 
-            if (item.IsEquippable)
-            {
-                if (replacedItem != null) PlayerStats.RemoveStatBonuses(replacedItem.itemName); //Remove stat bonuses of the now removed item
-                PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
-            }
-
-            return replacedItem; //Return the item that was replaced. If nothing was replaced, returns null.
+            return replacedItem;
         }
     }
 }

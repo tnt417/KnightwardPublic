@@ -7249,17 +7249,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnPoints:
   - {fileID: 359135425}
-  - {fileID: 636425797}
-  - {fileID: 1270358627}
-  - {fileID: 228358052}
   spawnRadius: 2
   enemySpawns:
   - enemyPrefabs:
     - {fileID: 4155343733709524297, guid: 9a1f224f3fc4eeb42a9ac3e8765bbbd3, type: 3}
-    difficultyRating: 100
+    difficultyRating: 1000
   - enemyPrefabs:
     - {fileID: 4155343733709524297, guid: 7166e29d0ffa34440976a507ae9135df, type: 3}
-    difficultyRating: 200
+    difficultyRating: 20000
   waveCooldown: 30
   wavesSpawned: 0
 --- !u!4 &1223629565
