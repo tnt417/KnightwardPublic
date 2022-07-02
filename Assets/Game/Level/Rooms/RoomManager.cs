@@ -23,7 +23,9 @@ namespace TonyDev.Game.Level.Rooms
         public int MapSize => roomGenerator.MapSize; //The shared width/height of the map
         private Vector2Int _currentActiveRoomIndex;
         public Room[,] Rooms { get; private set; }
-        public bool InStartingRoom => _currentActiveRoomIndex == Vector2Int.one * roomGenerator.mapRadius;
+        public bool InStartingRoom => _currentActiveRoomIndex == StartingRoomPos;
+        public Vector2Int StartingRoomPos => roomGenerator.startingRoomPos;
+        public Room StartingRoom => Rooms[StartingRoomPos.x, StartingRoomPos.y];
         //
         
         private void Awake()
@@ -140,6 +142,22 @@ namespace TonyDev.Game.Level.Rooms
         {
             if (x < 0 || y < 0 || x > roomGenerator.MapSize-1 || y > roomGenerator.MapSize-1) return false;
             return Rooms[x, y] != null;
+        }
+
+        public void ResetRooms()
+        {
+            foreach (var r in Rooms) //Destroy all rooms...
+                if(r != null) Destroy(r.gameObject);
+
+            MinimapManager.Instance.Reset();
+            roomGenerator.Reset();
+            StartRoomPhase();
+        }
+
+        public void TeleportPlayerToStart()
+        {
+            Player.Instance.transform.position = StartingRoom.transform.position;
+            SetActiveRoom(StartingRoomPos.x, StartingRoomPos.y);
         }
     }
 }

@@ -13,13 +13,11 @@ namespace TonyDev.UI.ItemUI
     {
         //Editor variables
         [SerializeField] private GameObject inventoryObject;
-        [SerializeField] private Image weaponImage;
-        [SerializeField] private TMP_Text weaponText;
-        [SerializeField] private Image armorImage;
-        [SerializeField] private TMP_Text armorText;
-        [SerializeField] private Image relic1Image;
-        [SerializeField] private Image relic2Image;
-        [SerializeField] private Image relic3Image;
+        [SerializeField] private GameObject gearInventoryObject;
+        [SerializeField] private GameObject towerInventoryObject;
+        [SerializeField] private ItemSlot weaponSlot;
+        [SerializeField] private ItemSlot armorSlot;
+        [SerializeField] private ItemSlot[] relicSlots;
         [SerializeField] private TMP_Text moneyText;
         //
     
@@ -31,55 +29,28 @@ namespace TonyDev.UI.ItemUI
             }
         
             //Update all the UI elements
-            var weaponItem = PlayerInventory.Instance.WeaponItem;
-            if (weaponItem != null)
-            {
-                weaponText.text = weaponItem.itemDescription + "\n" + GetItemDescription(weaponItem);
-                weaponImage.sprite = weaponItem.uiSprite;
-            }
+            weaponSlot.Item = PlayerInventory.Instance.WeaponItem;
+            armorSlot.Item = PlayerInventory.Instance.ArmorItem;
 
-            var armorItem = PlayerInventory.Instance.ArmorItem;
-            if (armorItem != null)
-            {
-                armorText.text = armorItem.itemDescription + "\n" + GetItemDescription(armorItem);
-                armorImage.sprite = armorItem.uiSprite;
-            }
-
-            if (PlayerInventory.Instance.RelicItems.Count >= 3)
-            {
-                relic3Image.enabled = true;
-                relic3Image.sprite = PlayerInventory.Instance.RelicItems.ToArray()[2].uiSprite;
-            }
-            else relic3Image.enabled = false;
-
-            if (PlayerInventory.Instance.RelicItems.Count >= 2)
-            {
-                relic2Image.enabled = true;
-                relic2Image.sprite = PlayerInventory.Instance.RelicItems.ToArray()[1].uiSprite;
-            }
-            else relic2Image.enabled = false;
-            
-            if (PlayerInventory.Instance.RelicItems.Count >= 1)
-            {
-                relic1Image.enabled = true;
-                relic1Image.sprite = PlayerInventory.Instance.RelicItems.ToArray()[0].uiSprite;
-            }
-            else relic1Image.enabled = false;
+            var relicArray = PlayerInventory.Instance.RelicItems.ToArray();
+            if(relicArray.Length >= 1) relicSlots[0].Item = relicArray[0];
+            if(relicArray.Length >= 2) relicSlots[1].Item = relicArray[1];
+            if(relicArray.Length >= 3) relicSlots[2].Item = relicArray[2];
             //
 
             moneyText.text = GameManager.Money.ToString();
         }
 
-        private string GetItemDescription(Item item) //Returns a string that contains a specified item's name and stats, all on their own line
+        public void SwitchToGearPanel()
         {
-            var stringBuilder = new StringBuilder();
-            
-            stringBuilder.AppendLine(item.itemName); //Append the item name
-            stringBuilder.AppendLine(item.itemDescription + "\n");
+            towerInventoryObject.SetActive(false);
+            gearInventoryObject.SetActive(true);
+        }
 
-            if(item.IsEquippable) stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsText(item.statBonuses) + "</color>" + "\n");
-
-            return stringBuilder.ToString(); //Return the string
+        public void SwitchToTowerPanel()
+        {
+            towerInventoryObject.SetActive(true);
+            gearInventoryObject.SetActive(false);
         }
     }
 }

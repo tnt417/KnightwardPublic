@@ -4,7 +4,7 @@ namespace TonyDev.Game.Core.Entities.Towers
 {
     public enum TowerAnimationState
     {
-        Charge, Fire
+        Charge, Fire, Idle
     }
     public class TowerAnimator : MonoBehaviour
     {
@@ -15,6 +15,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         
         public void PlayAnimation(TowerAnimationState animState)
         {
+            if (animations[(int) animState] == null) return;
             animator.Play(animations[(int)animState].name); //Play an animation based on the animState
         }
     }

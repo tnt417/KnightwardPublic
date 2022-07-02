@@ -365,7 +365,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb2D: {fileID: 1277911647}
-  speedMultiplier: 40000
+  speedMultiplier: 25000
 --- !u!114 &1277911644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb075c3e7cc12a4293a7e4e4e2d4a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deathCooldown: 10
+  deathCooldown: 5
   healthBarObject: {fileID: 7021041495485311875}
   deathTimerText: {fileID: 2684003557218082394}
 --- !u!114 &3273283584058802837
@@ -481,7 +481,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f587663e1de6244e85f0150dae080ca, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  towerPrefab: {fileID: 1150477889065159250, guid: 4984220720a15ef42bdfeff35a0e4b40, type: 3}
 --- !u!1 &4991830317333741039
 GameObject:
   m_ObjectHideFlags: 0
@@ -5661,7 +5660,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
-  m_EdgeRadius: 0
+  m_EdgeRadius: 0.2
 --- !u!1001 &253863116236715083
 PrefabInstance:
   m_ObjectHideFlags: 0

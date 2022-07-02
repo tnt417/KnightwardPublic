@@ -30,7 +30,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.083333336
+        time: 0.05
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -39,7 +39,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.8333333
+        time: 0.5
         value: 0
         inSlope: Infinity
         outSlope: Infinity
@@ -65,31 +65,31 @@ AnimationClip:
     script: {fileID: 0}
   m_PPtrCurves:
   - curve:
-    - time: 0.083333336
+    - time: 0.05
       value: {fileID: 7934486634113364521, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.16666667
+    - time: 0.1
       value: {fileID: -2518482901029058985, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.25
+    - time: 0.15
       value: {fileID: 5111592815656581544, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.33333334
+    - time: 0.2
       value: {fileID: 923730005880971647, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.41666666
+    - time: 0.25
       value: {fileID: -1138683553050338935, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.5
+    - time: 0.3
       value: {fileID: -8104546922111966089, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.5833333
+    - time: 0.35
       value: {fileID: -5535341334418039805, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.6666667
+    - time: 0.4
       value: {fileID: 7278729873464180506, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.75
+    - time: 0.45
       value: {fileID: 1017377533788240461, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.8333333
+    - time: 0.5
       value: {fileID: -4590656796376217752, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.9166667
+    - time: 0.55
       value: {fileID: 5220152795619417325, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 0.96666664
+    - time: 0.6
       value: {fileID: -4590656796376217752, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
-    - time: 1
+    - time: 0.65
       value: {fileID: 0}
     attribute: m_Sprite
     path: PlayerSlash
@@ -164,7 +164,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.083333336
+        time: 0.05
         value: 1
         inSlope: Infinity
         outSlope: Infinity
@@ -173,7 +173,7 @@ AnimationClip:
         inWeight: 0
         outWeight: 0
       - serializedVersion: 3
-        time: 0.8333333
+        time: 0.5
         value: 0
         inSlope: Infinity
         outSlope: Infinity

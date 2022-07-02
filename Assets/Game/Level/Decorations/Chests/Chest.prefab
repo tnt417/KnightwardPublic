@@ -242,10 +242,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65d34db50f0b29c4cacbcdafb67138e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  rarityBoost: -5
   groundItemPrefab: {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
   chestAnimator: {fileID: 3480099948076729621}
-  possibleTowerItems:
-  - {fileID: 11400000, guid: 18d6294d14ceaf143a7fe0b8637dfd39, type: 2}
 --- !u!95 &3480099948076729621
 Animator:
   serializedVersion: 4

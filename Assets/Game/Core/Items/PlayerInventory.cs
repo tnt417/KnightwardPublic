@@ -18,9 +18,9 @@ namespace TonyDev.Game.Core.Items
 
         private void Start()
         {
-            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Weapon,
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Weapon,
                 ItemRarity.Common)); //Add a starting sword to the player's inventory.
-            InsertItem(ItemGenerator.GenerateEquippableItem(ItemType.Armor,
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Armor,
                 ItemRarity.Common)); //Add armor to inventory
         }
 
@@ -39,18 +39,19 @@ namespace TonyDev.Game.Core.Items
                     ie.OnUpdate(); //Call OnUpdate for every item effect on the equipped relics
         }
 
-        public void InsertTower(GameObject prefab) //Inserts a tower into the inventory and adds it to the UI
+        public void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI
         {
-            if (prefab == null) return;
-            TowerUIController.Instance.AddTower(prefab);
+            if (!item.IsSpawnable) return;
+            TowerUIController.Instance.AddTower(item);
         }
 
         //Replaces/inserts items into inventory and returns the item that was replaced, if any.
         public Item InsertItem(Item item)
         {
+            if (item == null) return null;
             if (item.itemType == ItemType.Tower)
             {
-                InsertTower(item.spawnablePrefab); //If it's a tower, just insert the prefab
+                InsertTower(item); //If it's a tower, insert it
                 return null;
             }
 

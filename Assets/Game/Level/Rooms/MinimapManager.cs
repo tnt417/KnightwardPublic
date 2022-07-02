@@ -27,6 +27,14 @@ namespace TonyDev.Game.Level.Rooms
             else Destroy(this);
             //
         }
+
+        public void Reset()
+        {
+            foreach (var go in _uiRoomObjects)
+            {
+                Destroy(go);
+            }
+        }
     
         public void UpdateMinimap()
         {
@@ -83,10 +91,11 @@ namespace TonyDev.Game.Level.Rooms
 
         public void SetPlayerPosition(Vector2 playerPos, Vector2 roomOffset)
         {
-            //MATH EXPLANATION: Each room grid is 100x100 in the UI, with 25px of padding. playerPos divided by roomOffset gets the player's position in terms of
-            //                  room coordinates. Just multiply that by 125px to convert it to the UI room coordinates, subtracting half of the minimap's dimensions to center it,
+            //MATH EXPLANATION: Each room grid is 100x100 in the UI. playerPos divided by roomOffset gets the player's position in terms of
+            //                  room coordinates. Just multiply that by 100px to convert it to the UI room coordinates, subtracting half of the minimap's dimensions to center it,
             //                  and it works perfectly. playerPos is negative since it isn't the player moving, it is the world moving around it.
-            ((RectTransform) uiRoomGridLayout.transform).localPosition = 100f * -playerPos / roomOffset - new Vector2(200f, 200f);
+            ((RectTransform) uiRoomGridLayout.transform).localPosition =
+                100f * (-playerPos / roomOffset) - new Vector2(200f, 200f);
         }
     }
 }

@@ -1,4 +1,5 @@
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -14,6 +15,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //
         public int Spawns { get; private set; }
         private float _timer;
+        public bool InRoom => GetComponentInParent<Room>() != null;
 
         private void Awake()
         {

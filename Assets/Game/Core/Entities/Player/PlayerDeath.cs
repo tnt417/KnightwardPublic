@@ -13,12 +13,12 @@ namespace TonyDev.Game.Core.Entities.Player
         [SerializeField] private TMP_Text deathTimerText;
         //
     
-        private bool dead;
+        public static bool Dead;
         private float _deathTimer;
     
         void Update()
         {
-            if (dead) //Runs while dead
+            if (Dead) //Runs while dead
             {
                 _deathTimer += Time.deltaTime; //Tick death timer
                 deathTimerText.text = Mathf.CeilToInt(deathCooldown - _deathTimer).ToString(); //Update death timer text
@@ -31,8 +31,8 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public void Die() //Called when the player's health drops to 0
         {
-            if (dead) return;
-            dead = true; //Die
+            if (Dead) return;
+            Dead = true; //Die
             healthBarObject.SetActive(false); //Hide health bar
             Player.Instance.playerAnimator.PlayDeadAnimation(); //Play death animation
             foreach (var e in GameManager.Enemies)
@@ -43,7 +43,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         private void Revive() //Called when the player's death timer is up.
         {
-            dead = false; //Revive
+            Dead = false; //Revive
             _deathTimer = 0; //Reset the death timer
             healthBarObject.SetActive(true); //Re-active the health bar
             Player.Instance.SetHealth(Player.Instance.MaxHealth); //Fully heal the player

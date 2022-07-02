@@ -34,7 +34,7 @@ namespace TonyDev.Game.Level
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         {
-            _transitionAnimator.Play("SceneFadeIn"); //Fade in when a scene is loaded
+            if(_transitionAnimator != null) _transitionAnimator.Play("SceneFadeIn"); //Fade in when a scene is loaded
         }
 
         public void LoadScene(string scene) //Transitions to a new scene

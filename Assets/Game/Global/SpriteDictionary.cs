@@ -22,8 +22,12 @@ namespace TonyDev.Game.Global
     {
         [SerializeField] private SpriteEntry[] spriteEntries; //Sole purpose is to make entries in the editor
         public static readonly Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>(); //Dictionary to make accessing sprites through code easier.
+        private static bool _initialized;
         private void Awake()
         {
+            if (_initialized) return;
+            _initialized = true;
+            
             //Add all the sprites into the dictionary
             foreach(var se in spriteEntries)
             {

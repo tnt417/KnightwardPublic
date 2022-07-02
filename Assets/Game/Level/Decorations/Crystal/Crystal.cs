@@ -21,7 +21,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         #region IDamageable
 
         public Team team => Team.Player;
-        public int MaxHealth => 100;
+        public int MaxHealth => 1000;
         public float CurrentHealth {
             get => GameManager.CrystalHealth;
             private set => GameManager.CrystalHealth = value;
@@ -29,6 +29,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         public bool IsAlive => CurrentHealth > 0;
         public void ApplyDamage(int damage)
         {
+            Debug.Log(damage);
             CurrentHealth -= damage;
             OnHealthChanged?.Invoke();
 

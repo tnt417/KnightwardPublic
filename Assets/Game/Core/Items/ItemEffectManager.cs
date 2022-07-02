@@ -1,7 +1,6 @@
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items.ItemEffects;
 using TonyDev.Game.Level.Decorations.Crystal;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Events;
 

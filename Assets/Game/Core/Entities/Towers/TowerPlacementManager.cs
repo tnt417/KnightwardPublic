@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Towers;
+using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.UI;
 using UnityEngine;
@@ -14,7 +15,6 @@ namespace TonyDev
         
         //Editor variables
         [SerializeField] public GameObject towerPlacementIndicator;
-        [SerializeField] private GameObject towerPrefab;
         //
         
         private List<Tower> _placedTowers = new List<Tower>();
@@ -41,13 +41,13 @@ namespace TonyDev
             if (Input.GetMouseButtonDown(0)) SpawnTower(); //Spawn a tower if placing and click
         }
 
-        public void TogglePlacing(GameObject prefab)
+        public void TogglePlacing(Item item)
         {
             towerPlacementIndicator.SetActive(!Placing); //Toggle the placement indicator activeness
-            _selectedTowerPrefab = prefab; //Update selected prefab
+            _selectedTowerPrefab = item.spawnablePrefab; //Update selected prefab
             var prefabSprite = _selectedTowerPrefab.GetComponentInChildren<SpriteRenderer>(); //Get the prefab's SpriteRenderer
             var indicatorSprite = towerPlacementIndicator.GetComponent<SpriteRenderer>(); //Get the indicator's SpriteRenderer
-            indicatorSprite.sprite = prefabSprite.sprite; //Update the indicator's sprite to be the new prefab's sprite
+            indicatorSprite.sprite = item.uiSprite; //Update the indicator's sprite to be the tower's ui sprite
         }
         
         //Spawns a tower at the indicator position and exits from placing mode

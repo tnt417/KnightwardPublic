@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Towers;
+using TonyDev.Game.Core.Items;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -13,29 +14,30 @@ namespace TonyDev.UI
         [SerializeField] private GameObject uiTowerGrid;
         //
 
-        private UITower _selectedUITower;
+        private ItemSlot _selectedTowerSlot;
 
         private void Awake()
         {
             if (Instance == null) Instance = this;
             else Destroy(this);
+            gameObject.SetActive(false);
         }
         
-        public void AddTower(GameObject prefab)
+        public void AddTower(Item item)
         {
-            var go = Instantiate(uiTowerPrefab, uiTowerGrid.transform);
-            go.SendMessage("Set", prefab); //Tell the UITower what tower it is
+            var itemSlot = Instantiate(uiTowerPrefab, uiTowerGrid.transform).GetComponent<ItemSlot>();
+            itemSlot.Item = item;
         }
 
-        public void StartPlacingTower(UITower tower, GameObject prefab)
+        public void StartPlacingTower(ItemSlot slot, Item item)
         {
-            TowerPlacementManager.Instance.TogglePlacing(prefab); //Start/stop placing the prefab specified
-            _selectedUITower = tower;
+            TowerPlacementManager.Instance.TogglePlacing(item); //Start/stop placing the prefab specified
+            _selectedTowerSlot = slot;
         }
 
         public void ConfirmPlace()
         {
-            Destroy(_selectedUITower.gameObject); //Called when clicking while placing. Destroys the UI tower that was just placed.
+            Destroy(_selectedTowerSlot.gameObject); //Called when clicking while placing. Destroys the UI tower that was just placed.
         }
     }
 }

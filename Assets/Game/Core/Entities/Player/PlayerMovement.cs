@@ -7,7 +7,7 @@ namespace TonyDev.Game.Core.Entities.Player
     {
         //Editor variables
         [SerializeField] private Rigidbody2D rb2D;
-        [SerializeField] private float speedMultiplier;
+        [SerializeField] public float speedMultiplier;
         //
     
         [NonSerialized] public bool DoMovement = true;
@@ -21,7 +21,7 @@ namespace TonyDev.Game.Core.Entities.Player
             float dy = (Input.GetKey(KeyCode.S) ? -1 : 0) + (Input.GetKey(KeyCode.W) ? 1 : 0);
         
             //Add force, applying the movement.
-            rb2D.AddForce(new Vector2(dx, dy).normalized * speedMultiplier * Time.fixedDeltaTime * PlayerStats.MoveSpeedMultiplier);
+            rb2D.AddForce(new Vector2(dx, dy).normalized * Time.fixedDeltaTime * GetSpeedMultiplier());
         
             //Set animation directions based on the keys that were pressed.
             if (dy > 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Up;
@@ -30,6 +30,11 @@ namespace TonyDev.Game.Core.Entities.Player
             if (dx < 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Left;
             if (dy == 0 && dx == 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Idle;
             //
+        }
+
+        public float GetSpeedMultiplier()
+        {
+            return speedMultiplier * PlayerStats.MoveSpeedMultiplier;
         }
     }
 }

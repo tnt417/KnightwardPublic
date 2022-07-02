@@ -30,6 +30,13 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public void ApplyDamage(int damage)
         {
+            if (damage <= 0)
+            {
+                CurrentHealth -= damage;
+                OnHealthChanged?.Invoke();
+                return;
+            }
+            
             if (PlayerStats.DodgeSuccessful) return; //Don't apply damage is dodge rolls successful.
             var modifiedDamage = Mathf.Clamp(PlayerStats.ModifyIncomingDamage(damage), 0, Mathf.Infinity);
             CurrentHealth -= modifiedDamage;

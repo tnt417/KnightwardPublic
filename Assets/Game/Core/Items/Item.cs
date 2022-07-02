@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items.ItemEffects;
 using UnityEditor;
@@ -21,7 +22,23 @@ namespace TonyDev.Game.Core.Items
     [Serializable]
     public class Item
     {
-        public static ItemType RandomItemType => (ItemType) Random.Range(0, 3); //A random item type
+        public static ItemType RandomItemType
+        {
+            get
+            {
+                var roll = Random.Range(0, 100);
+                return roll switch
+                {
+                    >= 70 => ItemType.Armor,
+                    >= 40 => ItemType.Relic,
+                    >= 10 => ItemType.Weapon,
+                    >= 0 => ItemType.Tower,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                //A random item type. Towers are twice as rare as standard item types.
+            }
+        }
+
         public bool IsEquippable => itemType is ItemType.Armor or ItemType.Relic or ItemType.Weapon;
         public bool IsSpawnable => itemType is ItemType.Tower;
         
@@ -52,6 +69,17 @@ namespace TonyDev.Game.Core.Items
             //
             
             return itemRarity;
+        }
+        
+        public string GetItemDescription() //Returns a string that contains a specified item's name and stats, all on their own line
+        {
+            var stringBuilder = new StringBuilder();
+            
+            if(itemDescription != string.Empty) stringBuilder.AppendLine(itemDescription);
+
+            if(IsEquippable) stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsText(statBonuses) + "</color>");
+
+            return stringBuilder.ToString(); //Return the string
         }
     }
 }

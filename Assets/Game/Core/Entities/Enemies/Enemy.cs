@@ -2,6 +2,8 @@ using System;
 using System.Linq;
 using TonyDev.Game.Core.Combat;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Decorations.Crystal;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
@@ -62,7 +64,9 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 .OrderBy( mb => Vector2.Distance(mb.transform.position, transform.position))
                 .FirstOrDefault()
                 ?.gameObject; //Finds closest non-dead damageable object on the player team
-        
+
+            if (gameObject.GetComponent<Crystal>() != null && GetComponentInParent<EnemySpawner>().InRoom) return null; //Don't target the crystal if we are a room enemy
+            
             Target = go == null ? null : go.transform; //Update the Target variable
         
             return go; //Returns the game object

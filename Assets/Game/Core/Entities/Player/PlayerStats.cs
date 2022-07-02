@@ -41,10 +41,10 @@ namespace TonyDev.Game.Core.Entities.Player
         public static StatHandler DodgeHandler = () => GetStatBonus(Stat.Dodge);
         public static bool DodgeSuccessful => Random.Range(0f, 1f) < DodgeHandler.Invoke();
         //Health
-        public static StatHandler HealthHandler = () => 100 + (int)(GetStatBonus(Stat.Health) * 100);
+        public static StatHandler HealthHandler = () => 100 + (int)(GetStatBonus(Stat.Health));
         public static float Health => HealthHandler.Invoke();
         //Attack Speed
-        public static StatHandler AttackSpeedHandler = () => 1 + GetStatBonus(Stat.AttackSpeed);
+        public static StatHandler AttackSpeedHandler = () => GetStatBonus(Stat.AttackSpeed);
         public static float AttackSpeedMultiplier => AttackSpeedHandler.Invoke();
         //Crit chance
         public static StatHandler CritChanceHandler = () => GetStatBonus(Stat.CritChance);
@@ -54,7 +54,7 @@ namespace TonyDev.Game.Core.Entities.Player
         public static StatHandler CritDamageHandler = () => 2f + GetStatBonus(Stat.CritDamage);
         public static float CritDamageMultiplier => CritDamageHandler.Invoke();
         //Damage
-        public static StatHandler DamageHandler = () => 1f + GetStatBonus(Stat.Damage);
+        public static StatHandler DamageHandler = () => GetStatBonus(Stat.Damage);
         public static float OutgoingDamageMultiplier => DamageHandler.Invoke();
         public static float OutgoingDamageMultiplierWithCrit => (CritSuccessful ? CritDamageMultiplier : 1) * OutgoingDamageMultiplier;
         //Knockback
@@ -72,6 +72,9 @@ namespace TonyDev.Game.Core.Entities.Player
         //Damage reduction
         public static StatHandler DamageReductionHandler = () => GetStatBonus(Stat.DamageReduction);
         public static float IncomingDamageMultiplier = 1f - DamageReductionHandler.Invoke();
+        //Tenacity
+        public static StatHandler NegativeEffectMultiplierHandler = () => 1 - GetStatBonus(Stat.Tenacity);
+        public static float NegativeEffectMultiplier = NegativeEffectMultiplierHandler.Invoke();
         public static float ModifyIncomingDamage(float damage)
         {
             return (damage - IncomingDamageFlatReduction) * IncomingDamageMultiplier;
@@ -140,7 +143,7 @@ namespace TonyDev.Game.Core.Entities.Player
             foreach (var t in statBonuses)
             {
                 var value = t.strength;
-                sb.Append(GetStatText(t.stat, value) + "\n");
+                sb.AppendLine(GetStatText(t.stat, value));
             }
 
             return sb.ToString();
@@ -152,10 +155,10 @@ namespace TonyDev.Game.Core.Entities.Player
             
             return stat switch
             {
-                Stat.Armor => "Armor: " + value * 10f,
+                Stat.Armor => "Armor: " + value,
                 Stat.Damage => ("Damage: " + ((int) (value * 100f)) + "%"),
                 Stat.Dodge => ("Dodge: " + (int) (value * 100f) + "%"),
-                Stat.Health => ("Max HP: " + ((int) (value * 100f))),
+                Stat.Health => ("Max HP: " + ((int) (value))),
                 Stat.Knockback => ("Knockback: " + ((int) (value * 100f)) + "%"),
                 Stat.Stun => ("Stun: " + (int) (value * 100f) + "%"),
                 Stat.Tenacity => ("Tenacity: " + (int) (value * 100f) + "%"),

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 440167816253129492}
   - component: {fileID: 1850413612171510036}
   - component: {fileID: -4567278862790983507}
+  - component: {fileID: 61457816368861377}
   m_Layer: 6
   m_Name: Bolt
   m_TagString: Untagged
@@ -147,7 +148,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd879a871c0f7974b89c47103732aefb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 10
   damageMultiplier: 1
   damageCooldown: 0
   team: 1
@@ -262,3 +263,16 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &61457816368861377
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5620128404347004703}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d3413993769548879c11be84b68fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seconds: 10

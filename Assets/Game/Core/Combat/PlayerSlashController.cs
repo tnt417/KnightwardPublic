@@ -60,6 +60,7 @@ namespace TonyDev.Game.Core.Combat
         private void OnDisable()
         {
             slashSpriteRenderer.sprite = null; //Done to prevent attack animation sprites from sticking around when this is disabled
+            slashObject.GetComponent<BoxCollider2D>().enabled = false;
         }
     }
 }

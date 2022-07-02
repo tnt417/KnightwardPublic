@@ -29,7 +29,7 @@ namespace TonyDev.Game.Core.Items
 
         private void Start()
         {
-            if (!FromChest) SetItem(ItemGenerator.GenerateEquippableItem(Item.RandomItemType, Item.RandomRarity(rarityBoost)));
+            if (!FromChest) SetItem(ItemGenerator.GenerateItem(rarityBoost));
             SetCost(FromChest ? 0 : ItemGenerator.GenerateCost(_item));
         }
     
@@ -85,10 +85,10 @@ namespace TonyDev.Game.Core.Items
             if (Input.GetKey(KeyCode.E) && _pickupAble && GameManager.Money >= cost) //When the player presses E and has sufficient money...
             {
                 var returnItem = PlayerInventory.Instance.InsertItem(_item); //...try to insert the item into the player's inventory
+                GameManager.Money -= cost; //Subtract money
                 if(returnItem == null) Destroy(gameObject); //If no item was replaced, just destroy this GroundItem
                 else{
                     SetItem(returnItem); //Otherwise, replaced the item
-                    GameManager.Money -= cost; //Subtract
                     SetCost(0); //Don't make the player pay for their replaced item
                 }
                 StartCoroutine(DisablePickupForSeconds(0.5f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item

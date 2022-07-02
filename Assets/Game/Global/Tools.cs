@@ -10,7 +10,7 @@ namespace TonyDev.Game.Global
         {
             var array = iEnumerable.ToArray();
             if (array.Length == 0) return default;
-            var index = Random.Range(0, array.Length - 1);
+            var index = Random.Range(0, array.Length);
             return array[index];
         }
     }

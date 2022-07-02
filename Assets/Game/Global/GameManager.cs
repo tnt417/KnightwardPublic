@@ -20,13 +20,23 @@ namespace TonyDev.Game.Global
         [SerializeField] private List<ItemData> itemData;
         //
 
-        public static List<Item> AllItems = new List<Item>();
-        public static float CrystalHealth = 50f;
-        public static int Money = 1000;
+        public static List<Item> AllItems = new ();
+        public static float CrystalHealth = 1000f;
+        public static int Money = 0;
         public static readonly List<Enemy> Enemies = new ();
         public static readonly List<EnemySpawner> EnemySpawners = new ();
         public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
         public static GamePhase GamePhase;
+
+        public static void Reset()
+        {
+            AllItems.Clear();
+            CrystalHealth = 1000f;
+            Money = 0;
+            Enemies.Clear();
+            EnemySpawners.Clear();
+            Timer.GameTimer = 0;
+        }
 
         private void Awake()
         {
@@ -40,7 +50,9 @@ namespace TonyDev.Game.Global
         {
             if (Input.GetKeyDown(KeyCode.R)) TogglePhase(); //Toggle the phase when R is pressed
 
-            if (CrystalHealth <= 0) SceneManager.LoadScene("GameOver"); //Lose the game when the crystal dies
+            if (CrystalHealth <= 0) GameOver(); //Lose the game when the crystal dies
+            
+            if(PlayerDeath.Dead && GamePhase == GamePhase.Dungeon) EnterArenaPhase();
         }
 
         //Switches back and forth between Arena and Dungeon phases
@@ -57,14 +69,30 @@ namespace TonyDev.Game.Global
             GamePhase = GamePhase.Arena;
             Player.Instance.gameObject.transform.position =
                 GameObject.FindGameObjectWithTag("Castle").transform.position;
+            ReTargetEnemies();
         }
 
         //Teleports the player to the dungeon, sets the starting room as active, and sets the GamePhase to Dungeon.
         private void EnterDungeonPhase()
         {
             GamePhase = GamePhase.Dungeon;
-            Player.Instance.gameObject.transform.position = Vector3.zero;
-            RoomManager.Instance.SetActiveRoom((RoomManager.Instance.MapSize-1)/2, (RoomManager.Instance.MapSize-1)/2);
+            RoomManager.Instance.TeleportPlayerToStart();
+            ReTargetEnemies();
+        }
+
+        private void ReTargetEnemies()
+        {
+            foreach (var e in Enemies)
+            {
+                e.UpdateTarget();
+            }
+        }
+
+        private void GameOver()
+        {
+            Destroy(Player.Instance.gameObject);
+            Destroy(gameObject);
+            SceneManager.LoadScene("GameOver");
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

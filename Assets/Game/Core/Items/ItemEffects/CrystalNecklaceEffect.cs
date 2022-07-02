@@ -8,11 +8,11 @@ namespace TonyDev.Game.Core.Items.ItemEffects
     [CreateAssetMenu(menuName = "Item Effects/Crystal Necklace Effect")]
     public class CrystalNecklaceEffect : ItemEffect
     {
-        private const float Multiplier = 0.2f; //The portion of incoming player damage to redirect to the crystal
+        private const float Multiplier = 0.4f; //The portion of incoming player damage to redirect to the crystal
 
         public override void OnAdd() //Runs when an item is equipped
         {
-            Crystal.CrystalRegen = () => 1f + PlayerStats.GetStatBonus(Stat.HpRegen); //Sets the crystal regen to be the player's regen
+            Crystal.CrystalRegen = () => (1f + PlayerStats.GetStatBonus(Stat.HpRegen)) * 10f; //Sets the crystal regen to be the player's regen
             PlayerStats.HpRegenHandler = () => 0; //Set the players regen to be nothing
             PlayerStats.DamageReductionHandler = () => PlayerStats.GetStatBonus(Stat.DamageReduction) + Multiplier; //Give the player 20% damage reduction
             Player.OnPlayerDamage += DamageCrystal; //When the player is damaged, call our DamageCrystal method

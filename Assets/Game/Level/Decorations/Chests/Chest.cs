@@ -12,7 +12,6 @@ namespace TonyDev.Game.Level.Decorations.Chests
         [SerializeField] private int rarityBoost;
         [SerializeField] private GameObject groundItemPrefab;
         [SerializeField] private Animator chestAnimator;
-        [SerializeField] private ItemData[] possibleTowerItems;
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player") && other.isTrigger)
@@ -23,27 +22,14 @@ namespace TonyDev.Game.Level.Decorations.Chests
 
         private void DropItems()
         {
-
-            var itemType = Item.RandomItemType;
-
-            var item = itemType switch
-            {
-                ItemType.Weapon or ItemType.Armor or ItemType.Relic => ItemGenerator.GenerateEquippableItem(
-                    Item.RandomItemType, Item.RandomRarity(rarityBoost)),
-                ItemType.Tower => possibleTowerItems[Random.Range(0, possibleTowerItems.Length)].item,
-                _ => null
-            };
+            var item = ItemGenerator.GenerateItem(rarityBoost);
 
             Debug.Log("Item type: " + item?.itemType + ", Item sprite: " + item?.uiSprite);
+            
+            var parentTransform = transform;
 
-            //If in a room, make the room the parent of the new items
-            Transform parentTransform = null;
-            var parentRoom = GetComponentInParent<Room>();
-            if (parentRoom != null) parentTransform = parentRoom.transform;
-            //
-        
             //Instantiate the item and change the chest sprite
-            var groundItem = Instantiate(groundItemPrefab, transform.position, quaternion.identity, parentTransform);
+            var groundItem = Instantiate(groundItemPrefab, parentTransform.position, quaternion.identity, parentTransform);
             groundItem.SendMessage("SetItem", item);
             chestAnimator.Play("ChestOpen");
             //
