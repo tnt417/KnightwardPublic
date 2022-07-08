@@ -873,6 +873,8 @@ GameObject:
   - component: {fileID: 4036802154981258857}
   - component: {fileID: 4036802154981258856}
   - component: {fileID: 4036802154981258871}
+  - component: {fileID: 4036802154981258872}
+  - component: {fileID: 4036802154981258873}
   m_Layer: 0
   m_Name: DontDestroyOnLoad
   m_TagString: Untagged
@@ -903,6 +905,32 @@ MonoBehaviour:
     sprite: {fileID: 21300000, guid: ad60ecdfbd9093a4b939032260dd8ae6, type: 3}
   - key: ri_Necklace
     sprite: {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
+--- !u!114 &4036802154981258872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4036802154981258870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35d9609d16df03740a084f0c6affaca9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyPrefab: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+--- !u!114 &4036802154981258873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4036802154981258870}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b3278d54ba617e4fa9448a4b3a34fb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameSounds: []
 --- !u!1 &4036802155382830968
 GameObject:
   m_ObjectHideFlags: 0

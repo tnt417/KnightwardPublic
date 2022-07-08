@@ -100,6 +100,11 @@ namespace TonyDev.Game.Core.Entities.Player
             _activeStatBonuses = _activeStatBonuses.Where(sb => sb.source != source).ToList();
         }
 
+        public static void ClearStatBonuses()
+        {
+            _activeStatBonuses.Clear();
+        }
+
         public static float GetStatBonus(Stat stat) //Returns a sum of all stat bonuses of a certain type.
         {
             return _activeStatBonuses.Where(sb => sb.stat == stat).Sum(sb => sb.strength);

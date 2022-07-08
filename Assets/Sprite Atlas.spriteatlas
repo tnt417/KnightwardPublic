@@ -71,12 +71,16 @@ SpriteAtlas:
   - {fileID: 6660450562344536842, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: 8469575070837897384, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: 2407573818178188240, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
+  - {fileID: 21300000, guid: a7bb1dd0939a1c048ad90e6e26280530, type: 3}
   - {fileID: 21300000, guid: 19cd53e03b6a6784fa485bb207f6e5af, type: 3}
   - {fileID: 5045073161074915229, guid: 77232101e9d80754089e3481d34866da, type: 3}
   - {fileID: -6834524911116659543, guid: 77232101e9d80754089e3481d34866da, type: 3}
   - {fileID: 21300000, guid: e27c4c6211681df41a38930130a81ec9, type: 3}
   - {fileID: 21300000, guid: 21ed80a234edc954cb8cde6da8e8fdae, type: 3}
+  - {fileID: 21300000, guid: 2e050dc258bd692439e375b6d80cd224, type: 3}
   - {fileID: 21300000, guid: 2bf852e279ff4d24798c17b681247643, type: 3}
+  - {fileID: 21300000, guid: acf12fa3c673a17488dc5e6c832805cb, type: 3}
+  - {fileID: 21300000, guid: fceff2357cab9a848b81b2f4231f625c, type: 3}
   - {fileID: 21300000, guid: 0f9864061c12d2d429c9cbce1e968428, type: 3}
   - {fileID: 9033699428484915931, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: 4059640450490198499, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
@@ -89,6 +93,10 @@ SpriteAtlas:
   - {fileID: 654785354259171931, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: -2470712982808820347, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: 21300000, guid: a59a39a6e8b2fbc4ca889a685e0c7f45, type: 3}
+  - {fileID: 487120919, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+  - {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+  - {fileID: -673004153, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+  - {fileID: -678475407, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
   - {fileID: 1017377533788240461, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
   - {fileID: -4590656796376217752, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
   - {fileID: -1138683553050338935, guid: 198104e6ef14c69458efcdab57f78b4f, type: 3}
@@ -119,12 +127,18 @@ SpriteAtlas:
   - {fileID: -9126970591549369270, guid: df58e7484986be1448443be92533111f, type: 3}
   - {fileID: -878651424, guid: 4b2b771bae119f24fbfb07ec113f822c, type: 3}
   - {fileID: 966079698, guid: 4b2b771bae119f24fbfb07ec113f822c, type: 3}
+  - {fileID: 21300000, guid: fc4b002bf41850340a18b4b0df60c7c1, type: 3}
   - {fileID: 3657377838163212826, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: 7606227250200013639, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: 3397559289366077862, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: -9100843343654009677, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: -7329591253019825581, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: -5672041578588515963, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
+  - {fileID: -300970518, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
+  - {fileID: 1861576602, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
+  - {fileID: 256020959, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
+  - {fileID: -1672268373, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
+  - {fileID: -606292348, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
   - {fileID: -4624211100485340682, guid: 4ff7f71d0da05ef499d8a7f0cad5961f, type: 3}
   - {fileID: -4533104311714419295, guid: 4ff7f71d0da05ef499d8a7f0cad5961f, type: 3}
   - {fileID: 21300000, guid: ebc95e5db007b494a9b83ad51fccd6d0, type: 3}
@@ -139,11 +153,13 @@ SpriteAtlas:
   - {fileID: 4473523978737149865, guid: 9eae086de756a624dbf5eb480c577b45, type: 3}
   - {fileID: 21300000, guid: aa6d0bbd1484b3747892f7b3b5e0c1c4, type: 3}
   - {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
+  - {fileID: 21300000, guid: c7fbc0fd3de70a644ad8b92cb931ae76, type: 3}
   - {fileID: 21300000, guid: b8cf5e6e4483c834ca3cc04fd6a606b4, type: 3}
   - {fileID: -238602685, guid: 26f7b88e14397014ca1e7c8e71770ca7, type: 3}
   - {fileID: -86897462, guid: 26f7b88e14397014ca1e7c8e71770ca7, type: 3}
   - {fileID: 428175642, guid: 26f7b88e14397014ca1e7c8e71770ca7, type: 3}
   - {fileID: -1355688434, guid: 26f7b88e14397014ca1e7c8e71770ca7, type: 3}
+  - {fileID: 21300000, guid: 6ece589ed893fe64e9bdebfa53ef887b, type: 3}
   - {fileID: 5030290666744600015, guid: 87a4f8eef52ce114496d21291d10c990, type: 3}
   - {fileID: 6557094435153962602, guid: 87a4f8eef52ce114496d21291d10c990, type: 3}
   - {fileID: 7509860518518112746, guid: 87a4f8eef52ce114496d21291d10c990, type: 3}
@@ -170,6 +186,7 @@ SpriteAtlas:
   - {fileID: 7519933191670736559, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: 1654864542332646423, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: -366055929809456832, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
+  - {fileID: 21300000, guid: f7ea999f4861dd54faf9ff19a7da764c, type: 3}
   - {fileID: 21300000, guid: ad60ecdfbd9093a4b939032260dd8ae6, type: 3}
   - {fileID: 21300000, guid: 496f3affe307f9448b80a3b80fc68c4b, type: 3}
   m_PackedSpriteNamesToIndex:
@@ -194,12 +211,16 @@ SpriteAtlas:
   - darkArcher_12
   - darkArcher_10
   - darkArcher_11
+  - waveProgress
   - mysterySymbol
   - chest_1
   - chest_0
   - glacialArmor
   - crimsonArmor
+  - controlIndicatorE
   - goldTile
+  - UIBackground1
+  - basicSliderFrame
   - particle
   - SideWalk3
   - SideWalk2
@@ -212,6 +233,10 @@ SpriteAtlas:
   - FrontWalk3
   - FrontWalk2
   - playerWalkParticle
+  - IceAttack_1
+  - IceAttack_0
+  - IceAttack_3
+  - IceAttack_2
   - swordSlash_8
   - swordSlash_9
   - swordSlash_4
@@ -242,12 +267,18 @@ SpriteAtlas:
   - crystal_5
   - shopkeeper_0
   - shopkeeper_1
+  - waveProgressFill
   - hanginglantern_2
   - hanginglantern_3
   - hanginglantern_0
   - hanginglantern_1
   - hanginglantern_4
   - hanginglantern_5
+  - IceWizard_0
+  - IceWizard_1
+  - IceWizard_2
+  - IceWizard_3
+  - IceWizard_4
   - castleWall_0
   - castleWall_1
   - ballistaTurretBase
@@ -262,11 +293,13 @@ SpriteAtlas:
   - testTile_8
   - shadow
   - necklace
+  - inventoryUI
   - ballistaTurretBolt
   - flameTower_2
   - flameTower_3
   - flameTower_0
   - flameTower_1
+  - basicSliderFill
   - torch_2
   - torch_3
   - torch_0
@@ -293,6 +326,7 @@ SpriteAtlas:
   - rugTile_14
   - rugTile_17
   - rugTile_16
+  - whiteBox
   - verdantArmor
   - spectralStep
   m_RenderDataMap: {}

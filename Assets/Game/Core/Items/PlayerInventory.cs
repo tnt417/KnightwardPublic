@@ -22,6 +22,18 @@ namespace TonyDev.Game.Core.Items
                 ItemRarity.Common)); //Add a starting sword to the player's inventory.
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Armor,
                 ItemRarity.Common)); //Add armor to inventory
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
         }
 
         private void Awake()

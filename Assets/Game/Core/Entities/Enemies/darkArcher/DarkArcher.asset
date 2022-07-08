@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d638ee9ead7bab4e9fa1e72c8464d07, type: 3}
+  m_Name: DarkArcher
+  m_EditorClassIdentifier: 
+  enemyName: Dark Archer
+  enemyBaseSprite: {fileID: 4580117880243553785, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
+  baseMoneyReward: 2
+  maxHealth: 100
+  hitboxRadius: 0.5
+  animatorController: {fileID: 9100000, guid: 0cf2d13aa46c6fa418893ecaef147472, type: 2}
+  animations:
+  - enemyAnimationState: 0
+    animationName: DarkArcherHurt
+  - enemyAnimationState: 1
+    animationName: DarkArcherTravel
+  - enemyAnimationState: 2
+    animationName: DarkArcherLand
+  movementData: {fileID: 11400000, guid: 3d9e04a4a4844124892321b82133d6da, type: 2}
+  attackData: {fileID: 11400000, guid: 30d42c229df44c740923c4c29987cdd6, type: 2}

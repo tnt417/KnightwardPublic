@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using TonyDev.Game.Core.Entities.Enemies.Movement;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
@@ -7,33 +9,33 @@ namespace TonyDev.Game.Core.Entities.Enemies
         Hurt,
         Move,
         Stop,
-        Attack
+        Attack,
+        Die
     }
 
+    [RequireComponent(typeof(Animator))]
     public class EnemyAnimator : MonoBehaviour
     {
         //Editor Variables
-        [SerializeField] private string hurtAnimationName;
-        [SerializeField] private EnemyMoveBase enemyMoveBase;
         [SerializeField] private Animator animator;
         //
+        
+        private readonly Dictionary<EnemyAnimationState, string> _animationPairs = new();
 
         public void PlayAnimation(EnemyAnimationState state)
         {
-            switch (state)
+            if (!_animationPairs.ContainsKey(state)) return;
+            animator.Play(_animationPairs[state]);
+        }
+
+        public void Set(EnemyData enemyData)
+        {
+            animator.runtimeAnimatorController = enemyData.animatorController;
+            
+            IEnumerable<EnemyAnimationPairs> animationPairs = enemyData.animations;
+            foreach (var ap in animationPairs)
             {
-                case EnemyAnimationState.Hurt:
-                    animator.Play(hurtAnimationName);
-                    break;
-                case EnemyAnimationState.Move:
-                    animator.Play(enemyMoveBase.animations[0].name);
-                    break;
-                case EnemyAnimationState.Stop:
-                    animator.Play(enemyMoveBase.animations[1].name);
-                    break;
-                case EnemyAnimationState.Attack:
-                    animator.Play(enemyMoveBase.animations[2].name);
-                    break;
+                _animationPairs.Add(ap.enemyAnimationState, ap.animationName);
             }
         }
     }

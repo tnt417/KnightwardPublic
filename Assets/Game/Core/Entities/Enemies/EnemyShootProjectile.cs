@@ -1,34 +1,58 @@
+using TonyDev.Game.Core.Combat;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
 {
-    [RequireComponent(typeof(Enemy))]
     public class EnemyShootProjectile : MonoBehaviour
     {
-        //Editor variables
-        [SerializeField] private float projectileTravelSpeed;
-        [SerializeField] private GameObject projectilePrefab;
-        [SerializeField] private Enemy enemy;
-        //
-    
+        private Enemy enemy;
         private Transform Target => enemy.Target;
+        private ProjectileData _projectileData;
     
         // Start is called before the first frame update
         private void Start()
         {
-            enemy = GetComponent<Enemy>();
+            enemy = GetComponentInParent<Enemy>();
+            enemy.OnAttack += ShootProjectile;
         }
 
+        public void Set(ProjectileData projectileData, Enemy parentEnemy)
+        {
+            enemy = parentEnemy;
+            _projectileData = projectileData;
+        }
         public void ShootProjectile() //Called through animation events
         {
             var myPosition = transform.position;
-            Vector2 direction = (Target.transform.position - myPosition).normalized; //Calculates direction vector
-            Debug.Log(direction);
-            var projectile = Instantiate(projectilePrefab); //Instantiates the projectile
-            projectile.transform.position = myPosition; //Set the projectile's position to our enemy's position
-            var rb = projectile.GetComponent<Rigidbody2D>();
-            projectile.transform.up = direction; //Set the projectile's direction
-            rb.velocity = direction * projectileTravelSpeed; //Set the projectile's velocity
+            var travelOffset = _projectileData.initialTravelOffset; //TODO: falloff
+            var direction = (Vector2)(Target.transform.position - myPosition).normalized + travelOffset; //Calculates direction vector
+
+            var projectileObject = new GameObject();
+            
+            var rb = projectileObject.AddComponent<Rigidbody2D>();
+            var col = projectileObject.AddComponent<CircleCollider2D>();
+            var dmg = projectileObject.AddComponent<DamageComponent>();
+            var sprite = projectileObject.AddComponent<SpriteRenderer>();
+            var spawn = projectileObject.AddComponent<DestroyAfterSeconds>();
+            
+            spawn.seconds = _projectileData.lifetime;
+            spawn.spawnPrefabOnDestroy = _projectileData.spawnOnDestroy;
+
+            dmg.damage = _projectileData.damage;
+            dmg.team = _projectileData.team;
+            dmg.damageCooldown = 0.5f;
+            dmg.destroyOnApply = _projectileData.destroyOnApply;
+            dmg.knockbackMultiplier = _projectileData.knockbackMultiplier;
+
+            sprite.sprite = _projectileData.projectileSprite;
+            col.radius = _projectileData.hitboxRadius;
+            col.isTrigger = true;
+
+            projectileObject.transform.position = myPosition; //Set the projectile's position to our enemy's position
+            projectileObject.transform.up = direction; //Set the projectile's direction
+            rb.gravityScale = 0;
+            rb.isKinematic = true;
+            rb.velocity = direction * _projectileData.travelSpeed; //Set the projectile's velocity
         }
     }
 }

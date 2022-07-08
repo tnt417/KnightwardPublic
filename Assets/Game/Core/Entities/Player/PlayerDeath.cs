@@ -1,3 +1,4 @@
+using System.Linq;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
@@ -35,9 +36,10 @@ namespace TonyDev.Game.Core.Entities.Player
             Dead = true; //Die
             healthBarObject.SetActive(false); //Hide health bar
             Player.Instance.playerAnimator.PlayDeadAnimation(); //Play death animation
-            foreach (var e in GameManager.Enemies)
+            
+            foreach (var enemy in GameManager.Entities.Where(e => e is Enemy))
             {
-                e.UpdateTarget(); //Set new targets for all enemies, so that they don't target the dead player
+                enemy.UpdateTarget(); //Set new targets for all enemies, so that they don't target the dead player
             }
         }
 

@@ -4915,7 +4915,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 4155343733709524297, guid: 9a1f224f3fc4eeb42a9ac3e8765bbbd3, type: 3}
+  enemyData: {fileID: 11400000, guid: 1882a091d8902104aa3924d73e0bc6c6, type: 2}
   range: 8
   frequency: 0
   destroyAfterSpawns: 5

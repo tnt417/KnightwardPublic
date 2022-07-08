@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
@@ -23,19 +24,20 @@ namespace TonyDev.Game.Global
         public static List<Item> AllItems = new ();
         public static float CrystalHealth = 1000f;
         public static int Money = 0;
-        public static readonly List<Enemy> Enemies = new ();
+        public static readonly List<GameEntity> Entities = new ();
         public static readonly List<EnemySpawner> EnemySpawners = new ();
         public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
         public static GamePhase GamePhase;
 
         public static void Reset()
         {
-            AllItems.Clear();
             CrystalHealth = 1000f;
             Money = 0;
-            Enemies.Clear();
-            EnemySpawners.Clear();
             Timer.GameTimer = 0;
+            AllItems.Clear();
+            Entities.Clear();
+            EnemySpawners.Clear();
+            PlayerStats.ClearStatBonuses();
         }
 
         private void Awake()
@@ -82,7 +84,7 @@ namespace TonyDev.Game.Global
 
         private void ReTargetEnemies()
         {
-            foreach (var e in Enemies)
+            foreach (var e in Entities)
             {
                 e.UpdateTarget();
             }

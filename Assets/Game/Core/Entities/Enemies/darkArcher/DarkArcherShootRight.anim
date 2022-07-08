@@ -82,9 +82,9 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.41666666
-    functionName: ShootProjectile
+    functionName: Attack
     data: 
-    objectReferenceParameter: {fileID: 0}
+    objectReferenceParameter: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

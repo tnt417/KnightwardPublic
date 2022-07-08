@@ -8,7 +8,7 @@ namespace TonyDev
     public class DestroyAfterSeconds : MonoBehaviour
     {
         public float seconds;
-        [SerializeField] private GameObject spawnPrefabOnDestroy;
+        public GameObject spawnPrefabOnDestroy;
         private float _timer;
         private void Update()
         {

@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a08ec6363597b499075e9c87c38495, type: 3}
+  m_Name: IceWizardProjectile
+  m_EditorClassIdentifier: 
+  attackCooldown: 5
+  team: 0
+  projectileDatas:
+  - projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+    damage: 25
+    travelSpeed: 7
+    hitboxRadius: 0.5
+    lifetime: 10
+    knockbackMultiplier: 1
+    team: 0
+    destroyOnApply: 1
+    spawnOnDestroy: {fileID: 0}
+    initialTravelOffset: {x: 0, y: 1}
+    travelOffsetFalloff: 0.99
+  - projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+    damage: 25
+    travelSpeed: 7
+    hitboxRadius: 0.5
+    lifetime: 10
+    knockbackMultiplier: 1
+    team: 0
+    destroyOnApply: 1
+    spawnOnDestroy: {fileID: 0}
+    initialTravelOffset: {x: 0, y: 0}
+    travelOffsetFalloff: 0
+  - projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+    damage: 25
+    travelSpeed: 7
+    hitboxRadius: 0.5
+    lifetime: 10
+    knockbackMultiplier: 1
+    team: 0
+    destroyOnApply: 1
+    spawnOnDestroy: {fileID: 0}
+    initialTravelOffset: {x: 0, y: -1}
+    travelOffsetFalloff: 0.99

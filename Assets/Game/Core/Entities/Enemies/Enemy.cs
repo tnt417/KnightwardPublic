@@ -1,75 +1,154 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Entities.Enemies.Attack;
+using TonyDev.Game.Core.Entities.Enemies.Movement;
+using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
+using UnityEditor;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
 {
-    [RequireComponent(typeof(IEnemyMovement))]
-    public class Enemy : MonoBehaviour, IDamageable
+    [RequireComponent(typeof(EnemyAnimator), typeof(Collider2D))]
+    public class Enemy : GameEntity
     {
-        //Editor variables
+        #region Variables
         [SerializeField] private EnemyAnimator enemyAnimator;
-        [SerializeField] private int maxHealth;
-        [SerializeField] private int moneyReward;
-        //
+        private int MoneyReward => _enemyData.baseMoneyReward;
+        public override Team Team => Team.Enemy;
+        public override float DamageMultiplier => Mathf.Clamp01(1f - (Mathf.Log10(GameManager.EnemyDifficultyScale) - 0.5f)); //Enemies essentially gain damage resist as the difficulty scales.
+        public override int MaxHealth => _enemyData.maxHealth;
+        private EnemyData _enemyData = null;
+        private EnemyMovementBase _enemyMovementBase;
+        public delegate void AttackAction();
+        public event AttackAction OnAttack;
+        private float AttackTimerMax => _enemyData.attackData.attackCooldown;
+        private float _attackTimer;
+        private List<EnemyShootProjectile> _shootProjectiles;
+        #endregion
 
-        //Contains all interface code for IDamageable
-        #region IDamageable
-        public Team team => Team.Enemy;
-        public int MaxHealth { get; private set; }
-        public float CurrentHealth { get; private set; }
-        public bool IsAlive => CurrentHealth > 0;
-        [NonSerialized] public Transform Target;
-        public void ApplyDamage(int damage)
+        //Set enemy data, called on spawn
+        public void SetEnemyData(EnemyData enemyData)
         {
-            enemyAnimator.PlayAnimation(EnemyAnimationState.Hurt); //Play the hurt animation
-            var damageMultiplier = Mathf.Clamp01(1f - (Mathf.Log10(GameManager.EnemyDifficultyScale) - 0.5f)); //Enemies essentially gain damage resist as the difficulty scales.
-            CurrentHealth -= damage * damageMultiplier;
-            OnHealthChanged?.Invoke();
-        
-        
-            if (CurrentHealth <= 0)
+            if (_enemyData != null) return;
+            
+            _enemyData = enemyData;
+            
+            GetComponent<CircleCollider2D>().radius = _enemyData.hitboxRadius;
+            
+            enemyAnimator.Set(enemyData);
+            CreateMovementComponent(enemyData.movementData);
+            CreateAttackObjects(enemyData.attackData);
+        }
+
+        //Tick attack timers
+        private void Update()
+        {
+            if (AttackTimerMax < 0) return;
+            
+            _attackTimer += Time.deltaTime;
+            
+            if (_attackTimer >= AttackTimerMax)
             {
-                Die();
+                Attack();
+                _attackTimer = 0;
             }
         }
 
-        public void Die()
+        //Add movement components based on movement data
+        private void CreateMovementComponent(EnemyMovementData movementData)
         {
-            GameManager.Money += moneyReward;
-            GameManager.Enemies.Remove(this);
-            Destroy(gameObject);
-        }
-        public event IDamageable.HealthAction OnHealthChanged;
-        #endregion
-    
-        public void Awake()
-        {
-            GameManager.Enemies.Add(this); //Add this enemy to the GameManager's enemy list.
-        
-            //Initialize health variables.
-            MaxHealth = maxHealth;
-            CurrentHealth = MaxHealth;
+            var type = movementData switch
+            {
+                EnemyMovementChaseData => typeof(EnemyMovementChase),
+                EnemyMovementStrafeData => typeof(EnemyMovementPeriodicalStrafe),
+                _ => typeof(EnemyMovementBase)
+            };
+
+            var c = gameObject.AddComponent(type);
+
+            if (c is EnemyMovementBase moveBase)
+            {
+                moveBase.PopulateFromData(movementData);
+                _enemyMovementBase = moveBase;
+            }
         }
 
-        public GameObject UpdateTarget() //Updates enemy's target and returns it.
+        //Add attack objects based on attack data
+        private void CreateAttackObjects(EnemyAttackData attackData)
         {
-            var go = FindObjectsOfType
-                    <MonoBehaviour>()
-                .Where(mb => (mb as IDamageable)?.team == Team.Player && ((IDamageable) mb).IsAlive)
-                .OrderBy( mb => Vector2.Distance(mb.transform.position, transform.position))
-                .FirstOrDefault()
-                ?.gameObject; //Finds closest non-dead damageable object on the player team
-
-            if (gameObject.GetComponent<Crystal>() != null && GetComponentInParent<EnemySpawner>().InRoom) return null; //Don't target the crystal if we are a room enemy
+            var parentTransform = transform;
             
-            Target = go == null ? null : go.transform; //Update the Target variable
-        
-            return go; //Returns the game object
+            var attackObject = new GameObject("Attack Object");
+            attackObject.transform.parent = parentTransform;
+            attackObject.transform.localPosition = new Vector3(0, 0, 0);
+            
+            switch (attackData)
+            {
+                case EnemyAttackContactData contactData:
+                    var coll = attackObject.AddComponent<CircleCollider2D>();
+                    var dmg = attackObject.AddComponent<DamageComponent>();
+                    coll.isTrigger = true;
+                    coll.radius = contactData.hitboxRadius;
+                    dmg.damage = contactData.damage;
+                    dmg.team = contactData.team;
+                    dmg.damageCooldown = contactData.DamageCooldown;
+                    dmg.destroyOnApply = contactData.destroyOnApply;
+                    dmg.knockbackMultiplier = contactData.knockbackMultiplier;
+                    break;
+                case EnemyAttackProjectileData projData:
+                    foreach (var data in projData.projectileDatas)
+                    {
+                        _shootProjectiles = new List<EnemyShootProjectile>();
+                        
+                        var proj = attackObject.AddComponent<EnemyShootProjectile>();
+                        proj.Set(data, this);
+                        
+                        _shootProjectiles.Add(proj);
+                    }
+                    break;
+            }
+        }
+
+        //Initialize variables and events
+        private void Start()
+        {
+            Init();
+            
+            //Initialize variables
+            enemyAnimator = GetComponent<EnemyAnimator>();
+            //
+            
+            SubscribeAnimatorEvents();
+            
+            OnDeath += EnemyDie;
+        }
+
+        //Sets up the animator to play certain animations on certain events
+        private void SubscribeAnimatorEvents()
+        {
+            OnDeath += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Die);
+            OnHurt += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Hurt);
+            _enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Move);
+            _enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Stop);
+            OnAttack += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Attack);
+        }
+
+        //Invokes the attack event
+        public void Attack() //Called either on a timer or through animation events.
+        {
+            OnAttack?.Invoke();
+        }
+
+        //Give money reward and destroy self.
+        private void EnemyDie()
+        {
+            GameManager.Money += MoneyReward;
+            Destroy(gameObject);
         }
     }
 }

@@ -1,5 +1,7 @@
 using System;
+using System.Transactions;
 using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = UnityEngine.Random;
@@ -7,7 +9,7 @@ using Random = UnityEngine.Random;
 namespace TonyDev.Game.Core.Entities.Player
 {
     [RequireComponent(typeof(PlayerMovement))]
-    public class Player : MonoBehaviour, IDamageable
+    public class Player : GameEntity
     {
         //Singleton code
         public static Player Instance;
@@ -22,60 +24,38 @@ namespace TonyDev.Game.Core.Entities.Player
         
         //All implementations of IDamageable contained in a region
         #region IDamageable
+        public override Team Team => Team.Player;
+        public override int MaxHealth => (int)PlayerStats.Health;
 
-        public Team team => Team.Player;
-        public int MaxHealth => (int)PlayerStats.Health;
-        public float CurrentHealth { get; private set; }
-        public bool IsAlive => CurrentHealth > 0;
-
-        public void ApplyDamage(int damage)
+        public override void ApplyDamage(float damage)
         {
-            if (damage <= 0)
-            {
-                CurrentHealth -= damage;
-                OnHealthChanged?.Invoke();
-                return;
-            }
-            
             if (PlayerStats.DodgeSuccessful) return; //Don't apply damage is dodge rolls successful.
-            var modifiedDamage = Mathf.Clamp(PlayerStats.ModifyIncomingDamage(damage), 0, Mathf.Infinity);
-            CurrentHealth -= modifiedDamage;
-            
-            //Broadcast that health was changed and that player was damaged
-            OnHealthChanged?.Invoke();
+            var modifiedDamage = damage >= 0
+                ? Mathf.Clamp(PlayerStats.ModifyIncomingDamage(damage), 0, Mathf.Infinity)
+                : damage;
+            base.ApplyDamage(damage);
             OnPlayerDamage?.Invoke(modifiedDamage);
-        
-            playerAnimator.PlayHurtAnimation();
         }
 
-        public void Die()
+        public override void Die()
         {
             playerDeath.Die();
         }
-
-        public event IDamageable.HealthAction OnHealthChanged;
 
         #endregion
 
         public void Update()
         {
-            if (CurrentHealth <= 0)
-            {
-                Die();
-            }
-            
             //Enable/disable parts of the player depending on if player is alive
-            playerMovement.enabled = IsAlive;
+            playerMovement.DoMovement = IsAlive;
             PlayerCombat.Instance.gameObject.SetActive(IsAlive);
             //
             
             if (IsAlive)
             {
-                CurrentHealth += PlayerStats.HpRegen * Time.deltaTime; //Regen health by HpRegen per second
-                OnHealthChanged?.Invoke(); //Since health was regenerated, invoke this.
+                var hpRegen = PlayerStats.HpRegen * Time.deltaTime;
+                ApplyDamage(-hpRegen); //Regen health by HpRegen per second
             }
-
-            CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth); //Clamp health
         }
 
         public void Awake()
@@ -87,14 +67,9 @@ namespace TonyDev.Game.Core.Entities.Player
         
             DontDestroyOnLoad(gameObject); //Player persists between scenes
             
+            GameManager.Entities.Add(this);
+            
             CurrentHealth = MaxHealth;
         }
-
-        public void SetHealth(int newHealth) //TODO: If really picky, should convert this to be within the setters of the variable instead.
-        {
-            CurrentHealth = newHealth;
-            OnHealthChanged?.Invoke();
-        }
-
     }
 }
