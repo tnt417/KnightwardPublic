@@ -153,8 +153,10 @@ MonoBehaviour:
   damageCooldown: 0
   team: 1
   destroyOnApply: 0
+  destroyOnAnyCollide: 0
   knockbackForce: 300
   knockbackMultiplier: 1
+  enemySpeedModifier: 0
 --- !u!96 &-4567278862790983507
 TrailRenderer:
   serializedVersion: 2
@@ -276,3 +278,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seconds: 10
+  spawnPrefabOnDestroy: {fileID: 0}

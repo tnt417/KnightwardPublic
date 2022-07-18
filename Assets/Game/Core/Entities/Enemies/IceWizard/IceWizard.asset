@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d638ee9ead7bab4e9fa1e72c8464d07, type: 3}
   m_Name: IceWizard
   m_EditorClassIdentifier: 
+  prefab: {fileID: 7859054336703576918, guid: b853a5a797a36114cba6a1c050a5750a, type: 3}
   enemyName: Ice Wizard
   enemyBaseSprite: {fileID: -300970518, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
   baseMoneyReward: 5
@@ -21,7 +22,9 @@ MonoBehaviour:
   animations:
   - enemyAnimationState: 1
     animationName: IceWizardMove
-  - enemyAnimationState: 3
+  - enemyAnimationState: 2
     animationName: IceWizardShoot
+  - enemyAnimationState: 0
+    animationName: IceWizardHurt
   movementData: {fileID: 11400000, guid: 38f642d68b2b8fc43b64bc5962f75e90, type: 2}
   attackData: {fileID: 11400000, guid: fe113dbf75264e0419cbee37dd9b365c, type: 2}

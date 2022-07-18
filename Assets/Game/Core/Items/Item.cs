@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items.ItemEffects;
 using UnityEditor;
@@ -52,6 +54,7 @@ namespace TonyDev.Game.Core.Items
         public StatBonus[] statBonuses;
         public GameObject spawnablePrefab;
         public ItemEffect[] itemEffects;
+        public ProjectileData[] projectiles;
         //
 
         public static ItemRarity RandomRarity(int rarityBoost)

@@ -240,8 +240,10 @@ MonoBehaviour:
   damageCooldown: 0
   team: 1
   destroyOnApply: 1
+  destroyOnAnyCollide: 0
   knockbackForce: 300
   knockbackMultiplier: 1
+  enemySpeedModifier: 0
 --- !u!114 &61457816368861377
 MonoBehaviour:
   m_ObjectHideFlags: 0

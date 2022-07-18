@@ -12,11 +12,11 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             offensiveStatsText.text = PlayerStats.GetStatsText(new Stat[]
             {
-                Stat.Damage, Stat.Knockback, Stat.Stun, Stat.AoeSize, Stat.AttackSpeed, Stat.CritChance, Stat.CritDamage
+                Stat.Damage, Stat.AoeSize, Stat.AttackSpeed, Stat.CritChance
             });
             defensiveStatsText.text = PlayerStats.GetStatsText(new Stat[]
             {
-                Stat.Health, Stat.HpRegen, Stat.Armor, Stat.Tenacity, Stat.MoveSpeed, Stat.DamageReduction, Stat.Dodge
+                Stat.Health, Stat.HpRegen, Stat.Armor, Stat.MoveSpeed, Stat.Dodge
             });
         }
     }

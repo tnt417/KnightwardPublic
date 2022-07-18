@@ -3,6 +3,7 @@ using TMPro;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Chests;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = System.Random;
 
 namespace TonyDev.Game.Core.Items
@@ -22,6 +23,8 @@ namespace TonyDev.Game.Core.Items
         private bool _pickupAble = true;
         private bool FromChest => GetComponentInParent<Chest>() != null;
 
+        public UnityEvent onPickup = new UnityEvent();
+
         private void Awake()
         {
             spriteRenderer.sharedMaterial = new Material(spriteRenderer.sharedMaterial); //Create a copy of the renderer's material to allow temporary editing.
@@ -30,7 +33,7 @@ namespace TonyDev.Game.Core.Items
         private void Start()
         {
             if (!FromChest) SetItem(ItemGenerator.GenerateItem(rarityBoost));
-            SetCost(FromChest ? 0 : ItemGenerator.GenerateCost(_item));
+            SetCost(FromChest || cost == 0 ? 0 : ItemGenerator.GenerateCost(_item));
         }
     
         //Set the GroundItem's item.
@@ -86,6 +89,7 @@ namespace TonyDev.Game.Core.Items
             {
                 var returnItem = PlayerInventory.Instance.InsertItem(_item); //...try to insert the item into the player's inventory
                 GameManager.Money -= cost; //Subtract money
+                onPickup.Invoke(); //Invoke the onPickup method
                 if(returnItem == null) Destroy(gameObject); //If no item was replaced, just destroy this GroundItem
                 else{
                     SetItem(returnItem); //Otherwise, replaced the item

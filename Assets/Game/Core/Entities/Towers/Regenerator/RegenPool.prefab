@@ -55,6 +55,7 @@ MonoBehaviour:
   damageCooldown: 0.2
   team: 0
   destroyOnApply: 0
+  destroyOnAnyCollide: 0
   knockbackForce: 0
   knockbackMultiplier: 1
 --- !u!114 &8604458101966122574
@@ -265,7 +266,7 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
-        key1: {r: 0.50345993, g: 1, b: 0, a: 1}
+        key1: {r: 1, g: 0.096483365, b: 0, a: 1}
         key2: {r: 1, g: 0.5372549, b: 0.20000002, a: 0}
         key3: {r: 1, g: 0.9333334, b: 0.5137255, a: 0}
         key4: {r: 0.50345993, g: 1, b: 0, a: 0}
@@ -3592,7 +3593,7 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.16724777, g: 1, b: 0, a: 1}
+        key0: {r: 1, g: 0.016824901, b: 0, a: 1}
         key1: {r: 1, g: 1, b: 1, a: 1}
         key2: {r: 1, g: 1, b: 1, a: 0}
         key3: {r: 0, g: 0, b: 0, a: 0}

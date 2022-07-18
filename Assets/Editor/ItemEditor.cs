@@ -27,7 +27,16 @@ namespace TonyDev.Editor
             DisplayGeneralInfo(sp); //Show fields that applies to all items
             
             if(itemType is ItemType.Armor or ItemType.Weapon or ItemType.Relic) DisplayEquippableInfo(sp); //Show equippable-specific fields
-            if(itemType is ItemType.Tower) DisplaySpawnableInfo(sp); //Show spawnable-specific fields
+            
+            switch (itemType)
+            {
+                case ItemType.Weapon:
+                    EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.projectiles)));
+                    break;
+                case ItemType.Tower:
+                    DisplaySpawnableInfo(sp); //Show spawnable-specific fields
+                    break;
+            }
 
             serializedObject.ApplyModifiedProperties();
         }

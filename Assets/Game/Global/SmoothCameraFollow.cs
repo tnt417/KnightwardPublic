@@ -1,6 +1,7 @@
 using System;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Level.Decorations.Crystal;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,7 +14,7 @@ namespace TonyDev.Game.Global
         [SerializeField] private Camera camera;
         //
     
-        [NonSerialized] public Rect CameraBounds = Rect.zero;
+        private Rect _cameraBounds = Rect.zero;
         private float _z;
         private Transform _playerTransform;
         private Transform _crystalTransform;
@@ -23,12 +24,43 @@ namespace TonyDev.Game.Global
             _playerTransform = Player.Instance.transform; //Initialize the playerTransform variable
             _z = transform.position.z; //Set the initial z level of the camera so it can be kept constant
             SceneManager.sceneLoaded += ClearCameraBounds; //Set ClearCameraBounds to be called every time a new scene is loaded.
-            _crystalTransform = GameObject.FindObjectOfType<Crystal>().transform; //Set our crystal object so we can watch it
+            _crystalTransform = FindObjectOfType<Crystal>().transform; //Set our crystal object so we can watch it
         }
 
+        public void SetCameraBounds(Rect bounds)
+        {
+            //if it is bigger than the camera or zero, set it
+            if (bounds == Rect.zero)
+            {
+                _cameraBounds = bounds;
+                return;
+            }
+            
+            //otherwise center it...
+            _cameraBounds = FixCameraRect(bounds);
+        }
+
+        private Rect FixCameraRect(Rect rect)
+        {
+            
+            //Do some math to figure out the bounds of the camera in world coordinates
+            var cameraRect = camera.pixelRect;
+            var cameraTopRight = camera.ScreenToWorldPoint(new Vector2(cameraRect.xMax, cameraRect.yMax));
+            var cameraBottomLeft = camera.ScreenToWorldPoint(Vector3.zero);
+            var cameraWidthInWorldCoords = cameraTopRight.x - cameraBottomLeft.x;
+            var cameraHeightInWorldCoords = cameraTopRight.y - cameraBottomLeft.y;
+            //
+            
+            var center = rect.center;
+            var width = rect.width > cameraWidthInWorldCoords ? rect.width : cameraWidthInWorldCoords;
+            var height = rect.height > cameraHeightInWorldCoords ? rect.height : cameraHeightInWorldCoords;
+
+            return new Rect(center.x - width/2, center.y - height/2, width, height);
+        }
+        
         private void ClearCameraBounds(Scene scene, LoadSceneMode loadSceneMode)
         {
-            CameraBounds = Rect.zero; //Clears the camera bounds
+            _cameraBounds = Rect.zero; //Clears the camera bounds
         }
 
         private void Update()
@@ -45,8 +77,8 @@ namespace TonyDev.Game.Global
             {
                 newPos = _playerTransform.position;
             }
-            
-            if (CameraBounds != Rect.zero && !trackCrystal) //If CameraBounds is not cleared,
+
+            if (_cameraBounds != Rect.zero && !trackCrystal) //If CameraBounds is not cleared,
             {
                 //Do some math to figure out the bounds of the camera in world coordinates
                 var cameraRect = camera.pixelRect;
@@ -57,8 +89,8 @@ namespace TonyDev.Game.Global
                 //
             
                 //Clamp the camera's position based on the bounds, offset to be based on the camera's border, not the camera's center.
-                newPos.x = Mathf.Clamp(newPos.x, CameraBounds.x + cameraWidthInWorldCoords / 2, CameraBounds.x + CameraBounds.width - cameraWidthInWorldCoords / 2);
-                newPos.y = Mathf.Clamp(newPos.y, CameraBounds.y + cameraHeightInWorldCoords / 2, CameraBounds.y + CameraBounds.height - cameraHeightInWorldCoords / 2);
+                newPos.x = Mathf.Clamp(newPos.x, _cameraBounds.x + cameraWidthInWorldCoords / 2, _cameraBounds.x + _cameraBounds.width - cameraWidthInWorldCoords / 2);
+                newPos.y = Mathf.Clamp(newPos.y, _cameraBounds.y + cameraHeightInWorldCoords / 2, _cameraBounds.y + _cameraBounds.height - cameraHeightInWorldCoords / 2);
                 //
             }
 

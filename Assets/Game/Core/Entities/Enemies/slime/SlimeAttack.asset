@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1c47732e2f368404d9d25b286616ca2d, type: 3}
   m_Name: SlimeAttack
   m_EditorClassIdentifier: 
-  attackCooldown: 0.5
+  attackCooldown: 5
   team: 0
   hitboxRadius: 0.5
   damage: 25

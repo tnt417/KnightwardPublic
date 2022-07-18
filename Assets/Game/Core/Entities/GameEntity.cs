@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Combat;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using UnityEngine;
@@ -12,11 +14,27 @@ namespace TonyDev.Game.Core.Entities
     {
         public delegate void TargetChangeAction();
         public event TargetChangeAction OnTargetChange;
-        public Transform Target { get; private set; } = null;
-
+        [NonSerialized] public List<Transform> Targets = new ();
+        
+        private const float EntityTargetUpdatingRate = 0.1f;
+        private float _targetUpdateTimer;
+        [SerializeField] private string targetTag;
+        [SerializeField] private Team targetTeam;
+        [SerializeField] private int maxTargets;
         private void Start()
         {
             Init();
+        }
+
+        private void LateUpdate()
+        {
+            _targetUpdateTimer += Time.deltaTime;
+            
+            if (_targetUpdateTimer > EntityTargetUpdatingRate)
+            {
+                UpdateTarget();
+                _targetUpdateTimer = 0f;
+            }
         }
 
         protected void Init()
@@ -33,22 +51,26 @@ namespace TonyDev.Game.Core.Entities
             GameManager.Entities.Remove(this);
         }
 
-        public GameObject UpdateTarget() //Updates entity's target and returns it.
+        public List<Transform> UpdateTarget() //Updates entity's target and returns it.
         {
-            var go = GameManager.Entities
-                .Where(e => e.Team != Team && e.IsAlive && !e.IsInvulnerable)
+            /* Valid targets match our targetTag variable, match our targetTeam variable, do not target invulnerable or dead things (unless this object is a tower),
+             * and only attack things within 10 tiles unless it is the crystal
+             * 
+             */
+            
+            var transforms = GameManager.Entities
+                .Where(e => (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) &&
+                            e.Team == targetTeam && (this is Tower || !e.IsInvulnerable && e.IsAlive) && e != this
+                            && (e is Crystal || Vector2.Distance(e.transform.position, transform.position) < 10f))
                 .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
-                .FirstOrDefault()
-                ?.gameObject; //Finds closest non-dead game entity object on the opposing team
+                .Select(e => e.transform).Take(maxTargets).ToList(); //Finds closest non-dead game entity object on the opposing team
+            
+            if (transforms.Count == 0) return null;
+            
+            Targets = transforms;
+            OnTargetChange?.Invoke(); //Invoke the target changed method
 
-            if (go != null)
-            {
-                Target = go.transform; //Update the Target variable
-                OnTargetChange?.Invoke(); //Invoke the target changed method
-            }
-            else return null;
-
-            return go; //Returns the game object
+            return transforms; //Returns the game object
         }
         
         #region IDamageable

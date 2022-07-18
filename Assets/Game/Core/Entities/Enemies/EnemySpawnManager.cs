@@ -1,3 +1,4 @@
+using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
 using UnityEngine;
 
@@ -13,10 +14,11 @@ namespace TonyDev.Game.Core.Entities.Enemies
             else Destroy(this);
         }
         
-        public static void SpawnEnemy(EnemyData enemyData, Vector2 position, Transform parent)
+        public static Enemy SpawnEnemy(EnemyData enemyData, Vector2 position, Transform parent)
         {
-            var enemy = Instantiate(_instance.enemyPrefab, position, Quaternion.identity, parent).GetComponent<Enemy>();
+            var enemy = Instantiate(enemyData.prefab == null ? _instance.enemyPrefab : enemyData.prefab, position, Quaternion.identity, parent).GetComponent<Enemy>();
             enemy.SetEnemyData(enemyData);
+            return enemy;
         }
     }
 }

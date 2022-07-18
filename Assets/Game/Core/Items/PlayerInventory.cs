@@ -27,6 +27,10 @@ namespace TonyDev.Game.Core.Items
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
                 ItemRarity.Common));
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
                 ItemRarity.Uncommon));
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
                 ItemRarity.Uncommon));
@@ -34,6 +38,62 @@ namespace TonyDev.Game.Core.Items
                 ItemRarity.Rare));
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
                 ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Uncommon));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Rare));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Unique));
         }
 
         private void Awake()
@@ -47,8 +107,8 @@ namespace TonyDev.Game.Core.Items
         private void Update()
         {
             foreach (var r in RelicItems)
-                foreach (var ie in r.itemEffects)
-                    ie.OnUpdate(); //Call OnUpdate for every item effect on the equipped relics
+            foreach (var ie in r.itemEffects)
+                ie.OnUpdate(); //Call OnUpdate for every item effect on the equipped relics
         }
 
         public void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI

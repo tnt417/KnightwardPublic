@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5769312474634298354}
   - component: {fileID: 6938340393128323355}
   - component: {fileID: 2598763644231202126}
+  - component: {fileID: 2378733973540134516}
   m_Layer: 0
   m_Name: FlameTurret
   m_TagString: Untagged
@@ -85,14 +86,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609f77bd4fcb4e94db92f5f804f88634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: 
+  targetTeam: 0
+  maxTargets: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
   fireCooldown: 5
-  targetTeam: 0
+  projectileOriginOffset: {x: 0, y: 0}
+  projectileTargetOffset: {x: 0, y: 0}
   rotateToFaceTargetObject: {fileID: 0}
   projectilePrefab: {fileID: 5620128404347004703, guid: 89c93ef34e856be45889f169394b602e, type: 3}
   setProjectileRotation: 0
   projectileTravelSpeed: 5
+--- !u!58 &2378733973540134516
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150477889065159250}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &4032208556319356246
 GameObject:
   m_ObjectHideFlags: 0

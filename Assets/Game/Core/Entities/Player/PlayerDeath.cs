@@ -11,13 +11,19 @@ namespace TonyDev.Game.Core.Entities.Player
         //Editor variables
         [SerializeField] private float deathCooldown;
         [SerializeField] private GameObject healthBarObject;
-        [SerializeField] private TMP_Text deathTimerText;
+        [SerializeField] private TMP_Text deathTimerText; 
+        private Rigidbody2D _rb2d;
         //
     
         public static bool Dead;
         private float _deathTimer;
-    
-        void Update()
+
+        private void Awake()
+        {
+            _rb2d = GetComponent<Rigidbody2D>();
+        }
+        
+        private void Update()
         {
             if (Dead) //Runs while dead
             {
@@ -36,6 +42,7 @@ namespace TonyDev.Game.Core.Entities.Player
             Dead = true; //Die
             healthBarObject.SetActive(false); //Hide health bar
             Player.Instance.playerAnimator.PlayDeadAnimation(); //Play death animation
+            _rb2d.simulated = false;
             
             foreach (var enemy in GameManager.Entities.Where(e => e is Enemy))
             {
@@ -50,6 +57,7 @@ namespace TonyDev.Game.Core.Entities.Player
             healthBarObject.SetActive(true); //Re-active the health bar
             Player.Instance.SetHealth(Player.Instance.MaxHealth); //Fully heal the player
             deathTimerText.text = string.Empty; //Clear the death timer text
+            _rb2d.simulated = true;
             foreach (var e in FindObjectsOfType<Enemy>())
             {
                 e.UpdateTarget(); //Set new targets for all enemies, so that they might switch back to the player.

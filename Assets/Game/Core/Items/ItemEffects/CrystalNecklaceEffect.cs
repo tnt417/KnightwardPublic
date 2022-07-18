@@ -12,17 +12,15 @@ namespace TonyDev.Game.Core.Items.ItemEffects
 
         public override void OnAdd() //Runs when an item is equipped
         {
-            Crystal.CrystalRegen = () => (1f + PlayerStats.GetStatBonus(Stat.HpRegen)) * 10f; //Sets the crystal regen to be the player's regen
-            PlayerStats.HpRegenHandler = () => 0; //Set the players regen to be nothing
-            PlayerStats.DamageReductionHandler = () => PlayerStats.GetStatBonus(Stat.DamageReduction) + Multiplier; //Give the player 20% damage reduction
+            Crystal.CrystalRegen = () => (1f + PlayerStats.GetFlatStatBonus(Stat.HpRegen)) * PlayerStats.GetStatMultiplyBonus(Stat.HpRegen) * 10f; //Sets the crystal regen to be the player's regen
+            PlayerStats.AddStatBonus(StatType.Flat, Stat.Armor, 50f, "CrystalNecklace"); //Give the player 50 armor
             Player.OnPlayerDamage += DamageCrystal; //When the player is damaged, call our DamageCrystal method
         }
 
         public override void OnRemove() //Runs when an item is unequipped
         {
             Crystal.CrystalRegen = () => 0; //Sets the crystal regen back to 0
-            PlayerStats.HpRegenHandler = () => 1f + PlayerStats.GetStatBonus(Stat.HpRegen); //Sets the player regen back to what it normally is
-            PlayerStats.DamageReductionHandler = () => PlayerStats.GetStatBonus(Stat.DamageReduction); //Return the player's damage reduction to normal
+            PlayerStats.RemoveStatBonuses("CrystalNecklace");
             Player.OnPlayerDamage -= DamageCrystal; //Stop calling DamageCrystal
         }
 
@@ -30,7 +28,7 @@ namespace TonyDev.Game.Core.Items.ItemEffects
 
         private void DamageCrystal(float damage)
         {
-            GameManager.CrystalHealth -= damage * Multiplier; //Damage the crystal for 20% of incoming player damage
+            GameManager.CrystalHealth -= damage * Multiplier * 10; //Damage the crystal for 40% of incoming player damage times 10
         }
     }
 }

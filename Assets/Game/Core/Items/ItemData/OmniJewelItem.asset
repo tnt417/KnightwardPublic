@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: OmniJewelItem
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: 1c67ffdf70fda5f40bfbab9bc0242bcd, type: 3}
+    itemName: Omni Jewel
+    itemDescription: <color=green>Grants a 10% bonus to damage, attack speed, health,
+      and armor.</color>
+    itemType: 2
+    itemRarity: 3
+    statBonuses: []
+    spawnablePrefab: {fileID: 0}
+    itemEffects:
+    - {fileID: 11400000, guid: 7ed91492883722c45a97d63619463014, type: 2}
+    projectiles: []

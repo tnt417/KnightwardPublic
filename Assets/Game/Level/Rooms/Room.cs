@@ -13,14 +13,24 @@ namespace TonyDev.Game.Level.Rooms
         [SerializeField] private Grid grid;
         [SerializeField] private RoomDoor[] roomDoors;
         [SerializeField] private GameObject spawnPrefabOnClear;
+        [SerializeField] private Transform entryPointUp;
+        [SerializeField] private Transform entryPointDown;
+        [SerializeField] private Transform entryPointLeft;
+        [SerializeField] private Transform entryPointRight;
+
         public Sprite minimapIcon;
         //
 
         private Vector2Int _roomIndex;
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
-        private bool _prefabSpawned = false;
+        private bool _clearPrefabSpawned = false;
 
+        private void Start()
+        {
+            CheckShouldLockDoors();
+        }
+        
         //Returns a rect, representing the room's position and shape in the world based on its tilemaps
         private Rect FindRoomRect()
         {
@@ -43,9 +53,19 @@ namespace TonyDev.Game.Level.Rooms
             return new Rect(pos.x + xMin, pos.y + yMin, xMax - xMin, yMax - yMin);
         }
 
-        public void
-            SetOpenDirections(
-                List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
+        public Vector2 GetSpawnpoint(Direction fromDirection)
+        {
+            return fromDirection switch
+            {
+                Direction.Up => entryPointDown.position,
+                Direction.Down => entryPointUp.position,
+                Direction.Right => entryPointLeft.position,
+                Direction.Left => entryPointRight.position,
+                _ => transform.position
+            };
+        }
+
+        public void SetOpenDirections(List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
         {
             _openDirections = directions;
             foreach (var rd in
@@ -54,25 +74,57 @@ namespace TonyDev.Game.Level.Rooms
                 where rd.direction == d
                 select rd) //Not sure what Ryder did for me here
             {
-                rd.open = true;
+                rd.Open();
             }
         }
 
-        private void FixedUpdate()
+        public List<Direction> GetDoorDirections()
         {
-            if (GetComponentInChildren<Enemy>() != null || GetComponentInChildren<EnemySpawner>() != null)
+            return roomDoors.Select(rd => rd.direction).ToList();
+        }
+
+        private void CheckShouldLockDoors()
+        {
+            var enemySpawner = GetComponentInChildren<EnemySpawner>();
+            
+            if (GetComponentsInChildren<Enemy>().Any(e => e.IsAlive) || enemySpawner != null && enemySpawner.CurrentlySpawning)
             {
                 LockAllDoors(); //Lock doors while enemies are alive in the room.
             }
             else
             {
-                if (!_prefabSpawned && spawnPrefabOnClear != null)
-                {
-                    Instantiate(spawnPrefabOnClear, transform.position, quaternion.identity, transform); //Instantiate the on clear prefab in the center of the room
-                    _prefabSpawned = true;
-                }
+                OnClear();
+            }
+        }
 
-                SetOpenDirections(_openDirections); //Otherwise, open/close the doors as normal.
+        public void OnEnemySpawn()
+        {
+            LockAllDoors();
+        }
+
+        public void OnEnemyDie()
+        {
+            CheckShouldLockDoors();
+        }
+
+        private void OnClear()
+        {
+            if (!_clearPrefabSpawned && spawnPrefabOnClear != null)
+            {
+                Instantiate(spawnPrefabOnClear, transform.position, quaternion.identity,
+                    transform); //Instantiate the on clear prefab in the center of the room
+                _clearPrefabSpawned = true;
+            }
+
+            OpenAllDoors(); //Otherwise, open/close the doors as normal.
+        }
+
+        private void OpenAllDoors()
+        {
+            foreach (var rd in roomDoors)
+            {
+                if (_openDirections.Contains(rd.direction)) rd.Open();
+                else rd.Close();
             }
         }
 
@@ -80,7 +132,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             foreach (var rd in roomDoors)
             {
-                rd.open = false;
+                rd.Close();
             }
         }
 

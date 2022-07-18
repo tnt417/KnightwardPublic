@@ -86,7 +86,7 @@ namespace TonyDev.Game.Core.Items
         #region Stat Generation
 
         private static float StatStrengthFactor => 1 + GameManager.EnemyDifficultyScale/30f;
-        private static float DamageStrength => Random.Range(0.6f, 1f) * StatStrengthFactor;
+        private static float DamageStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 25f;
         private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * StatStrengthFactor;
         private static float ArmorStrength => Random.Range(0.6f, 1f) * 10 * StatStrengthFactor;
         private static float HealthStrength => Random.Range(0.6f, 1f) * 10 * StatStrengthFactor;
@@ -98,7 +98,7 @@ namespace TonyDev.Game.Core.Items
             Common = base dmg, base attack spd
             Uncommon = base dmg+, base attack spd+
             Rare = base dmg++, base attack spd++, bonus stat
-            Unique = base dmg++, base attack spd++, bonus stat, bonus stat, special effect (ONLY DROPS FROM SPECIAL PLACES!)*/
+            Unique = base dmg++, base attack spd++, bonus stat, bonus stat, special effect (ONLY DROPS FROM SPECIAL PLACES!) TODO*/
             
             //1. add stat bonuses to an array without a strength
             //2. adjust the strength of the effects depending on the stat
@@ -117,12 +117,12 @@ namespace TonyDev.Game.Core.Items
             switch (itemType)
             {
                 case ItemType.Weapon:
-                    statBonuses.Add(new StatBonus(Stat.Damage, DamageStrength * multiplier, "Weapon"));
-                    statBonuses.Add(new StatBonus(Stat.AttackSpeed, AttackSpeedStrength * multiplier, "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier, "Weapon"));
                     break;
                 case ItemType.Armor:
-                    statBonuses.Add(new StatBonus(Stat.Armor, ArmorStrength * multiplier, "Armor"));
-                    statBonuses.Add(new StatBonus(Stat.Health, HealthStrength * multiplier, "Armor"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Armor, ArmorStrength * multiplier, "Armor"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Health, HealthStrength * multiplier, "Armor"));
                     break;
             }
 
@@ -130,13 +130,13 @@ namespace TonyDev.Game.Core.Items
             {
                 case ItemRarity.Rare:
                     var stat1 = PlayerStats.GetValidStatForItem(itemType);
-                    statBonuses.Add(new StatBonus(stat1, GetBonusStatStrength(stat1), itemType == ItemType.Armor ? "Armor" : "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, stat1, GetBonusStatStrength(stat1), itemType == ItemType.Armor ? "Armor" : "Weapon"));
                     break;
                 case ItemRarity.Unique:
                     stat1 = PlayerStats.GetValidStatForItem(itemType);
-                    statBonuses.Add(new StatBonus(stat1, GetBonusStatStrength(stat1), itemType == ItemType.Armor ? "Armor" : "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, stat1, GetBonusStatStrength(stat1), itemType == ItemType.Armor ? "Armor" : "Weapon"));
                     var stat2 = PlayerStats.GetValidStatForItem(itemType);
-                    statBonuses.Add(new StatBonus(stat2, GetBonusStatStrength(stat2), itemType == ItemType.Armor ? "Armor" : "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, stat2, GetBonusStatStrength(stat2), itemType == ItemType.Armor ? "Armor" : "Weapon"));
                     break;
             }
 
@@ -147,20 +147,20 @@ namespace TonyDev.Game.Core.Items
         {
             return stat switch
             {
-                Stat.Damage => DamageStrength*0.2f,
+                Stat.Damage => DamageStrength*1.2f,
                 Stat.AttackSpeed => AttackSpeedStrength*0.2f,
                 Stat.Armor => ArmorStrength * 0.2f,
                 Stat.Health => HealthStrength * 0.2f,
                 Stat.CritChance => Random.Range(0.2f, 0.4f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
-                Stat.CritDamage => DamageStrength*Mathf.Clamp01(StatStrengthFactor-1),
+                //Stat.CritDamage => DamageStrength*Mathf.Clamp01(StatStrengthFactor-1),
                 Stat.Dodge => Random.Range(0.2f, 0.4f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
-                Stat.Knockback => Random.Range(0.1f, 0.5f),
-                Stat.Stun => 0,
-                Stat.AoeSize => Random.Range(0.2f, 0.75f),
+                //Stat.Knockback => Random.Range(0.1f, 0.5f),
+                //Stat.Stun => 0,
+                //Stat.AoeSize => Random.Range(0.2f, 0.75f),
                 Stat.MoveSpeed => Random.Range(0.1f, 0.5f),
-                Stat.Tenacity => 0, //Random.Range(0.2f, 0.5f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
-                Stat.HpRegen => HealthStrength / 100,
-                Stat.DamageReduction => Random.Range(0.1f, 0.3f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
+                //Stat.Tenacity => 0, //Random.Range(0.2f, 0.5f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
+                //Stat.HpRegen => HealthStrength / 100,
+                //Stat.DamageReduction => Random.Range(0.1f, 0.3f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
                 _ => throw new ArgumentOutOfRangeException(nameof(stat), stat, null)
             };
         }

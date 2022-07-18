@@ -1,13 +1,15 @@
 using System;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
-using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using UnityEngine;
 
-namespace TonyDev.Game.Core.Entities.Enemies
+namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
 {
-    [CreateAssetMenu(menuName = "EnemyData")]
+    [CreateAssetMenu(menuName = "Enemy/EnemyData")]
     public class EnemyData : ScriptableObject
     {
+        [Header("Prefab - can be left empty for default")]
+        public GameObject prefab;
+        
         [Header("Basic Data")]
         public string enemyName;
         public Sprite enemyBaseSprite;

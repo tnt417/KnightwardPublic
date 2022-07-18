@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: IceWizardMovement
   m_EditorClassIdentifier: 
   speedMultiplier: 1
-  strafeDistance: 5
-  strafeSpeed: 2
-  strafeCooldown: 5
+  doXFlipping: 1
+  strafeDistance: 7
+  strafeSpeed: 5
+  strafeCooldown: 2
   strafeRadius: 7

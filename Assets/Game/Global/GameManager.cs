@@ -24,7 +24,7 @@ namespace TonyDev.Game.Global
         public static List<Item> AllItems = new ();
         public static float CrystalHealth = 1000f;
         public static int Money = 0;
-        public static readonly List<GameEntity> Entities = new ();
+        public static List<GameEntity> Entities = new ();
         public static readonly List<EnemySpawner> EnemySpawners = new ();
         public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
         public static GamePhase GamePhase;

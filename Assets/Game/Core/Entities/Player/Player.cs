@@ -1,6 +1,7 @@
 using System;
 using System.Transactions;
 using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Entities.Player.Combat;
 using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.Events;
@@ -46,14 +47,14 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public void Update()
         {
-            //Enable/disable parts of the player depending on if player is alive
-            playerMovement.DoMovement = IsAlive;
+            //Enable/disable parts of the player depending on if player is alive //TODO not good
+            playerMovement.enabled = IsAlive;
             PlayerCombat.Instance.gameObject.SetActive(IsAlive);
             //
             
             if (IsAlive)
             {
-                var hpRegen = PlayerStats.HpRegen * Time.deltaTime;
+                var hpRegen = MaxHealth * 0.01f * Time.deltaTime; //Regen 1% of hp per second
                 ApplyDamage(-hpRegen); //Regen health by HpRegen per second
             }
         }

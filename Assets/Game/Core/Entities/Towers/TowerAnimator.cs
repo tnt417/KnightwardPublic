@@ -15,7 +15,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         
         public void PlayAnimation(TowerAnimationState animState)
         {
-            if (animations[(int) animState] == null) return;
+            if (animations.Length < (int)animState || animations[(int) animState] == null) return;
             animator.Play(animations[(int)animState].name); //Play an animation based on the animState
         }
     }

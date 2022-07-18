@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 8167611084454580651}
   m_Layer: 0
   m_Name: Crystal
-  m_TagString: Untagged
+  m_TagString: Crystal
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -136,7 +136,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 2}
+  m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
 --- !u!61 &922445376998541849
 BoxCollider2D:
@@ -176,6 +176,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eced12fa32c2bc1419cc42585fcfb5b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: 
+  targetTeam: 0
 --- !u!50 &8167611084454580651
 Rigidbody2D:
   serializedVersion: 4

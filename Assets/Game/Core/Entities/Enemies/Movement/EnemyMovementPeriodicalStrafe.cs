@@ -41,7 +41,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             FindDirection() //Some trigonometry to find a position a certain distance away from both the player and enemy
         {
             var posA = transform.position;
-            var posB = Target.transform.position;
+            var posB = FirstTarget.transform.position;
             var dist = Vector2.Distance(posA, posB);
             var angleA = Mathf.Acos(
                 Mathf.Clamp(
@@ -90,15 +90,15 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
         public override void PopulateFromData(EnemyMovementData data)
         {
+            EnemyMovementData = data;
             SpeedMultiplier = data.speedMultiplier;
 
-            if (data is EnemyMovementStrafeData strafeData)
-            {
-                strafeDistance = strafeData.strafeDistance;
-                strafeSpeed = strafeData.strafeSpeed;
-                strafeCooldown = strafeData.strafeCooldown;
-                strafeRadius = strafeData.strafeRadius;
-            }
+            if (data is not EnemyMovementStrafeData strafeData) return;
+            
+            strafeDistance = strafeData.strafeDistance;
+            strafeSpeed = strafeData.strafeSpeed;
+            strafeCooldown = strafeData.strafeCooldown;
+            strafeRadius = strafeData.strafeRadius;
         }
 
         public override event MoveAction OnStartMove;

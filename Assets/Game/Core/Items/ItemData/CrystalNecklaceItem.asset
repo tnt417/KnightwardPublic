@@ -16,11 +16,12 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
     itemName: Crystal Fragment Necklace
     itemDescription: <color=green>The crystal now heals 10x your HP regen over time
-      and absorbs 40% of the damage that you take...</color><color=red> BUT you can
-      no longer regenerate health</color>
+      and you gain 50 armor...</color><color=red> BUT the crystal now takes damage
+      upon the player getting hit.</color>
     itemType: 2
     itemRarity: 2
     statBonuses: []
     spawnablePrefab: {fileID: 0}
     itemEffects:
     - {fileID: 11400000, guid: 3d0ce421e1af8bf4ca64dbd2662392cd, type: 2}
+    projectiles: []

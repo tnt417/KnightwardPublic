@@ -13,7 +13,7 @@ using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
 {
-    [RequireComponent(typeof(EnemyAnimator), typeof(Collider2D))]
+    [RequireComponent(typeof(EnemyAnimator), typeof(CircleCollider2D))]
     public class Enemy : GameEntity
     {
         #region Variables
@@ -37,8 +37,10 @@ namespace TonyDev.Game.Core.Entities.Enemies
             if (_enemyData != null) return;
             
             _enemyData = enemyData;
+
+            var coll = GetComponent<CircleCollider2D>();
             
-            GetComponent<CircleCollider2D>().radius = _enemyData.hitboxRadius;
+            if(coll != null) coll.radius = _enemyData.hitboxRadius;
             
             enemyAnimator.Set(enemyData);
             CreateMovementComponent(enemyData.movementData);

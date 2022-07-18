@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5769312474634298354}
   - component: {fileID: 6938340393128323355}
   - component: {fileID: 2598763644231202126}
+  - component: {fileID: 9117518813328103301}
   m_Layer: 0
   m_Name: BallistaTurret
   m_TagString: Untagged
@@ -84,12 +85,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609f77bd4fcb4e94db92f5f804f88634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTag: 
+  targetTeam: 0
+  maxTargets: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
   fireCooldown: 0.5
+  projectileOriginOffset: {x: 0, y: 0}
+  projectileTargetOffset: {x: 0, y: 0}
   rotateToFaceTargetObject: {fileID: 5988369303423483918}
   projectilePrefab: {fileID: 5620128404347004703, guid: 9fb8590f630b2734793d63ac5c2f4b0e, type: 3}
+  setProjectileRotation: 1
   projectileTravelSpeed: 20
+--- !u!58 &9117518813328103301
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150477889065159250}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &4032208556319356246
 GameObject:
   m_ObjectHideFlags: 0
@@ -162,7 +185,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -1
   m_Sprite: {fileID: 21300000, guid: ebc95e5db007b494a9b83ad51fccd6d0, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -246,7 +269,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 235405268, guid: 4b0a3b5019c9d1c48a96720407a5c11e, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 1

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Enemies.Movement;
+using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
