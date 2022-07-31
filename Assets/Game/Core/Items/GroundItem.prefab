@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4323213906609012047}
   - component: {fileID: 8979394758962707601}
   - component: {fileID: 1974034100517254312}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: PickupIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -87,7 +87,7 @@ GameObject:
   - component: {fileID: 5337516078970367296}
   - component: {fileID: 3969628297381846618}
   - component: {fileID: 2374558467336496414}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: MoneyIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -162,7 +162,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8067656620111282952}
   - component: {fileID: 3956062361039298950}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -181,7 +181,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2669139127557075415}
+  m_Father: {fileID: 2704444892847785078}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &3956062361039298950
@@ -247,7 +247,7 @@ GameObject:
   - component: {fileID: 2988523316390455627}
   - component: {fileID: 2970631068443569411}
   - component: {fileID: 2533623661092243764}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ControlIndicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -323,7 +323,7 @@ GameObject:
   - component: {fileID: 3148908135027962176}
   - component: {fileID: 1839092275424656218}
   - component: {fileID: 829267135949234640}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: MoneyLabel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -456,10 +456,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6230188775502269433}
-  - component: {fileID: 1057646295140397346}
   - component: {fileID: 7931160046717526793}
-  m_Layer: 0
-  m_Name: Canvas
+  - component: {fileID: 5315185429658272849}
+  m_Layer: 5
+  m_Name: Indicator
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -481,7 +481,7 @@ RectTransform:
   - {fileID: 2988523316390455627}
   - {fileID: 3148908135027962176}
   - {fileID: 5337516078970367296}
-  m_Father: {fileID: 2669139127557075415}
+  m_Father: {fileID: 2704444892847785078}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -489,27 +489,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1.1, y: 1.1}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!223 &1057646295140397346
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6167932236764749957}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 25
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!95 &7931160046717526793
 Animator:
   serializedVersion: 4
@@ -530,6 +509,27 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!223 &5315185429658272849
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6167932236764749957}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &6299984590477429156
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +540,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7969715042602372713}
   - component: {fileID: 4358118075802325454}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2669139127557075415}
+  m_Father: {fileID: 2704444892847785078}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4358118075802325454
@@ -622,18 +622,18 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2669139127557075415}
+  - component: {fileID: 2704444892847785078}
   - component: {fileID: 7956640096563318440}
   - component: {fileID: 6940464710394102608}
   - component: {fileID: 6707857981618908756}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GroundItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2669139127557075415
+--- !u!4 &2704444892847785078
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -669,6 +669,9 @@ MonoBehaviour:
   moneyIcon: {fileID: 1689308873513281990}
   moneyLabel: {fileID: 829267135949234640}
   cost: 1
+  onPickup:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!61 &6940464710394102608
 BoxCollider2D:
   m_ObjectHideFlags: 0

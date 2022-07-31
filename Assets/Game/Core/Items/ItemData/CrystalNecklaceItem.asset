@@ -22,6 +22,6 @@ MonoBehaviour:
     itemRarity: 2
     statBonuses: []
     spawnablePrefab: {fileID: 0}
-    itemEffects:
-    - {fileID: 11400000, guid: 3d0ce421e1af8bf4ca64dbd2662392cd, type: 2}
+    itemEffectIds:
+    - crystalNecklaceEffect
     projectiles: []

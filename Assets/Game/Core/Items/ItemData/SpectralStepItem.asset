@@ -18,15 +18,18 @@ MonoBehaviour:
     itemDescription: '<color=#94d1c3>You feel your body become lighter...</color>
 
       <color=green>Gain
-      50% move speed and become knockback immune.</color>'
+      40% move speed and gain 20% dodge chance.</color>'
     itemType: 2
     itemRarity: 0
     statBonuses:
-    - stat: 7
-      strength: 0.5
+    - statType: 0
+      stat: 4
+      strength: 0.4
       source: Relic
-    - stat: 10
-      strength: 1
+    - statType: 0
+      stat: 7
+      strength: 0.2
       source: Relic
     spawnablePrefab: {fileID: 0}
     itemEffects: []
+    projectiles: []

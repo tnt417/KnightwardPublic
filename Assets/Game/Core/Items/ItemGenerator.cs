@@ -51,16 +51,24 @@ namespace TonyDev.Game.Core.Items
         public static Item GenerateItemOfType(ItemType type, ItemRarity rarity)
         {
             //Instantiate local variables that will end up at the parameters for the generated item.
+            Item item = null;
             var itemName = string.Empty;
             Sprite sprite = null;
             //
+            
+            
+            if (type == ItemType.Weapon)
+            {
+                item = Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Weapon));
+            }
 
             //Set sprites and item names based on the item type
             switch (type)
             {
                 case ItemType.Weapon:
-                    sprite = Tools.SelectRandom(_weaponSprites);
-                    itemName = "Weapon";
+                    if (item == null) return null;
+                    sprite = item.uiSprite;
+                    itemName = item.itemName;
                     break;
                 case ItemType.Armor:
                     sprite = Tools.SelectRandom(_armorSprites);
@@ -78,14 +86,15 @@ namespace TonyDev.Game.Core.Items
                 itemType = type,
                 itemRarity = rarity,
                 itemName = itemName,
-                statBonuses = GenerateItemStats(type, rarity),
-                uiSprite = sprite
+                statBonuses = item == null ? GenerateItemStats(type, rarity) : StatBonus.Combine(GenerateItemStats(type, rarity), item.statBonuses).ToArray(),
+                uiSprite = sprite,
+                ItemEffects = item?.ItemEffects
             };
         }
 
         #region Stat Generation
 
-        private static float StatStrengthFactor => 1 + GameManager.EnemyDifficultyScale/30f;
+        private static float StatStrengthFactor => 1 + GameManager.DungeonFloor/15f;
         private static float DamageStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 25f;
         private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * StatStrengthFactor;
         private static float ArmorStrength => Random.Range(0.6f, 1f) * 10 * StatStrengthFactor;
@@ -93,7 +102,7 @@ namespace TonyDev.Game.Core.Items
         private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity)
         {
             if (itemType is not (ItemType.Armor or ItemType.Weapon)) return null;
-            
+
             /*Weapons:
             Common = base dmg, base attack spd
             Uncommon = base dmg+, base attack spd+
@@ -113,16 +122,18 @@ namespace TonyDev.Game.Core.Items
                 ItemRarity.Unique => 1.2f,
                 _ => 1f
             };
+
+            var source = Enum.GetName(typeof(ItemType), itemType);
             
             switch (itemType)
             {
                 case ItemType.Weapon:
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, "Weapon"));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier, "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier, source));
                     break;
                 case ItemType.Armor:
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Armor, ArmorStrength * multiplier, "Armor"));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Health, HealthStrength * multiplier, "Armor"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Armor, ArmorStrength * multiplier, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Health, HealthStrength * multiplier, source));
                     break;
             }
 
@@ -130,13 +141,13 @@ namespace TonyDev.Game.Core.Items
             {
                 case ItemRarity.Rare:
                     var stat1 = PlayerStats.GetValidStatForItem(itemType);
-                    statBonuses.Add(new StatBonus(StatType.Flat, stat1, GetBonusStatStrength(stat1), itemType == ItemType.Armor ? "Armor" : "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, stat1, GetBonusStatStrength(stat1), source));
                     break;
                 case ItemRarity.Unique:
                     stat1 = PlayerStats.GetValidStatForItem(itemType);
-                    statBonuses.Add(new StatBonus(StatType.Flat, stat1, GetBonusStatStrength(stat1), itemType == ItemType.Armor ? "Armor" : "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, stat1, GetBonusStatStrength(stat1), source));
                     var stat2 = PlayerStats.GetValidStatForItem(itemType);
-                    statBonuses.Add(new StatBonus(StatType.Flat, stat2, GetBonusStatStrength(stat2), itemType == ItemType.Armor ? "Armor" : "Weapon"));
+                    statBonuses.Add(new StatBonus(StatType.Flat, stat2, GetBonusStatStrength(stat2), source));
                     break;
             }
 
@@ -170,10 +181,10 @@ namespace TonyDev.Game.Core.Items
         {
             return (int) (item.itemRarity switch
             {
-                ItemRarity.Common => 10f * (1 + GameManager.EnemyDifficultyScale / 5f),
-                ItemRarity.Uncommon => 15f * (1 + GameManager.EnemyDifficultyScale / 5f),
-                ItemRarity.Rare => 20f * (1 + GameManager.EnemyDifficultyScale / 5f),
-                ItemRarity.Unique => 25f * (1 + GameManager.EnemyDifficultyScale / 5f),
+                ItemRarity.Common => 10f * (1 + GameManager.DungeonFloor / 5f),
+                ItemRarity.Uncommon => 15f * (1 + GameManager.DungeonFloor / 5f),
+                ItemRarity.Rare => 20f * (1 + GameManager.DungeonFloor / 5f),
+                ItemRarity.Unique => 25f * (1 + GameManager.DungeonFloor / 5f),
                 _ => 0
             });
         }

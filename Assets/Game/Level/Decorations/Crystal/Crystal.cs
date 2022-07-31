@@ -27,5 +27,12 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         }
 
         #endregion
+
+        [GameCommand(Keyword = "ci", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled crystal invulnerability.")]
+        public static void ToggleInvulnerable()
+        {
+                var crystal = FindObjectOfType<Crystal>();
+                crystal.IsInvulnerable = !crystal.IsInvulnerable;
+        }
     }
 }

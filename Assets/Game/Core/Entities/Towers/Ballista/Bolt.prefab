@@ -150,13 +150,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   damageMultiplier: 1
-  damageCooldown: 0
+  damageCooldown: 1
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
   knockbackForce: 300
   knockbackMultiplier: 1
-  enemySpeedModifier: 0
+  inflictBuffs: []
 --- !u!96 &-4567278862790983507
 TrailRenderer:
   serializedVersion: 2

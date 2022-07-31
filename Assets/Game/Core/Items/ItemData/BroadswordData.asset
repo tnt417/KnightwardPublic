@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: BroadswordData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
+    itemName: Broadsword
+    itemDescription: Shoots mid-speed. Built-in armor. Higher damage. Special ability
+      bashes enemies and slows them.
+    itemType: 0
+    itemRarity: 0
+    statBonuses:
+    - statType: 1
+      stat: 6
+      strength: 0.1
+      source: 
+    spawnablePrefab: {fileID: 0}
+    itemEffects: []
+    projectiles:
+    - prefab: {fileID: 1437695475391080197, guid: 2ed55f042af47534e877f1b55dac4b14, type: 3}
+      projectileSprite: {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
+      damageMultiplier: 1
+      hitboxRadius: 0.2
+      knockbackMultiplier: 1
+      team: 1
+      destroyOnApply: 0
+      spawnOnDestroy: {fileID: 0}
+      travelSpeed: 8
+      lifetime: 0.2
+      offsetDegrees: 0
+      waveAmplitude: 0
+      waveFrequency: 0
+      waveDistance: 0

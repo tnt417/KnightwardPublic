@@ -87,7 +87,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: 
   targetTeam: 0
-  maxTargets: 0
+  maxTargets: 1
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
   fireCooldown: 0.5

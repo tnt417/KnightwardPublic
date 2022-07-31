@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CelestialTower
   m_EditorClassIdentifier: 
   item:
-    uiSprite: {fileID: -1718924737, guid: 2539f01085005c04faf6928503ee6369, type: 3}
+    uiSprite: {fileID: 21300000, guid: 233656d44bf79d9499bf1f8689011878, type: 3}
     itemName: Celestial Tower
     itemDescription: Applies a buff to nearby towers' fire rate and strength.
     itemType: 3

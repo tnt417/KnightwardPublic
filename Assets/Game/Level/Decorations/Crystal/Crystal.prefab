@@ -178,6 +178,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: 
   targetTeam: 0
+  maxTargets: 0
 --- !u!50 &8167611084454580651
 Rigidbody2D:
   serializedVersion: 4

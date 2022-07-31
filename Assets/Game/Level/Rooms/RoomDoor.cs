@@ -56,8 +56,7 @@ namespace TonyDev.Game.Level.Rooms
             {
                 var pos = wallTileSpots[i];
                 Gizmos.color = new Color(1, 0, 0, 0.5f);
-                Gizmos.DrawCube(new Vector3(pos.x, pos.y, 0), Vector3.one);   
-                Debug.Log("rect at: " + pos);
+                Gizmos.DrawCube(new Vector3(pos.x, pos.y, 0), Vector3.one);
             }
         }
     }

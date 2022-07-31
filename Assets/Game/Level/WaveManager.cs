@@ -32,14 +32,15 @@ namespace TonyDev.Game.Core
 
         private void Update()
         {
-            _waveCooldown = wavesSpawned % 5 == 0 ? 120 : 5; //Every 5 waves, have a 2 minute break. Otherwise 30 seconds in between waves.
+            _waveCooldown = wavesSpawned % 5 == 0 ? 120 : 30; //Every 5 waves, have a 2 minute break. Otherwise 30 seconds in between waves.
             
             _waveTimer += Time.deltaTime; //Tick the wave timer
             if (_waveTimer >= _waveCooldown) SpawnWave(); //Spawn a wave if cooldown is over
         }
-
+        
         //Spawns a wave of enemies
-        private void SpawnWave()
+        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawning next wave.")]
+        public void SpawnWave()
         {
             /* DESCRIPTION:
              * Chooses random spawns of enemies to spawn in random locations until it runs out of difficulty allowance.

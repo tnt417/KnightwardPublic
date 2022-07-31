@@ -21,6 +21,10 @@ namespace TonyDev.Game.Core.Entities
         [SerializeField] private string targetTag;
         [SerializeField] private Team targetTeam;
         [SerializeField] private int maxTargets;
+
+        public readonly EntityBuff Buff = new ();
+
+        private delegate void TargetAction();
         private void Start()
         {
             Init();
@@ -57,11 +61,14 @@ namespace TonyDev.Game.Core.Entities
              * and only attack things within 10 tiles unless it is the crystal
              * 
              */
+
+            var range = 10f;
+            if (this is Tower t) range = t.targetRadius;
             
             var transforms = GameManager.Entities
                 .Where(e => (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) &&
                             e.Team == targetTeam && (this is Tower || !e.IsInvulnerable && e.IsAlive) && e != this
-                            && (e is Crystal || Vector2.Distance(e.transform.position, transform.position) < 10f))
+                            && ((e is Crystal && Vector2.Distance(e.transform.position, transform.position) < 200f)|| Vector2.Distance(e.transform.position, transform.position) < range))
                 .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
                 .Select(e => e.transform).Take(maxTargets).ToList(); //Finds closest non-dead game entity object on the opposing team
             

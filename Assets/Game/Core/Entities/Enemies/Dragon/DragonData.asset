@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d638ee9ead7bab4e9fa1e72c8464d07, type: 3}
+  m_Name: DragonData
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  enemyName: Dragon
+  enemyBaseSprite: {fileID: 1705161211, guid: cd10e1c2d92657c41a838506da9d3145, type: 3}
+  baseMoneyReward: 10
+  maxHealth: 300
+  hitboxRadius: 0.8
+  animatorController: {fileID: 9100000, guid: a9e1451e5eb298b47b6c77a4856a6d98, type: 2}
+  animations:
+  - enemyAnimationState: 3
+    animationName: DragonAttack
+  movementData: {fileID: 11400000, guid: fb158c11d1319284ead228e98e651faa, type: 2}
+  attackData: {fileID: 11400000, guid: b3c7a8204bda0f944b6795d841d7fb02, type: 2}

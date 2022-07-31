@@ -1,13 +1,20 @@
 using System;
+using System.Linq;
 using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Towers.Celestial
 {
     public class BuffTower : Tower
     {
-        [SerializeField] private float allyStrengthMultiplier;
-        [SerializeField] private float allyAttackSpeedMultiplier;
+        [SerializeField] private float allyStrengthBonusPercent;
+        [SerializeField] private float allyAttackSpeedBonusPercent;
+
+        private void Awake()
+        {
+            OnTargetChange += DoBuffing;
+        }
 
         protected override void TowerUpdate()
         {
@@ -17,24 +24,14 @@ namespace TonyDev.Game.Core.Entities.Towers.Celestial
         {
         }
 
-        public void OnTriggerEnter2D(Collider2D other)
+        private void DoBuffing()
         {
-            var entity = other.GetComponent<GameEntity>();
-
-            if (entity != null && entity is ProjectileTower projectileTower)
+            foreach (var pt in Targets.Select(t => t.GetComponent<ProjectileTower>()).Where(pt => pt != null))
             {
-                projectileTower.AddBuff(TowerBuffType.Strength, GetInstanceID().ToString(), allyStrengthMultiplier);
-                projectileTower.AddBuff(TowerBuffType.FireSpeed, GetInstanceID().ToString(), allyAttackSpeedMultiplier);
-            }
-        }
-        
-        public void OnTriggerExit2D(Collider2D other)
-        {
-            var entity = other.GetComponent<GameEntity>();
-
-            if (entity != null && entity is ProjectileTower projectileTower)
-            {
-                projectileTower.RemoveBuff(GetInstanceID().ToString());
+                var source = GetInstanceID().ToString();
+                pt.Buff.RemoveStatBonuses(source);
+                pt.Buff.AddStatBonus(StatType.Multiplicative, Stat.Damage, allyStrengthBonusPercent, source);
+                pt.Buff.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, allyAttackSpeedBonusPercent, source);
             }
         }
 
@@ -42,7 +39,7 @@ namespace TonyDev.Game.Core.Entities.Towers.Celestial
         {
             foreach (var t in FindObjectsOfType<ProjectileTower>())
             {
-                t.RemoveBuff(GetInstanceID().ToString());
+                t.Buff.RemoveStatBonuses(GetInstanceID().ToString());
             }
         }
     }

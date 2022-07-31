@@ -5,7 +5,7 @@ using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.UI;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.UI;
 
 namespace TonyDev
 {
@@ -14,10 +14,11 @@ namespace TonyDev
         public static TowerPlacementManager Instance;
         
         //Editor variables
-        [SerializeField] public GameObject towerPlacementIndicator;
+        [SerializeField] private GameObject towerPlacementIndicator;
+        [SerializeField] private Image rangeIndicator;
         //
         
-        private List<Tower> _placedTowers = new List<Tower>();
+        private readonly List<Tower> _placedTowers = new ();
         private bool Placing => towerPlacementIndicator.activeSelf;
         private Camera _mainCamera;
         private GameObject _selectedTowerPrefab;
@@ -45,6 +46,8 @@ namespace TonyDev
         {
             towerPlacementIndicator.SetActive(!Placing); //Toggle the placement indicator activeness
             _selectedTowerPrefab = item.spawnablePrefab; //Update selected prefab
+            var tower = _selectedTowerPrefab.GetComponent<Tower>(); //Get a reference to the tower of the prefab...
+            rangeIndicator.transform.localScale = new Vector3(tower.targetRadius * 2, tower.targetRadius * 2, 1); //...and update the rangeIndicator based on the tower's range.
             var prefabSprite = _selectedTowerPrefab.GetComponentInChildren<SpriteRenderer>(); //Get the prefab's SpriteRenderer
             var indicatorSprite = towerPlacementIndicator.GetComponent<SpriteRenderer>(); //Get the indicator's SpriteRenderer
             indicatorSprite.sprite = item.uiSprite; //Update the indicator's sprite to be the tower's ui sprite

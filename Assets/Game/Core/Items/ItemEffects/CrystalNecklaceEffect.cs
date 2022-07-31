@@ -5,14 +5,14 @@ using UnityEngine;
 
 namespace TonyDev.Game.Core.Items.ItemEffects
 {
-    [CreateAssetMenu(menuName = "Item Effects/Crystal Necklace Effect")]
+    [ItemEffect(ID = "crystalNecklaceEffect")]
     public class CrystalNecklaceEffect : ItemEffect
     {
         private const float Multiplier = 0.4f; //The portion of incoming player damage to redirect to the crystal
 
         public override void OnAdd() //Runs when an item is equipped
         {
-            Crystal.CrystalRegen = () => (1f + PlayerStats.GetFlatStatBonus(Stat.HpRegen)) * PlayerStats.GetStatMultiplyBonus(Stat.HpRegen) * 10f; //Sets the crystal regen to be the player's regen
+            Crystal.CrystalRegen = () => (1f + PlayerStats.GetStat(Stat.HpRegen)) * 10f; //Sets the crystal regen to be 10x the player's regen
             PlayerStats.AddStatBonus(StatType.Flat, Stat.Armor, 50f, "CrystalNecklace"); //Give the player 50 armor
             Player.OnPlayerDamage += DamageCrystal; //When the player is damaged, call our DamageCrystal method
         }

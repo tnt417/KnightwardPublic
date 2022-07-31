@@ -1,22 +1,21 @@
 using System.Linq;
 using TonyDev.Game.Core.Combat;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Towers
 {
-    public abstract class Tower : GameEntity
+    public class Tower : GameEntity
     {
         //Editor variables
         [SerializeField] protected TowerAnimator towerAnimator;
-        [SerializeField] protected float targetRadius;
-
+        [SerializeField] public float targetRadius;
         [SerializeField] private float fireCooldown;
         //
-
-        protected float AttackSpeedMultiplier = 1;
+        protected float AttackSpeedMultiplier => 1 + Buff.GetFlatStatBonus(Stat.AttackSpeed) * Buff.GetStatMultiplyBonus(Stat.AttackSpeed);
         private float _fireTimer;
 
         public void Update()
@@ -37,8 +36,8 @@ namespace TonyDev.Game.Core.Entities.Towers
         }
 
         public override Team Team => Team.Player;
+        protected virtual void TowerUpdate() {}
         public override bool IsInvulnerable => true;
-        protected abstract void TowerUpdate();
-        protected abstract void OnFire();
+        protected virtual void OnFire() {}
     }
 }

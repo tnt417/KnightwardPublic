@@ -26,7 +26,7 @@ namespace TonyDev.Game.Core.Entities.Player
         //All implementations of IDamageable contained in a region
         #region IDamageable
         public override Team Team => Team.Player;
-        public override int MaxHealth => (int)PlayerStats.Health;
+        public override int MaxHealth => (int)PlayerStats.GetStat(Stat.Health);
 
         public override void ApplyDamage(float damage)
         {
@@ -69,8 +69,22 @@ namespace TonyDev.Game.Core.Entities.Player
             DontDestroyOnLoad(gameObject); //Player persists between scenes
             
             GameManager.Entities.Add(this);
-            
+
+            //Add base stat bonuses
+            PlayerStats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, 5.0f, "Player");
+            PlayerStats.AddStatBonus(StatType.Flat, Stat.AoeSize, 1.0f, "Player");
+            PlayerStats.AddStatBonus(StatType.Flat, Stat.Health, 100f, "Player");
+        }
+
+        private void Start()
+        {
             CurrentHealth = MaxHealth;
+        }
+        
+        [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled invulnerability.")]
+        public static void ToggleInvulnerable()
+        {
+            Instance.IsInvulnerable = !Instance.IsInvulnerable;
         }
     }
 }

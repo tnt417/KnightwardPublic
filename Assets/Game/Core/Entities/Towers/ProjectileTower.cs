@@ -1,16 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Combat;
-using TonyDev.Game.Core.Entities.Towers;
+using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.Core.Entities.Towers
 {
-    public enum TowerBuffType
-    {
-        Strength, FireSpeed
-    }
     public class ProjectileTower : Tower
     {
         //Editor variables
@@ -21,9 +15,6 @@ namespace TonyDev
         [SerializeField] private bool setProjectileRotation = true;
         [SerializeField] private float projectileTravelSpeed; //Travel speed in units per second of projectiles
         //
-
-        private readonly Dictionary<string, float> _strengthBuffs = new();
-        private readonly Dictionary<string, float> _fireSpeedBuffs = new();
 
         protected override void TowerUpdate()
         {
@@ -42,40 +33,13 @@ namespace TonyDev
                 var dmg = projectile.GetComponent<DamageComponent>();
 
                 dmg.Owner = gameObject;
-                foreach (var buff in _strengthBuffs)
-                {
-                    dmg.damageMultiplier *= buff.Value;
-                }
+                dmg.damageMultiplier *= 1 + Buff.GetStatMultiplyBonus(Stat.Damage);
 
                 projectile.transform.position = transform.position + (Vector3)projectileOriginOffset; //Set the projectile's position to our tower's position
                 var rb = projectile.GetComponent<Rigidbody2D>();
                 if (setProjectileRotation) projectile.transform.right = direction; //Set the projectile's direction
                 rb.velocity = direction * projectileTravelSpeed; //Set the projectile's velocity
             }
-        }
-
-        private void UpdateMultipliers()
-        {
-            AttackSpeedMultiplier = 1;
-            foreach (var buff in _fireSpeedBuffs)
-            {
-                AttackSpeedMultiplier *= buff.Value;
-                Debug.Log(AttackSpeedMultiplier);
-            }
-        }
-
-        public void AddBuff(TowerBuffType type, string id, float strength)
-        {
-            if(type == TowerBuffType.Strength) _strengthBuffs.Add(id, strength);
-            else _fireSpeedBuffs.Add(id, strength);
-            UpdateMultipliers();
-        }
-
-        public void RemoveBuff(string id)
-        {
-            _strengthBuffs.Remove(id);
-            _fireSpeedBuffs.Remove(id);
-            UpdateMultipliers();
         }
     }
 }

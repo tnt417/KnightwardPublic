@@ -53,7 +53,7 @@ namespace TonyDev.Editor
         {
             EditorGUILayout.LabelField("Equippable Item Data:", EditorStyles.largeLabel);
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.statBonuses)));
-            EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemEffects)));
+            EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemEffectIds)));
         }
 
         private void DisplaySpawnableInfo(SerializedProperty sp)

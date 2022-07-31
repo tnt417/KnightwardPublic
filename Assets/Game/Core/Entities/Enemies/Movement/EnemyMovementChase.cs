@@ -20,13 +20,13 @@ namespace TonyDev.Game.Core.Entities.Enemies.Movement
         public override void UpdateMovement()
         {
             //Move towards the target
-            transform.Translate((FirstTarget.position - transform.position).normalized * SpeedMultiplier * Time.fixedDeltaTime);
+            transform.Translate((FirstTarget.position - transform.position).normalized * SpeedMultiplier * Speed * Time.fixedDeltaTime);
         }
 
         public override void PopulateFromData(EnemyMovementData data)
         {
             EnemyMovementData = data;
-            SpeedMultiplier = data.speedMultiplier;
+            Speed = data.baseSpeed;
         }
 
         public override event MoveAction OnStartMove;

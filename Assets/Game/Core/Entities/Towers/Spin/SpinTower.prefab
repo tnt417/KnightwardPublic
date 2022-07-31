@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7597066688944283777}
   - component: {fileID: 1567679890614665197}
   - component: {fileID: 9087303082573743762}
+  - component: {fileID: 917224836616493330}
   m_Layer: 0
   m_Name: SpinTower
   m_TagString: Untagged
@@ -107,6 +108,25 @@ MonoBehaviour:
   destroyOnAnyCollide: 0
   knockbackForce: 1000
   knockbackMultiplier: 1
+  enemySpeedModifier: 1
+--- !u!114 &917224836616493330
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150477889065159250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff4f85a28fd05947baf5b6067bec941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTag: 
+  targetTeam: 0
+  maxTargets: 1
+  towerAnimator: {fileID: 6938340393128323355}
+  targetRadius: 0.5
+  fireCooldown: 0
 --- !u!1 &4032208556319356246
 GameObject:
   m_ObjectHideFlags: 0

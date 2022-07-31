@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace TonyDev.Game.Core.Items.ItemEffects
 {
-    [CreateAssetMenu(menuName = "Item Effects/Omni Jewel Effect")]
+    [ItemEffect(ID = "omniJewelEffect")]
     public class OmniJewelEffect : ItemEffect
     {
         public float multiplyBonus = 0.1f;

@@ -12,4 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb77ab5f2a110484e8dfcd29a892062b, type: 3}
   m_Name: SlimeMovement
   m_EditorClassIdentifier: 
-  speedMultiplier: 2
+  baseSpeed: 2
+  doXFlipping: 0

@@ -89,9 +89,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   targetTag: Crystal
   targetTeam: 1
+  maxTargets: 1
   towerAnimator: {fileID: 6938340393128323355}
-  targetRadius: 5
+  targetRadius: 3
   fireCooldown: 5
+  projectileOriginOffset: {x: 0, y: 0}
+  projectileTargetOffset: {x: 0, y: 0}
   rotateToFaceTargetObject: {fileID: 0}
   projectilePrefab: {fileID: 5620128404347004703, guid: 027c3024041a5be45b0c3c7c0d4ea649, type: 3}
   setProjectileRotation: 0

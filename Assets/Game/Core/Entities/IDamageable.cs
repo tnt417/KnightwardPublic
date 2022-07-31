@@ -7,8 +7,8 @@ namespace TonyDev.Game.Core.Combat
         float HealMultiplier { get; }
         int MaxHealth { get; }
         float CurrentHealth { get; }
-        bool IsInvulnerable { get; }
         void ApplyDamage(float damage);
+        bool IsInvulnerable { get; }
         void Die();
         delegate void HealthAction();
         event HealthAction OnHealthChanged;

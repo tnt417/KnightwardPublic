@@ -77,7 +77,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             }
             else if (_strafing)
             {
-                var strafeVector = _direction * strafeSpeed * Time.fixedDeltaTime * SpeedMultiplier;
+                var strafeVector = _direction * strafeSpeed * Time.fixedDeltaTime * SpeedMultiplier * Speed;
                 _strafeProgress += strafeVector.magnitude;
                 transform.Translate(strafeVector);
             }
@@ -91,7 +91,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         public override void PopulateFromData(EnemyMovementData data)
         {
             EnemyMovementData = data;
-            SpeedMultiplier = data.speedMultiplier;
+            Speed = data.baseSpeed;
 
             if (data is not EnemyMovementStrafeData strafeData) return;
             

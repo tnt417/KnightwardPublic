@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d638ee9ead7bab4e9fa1e72c8464d07, type: 3}
+  m_Name: BatEnemy
+  m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
+  enemyName: Bat
+  enemyBaseSprite: {fileID: -881900851, guid: e32f0907fb5c1cc448b948a448e2a09c, type: 3}
+  baseMoneyReward: 1
+  maxHealth: 50
+  hitboxRadius: 0.3
+  animatorController: {fileID: 9100000, guid: 3a1487dd7e00c53419058d0166e68615, type: 2}
+  animations:
+  - enemyAnimationState: 1
+    animationName: BatMove
+  movementData: {fileID: 11400000, guid: 67c7aa5da8002f24f8a6a9319e56972f, type: 2}
+  attackData: {fileID: 11400000, guid: b1e95b44bab1e714aa1e7d30404b3e6d, type: 2}

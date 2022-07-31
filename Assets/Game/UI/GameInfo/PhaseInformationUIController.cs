@@ -15,7 +15,7 @@ namespace TonyDev.UI
         {
             enemiesRemainingText.text = "Enemies Remaining: " + (GameManager.EnemySpawners.Sum(s => s.destroyAfterSpawns - s.Spawns) +
                                                                  GameManager.Entities.Where(e => e is Enemy).ToArray().Length);
-            enemyDifficultyText.text = "Difficulty Scale: " + GameManager.EnemyDifficultyScale;
+            enemyDifficultyText.text = "Difficulty Scale: " + GameManager.EnemyDifficultyScale + "\n" + "Dungeon Floor: " + GameManager.DungeonFloor;
         }
     }
 }

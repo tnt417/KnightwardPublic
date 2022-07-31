@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FlameTowerItem
   m_EditorClassIdentifier: 
   item:
-    uiSprite: {fileID: -1355688434, guid: 26f7b88e14397014ca1e7c8e71770ca7, type: 3}
+    uiSprite: {fileID: 21300000, guid: 00aa8717ddb829047b6cb0e404e8f532, type: 3}
     itemName: Flame Tower
     itemDescription: A flame tower.
     itemType: 3
@@ -21,3 +21,4 @@ MonoBehaviour:
     statBonuses: []
     spawnablePrefab: {fileID: 1150477889065159250, guid: 48e8e215a852fb64c9abd7c2b983226e, type: 3}
     itemEffects: []
+    projectiles: []

@@ -1,6 +1,8 @@
+using System;
 using TonyDev.Game.Core.Combat;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Items;
+using TonyDev.Game.Global;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Player.Combat
@@ -14,7 +16,7 @@ namespace TonyDev.Game.Core.Entities.Player.Combat
         [SerializeField] private GameObject defaultProjectilePrefab;
         //
         
-        private float AttackTimerMax => PlayerStats.AttackSpeedMultiplier;
+        private float AttackTimerMax => 1 / PlayerStats.GetStat(Stat.AttackSpeed);
         private float _attackTimer;
         private Camera _mainCamera;
         private Vector2 Direction => (_mainCamera.ScreenToWorldPoint(Input.mousePosition) - transform.position).normalized;
@@ -32,7 +34,7 @@ namespace TonyDev.Game.Core.Entities.Player.Combat
         private void Update()
         {
             _attackTimer += Time.deltaTime;
-            if (_attackTimer >= AttackTimerMax && Input.GetMouseButton(0))
+            if (_attackTimer >= AttackTimerMax && Input.GetMouseButton(0) && GameManager.GameControlsActive)
             {
                 Attack();
                 _attackTimer = 0;
@@ -62,7 +64,8 @@ namespace TonyDev.Game.Core.Entities.Player.Combat
             var projectileObject = data.prefab == null ? Instantiate(defaultProjectilePrefab) : Instantiate(data.prefab);
 
             var rb = projectileObject.AddComponent<Rigidbody2D>();
-            var col = projectileObject.AddComponent<CircleCollider2D>();
+            var col = projectileObject.GetComponent<CircleCollider2D>();
+            if (col == null) col = projectileObject.AddComponent<CircleCollider2D>();
             var dmg = projectileObject.AddComponent<DamageComponent>();
             var sprite = projectileObject.GetComponentInChildren<SpriteRenderer>();
             if(sprite == null) sprite = projectileObject.AddComponent<SpriteRenderer>();
@@ -74,11 +77,15 @@ namespace TonyDev.Game.Core.Entities.Player.Combat
             spawn.seconds = data.lifetime;
             spawn.spawnPrefabOnDestroy = data.spawnOnDestroy;
 
-            dmg.damage = data.damageMultiplier * PlayerStats.OutgoingDamageWithCrit;
+            var damage = data.damageMultiplier * PlayerStats.OutgoingDamageWithCrit;
+            var isCrit = Math.Abs(damage - PlayerStats.OutgoingDamage * data.damageMultiplier) > 0.01;
+            
+            dmg.damage = damage;
             dmg.team = data.team;
             dmg.damageCooldown = 0.5f;
             dmg.destroyOnApply = data.destroyOnApply;
             dmg.knockbackMultiplier = data.knockbackMultiplier;
+            dmg.IsCriticalHit = isCrit;
 
             sprite.sprite = data.projectileSprite;
             col.radius = data.hitboxRadius;
@@ -86,7 +93,7 @@ namespace TonyDev.Game.Core.Entities.Player.Combat
 
             projectileObject.transform.position = myPosition; //Set the projectile's position to our enemy's position
             projectileObject.transform.up = direction; //Set the projectile's direction
-            projectileObject.transform.localScale *= PlayerStats.AoEMultiplier;
+            projectileObject.transform.localScale *= PlayerStats.GetStat(Stat.AoeSize);
             rb.gravityScale = 0;
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
             rb.isKinematic = true;

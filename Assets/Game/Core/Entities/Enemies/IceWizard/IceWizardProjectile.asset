@@ -17,7 +17,7 @@ MonoBehaviour:
   projectileDatas:
   - prefab: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
     projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
-    damage: 25
+    damageMultiplier: 25
     hitboxRadius: 0.5
     knockbackMultiplier: 1
     team: 0
@@ -31,7 +31,7 @@ MonoBehaviour:
     waveDistance: 7
   - prefab: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
     projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
-    damage: 25
+    damageMultiplier: 25
     hitboxRadius: 0.5
     knockbackMultiplier: 1
     team: 0
@@ -45,7 +45,7 @@ MonoBehaviour:
     waveDistance: 10
   - prefab: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
     projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
-    damage: 25
+    damageMultiplier: 25
     hitboxRadius: 0.5
     knockbackMultiplier: 1
     team: 0

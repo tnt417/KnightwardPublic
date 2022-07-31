@@ -19,7 +19,7 @@ namespace TonyDev.Game.Core.Items
         [SerializeField] private int cost;
         //
         
-        private Item _item;
+        public Item Item { get; private set; }
         private bool _pickupAble = true;
         private bool FromChest => GetComponentInParent<Chest>() != null;
 
@@ -33,7 +33,7 @@ namespace TonyDev.Game.Core.Items
         private void Start()
         {
             if (!FromChest) SetItem(ItemGenerator.GenerateItem(rarityBoost));
-            SetCost(FromChest || cost == 0 ? 0 : ItemGenerator.GenerateCost(_item));
+            SetCost(FromChest || cost == 0 ? 0 : ItemGenerator.GenerateCost(Item));
         }
     
         //Set the GroundItem's item.
@@ -46,7 +46,7 @@ namespace TonyDev.Game.Core.Items
             }
             
             spriteRenderer.sprite = newItem.uiSprite; //Update the sprite
-            _item = newItem; //Update the item
+            Item = newItem; //Update the item
             UpdateOutlineColor(); //Update the outline color
         }
 
@@ -60,7 +60,7 @@ namespace TonyDev.Game.Core.Items
 
         private void UpdateOutlineColor()
         {
-            switch (_item.itemRarity) //Set the material's outline color based on the rarity. These are hardcoded right now.
+            switch (Item.itemRarity) //Set the material's outline color based on the rarity. These are hardcoded right now.
             {
                 case ItemRarity.Common:
                     spriteRenderer.sharedMaterial.SetColor("_OutlineColor", Color.black);
@@ -87,7 +87,7 @@ namespace TonyDev.Game.Core.Items
             if (!other.CompareTag("Player")) return;
             if (Input.GetKey(KeyCode.E) && _pickupAble && GameManager.Money >= cost) //When the player presses E and has sufficient money...
             {
-                var returnItem = PlayerInventory.Instance.InsertItem(_item); //...try to insert the item into the player's inventory
+                var returnItem = PlayerInventory.Instance.InsertItem(Item); //...try to insert the item into the player's inventory
                 GameManager.Money -= cost; //Subtract money
                 onPickup.Invoke(); //Invoke the onPickup method
                 if(returnItem == null) Destroy(gameObject); //If no item was replaced, just destroy this GroundItem

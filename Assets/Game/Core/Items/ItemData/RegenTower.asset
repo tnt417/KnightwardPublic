@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: RegenTower
   m_EditorClassIdentifier: 
   item:
-    uiSprite: {fileID: 21300000, guid: ebc95e5db007b494a9b83ad51fccd6d0, type: 3}
+    uiSprite: {fileID: 21300000, guid: 48ceef257e82909489b5c795e4e069da, type: 3}
     itemName: Regeneration Tower
     itemDescription: A regeneration tower.
     itemType: 3
@@ -21,3 +21,4 @@ MonoBehaviour:
     statBonuses: []
     spawnablePrefab: {fileID: 1150477889065159250, guid: 69391adfe88f19e48b1c95581c20e6f7, type: 3}
     itemEffects: []
+    projectiles: []

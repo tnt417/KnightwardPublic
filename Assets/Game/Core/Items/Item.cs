@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using System.Text;
 using TonyDev.Game.Core.Combat;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
@@ -24,6 +26,37 @@ namespace TonyDev.Game.Core.Items
     [Serializable]
     public class Item
     {
+        private static Dictionary<string, ItemEffect> _itemEffectsDictionary = new ();
+        public static void LoadItemEffects()
+        {
+            var assembly = Assembly.Load("TonyDev");
+                
+            var classes = assembly.GetTypes()
+                .Where(t => t.IsClass)
+                .Where(t => t.GetCustomAttributes(typeof(ItemEffectAttribute), false).FirstOrDefault() != null);
+
+            Debug.Log(classes.Count());
+            
+            foreach (var c in classes)
+            {
+                var attr = c.GetCustomAttributes(typeof(ItemEffectAttribute), false).FirstOrDefault();
+                
+                if (attr is ItemEffectAttribute itemEffectAttribute)
+                {
+                    Debug.Log(itemEffectAttribute.ID);
+                    _itemEffectsDictionary.Add(itemEffectAttribute.ID, Activator.CreateInstance(c) as ItemEffect);
+                }
+            }
+        }
+        
+        public void Init()
+        {
+            foreach (var id in itemEffectIds)
+            {
+                ItemEffects.Add(_itemEffectsDictionary[id]);
+            }
+        }
+        
         public static ItemType RandomItemType
         {
             get
@@ -53,7 +86,8 @@ namespace TonyDev.Game.Core.Items
         public ItemRarity itemRarity;
         public StatBonus[] statBonuses;
         public GameObject spawnablePrefab;
-        public ItemEffect[] itemEffects;
+        public string[] itemEffectIds;
+        [NonSerialized] public List<ItemEffect> ItemEffects = new ();
         public ProjectileData[] projectiles;
         //
 
@@ -80,7 +114,7 @@ namespace TonyDev.Game.Core.Items
             
             if(itemDescription != string.Empty) stringBuilder.AppendLine(itemDescription);
 
-            if(IsEquippable) stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsText(statBonuses) + "</color>");
+            if(IsEquippable) stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true) + "</color>");
 
             return stringBuilder.ToString(); //Return the string
         }

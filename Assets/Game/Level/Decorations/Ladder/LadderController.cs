@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global;
 using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
@@ -30,6 +31,7 @@ namespace TonyDev
         {
             TransitionController.Instance.FadeInOut();
             yield return new WaitUntil(() => TransitionController.Instance.OutTransitionDone);
+            GameManager.DungeonFloor += 1;
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.TeleportPlayerToStart();
         }

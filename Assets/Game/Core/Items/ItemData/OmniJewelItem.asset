@@ -21,6 +21,6 @@ MonoBehaviour:
     itemRarity: 3
     statBonuses: []
     spawnablePrefab: {fileID: 0}
-    itemEffects:
-    - {fileID: 11400000, guid: 7ed91492883722c45a97d63619463014, type: 2}
+    itemEffectIds:
+    - omniJewelEffect
     projectiles: []

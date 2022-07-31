@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
+using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies.Movement
@@ -30,19 +31,13 @@ namespace TonyDev.Game.Core.Entities.Enemies.Movement
 
         public bool DoMovement => true;
         public abstract void UpdateMovement();
-        public float SpeedMultiplier { get; set; } = 1;
-        protected Transform FirstTarget => _enemy.Targets.First();
+        public float Speed { get; protected set; }
+        public float SpeedMultiplier => 1 * _enemy.Buff.GetStatMultiplyBonus(Stat.MoveSpeed);
+        protected Transform FirstTarget => _enemy.Targets.FirstOrDefault();
 
         public delegate void MoveAction();
 
         public abstract void PopulateFromData(EnemyMovementData data);
-
-        public IEnumerator ModifySpeedForSeconds(float multiplier, float seconds)
-        {
-            SpeedMultiplier = multiplier;
-            yield return new WaitForSeconds(seconds);
-            SpeedMultiplier = 1;
-        }
 
         public abstract event MoveAction OnStartMove;
         public abstract event MoveAction OnStopMove;

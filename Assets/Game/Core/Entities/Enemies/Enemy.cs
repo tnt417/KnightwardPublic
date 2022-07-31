@@ -38,9 +38,11 @@ namespace TonyDev.Game.Core.Entities.Enemies
             
             _enemyData = enemyData;
 
-            var coll = GetComponent<CircleCollider2D>();
+            var hitbox = GetComponent<CircleCollider2D>();
+            var coll = GetComponent<BoxCollider2D>();
             
-            if(coll != null) coll.radius = _enemyData.hitboxRadius;
+            if(hitbox != null) hitbox.radius = _enemyData.hitboxRadius;
+            if (coll != null) coll.size = _enemyData.hitboxRadius * Vector2.one;
             
             enemyAnimator.Set(enemyData);
             CreateMovementComponent(enemyData.movementData);
@@ -101,6 +103,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                     dmg.damageCooldown = contactData.DamageCooldown;
                     dmg.destroyOnApply = contactData.destroyOnApply;
                     dmg.knockbackMultiplier = contactData.knockbackMultiplier;
+                    dmg.rb2d = GetComponent<Rigidbody2D>();
                     break;
                 case EnemyAttackProjectileData projData:
                     foreach (var data in projData.projectileDatas)
@@ -149,7 +152,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //Give money reward and destroy self.
         private void EnemyDie()
         {
-            GameManager.Money += MoneyReward;
+            PickupSpawner.SpawnMoney(MoneyReward, transform.position);
             Destroy(gameObject);
         }
     }

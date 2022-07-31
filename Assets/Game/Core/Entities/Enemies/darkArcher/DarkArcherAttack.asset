@@ -15,14 +15,17 @@ MonoBehaviour:
   attackCooldown: -1
   team: 0
   projectileDatas:
-  - projectileSprite: {fileID: 21300000, guid: 29dc1ac709c75eb4c8ea3ba8defaf8ae, type: 3}
-    damage: 25
-    travelSpeed: 10
+  - prefab: {fileID: 0}
+    projectileSprite: {fileID: 21300000, guid: 29dc1ac709c75eb4c8ea3ba8defaf8ae, type: 3}
+    damageMultiplier: 10
     hitboxRadius: 0.3
-    lifetime: 10
     knockbackMultiplier: 1
     team: 0
     destroyOnApply: 1
     spawnOnDestroy: {fileID: 0}
-    initialTravelOffset: {x: 0, y: 0}
-    travelOffsetFalloff: 0
+    travelSpeed: 10
+    lifetime: 10
+    offsetDegrees: 0
+    waveAmplitude: 0
+    waveFrequency: 0
+    waveDistance: 0

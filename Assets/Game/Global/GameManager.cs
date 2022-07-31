@@ -27,7 +27,9 @@ namespace TonyDev.Game.Global
         public static List<GameEntity> Entities = new ();
         public static readonly List<EnemySpawner> EnemySpawners = new ();
         public static int EnemyDifficultyScale => Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
+        public static int DungeonFloor = 1;
         public static GamePhase GamePhase;
+        public static bool GameControlsActive => !GameConsoleController.IsTyping;
 
         public static void Reset()
         {
@@ -45,12 +47,20 @@ namespace TonyDev.Game.Global
             DontDestroyOnLoad(gameObject); //Persist between scenes
             SceneManager.sceneLoaded += OnSceneLoaded;
 
-            if (AllItems.Count >= 0) AllItems = itemData.Select(t => t.item).ToList();
+            if (AllItems.Count >= 0)
+            {
+                AllItems = itemData.Select(t => t.item).ToList();
+                Item.LoadItemEffects();
+                foreach (var i in AllItems)
+                {
+                    i.Init();
+                }
+            }
         }
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.R)) TogglePhase(); //Toggle the phase when R is pressed
+            if (Input.GetKeyDown(KeyCode.R) && GameControlsActive) TogglePhase(); //Toggle the phase when R is pressed
 
             if (CrystalHealth <= 0) GameOver(); //Lose the game when the crystal dies
             
@@ -65,7 +75,8 @@ namespace TonyDev.Game.Global
         }
 
         //Teleports player to the arena and sets GamePhase to Arena.
-        private void EnterArenaPhase()
+        [GameCommand(Keyword = "arena", PermissionLevel = PermissionLevel.Cheat)]
+        public void EnterArenaPhase()
         {
             RoomManager.Instance.DeactivateRoomPhase();
             GamePhase = GamePhase.Arena;
@@ -95,6 +106,12 @@ namespace TonyDev.Game.Global
             Destroy(Player.Instance.gameObject);
             Destroy(gameObject);
             SceneManager.LoadScene("GameOver");
+        }
+
+        [GameCommand(Keyword = "money", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Added money.")]
+        public void AddMoney(int amount)
+        {
+            Money += amount;
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

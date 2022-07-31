@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.UI;
@@ -22,78 +24,6 @@ namespace TonyDev.Game.Core.Items
                 ItemRarity.Common)); //Add a starting sword to the player's inventory.
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Armor,
                 ItemRarity.Common)); //Add armor to inventory
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Uncommon));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Rare));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Unique));
         }
 
         private void Awake()
@@ -107,8 +37,9 @@ namespace TonyDev.Game.Core.Items
         private void Update()
         {
             foreach (var r in RelicItems)
-            foreach (var ie in r.itemEffects)
-                ie.OnUpdate(); //Call OnUpdate for every item effect on the equipped relics
+                ItemEffectManager.OnEffectsUpdate(r.ItemEffects);
+            ItemEffectManager.OnEffectsUpdate(WeaponItem.ItemEffects);
+            ItemEffectManager.OnEffectsUpdate(ArmorItem.ItemEffects);
         }
 
         public void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI
@@ -133,11 +64,12 @@ namespace TonyDev.Game.Core.Items
             {
                 if (replacedItem != null)
                 {
-                    ItemEffectManager.OnEffectsRemoved(replacedItem.itemEffects);
-                    PlayerStats.RemoveStatBonuses(replacedItem.itemName); //Remove stat bonuses of the now removed item
+                    ItemEffectManager.OnEffectsRemoved(replacedItem.ItemEffects);
+                    PlayerStats.RemoveStatBonuses(Enum.GetName(typeof(ItemType),
+                        item.itemType)); //Remove stat bonuses of the now removed item
                 }
 
-                ItemEffectManager.OnEffectsAdded(item.itemEffects);
+                ItemEffectManager.OnEffectsAdded(item.ItemEffects);
                 PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
             }
 

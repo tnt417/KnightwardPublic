@@ -12,7 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f0b929a6c2c191642a1c491e9e7cbf37, type: 3}
   m_Name: DarkArcherMovement
   m_EditorClassIdentifier: 
-  speedMultiplier: 1
+  baseSpeed: 1
+  doXFlipping: 1
   strafeDistance: 4
   strafeSpeed: 10
   strafeCooldown: 2

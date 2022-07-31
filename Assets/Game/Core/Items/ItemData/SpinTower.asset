@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpinTower
   m_EditorClassIdentifier: 
   item:
-    uiSprite: {fileID: -432303052, guid: 886977255ff7b2b42b9b3aeb74d30a4e, type: 3}
+    uiSprite: {fileID: 21300000, guid: 964da4c755e82fa43ac4687967355a1f, type: 3}
     itemName: Saw Tower
     itemDescription: A melee saw tower that spins, damaging and knocking back enemeis.
     itemType: 3

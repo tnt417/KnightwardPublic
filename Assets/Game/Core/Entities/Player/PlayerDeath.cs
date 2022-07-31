@@ -11,7 +11,8 @@ namespace TonyDev.Game.Core.Entities.Player
         //Editor variables
         [SerializeField] private float deathCooldown;
         [SerializeField] private GameObject healthBarObject;
-        [SerializeField] private TMP_Text deathTimerText; 
+        [SerializeField] private TMP_Text deathTimerText;
+        [SerializeField] private ParticleSystem walkParticleSystem;
         private Rigidbody2D _rb2d;
         //
     
@@ -41,8 +42,10 @@ namespace TonyDev.Game.Core.Entities.Player
             if (Dead) return;
             Dead = true; //Die
             healthBarObject.SetActive(false); //Hide health bar
+            GameManager.Money = 0;
             Player.Instance.playerAnimator.PlayDeadAnimation(); //Play death animation
             _rb2d.simulated = false;
+            walkParticleSystem.Stop();
             
             foreach (var enemy in GameManager.Entities.Where(e => e is Enemy))
             {

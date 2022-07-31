@@ -40,7 +40,7 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             playerSpriteRenderer.sprite = playerSprites[playerSpriteIndex];
 
-            playerAnimator.speed = Player.Instance.playerMovement.speedMultiplier / 40000f;
+            playerAnimator.speed = PlayerStats.GetStat(Stat.MoveSpeed) / 10f;
 
             //Plays different animations depending on the animation state
             switch (PlayerAnimState)

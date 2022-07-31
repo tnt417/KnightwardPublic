@@ -74,7 +74,11 @@ MonoBehaviour:
   destroyOnAnyCollide: 0
   knockbackForce: 0
   knockbackMultiplier: 1
-  enemySpeedModifier: 0.5
+  inflictBuffs:
+  - statType: 1
+    stat: 4
+    strength: -0.5
+    source: 
 --- !u!114 &8604458101966122574
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2458,11 +2462,12 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    influenceFilter: 0
+    influenceFilter: 1
     influenceMask:
       serializedVersion: 2
       m_Bits: 4294967295
-    influenceList: []
+    influenceList:
+    - {fileID: 7635865147489597763}
   ClampVelocityModule:
     enabled: 0
     x:
