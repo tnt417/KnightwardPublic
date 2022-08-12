@@ -1,10 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.UI.Popups
 {
     public class PopupManager : MonoBehaviour
     {

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
-using TonyDev.UI;
+using TonyDev.Game.Global.Console;
+using TonyDev.Game.UI.Tower;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace TonyDev.Game.Core.Items
 {
@@ -34,15 +36,17 @@ namespace TonyDev.Game.Core.Items
             //
         }
 
-        private void Update()
+        [GameCommand(Keyword = "insertitem", PermissionLevel = PermissionLevel.Cheat,
+            SuccessMessage = "Inserted item.")]
+        public static void InsertItemCommand(string itemType, string itemRarity)
         {
-            foreach (var r in RelicItems)
-                ItemEffectManager.OnEffectsUpdate(r.ItemEffects);
-            ItemEffectManager.OnEffectsUpdate(WeaponItem.ItemEffects);
-            ItemEffectManager.OnEffectsUpdate(ArmorItem.ItemEffects);
+            var it = Enum.Parse<ItemType>(itemType, true);
+            var ir = Enum.Parse<ItemRarity>(itemRarity, true);
+            
+            Instance.InsertItem(ItemGenerator.GenerateItemOfType(it, ir));
         }
-
-        public void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI
+        
+        private static void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI
         {
             if (!item.IsSpawnable) return;
             TowerUIController.Instance.AddTower(item);
@@ -51,7 +55,6 @@ namespace TonyDev.Game.Core.Items
         //Replaces/inserts items into inventory and returns the item that was replaced, if any.
         public Item InsertItem(Item item)
         {
-            if (item == null) return null;
             if (item.itemType == ItemType.Tower)
             {
                 InsertTower(item); //If it's a tower, insert it
@@ -64,12 +67,15 @@ namespace TonyDev.Game.Core.Items
             {
                 if (replacedItem != null)
                 {
-                    ItemEffectManager.OnEffectsRemoved(replacedItem.ItemEffects);
-                    PlayerStats.RemoveStatBonuses(Enum.GetName(typeof(ItemType),
+                    if(replacedItem.ItemEffects != null) foreach (var effect in replacedItem.ItemEffects) Player.Instance.RemoveEffect(effect);
+                    PlayerStats.Stats.RemoveStatBonuses(Enum.GetName(typeof(ItemType),
                         item.itemType)); //Remove stat bonuses of the now removed item
                 }
 
-                ItemEffectManager.OnEffectsAdded(item.ItemEffects);
+                if (item.ItemEffects != null)
+                    foreach (var effect in item.ItemEffects)
+                        Player.Instance.AddEffect(effect, Player.Instance);
+
                 PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
             }
 
@@ -95,6 +101,8 @@ namespace TonyDev.Game.Core.Items
                     break;
                 case ItemType.Tower:
                     return null;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
 
             return replacedItem;

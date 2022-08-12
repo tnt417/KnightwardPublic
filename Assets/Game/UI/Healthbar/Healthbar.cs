@@ -1,8 +1,8 @@
-using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Entities;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TonyDev.UI.Healthbar
+namespace TonyDev.Game.UI.Healthbar
 {
     public class Healthbar : MonoBehaviour
     {
@@ -33,7 +33,7 @@ namespace TonyDev.UI.Healthbar
             _attachedDamageable.OnHealthChanged += UpdateUI; //Set the UI to be updated whenever the health is changed
         }
 
-        private void UpdateUI()
+        private void UpdateUI(float value)
         {
             healthSlider.maxValue = _attachedDamageable.MaxHealth; //Update the slider values.
             healthSlider.value = _attachedDamageable.CurrentHealth;

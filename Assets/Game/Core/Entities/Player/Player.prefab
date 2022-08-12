@@ -31,7 +31,7 @@ RectTransform:
   m_Children:
   - {fileID: 693964329495403076}
   m_Father: {fileID: 5567193263630704247}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -59,66 +59,6 @@ Canvas:
   m_SortingLayerID: 0
   m_SortingOrder: 0
   m_TargetDisplay: 0
---- !u!1 &1587193993602017114
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3693051961952615885}
-  - component: {fileID: 8781056707226574363}
-  m_Layer: 7
-  m_Name: PlayerCombat
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3693051961952615885
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587193993602017114}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 5567193263630704247}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8781056707226574363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1587193993602017114}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05d66e6312421cd419fb6cced0178ff5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultProjectileData:
-    prefab: {fileID: 0}
-    projectileSprite: {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
-    damageMultiplier: 0
-    hitboxRadius: 0.5
-    knockbackMultiplier: 1
-    team: 1
-    destroyOnApply: 0
-    spawnOnDestroy: {fileID: 0}
-    travelSpeed: 10
-    lifetime: 0.2
-    offsetDegrees: 0
-    waveAmplitude: 0.01
-    waveFrequency: 1
-    waveDistance: 5
-  defaultProjectilePrefab: {fileID: 1437695475391080197, guid: 2ed55f042af47534e877f1b55dac4b14, type: 3}
 --- !u!1 &2078632121062737528
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +262,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2468685822208163573}
-  - {fileID: 3693051961952615885}
   - {fileID: 7021041495485311932}
   - {fileID: 188137907888138397}
   - {fileID: 6547775093062014084}
@@ -374,7 +313,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 100
+  m_LinearDrag: 10
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
@@ -711,7 +650,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5567193263630704247}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3990596232144301662
 MonoBehaviour:
@@ -5650,7 +5589,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7127552388381089783, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7127552388381089783, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
       propertyPath: m_AnchorMax.x

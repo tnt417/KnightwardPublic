@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
@@ -37,14 +38,7 @@ namespace TonyDev.Game.Core.Items
         {
             var itemType = Item.RandomItemType;
 
-            var item = itemType switch
-            {
-                ItemType.Weapon or ItemType.Armor or ItemType.Relic or ItemType.Tower => GenerateItemOfType(
-                    itemType, Item.RandomRarity(rarityBoost)),
-                _ => null
-            };
-
-            return item;
+            return GenerateItemOfType(itemType, Item.RandomRarity(rarityBoost));
         }
         
         //Returns a randomly generated item based on input parameters
@@ -75,20 +69,21 @@ namespace TonyDev.Game.Core.Items
                     itemName = "Armor";
                     break;
                 case ItemType.Relic:
-                    return Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Relic));
+                    return Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
                 case ItemType.Tower:
                     return GetTowerItem(rarity);
             }
 
             //Return a new item using all the variables this function has generated and/or been provided with
-            return new Item()
+            return new Item
             {
                 itemType = type,
                 itemRarity = rarity,
                 itemName = itemName,
                 statBonuses = item == null ? GenerateItemStats(type, rarity) : StatBonus.Combine(GenerateItemStats(type, rarity), item.statBonuses).ToArray(),
                 uiSprite = sprite,
-                ItemEffects = item?.ItemEffects
+                ItemEffects = item?.ItemEffects,
+                projectiles = item?.projectiles
             };
         }
 
@@ -167,10 +162,11 @@ namespace TonyDev.Game.Core.Items
                 Stat.Dodge => Random.Range(0.2f, 0.4f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
                 //Stat.Knockback => Random.Range(0.1f, 0.5f),
                 //Stat.Stun => 0,
-                //Stat.AoeSize => Random.Range(0.2f, 0.75f),
+                Stat.AoeSize => Random.Range(0.2f, 0.75f),
                 Stat.MoveSpeed => Random.Range(0.1f, 0.5f),
+                Stat.CooldownReduce => Random.Range(0.2f, 0.4f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
                 //Stat.Tenacity => 0, //Random.Range(0.2f, 0.5f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
-                //Stat.HpRegen => HealthStrength / 100,
+                Stat.HpRegen => HealthStrength / 100f,
                 //Stat.DamageReduction => Random.Range(0.1f, 0.3f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
                 _ => throw new ArgumentOutOfRangeException(nameof(stat), stat, null)
             };

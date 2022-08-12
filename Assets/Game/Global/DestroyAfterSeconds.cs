@@ -1,35 +1,45 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Entities;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.Global
 {
     public class DestroyAfterSeconds : MonoBehaviour
     {
         public float seconds;
         public GameObject spawnPrefabOnDestroy;
         private float _timer;
+        private GameEntity _owner;
+        
         private void Update()
         {
             _timer += Time.deltaTime;
-            if (_timer >= seconds)
+            if (_timer >= seconds && seconds > 0)
             {
                 Destroy(gameObject);
             }
         }
 
-        private bool isQuitting = false;
+        private bool _isQuitting = false;
         
         private void OnApplicationQuit()
         {
-            isQuitting = true;
+            _isQuitting = true;
         }
         
         private void OnDestroy()
         {
-            if(!isQuitting && spawnPrefabOnDestroy != null)
-                Instantiate(spawnPrefabOnDestroy, transform.position, Quaternion.identity);
+            if (!_isQuitting && spawnPrefabOnDestroy != null)
+            {
+                var spawned = Instantiate(spawnPrefabOnDestroy, transform.position, Quaternion.identity);
+                var attackComponent = spawned.GetComponent<AttackComponent>();
+                attackComponent.SetData(null, _owner);
+            }
+        }
+
+        public void SetOwner(GameEntity entity)
+        {
+            _owner = entity;
         }
     }
 }

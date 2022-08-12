@@ -9,6 +9,7 @@ namespace TonyDev.Game.Global
         private static Timer Instance { get; set; }
         [SerializeField] private TMP_Text gameTimerText;
         public static float GameTimer;
+        public static float TickSpeedMultiplier = 1f;
         private static bool _paused = false;
 
         private void Awake()
@@ -25,7 +26,7 @@ namespace TonyDev.Game.Global
     
         private void Update()
         {
-            if(!_paused) GameTimer += Time.deltaTime; //Tick timer if not paused
+            if(!_paused) GameTimer += Time.deltaTime * TickSpeedMultiplier; //Tick timer if not paused
             gameTimerText.text = FormatTimeFromSeconds(GameTimer); //Update timer text
         }
 

@@ -1,10 +1,10 @@
+using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
-using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace TonyDev.Game.Core.Entities.Enemies
+namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 {
     public class EnemySpawner : MonoBehaviour
     {

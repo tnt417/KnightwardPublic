@@ -1,10 +1,9 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using TonyDev.Game.Core.Items;
+using TonyDev.Game.Global;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game
 {
     [Serializable]
     public struct GameSound

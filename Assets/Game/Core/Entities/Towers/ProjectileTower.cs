@@ -1,6 +1,8 @@
 using System.Linq;
-using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Towers
@@ -8,38 +10,29 @@ namespace TonyDev.Game.Core.Entities.Towers
     public class ProjectileTower : Tower
     {
         //Editor variables
-        [SerializeField] private Vector2 projectileOriginOffset;
-        [SerializeField] private Vector2 projectileTargetOffset;
         [SerializeField] private GameObject rotateToFaceTargetObject; //Rotates to face direction of firing
-        [SerializeField] private GameObject projectilePrefab; //Prefab spawned upon fire
-        [SerializeField] private bool setProjectileRotation = true;
-        [SerializeField] private float projectileTravelSpeed; //Travel speed in units per second of projectiles
+        [SerializeField] private ProjectileData[] projectileData; //Prefab spawned upon fire
         //
 
-        protected override void TowerUpdate()
+        private new void Start()
         {
-            
-        }
+            base.Start();
 
-        protected override void OnFire()
-        {
-            towerAnimator.PlayAnimation(TowerAnimationState.Fire);
-
-            foreach (var direction in Targets.Where(t => t != null).Select(t => (t.transform.position + (Vector3) projectileTargetOffset - transform.position).normalized))
+            OnAttack += () =>
             {
-                if(rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
-                var projectile = Instantiate(projectilePrefab); //Instantiates the projectile
+                towerAnimator.PlayAnimation(TowerAnimationState.Fire);
 
-                var dmg = projectile.GetComponent<DamageComponent>();
+                foreach (var direction in Targets.Where(t => t != null).Select(t =>
+                    (t.transform.position - transform.position).normalized))
+                {
+                    foreach (var projData in projectileData)
+                    {
+                        if (rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
 
-                dmg.Owner = gameObject;
-                dmg.damageMultiplier *= 1 + Buff.GetStatMultiplyBonus(Stat.Damage);
-
-                projectile.transform.position = transform.position + (Vector3)projectileOriginOffset; //Set the projectile's position to our tower's position
-                var rb = projectile.GetComponent<Rigidbody2D>();
-                if (setProjectileRotation) projectile.transform.right = direction; //Set the projectile's direction
-                rb.velocity = direction * projectileTravelSpeed; //Set the projectile's velocity
-            }
+                        AttackFactory.CreateProjectileAttack(this, direction, projData);
+                    }
+                }
+            };
         }
     }
 }

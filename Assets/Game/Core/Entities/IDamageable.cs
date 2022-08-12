@@ -1,4 +1,7 @@
-namespace TonyDev.Game.Core.Combat
+using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Global;
+
+namespace TonyDev.Game.Core.Entities
 {
     public interface IDamageable
     {
@@ -7,10 +10,10 @@ namespace TonyDev.Game.Core.Combat
         float HealMultiplier { get; }
         int MaxHealth { get; }
         float CurrentHealth { get; }
-        void ApplyDamage(float damage);
+        float ApplyDamage(float damage);
         bool IsInvulnerable { get; }
         void Die();
-        delegate void HealthAction();
+        delegate void HealthAction(float value);
         event HealthAction OnHealthChanged;
         event HealthAction OnHeal;
         event HealthAction OnHurt;

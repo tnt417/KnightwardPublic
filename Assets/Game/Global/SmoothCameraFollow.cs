@@ -11,7 +11,7 @@ namespace TonyDev.Game.Global
     {
         //Editor variables
         [SerializeField] private float followSpeed;
-        [SerializeField] private Camera camera;
+        [SerializeField] private new Camera camera;
         //
     
         private Rect _cameraBounds = Rect.zero;

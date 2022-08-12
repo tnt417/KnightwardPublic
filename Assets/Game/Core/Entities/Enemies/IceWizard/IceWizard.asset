@@ -16,8 +16,24 @@ MonoBehaviour:
   enemyName: Ice Wizard
   enemyBaseSprite: {fileID: -300970518, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
   baseMoneyReward: 5
-  maxHealth: 100
   hitboxRadius: 0.5
+  baseStats:
+  - statType: 0
+    stat: 5
+    strength: 1
+    source: 
+  - statType: 0
+    stat: 3
+    strength: 1
+    source: 
+  - statType: 0
+    stat: 6
+    strength: 100
+    source: 
+  - statType: 0
+    stat: 1
+    strength: 25
+    source: 
   animatorController: {fileID: 9100000, guid: 26a116d514eebea4e9bfa67680046583, type: 2}
   animations:
   - enemyAnimationState: 1
@@ -27,4 +43,56 @@ MonoBehaviour:
   - enemyAnimationState: 0
     animationName: IceWizardHurt
   movementData: {fileID: 11400000, guid: 38f642d68b2b8fc43b64bc5962f75e90, type: 2}
-  attackData: {fileID: 11400000, guid: fe113dbf75264e0419cbee37dd9b365c, type: 2}
+  contactAttackData:
+    damageMultiplier: 0
+    hitboxRadius: 0
+    team: 0
+    destroyOnApply: 0
+    lifetime: 0
+    spawnOnDestroy: {fileID: 0}
+  projectileAttackData:
+  - prefab: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
+    projectileSprite: {fileID: 0}
+    attackData:
+      damageMultiplier: 1
+      hitboxRadius: 0.3
+      team: 0
+      destroyOnApply: 1
+      lifetime: 1
+      spawnOnDestroy: {fileID: 5252816401415666444, guid: 63d199c7d21207d4faae5144ee6f5ca2, type: 3}
+    travelSpeed: 10
+    offsetDegrees: 0
+    waveAmplitude: 0.5
+    waveFrequency: 0.5
+    waveDistance: 7
+    effectIDs: []
+  - prefab: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
+    projectileSprite: {fileID: 0}
+    attackData:
+      damageMultiplier: 1
+      hitboxRadius: 0.3
+      team: 0
+      destroyOnApply: 1
+      lifetime: 1
+      spawnOnDestroy: {fileID: 5252816401415666444, guid: 63d199c7d21207d4faae5144ee6f5ca2, type: 3}
+    travelSpeed: 10
+    offsetDegrees: 0
+    waveAmplitude: -0.5
+    waveFrequency: 0.5
+    waveDistance: 7
+    effectIDs: []
+  - prefab: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
+    projectileSprite: {fileID: 0}
+    attackData:
+      damageMultiplier: 1
+      hitboxRadius: 0.3
+      team: 0
+      destroyOnApply: 1
+      lifetime: 1
+      spawnOnDestroy: {fileID: 5252816401415666444, guid: 63d199c7d21207d4faae5144ee6f5ca2, type: 3}
+    travelSpeed: 10
+    offsetDegrees: 0
+    waveAmplitude: 0
+    waveFrequency: 0
+    waveDistance: 7
+    effectIDs: []

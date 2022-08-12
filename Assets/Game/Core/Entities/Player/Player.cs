@@ -1,11 +1,8 @@
-using System;
-using System.Transactions;
-using TonyDev.Game.Core.Combat;
-using TonyDev.Game.Core.Entities.Player.Combat;
+using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Console;
 using UnityEngine;
-using UnityEngine.Events;
-using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
@@ -14,28 +11,28 @@ namespace TonyDev.Game.Core.Entities.Player
     {
         //Singleton code
         public static Player Instance;
-    
+
         //Sub-components of the player, for easy access.
         public PlayerMovement playerMovement;
         public PlayerAnimator playerAnimator;
         public PlayerDeath playerDeath;
 
-        public delegate void DamageCallback(float damage);
-        public static event DamageCallback OnPlayerDamage;
-        
-        //All implementations of IDamageable contained in a region
-        #region IDamageable
-        public override Team Team => Team.Player;
-        public override int MaxHealth => (int)PlayerStats.GetStat(Stat.Health);
+        protected override bool CanAttack => Input.GetMouseButton(0) && base.CanAttack;
 
-        public override void ApplyDamage(float damage)
+        //All implementations of IDamageable contained in a region
+
+        #region IDamageable
+
+        public override Team Team => Team.Player;
+
+        #endregion
+
+        private new void Update()
         {
-            if (PlayerStats.DodgeSuccessful) return; //Don't apply damage is dodge rolls successful.
-            var modifiedDamage = damage >= 0
-                ? Mathf.Clamp(PlayerStats.ModifyIncomingDamage(damage), 0, Mathf.Infinity)
-                : damage;
-            base.ApplyDamage(damage);
-            OnPlayerDamage?.Invoke(modifiedDamage);
+            base.Update();
+            //Enable/disable parts of the player depending on if player is alive //TODO not good
+            playerMovement.enabled = IsAlive;
+            //
         }
 
         public override void Die()
@@ -43,45 +40,36 @@ namespace TonyDev.Game.Core.Entities.Player
             playerDeath.Die();
         }
 
-        #endregion
-
-        public void Update()
-        {
-            //Enable/disable parts of the player depending on if player is alive //TODO not good
-            playerMovement.enabled = IsAlive;
-            PlayerCombat.Instance.gameObject.SetActive(IsAlive);
-            //
-            
-            if (IsAlive)
-            {
-                var hpRegen = MaxHealth * 0.01f * Time.deltaTime; //Regen 1% of hp per second
-                ApplyDamage(-hpRegen); //Regen health by HpRegen per second
-            }
-        }
-
-        public void Awake()
+        private void Awake()
         {
             //Singleton code
             if (Instance == null && Instance != this) Instance = this;
             else Destroy(this);
             //
-        
+
+            PlayerStats.Stats = Stats;
+
             DontDestroyOnLoad(gameObject); //Player persists between scenes
-            
-            GameManager.Entities.Add(this);
 
             //Add base stat bonuses
-            PlayerStats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, 5.0f, "Player");
-            PlayerStats.AddStatBonus(StatType.Flat, Stat.AoeSize, 1.0f, "Player");
-            PlayerStats.AddStatBonus(StatType.Flat, Stat.Health, 100f, "Player");
+            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, 5.0f, "Player");
+            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.AoeSize, 1.0f, "Player");
+            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.Health, 100f, "Player");
+            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.HpRegen, 1f, "Player");
+            
+            OnAttack += () =>
+            {
+                var projectileData = PlayerInventory.Instance.WeaponItem.projectiles;
+
+                if (projectileData == null) return;
+
+                foreach (var proj in projectileData)
+                    AttackFactory.CreateProjectileAttack(this, GameManager.MouseDirection, proj);
+            };
         }
 
-        private void Start()
-        {
-            CurrentHealth = MaxHealth;
-        }
-        
-        [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled invulnerability.")]
+        [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat,
+            SuccessMessage = "Toggled invulnerability.")]
         public static void ToggleInvulnerable()
         {
             Instance.IsInvulnerable = !Instance.IsInvulnerable;

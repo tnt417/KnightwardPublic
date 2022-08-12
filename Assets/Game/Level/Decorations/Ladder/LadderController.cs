@@ -1,12 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
-using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.Level.Decorations.Ladder
 {
     public class LadderController : MonoBehaviour
     {

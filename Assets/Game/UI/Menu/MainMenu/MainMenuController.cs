@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace TonyDev.Game.Menu.MainMenu
+namespace TonyDev.Game.UI.Menu.MainMenu
 {
     public class MainMenuController : MonoBehaviour
     {

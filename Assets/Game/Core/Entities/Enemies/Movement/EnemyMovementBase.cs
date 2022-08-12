@@ -32,7 +32,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Movement
         public bool DoMovement => true;
         public abstract void UpdateMovement();
         public float Speed { get; protected set; }
-        public float SpeedMultiplier => 1 * _enemy.Buff.GetStatMultiplyBonus(Stat.MoveSpeed);
+        public float SpeedMultiplier => _enemy.Stats.GetStat(Stat.MoveSpeed);
         protected Transform FirstTarget => _enemy.Targets.FirstOrDefault();
 
         public delegate void MoveAction();

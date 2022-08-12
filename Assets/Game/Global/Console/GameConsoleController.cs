@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -8,7 +7,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace TonyDev
+namespace TonyDev.Game.Global.Console
 {
     public class GameConsoleController : MonoBehaviour
     {

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Enemies.Movement;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
@@ -13,54 +13,44 @@ using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
 {
-    [RequireComponent(typeof(EnemyAnimator), typeof(CircleCollider2D))]
+    [RequireComponent(typeof(EnemyAnimator))]
     public class Enemy : GameEntity
     {
         #region Variables
+
+        private EnemyData _enemyData = null;
+
         [SerializeField] private EnemyAnimator enemyAnimator;
+        private EnemyMovementBase _enemyMovementBase;
         private int MoneyReward => _enemyData.baseMoneyReward;
         public override Team Team => Team.Enemy;
-        public override float DamageMultiplier => Mathf.Clamp01(1f - (Mathf.Log10(GameManager.EnemyDifficultyScale) - 0.5f)); //Enemies essentially gain damage resist as the difficulty scales.
-        public override int MaxHealth => _enemyData.maxHealth;
-        private EnemyData _enemyData = null;
-        private EnemyMovementBase _enemyMovementBase;
-        public delegate void AttackAction();
-        public event AttackAction OnAttack;
-        private float AttackTimerMax => _enemyData.attackData.attackCooldown;
-        private float _attackTimer;
-        private List<EnemyShootProjectile> _shootProjectiles;
+        protected override float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
+
         #endregion
 
         //Set enemy data, called on spawn
         public void SetEnemyData(EnemyData enemyData)
         {
             if (_enemyData != null) return;
-            
+
             _enemyData = enemyData;
+
+            foreach (var sb in enemyData.baseStats)
+            {
+                Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, sb.source);
+            }
 
             var hitbox = GetComponent<CircleCollider2D>();
             var coll = GetComponent<BoxCollider2D>();
-            
-            if(hitbox != null) hitbox.radius = _enemyData.hitboxRadius;
+
+            if (hitbox != null) hitbox.radius = _enemyData.hitboxRadius;
             if (coll != null) coll.size = _enemyData.hitboxRadius * Vector2.one;
-            
+
             enemyAnimator.Set(enemyData);
             CreateMovementComponent(enemyData.movementData);
-            CreateAttackObjects(enemyData.attackData);
-        }
-
-        //Tick attack timers
-        private void Update()
-        {
-            if (AttackTimerMax < 0) return;
             
-            _attackTimer += Time.deltaTime;
-            
-            if (_attackTimer >= AttackTimerMax)
-            {
-                Attack();
-                _attackTimer = 0;
-            }
+            InitProjectiles(enemyData.projectileAttackData);
+            InitContactDamage(enemyData.contactAttackData);
         }
 
         //Add movement components based on movement data
@@ -82,75 +72,50 @@ namespace TonyDev.Game.Core.Entities.Enemies
             }
         }
 
-        //Add attack objects based on attack data
-        private void CreateAttackObjects(EnemyAttackData attackData)
+        private void InitProjectiles(IEnumerable<ProjectileData> projectileData)
         {
-            var parentTransform = transform;
-            
-            var attackObject = new GameObject("Attack Object");
-            attackObject.transform.parent = parentTransform;
-            attackObject.transform.localPosition = new Vector3(0, 0, 0);
-            
-            switch (attackData)
+            foreach (var data in projectileData)
             {
-                case EnemyAttackContactData contactData:
-                    var coll = attackObject.AddComponent<CircleCollider2D>();
-                    var dmg = attackObject.AddComponent<DamageComponent>();
-                    coll.isTrigger = true;
-                    coll.radius = contactData.hitboxRadius;
-                    dmg.damage = contactData.damage;
-                    dmg.team = contactData.team;
-                    dmg.damageCooldown = contactData.DamageCooldown;
-                    dmg.destroyOnApply = contactData.destroyOnApply;
-                    dmg.knockbackMultiplier = contactData.knockbackMultiplier;
-                    dmg.rb2d = GetComponent<Rigidbody2D>();
-                    break;
-                case EnemyAttackProjectileData projData:
-                    foreach (var data in projData.projectileDatas)
-                    {
-                        _shootProjectiles = new List<EnemyShootProjectile>();
-                        
-                        var proj = attackObject.AddComponent<EnemyShootProjectile>();
-                        proj.Set(data, this);
-                        
-                        _shootProjectiles.Add(proj);
-                    }
-                    break;
+                OnAttack += () =>
+                {
+                    foreach (var direction in Targets.Select(
+                        t => (t.transform.position - transform.position).normalized))
+                        AttackFactory.CreateProjectileAttack(this, direction, data);
+                };
             }
         }
 
-        //Initialize variables and events
-        private void Start()
+        private void InitContactDamage(AttackData contactAttackData)
         {
-            Init();
-            
+            AttackFactory.CreateStaticAttack(this, contactAttackData, true, null);
+        }
+        
+        //Initialize variables and events
+        private new void Start()
+        {
+            base.Start();
+
             //Initialize variables
             enemyAnimator = GetComponent<EnemyAnimator>();
             //
-            
+
             SubscribeAnimatorEvents();
-            
+
             OnDeath += EnemyDie;
         }
 
         //Sets up the animator to play certain animations on certain events
         private void SubscribeAnimatorEvents()
         {
-            OnDeath += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Die);
-            OnHurt += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Hurt);
+            OnDeath += (float value) => enemyAnimator.PlayAnimation(EnemyAnimationState.Die);
+            OnHurt += (float value) => enemyAnimator.PlayAnimation(EnemyAnimationState.Hurt);
+            OnAttack += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Attack);
             _enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Move);
             _enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Stop);
-            OnAttack += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Attack);
-        }
-
-        //Invokes the attack event
-        public void Attack() //Called either on a timer or through animation events.
-        {
-            OnAttack?.Invoke();
         }
 
         //Give money reward and destroy self.
-        private void EnemyDie()
+        private void EnemyDie(float value)
         {
             PickupSpawner.SpawnMoney(MoneyReward, transform.position);
             Destroy(gameObject);

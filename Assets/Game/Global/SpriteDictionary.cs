@@ -21,7 +21,7 @@ namespace TonyDev.Game.Global
     public class SpriteDictionary : MonoBehaviour
     {
         [SerializeField] private SpriteEntry[] spriteEntries; //Sole purpose is to make entries in the editor
-        public static readonly Dictionary<string, Sprite> Sprites = new Dictionary<string, Sprite>(); //Dictionary to make accessing sprites through code easier.
+        public static readonly Dictionary<string, Sprite> Sprites = new (); //Dictionary to make accessing sprites through code easier.
         private static bool _initialized;
         private void Awake()
         {

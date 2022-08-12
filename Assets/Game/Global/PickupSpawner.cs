@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.Global
 {
     public class PickupSpawner : MonoBehaviour
     {

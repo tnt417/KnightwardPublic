@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -10,7 +11,6 @@ namespace TonyDev.Game.Level.Rooms
     public class Room : MonoBehaviour
     {
         //Editor variables
-        [SerializeField] private Grid grid;
         [SerializeField] private RoomDoor[] roomDoors;
         [SerializeField] private GameObject spawnPrefabOnClear;
         [SerializeField] private Transform entryPointUp;
@@ -24,7 +24,7 @@ namespace TonyDev.Game.Level.Rooms
         private Vector2Int _roomIndex;
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
-        private bool _clearPrefabSpawned = false;
+        private bool _clearPrefabSpawned;
 
         private void Start()
         {
@@ -102,7 +102,7 @@ namespace TonyDev.Game.Level.Rooms
             LockAllDoors();
         }
 
-        public void OnEnemyDie()
+        public void OnEnemyDie(float value)
         {
             CheckShouldLockDoors();
         }
@@ -111,8 +111,9 @@ namespace TonyDev.Game.Level.Rooms
         {
             if (!_clearPrefabSpawned && spawnPrefabOnClear != null)
             {
-                Instantiate(spawnPrefabOnClear, transform.position, quaternion.identity,
-                    transform); //Instantiate the on clear prefab in the center of the room
+                var myTransform = transform;
+                Instantiate(spawnPrefabOnClear, myTransform.position, quaternion.identity,
+                    myTransform); //Instantiate the on clear prefab in the center of the room
                 _clearPrefabSpawned = true;
             }
 

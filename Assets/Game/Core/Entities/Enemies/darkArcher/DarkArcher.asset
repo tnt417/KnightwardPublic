@@ -12,11 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8d638ee9ead7bab4e9fa1e72c8464d07, type: 3}
   m_Name: DarkArcher
   m_EditorClassIdentifier: 
+  prefab: {fileID: 0}
   enemyName: Dark Archer
   enemyBaseSprite: {fileID: 4580117880243553785, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   baseMoneyReward: 2
-  maxHealth: 100
   hitboxRadius: 0.5
+  baseStats:
+  - statType: 0
+    stat: 1
+    strength: 25
+    source: 
+  - statType: 0
+    stat: 6
+    strength: 100
+    source: 
+  - statType: 0
+    stat: 3
+    strength: 1
+    source: 
+  - statType: 0
+    stat: 5
+    strength: 1
+    source: 
   animatorController: {fileID: 9100000, guid: 0cf2d13aa46c6fa418893ecaef147472, type: 2}
   animations:
   - enemyAnimationState: 0
@@ -26,4 +43,26 @@ MonoBehaviour:
   - enemyAnimationState: 2
     animationName: DarkArcherLand
   movementData: {fileID: 11400000, guid: 3d9e04a4a4844124892321b82133d6da, type: 2}
-  attackData: {fileID: 11400000, guid: 30d42c229df44c740923c4c29987cdd6, type: 2}
+  contactAttackData:
+    damageMultiplier: 0
+    hitboxRadius: 0
+    team: 0
+    destroyOnApply: 0
+    lifetime: 0
+    spawnOnDestroy: {fileID: 0}
+  projectileAttackData:
+  - prefab: {fileID: 0}
+    projectileSprite: {fileID: 21300000, guid: 29dc1ac709c75eb4c8ea3ba8defaf8ae, type: 3}
+    attackData:
+      damageMultiplier: 1
+      hitboxRadius: 0.1
+      team: 0
+      destroyOnApply: 1
+      lifetime: 1
+      spawnOnDestroy: {fileID: 0}
+    travelSpeed: 20
+    offsetDegrees: 0
+    waveAmplitude: 0
+    waveFrequency: 0
+    waveDistance: 0
+    effectIDs: []

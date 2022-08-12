@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
@@ -18,30 +19,72 @@ namespace TonyDev.Game.Core.Entities
         
         private const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
+
+        protected virtual bool CanAttack => IsAlive;
+        
+        //Editor fields
+        [Header("Targeting")]
         [SerializeField] private string targetTag;
         [SerializeField] private Team targetTeam;
         [SerializeField] private int maxTargets;
+        // 
 
-        public readonly EntityBuff Buff = new ();
+        public readonly EntityStats Stats = new ();
+
+        
+        #region Attack
+        protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
+        private float _attackTimer;
+        
+        public delegate void AttackAction();
+        public event AttackAction OnAttack;
+        
+        //Invokes the attack event
+        public void Attack() //Called in animator events on some entities
+        {
+            if(CanAttack) OnAttack?.Invoke();
+        }
+        #endregion
 
         private delegate void TargetAction();
-        private void Start()
+        protected void Start()
         {
             Init();
+
+            OnAttack += () => _attackTimer = 0;
         }
 
-        private void LateUpdate()
+        protected void Update()
         {
             _targetUpdateTimer += Time.deltaTime;
+            _attackTimer += Time.deltaTime;
             
             if (_targetUpdateTimer > EntityTargetUpdatingRate)
             {
                 UpdateTarget();
                 _targetUpdateTimer = 0f;
             }
+
+            if (_attackTimer > AttackTimerMax)
+            {
+                Attack();
+            }
+
+            _effects.RemoveAll(e => e == null);
+            
+            foreach (var effect in _effects.ToArray())
+            {
+                effect.OnUpdate();
+            }
+            
+            if (IsAlive)
+            {
+                var hpRegen = Stats.GetStat(Stat.HpRegen) * Time.deltaTime; //Regen 1% of hp per second
+                ApplyDamage(-hpRegen); //Regen health by HpRegen per second
+            }
         }
 
-        protected void Init()
+        private void Init()
         {
             GameManager.Entities.Add(this);
 
@@ -80,46 +123,73 @@ namespace TonyDev.Game.Core.Entities
             return transforms; //Returns the game object
         }
         
+        #region Effects
+
+        private readonly List<GameEffect> _effects = new();
+
+        public void AddEffect(GameEffect effect, GameEntity source)
+        {
+            Debug.Log("Added effect: " + nameof(effect));
+            _effects.Add(effect);
+            effect.Entity = this;
+            effect.OnAdd(source);
+        }
+        
+        public void RemoveEffect(GameEffect effect)
+        {
+            _effects.Remove(effect);
+            effect.OnRemove();
+        }
+        
+        #endregion
+        
         #region IDamageable
-        public virtual Team Team { get; protected set; }
+        public virtual Team Team { get; protected set; } = default;
         public virtual float DamageMultiplier { get; protected set; } = 1f;
         public virtual float HealMultiplier { get; protected set; } = 1f;
-        public virtual int MaxHealth { get; protected set; }
+        public virtual int MaxHealth => (int)Stats.GetStat(Stat.Health);
         public virtual float CurrentHealth { get; protected set; }
         public virtual bool IsInvulnerable { get; protected set; }
         public bool IsAlive => CurrentHealth > 0;
-        public virtual void ApplyDamage(float damage)
+        public virtual float ApplyDamage(float damage)
         {
-            if (damage == 0 || IsInvulnerable) return;
+            if (damage == 0 || IsInvulnerable) return 0;
 
-            (damage > 0 ? OnHurt : OnHeal)?.Invoke();
+            if (Stats.DodgeSuccessful) return 0; //Don't apply damage is dodge rolls successful.
+            var modifiedDamage = damage >= 0
+                ? Mathf.Clamp(Stats.ModifyIncomingDamage(damage), 0, Mathf.Infinity)
+                : damage;
+            
+            (modifiedDamage > 0 ? OnHurt : OnHeal)?.Invoke(modifiedDamage);
 
-            switch (damage)
+            switch (modifiedDamage)
             {
                 case > 0:
-                    CurrentHealth -= damage * DamageMultiplier;
+                    CurrentHealth -= modifiedDamage * DamageMultiplier;
                     break;
                 case < 0:
-                    CurrentHealth -= damage * HealMultiplier;
+                    CurrentHealth -= modifiedDamage * HealMultiplier;
                     break;
             }
 
-            OnHealthChanged?.Invoke();
+            OnHealthChanged?.Invoke(modifiedDamage);
 
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth); //Clamp health
             
             if (CurrentHealth <= 0) Die();
+
+            return modifiedDamage;
         }
         
         public void SetHealth(int newHealth)
         {
-            OnHealthChanged?.Invoke();
+            OnHealthChanged?.Invoke(newHealth);
             CurrentHealth = newHealth;
         }
 
         public virtual void Die()
         {
-            OnDeath?.Invoke();
+            OnDeath?.Invoke(0);
             Destroy(gameObject);
         }
 

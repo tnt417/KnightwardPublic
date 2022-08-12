@@ -1,13 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
-using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
-using TonyDev.UI;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TonyDev
+namespace TonyDev.Game.UI.Tower
 {
     public class TowerPlacementManager : MonoBehaviour
     {
@@ -18,7 +15,7 @@ namespace TonyDev
         [SerializeField] private Image rangeIndicator;
         //
         
-        private readonly List<Tower> _placedTowers = new ();
+        private readonly List<Core.Entities.Towers.Tower> _placedTowers = new ();
         private bool Placing => towerPlacementIndicator.activeSelf;
         private Camera _mainCamera;
         private GameObject _selectedTowerPrefab;
@@ -46,7 +43,7 @@ namespace TonyDev
         {
             towerPlacementIndicator.SetActive(!Placing); //Toggle the placement indicator activeness
             _selectedTowerPrefab = item.spawnablePrefab; //Update selected prefab
-            var tower = _selectedTowerPrefab.GetComponent<Tower>(); //Get a reference to the tower of the prefab...
+            var tower = _selectedTowerPrefab.GetComponent<Core.Entities.Towers.Tower>(); //Get a reference to the tower of the prefab...
             rangeIndicator.transform.localScale = new Vector3(tower.targetRadius * 2, tower.targetRadius * 2, 1); //...and update the rangeIndicator based on the tower's range.
             var prefabSprite = _selectedTowerPrefab.GetComponentInChildren<SpriteRenderer>(); //Get the prefab's SpriteRenderer
             var indicatorSprite = towerPlacementIndicator.GetComponent<SpriteRenderer>(); //Get the indicator's SpriteRenderer
@@ -59,7 +56,7 @@ namespace TonyDev
             var t = towerPlacementIndicator.transform;
             var go = Instantiate(_selectedTowerPrefab, t.position, Quaternion.identity, transform);
             TowerUIController.Instance.ConfirmPlace();
-            _placedTowers.Add(go.GetComponent<Tower>());
+            _placedTowers.Add(go.GetComponent<Core.Entities.Towers.Tower>());
             towerPlacementIndicator.SetActive(false);
         }
     }

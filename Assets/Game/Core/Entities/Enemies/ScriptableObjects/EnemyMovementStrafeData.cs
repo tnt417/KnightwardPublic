@@ -1,9 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
 {
     [CreateAssetMenu(menuName = "Enemy/Movement/Strafe")]
     public class EnemyMovementStrafeData : EnemyMovementData

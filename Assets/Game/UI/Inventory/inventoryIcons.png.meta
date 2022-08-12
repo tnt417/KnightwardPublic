@@ -343,7 +343,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -351,6 +351,27 @@ TextureImporter:
       bones: []
       spriteID: 9fdb15e35beaa7d41b4bb9a4de908293
       internalID: 451852544
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: inventoryIcons_12
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cb5cd302cc867fe4ebf2b17e6c845486
+      internalID: -439185120
       vertices: []
       indices: 
       edges: []
@@ -378,6 +399,7 @@ TextureImporter:
       inventoryIcons_11: 451852544
       inventoryIcons_6: 1953514867
       inventoryIcons_4: -1911547659
+      inventoryIcons_12: -439185120
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

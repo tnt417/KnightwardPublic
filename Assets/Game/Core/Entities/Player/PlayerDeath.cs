@@ -39,13 +39,13 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public void Die() //Called when the player's health drops to 0
         {
-            if (Dead) return;
+            if (Dead) return; //Don't re-die if already dead
             Dead = true; //Die
             healthBarObject.SetActive(false); //Hide health bar
-            GameManager.Money = 0;
+            GameManager.Money = 0; //Reset money as a penalty for dying
             Player.Instance.playerAnimator.PlayDeadAnimation(); //Play death animation
-            _rb2d.simulated = false;
-            walkParticleSystem.Stop();
+            _rb2d.simulated = false; //De-activate Rigidbody
+            walkParticleSystem.Stop(); //Turn off walk particles
             
             foreach (var enemy in GameManager.Entities.Where(e => e is Enemy))
             {
@@ -60,11 +60,7 @@ namespace TonyDev.Game.Core.Entities.Player
             healthBarObject.SetActive(true); //Re-active the health bar
             Player.Instance.SetHealth(Player.Instance.MaxHealth); //Fully heal the player
             deathTimerText.text = string.Empty; //Clear the death timer text
-            _rb2d.simulated = true;
-            foreach (var e in FindObjectsOfType<Enemy>())
-            {
-                e.UpdateTarget(); //Set new targets for all enemies, so that they might switch back to the player.
-            }
+            _rb2d.simulated = true; //Re-activate the RigidBody
         }
     }
 }

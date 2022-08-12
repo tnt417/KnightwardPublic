@@ -1,10 +1,8 @@
-using System.Collections.Generic;
-using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Core.Items;
+using TonyDev.Game.UI.Inventory;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace TonyDev.UI
+namespace TonyDev.Game.UI.Tower
 {
     public class TowerUIController : MonoBehaviour
     {

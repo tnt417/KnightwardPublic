@@ -1,5 +1,4 @@
 using TonyDev.Game.Core.Items;
-using TonyDev.UI.ItemUI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;

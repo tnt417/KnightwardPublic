@@ -1,5 +1,7 @@
 using System;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
+using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
@@ -14,14 +16,19 @@ namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
         public string enemyName;
         public Sprite enemyBaseSprite;
         public int baseMoneyReward;
-        public int maxHealth;
         public float hitboxRadius;
+
+        [Header("Stats - some stats may not be implemented")] 
+        public StatBonus[] baseStats;
         
         [Header("Additional Data")]
         public RuntimeAnimatorController animatorController;
         public EnemyAnimationPairs[] animations;
         public EnemyMovementData movementData;
-        public EnemyAttackData attackData;
+        
+        [Header("Attack Data")]
+        public AttackData contactAttackData;
+        public ProjectileData[] projectileAttackData;
     }
 
     [Serializable]

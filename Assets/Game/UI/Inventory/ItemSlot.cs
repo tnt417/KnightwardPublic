@@ -1,13 +1,10 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using TonyDev.Game.Core.Items;
-using TonyDev.UI;
+using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace TonyDev
+namespace TonyDev.Game.UI.Inventory
 {
     public class ItemSlot : MonoBehaviour
     {
@@ -35,9 +32,9 @@ namespace TonyDev
 
         private void OnItemSet(Item item)
         {
-            if (image != null) image.sprite = Item.uiSprite;
-            if (nameText != null) nameText.text = item.itemName;
-            if(descriptionText != null) descriptionText.text = item.GetItemDescription();
+            if (image != null) image.sprite = item?.uiSprite;
+            if (nameText != null) nameText.text = item?.itemName;
+            if(descriptionText != null) descriptionText.text = item?.GetItemDescription();
         }
         
         public void OnClick()

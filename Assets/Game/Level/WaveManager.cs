@@ -1,14 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Console;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace TonyDev.Game.Core
+namespace TonyDev.Game.Level
 {
     [Serializable]
     public struct EnemySpawn
@@ -34,7 +34,7 @@ namespace TonyDev.Game.Core
         {
             _waveCooldown = wavesSpawned % 5 == 0 ? 120 : 30; //Every 5 waves, have a 2 minute break. Otherwise 30 seconds in between waves.
             
-            _waveTimer += Time.deltaTime; //Tick the wave timer
+            _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier; //Tick the wave timer
             if (_waveTimer >= _waveCooldown) SpawnWave(); //Spawn a wave if cooldown is over
         }
         

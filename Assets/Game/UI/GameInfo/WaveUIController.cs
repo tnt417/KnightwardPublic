@@ -1,12 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using TonyDev.Game.Core;
+using TonyDev.Game.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace TonyDev
+namespace TonyDev.Game.UI.GameInfo
 {
     public class WaveUIController : MonoBehaviour
     {

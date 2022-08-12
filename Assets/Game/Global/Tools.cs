@@ -22,5 +22,18 @@ namespace TonyDev.Game.Global
                 .Where(c => !char.IsWhiteSpace(c))
                 .ToArray());
         }
+        
+        //Helper function to rotate a vector by radians
+        public static Vector2 Rotate(Vector2 v, float radians)
+        {
+            var sin = Mathf.Sin(radians);
+            var cos = Mathf.Cos(radians);
+
+            var tx = v.x;
+            var ty = v.y;
+            v.x = (cos * tx) - (sin * ty);
+            v.y = (sin * tx) + (cos * ty);
+            return v;
+        }
     }
 }

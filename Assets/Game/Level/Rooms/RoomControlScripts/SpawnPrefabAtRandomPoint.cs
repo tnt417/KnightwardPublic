@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Tools = TonyDev.Game.Global.Tools;
 
-namespace TonyDev
+namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 {
     public class SpawnPrefabAtRandomPoint : MonoBehaviour
     {

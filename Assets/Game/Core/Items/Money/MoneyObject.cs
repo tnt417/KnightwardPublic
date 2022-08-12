@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Numerics;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
-namespace TonyDev
+namespace TonyDev.Game.Core.Items.Money
 {
     public class MoneyObject : MonoBehaviour
     {

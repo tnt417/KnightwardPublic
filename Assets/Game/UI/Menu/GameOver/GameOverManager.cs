@@ -2,7 +2,7 @@ using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace TonyDev.Game.Menu
+namespace TonyDev.Game.UI.Menu.GameOver
 {
     public class GameOverManager : MonoBehaviour
     {

@@ -4,7 +4,12 @@ namespace TonyDev.Game.Core.Entities.Player
 {
     public enum PlayerAnimState
     {
-        Up, Down, Left, Right, Idle, Dead
+        Up,
+        Down,
+        Left,
+        Right,
+        Idle,
+        Dead
     }
 
     public class PlayerAnimator : MonoBehaviour
@@ -14,11 +19,13 @@ namespace TonyDev.Game.Core.Entities.Player
         [SerializeField] private Sprite[] playerSprites;
         [SerializeField] private SpriteRenderer playerSpriteRenderer;
         [SerializeField] private Animator playerAnimator;
+
         [SerializeField] private ParticleSystem playerWalkParticles;
         //
 
-        //PlayerAnimState only structured like this to allow a method to be called when the direction is changed.
+        //Custom setter to allow controlling of walk particles without spamming Play and Stop on the particle system.
         private PlayerAnimState _playerAnimState = PlayerAnimState.Idle;
+
         public PlayerAnimState PlayerAnimState
         {
             get => _playerAnimState;
@@ -31,16 +38,11 @@ namespace TonyDev.Game.Core.Entities.Player
         }
         //
 
-        public void PlayHurtAnimation()
-        {
-            playerAnimator.Play("PlayerHurt");
-        }
-
         private void Update()
         {
             playerSpriteRenderer.sprite = playerSprites[playerSpriteIndex];
 
-            playerAnimator.speed = PlayerStats.GetStat(Stat.MoveSpeed) / 10f;
+            playerAnimator.speed = PlayerStats.Stats.GetStat(Stat.MoveSpeed) / 10f;
 
             //Plays different animations depending on the animation state
             switch (PlayerAnimState)
@@ -70,7 +72,7 @@ namespace TonyDev.Game.Core.Entities.Player
         //This function poorly named. All it does is pause/play the walk particles when the player is not walking/walking.
         private void DirectionChanged(PlayerAnimState oldPlayerAnimState, PlayerAnimState newPlayerAnimState)
         {
-            if(newPlayerAnimState == PlayerAnimState.Idle) playerWalkParticles.Stop();
+            if (newPlayerAnimState == PlayerAnimState.Idle) playerWalkParticles.Stop();
             else playerWalkParticles.Play();
         }
 

@@ -1,9 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
-using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Global;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game
 {
     public class DestructableObject : MonoBehaviour, IDamageable
     {
@@ -16,15 +16,16 @@ namespace TonyDev
         public Team Team => Team.Enemy;
         public float DamageMultiplier { get; } = 1f;
         public float HealMultiplier { get; } = 1f;
-        public int MaxHealth { get; }
-        public float CurrentHealth { get; private set; }
-        public bool IsInvulnerable { get; }
+        public int MaxHealth => hitsRemaining;
+        public float CurrentHealth => hitsRemaining;
+        public bool IsInvulnerable => false;
         
-        public void ApplyDamage(float damage)
+        public float ApplyDamage(float damage)
         {
             hitsRemaining--;
             animator.Play(hitAnimation);
             if(hitsRemaining <= 0) Die();
+            return damage;
         }
 
         public void Die()

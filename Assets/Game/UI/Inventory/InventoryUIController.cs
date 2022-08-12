@@ -1,14 +1,11 @@
-using System.Globalization;
-using System.Runtime.CompilerServices;
-using System.Text;
 using TMPro;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace TonyDev.UI.ItemUI
+namespace TonyDev.Game.UI.Inventory
 {
     public class InventoryUIController : MonoBehaviour
     {
@@ -30,11 +27,12 @@ namespace TonyDev.UI.ItemUI
         [SerializeField] private TMP_Text critText;
         [SerializeField] private TMP_Text dodgeText;
         [SerializeField] private TMP_Text attackSpeedText;
+        [SerializeField] private TMP_Text cooldownText;
         //
 
-        private void Awake()
+        private void Start()
         {
-            PlayerStats.OnStatsChanged += UpdateStatText;
+            Player.Instance.Stats.OnStatsChanged += UpdateStatText;
         }
 
         private void UpdateStatText()
@@ -48,6 +46,7 @@ namespace TonyDev.UI.ItemUI
             critText.text = PlayerStats.GetStatsText(new []{Stat.CritChance}, false, false);
             dodgeText.text = PlayerStats.GetStatsText(new []{Stat.Dodge}, false, false);
             attackSpeedText.text = PlayerStats.GetStatsText(new []{Stat.AttackSpeed}, false, false);
+            cooldownText.text = PlayerStats.GetStatsText(new []{Stat.CooldownReduce}, false, false);
         }
     
         private void Update()

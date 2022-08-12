@@ -1,8 +1,7 @@
-using TonyDev.Game.Core.Entities.Enemies.Movement;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using UnityEngine;
 
-namespace TonyDev.Game.Core.Entities.Enemies
+namespace TonyDev.Game.Core.Entities.Enemies.Movement
 {
     [RequireComponent(typeof(EnemyAnimator))]
     public class EnemyMovementPeriodicalStrafe : EnemyMovementBase

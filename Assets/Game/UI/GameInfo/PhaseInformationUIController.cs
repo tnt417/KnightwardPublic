@@ -4,7 +4,7 @@ using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
 using UnityEngine;
 
-namespace TonyDev.UI
+namespace TonyDev.Game.UI.GameInfo
 {
     public class PhaseInformationUIController : MonoBehaviour
     {

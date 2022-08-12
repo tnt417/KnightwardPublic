@@ -977,7 +977,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0997999b7b145a543952c8b127dc7633, type: 2}
   - {fileID: 11400000, guid: 9de90e29621df6c4ab9a6a1fabae7eaf, type: 2}
   - {fileID: 11400000, guid: fe2a816f9545ecd4c8b93fc9e779b326, type: 2}
+  - {fileID: 11400000, guid: 307c5ec5668334d449ada8a33f02bb21, type: 2}
+  - {fileID: 11400000, guid: c88240ddc3c961b4891434f47cb2012e, type: 2}
+  - {fileID: 11400000, guid: ee670be3e9e299e40a23c0a340850ae2, type: 2}
   - {fileID: 11400000, guid: 396af29dea467734096ab1d39e0c1f30, type: 2}
+  - {fileID: 11400000, guid: 14f4ff29017e4374fbebfd286a21306c, type: 2}
+  - {fileID: 11400000, guid: 95ace397c06cb2d47818221c716c1f0f, type: 2}
+  - {fileID: 11400000, guid: 9e4e352ddb3fd59499cc0c1b1f7a84b6, type: 2}
 --- !u!4 &4036802154981258857
 Transform:
   m_ObjectHideFlags: 0
@@ -1122,6 +1128,9 @@ MonoBehaviour:
     value: {fileID: 11400000, guid: cc8fce2e70e343b4fa78d64e34d59cd0, type: 2}
   - key: dragon
     value: {fileID: 11400000, guid: 5fd4f12622a778147a601d010a99b5c8, type: 2}
+  prefabEntries:
+  - key: broadswordEffect
+    value: {fileID: 4870227055206291163, guid: fba2603b6f306184d963340acd9a0e36, type: 3}
 --- !u!1 &4036802155382830968
 GameObject:
   m_ObjectHideFlags: 0
@@ -1572,6 +1581,30 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3070679827601927216, guid: ea0cd8c86f414bc48b7e6dffd43952a2, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237211778215310732, guid: ea0cd8c86f414bc48b7e6dffd43952a2, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237211778215310732, guid: ea0cd8c86f414bc48b7e6dffd43952a2, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237211778215310732, guid: ea0cd8c86f414bc48b7e6dffd43952a2, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237211778215310732, guid: ea0cd8c86f414bc48b7e6dffd43952a2, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237211778215310732, guid: ea0cd8c86f414bc48b7e6dffd43952a2, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3237211778215310732, guid: ea0cd8c86f414bc48b7e6dffd43952a2, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}

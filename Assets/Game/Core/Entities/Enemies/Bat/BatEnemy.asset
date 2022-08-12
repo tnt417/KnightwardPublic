@@ -16,11 +16,38 @@ MonoBehaviour:
   enemyName: Bat
   enemyBaseSprite: {fileID: -881900851, guid: e32f0907fb5c1cc448b948a448e2a09c, type: 3}
   baseMoneyReward: 1
-  maxHealth: 50
   hitboxRadius: 0.3
+  baseStats:
+  - statType: 0
+    stat: 0
+    strength: 1
+    source: 
+  - statType: 0
+    stat: 5
+    strength: 1
+    source: 
+  - statType: 0
+    stat: 1
+    strength: 15
+    source: 
+  - statType: 0
+    stat: 6
+    strength: 50
+    source: 
+  - statType: 0
+    stat: 3
+    strength: 1
+    source: 
   animatorController: {fileID: 9100000, guid: 3a1487dd7e00c53419058d0166e68615, type: 2}
   animations:
   - enemyAnimationState: 1
     animationName: BatMove
   movementData: {fileID: 11400000, guid: 67c7aa5da8002f24f8a6a9319e56972f, type: 2}
-  attackData: {fileID: 11400000, guid: b1e95b44bab1e714aa1e7d30404b3e6d, type: 2}
+  contactAttackData:
+    damageMultiplier: 1
+    hitboxRadius: 0.3
+    team: 0
+    destroyOnApply: 0
+    lifetime: -1
+    spawnOnDestroy: {fileID: 0}
+  projectileAttackData: []

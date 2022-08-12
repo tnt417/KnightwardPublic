@@ -1,9 +1,11 @@
 using System.Linq;
+using TonyDev.Game.Global.Console;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.UI;
 using Image = UnityEngine.UI.Image;
 
-namespace TonyDev.Game.Level.Rooms
+namespace TonyDev.Game.UI.Minimap
 {
     public class MinimapManager : MonoBehaviour
     {
@@ -65,6 +67,18 @@ namespace TonyDev.Game.Level.Rooms
         {
             _discoveredRooms[position.x, position.y] = 1;
             UpdateMinimapSymbols();
+        }
+
+        [GameCommand(Keyword = "revealmap", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Map revealed.")]
+        public static void UncoverAllRooms()
+        {
+            for (var i = 0; i < RoomManager.Instance.MapSize; i++)
+            {
+                for (var j = 0; j < RoomManager.Instance.MapSize; j++)
+                {
+                    MinimapManager.Instance.UncoverRoom(new Vector2Int(i, j));
+                }
+            }
         }
 
         private void UpdateMinimapSymbols()

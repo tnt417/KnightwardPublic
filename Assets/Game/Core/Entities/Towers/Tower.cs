@@ -1,5 +1,5 @@
 using System.Linq;
-using TonyDev.Game.Core.Combat;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
@@ -13,31 +13,9 @@ namespace TonyDev.Game.Core.Entities.Towers
         //Editor variables
         [SerializeField] protected TowerAnimator towerAnimator;
         [SerializeField] public float targetRadius;
-        [SerializeField] private float fireCooldown;
         //
-        protected float AttackSpeedMultiplier => 1 + Buff.GetFlatStatBonus(Stat.AttackSpeed) * Buff.GetStatMultiplyBonus(Stat.AttackSpeed);
-        private float _fireTimer;
-
-        public void Update()
-        {
-            if (Targets.Count == 0) UpdateTarget(); //Get a target if our target is null.
-
-            _fireTimer += Time.deltaTime; //Tick our fire timer
-            if (_fireTimer * AttackSpeedMultiplier >= fireCooldown)
-                Fire(); //Fire when cooldown is over
-        }
-
-        private void Fire()
-        {
-            UpdateTarget();
-            _fireTimer = 0;
-            if (Targets.Count == 0) return;
-            OnFire();
-        }
 
         public override Team Team => Team.Player;
-        protected virtual void TowerUpdate() {}
         public override bool IsInvulnerable => true;
-        protected virtual void OnFire() {}
     }
 }

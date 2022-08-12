@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.Global.Console
 {
     public enum PermissionLevel
     {

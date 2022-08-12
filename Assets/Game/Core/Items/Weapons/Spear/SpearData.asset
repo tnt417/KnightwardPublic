@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: SpearData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: 919dc578ee3403c4cb9d68eecd493a98, type: 3}
+    itemName: Spear
+    itemDescription: 
+    itemType: 0
+    itemRarity: 0
+    statBonuses:
+    - statType: 0
+      stat: 0
+      strength: 0.5
+      source: Weapon
+    - statType: 1
+      stat: 5
+      strength: 0.2
+      source: Weapon
+    spawnablePrefab: {fileID: 0}
+    itemEffectIds:
+    - spearEffect
+    projectiles:
+    - prefab: {fileID: 1437695475391080197, guid: 2ed55f042af47534e877f1b55dac4b14, type: 3}
+      projectileSprite: {fileID: 21300000, guid: 919dc578ee3403c4cb9d68eecd493a98, type: 3}
+      attackData:
+        damageMultiplier: 1
+        hitboxRadius: 0.4
+        team: 1
+        destroyOnApply: 0
+        lifetime: 2
+        spawnOnDestroy: {fileID: 0}
+      travelSpeed: 20
+      offsetDegrees: 0
+      waveAmplitude: 0
+      waveFrequency: 0
+      waveDistance: 0
+      effectIDs: []
