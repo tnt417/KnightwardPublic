@@ -10,13 +10,13 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         public override void OnAdd(GameEntity source)
         {
             Timer.TickSpeedMultiplier = 0.75f;
-            Player.Instance.OnHurt += OnPlayerHit;
+            Player.LocalInstance.OnHurt += OnPlayerHit;
         }
 
         public override void OnRemove()
         {
             Timer.TickSpeedMultiplier = 1f;
-            Player.Instance.OnHurt -= OnPlayerHit;
+            Player.LocalInstance.OnHurt -= OnPlayerHit;
         }
 
         public override void OnUpdate()

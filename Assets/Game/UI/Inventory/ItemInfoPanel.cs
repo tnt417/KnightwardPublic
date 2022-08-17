@@ -14,7 +14,7 @@ namespace TonyDev.Game.UI.Inventory
         private RectTransform _rectTransform;
         private Camera _mainCamera;
 
-        private void Awake()
+        private void Start()
         {
             _rectTransform = (RectTransform) toggleObject.transform;
             _mainCamera = Camera.main;
@@ -22,6 +22,8 @@ namespace TonyDev.Game.UI.Inventory
 
         private void Update()
         {
+            if(_mainCamera == null) _mainCamera = Camera.main;
+
             var eventData = new PointerEventData(EventSystem.current)
             {
                 position = Input.mousePosition

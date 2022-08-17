@@ -1,13 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Global;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovement : NetworkBehaviour
     {
         private struct GameForce //Custom force implementation to allow more specific control of the player's movement.
         {
@@ -41,7 +42,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         private void FixedUpdate()
         {
-            if (!DoMovement) return;
+            if (!DoMovement || !hasAuthority) return;
 
             //dx and dy are either 1, 0, or -1 depending on keys being pressed
             var dx = (Input.GetKey(KeyCode.A) && GameManager.GameControlsActive ? -1 : 0) +
@@ -70,11 +71,11 @@ namespace TonyDev.Game.Core.Entities.Player
                               Time.fixedDeltaTime * (new Vector2(dx, dy).normalized * GetSpeedMultiplier() + forceSum));
 
             //Set animation directions based on the keys that were pressed.
-            if (dy > 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Up;
-            if (dy < 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Down;
-            if (dx > 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Right;
-            if (dx < 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Left;
-            if (dy == 0 && dx == 0) Player.Instance.playerAnimator.PlayerAnimState = PlayerAnimState.Idle;
+            if (dy > 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Up;
+            if (dy < 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Down;
+            if (dx > 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Right;
+            if (dx < 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Left;
+            if (dy == 0 && dx == 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Idle;
             //
         }
 

@@ -1,3 +1,5 @@
+using System;
+using Mirror;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
@@ -6,7 +8,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
     {
         Chase, Strafe
     }
-    
+
     public class EnemyMovementData : ScriptableObject
     {
         public float baseSpeed;

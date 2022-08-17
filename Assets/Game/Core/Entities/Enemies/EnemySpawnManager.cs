@@ -1,3 +1,4 @@
+using Mirror;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
@@ -22,7 +23,13 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             var enemy = Instantiate(enemyData.prefab == null ? _instance.enemyPrefab : enemyData.prefab, position,
                 Quaternion.identity, parent).GetComponent<Enemy>();
+
+            NetworkServer.Spawn(enemy.gameObject);
+
+            enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
+            
             enemy.SetEnemyData(enemyData);
+
             return enemy;
         }
 
@@ -31,7 +38,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             for (var i = 0; i < amount; i++)
                 if (Camera.main is not null)
-                    SpawnEnemy(ObjectDictionaries.Enemies[enemyName],
+                    GameManager.Instance.CmdSpawnEnemy(enemyName,
                         Camera.main.ScreenToWorldPoint(Input.mousePosition), null);
         }
     }

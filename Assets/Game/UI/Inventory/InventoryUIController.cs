@@ -32,7 +32,8 @@ namespace TonyDev.Game.UI.Inventory
 
         private void Start()
         {
-            Player.Instance.Stats.OnStatsChanged += UpdateStatText;
+            Player.LocalInstance.Stats.OnStatsChanged += UpdateStatText;
+            UpdateStatText();
         }
 
         private void UpdateStatText()

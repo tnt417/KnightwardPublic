@@ -1,3 +1,4 @@
+using Mirror;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Player
@@ -12,40 +13,42 @@ namespace TonyDev.Game.Core.Entities.Player
         Dead
     }
 
-    public class PlayerAnimator : MonoBehaviour
+    public class PlayerAnimator : NetworkBehaviour
     {
         //Editor variables
-        [SerializeField] private int playerSpriteIndex;
         [SerializeField] private Sprite[] playerSprites;
         [SerializeField] private SpriteRenderer playerSpriteRenderer;
         [SerializeField] private Animator playerAnimator;
-
+        [SerializeField] private PlayerAnimationValues playerAnimationValues;
         [SerializeField] private ParticleSystem playerWalkParticles;
         //
 
+        private int PlayerSpriteIndex => playerAnimationValues.spriteIndex;
+        
         //Custom setter to allow controlling of walk particles without spamming Play and Stop on the particle system.
-        private PlayerAnimState _playerAnimState = PlayerAnimState.Idle;
+        [SyncVar] private PlayerAnimState _playerAnimState = PlayerAnimState.Idle;
 
         public PlayerAnimState PlayerAnimState
         {
             get => _playerAnimState;
             set
             {
-                if (_playerAnimState == value) return;
+                if (_playerAnimState == value || !hasAuthority) return;
                 DirectionChanged(_playerAnimState, value);
                 _playerAnimState = value;
+                CmdSetAnimState(_playerAnimState);
             }
         }
         //
 
         private void Update()
         {
-            playerSpriteRenderer.sprite = playerSprites[playerSpriteIndex];
+            playerSpriteRenderer.sprite = playerSprites[PlayerSpriteIndex];
 
             playerAnimator.speed = PlayerStats.Stats.GetStat(Stat.MoveSpeed) / 10f;
 
             //Plays different animations depending on the animation state
-            switch (PlayerAnimState)
+            switch (_playerAnimState)
             {
                 case PlayerAnimState.Up:
                     playerAnimator.Play("WalkUp");
@@ -67,6 +70,12 @@ namespace TonyDev.Game.Core.Entities.Player
                     break;
             }
             //
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdSetAnimState(PlayerAnimState animState)
+        {
+            _playerAnimState = animState;
         }
 
         //This function poorly named. All it does is pause/play the walk particles when the player is not walking/walking.

@@ -47,7 +47,7 @@ namespace TonyDev.Game.Level.Rooms
         private void Update()
         {
             minimapObject.SetActive(GameManager.GamePhase == GamePhase.Dungeon);
-            MinimapManager.Instance.SetPlayerPosition(Player.Instance.transform.position, roomGenerator.roomOffset);
+            MinimapManager.Instance.SetPlayerPosition(Player.LocalInstance.transform.position, roomGenerator.roomOffset);
         }
 
         private void StartRoomPhase()
@@ -59,7 +59,7 @@ namespace TonyDev.Game.Level.Rooms
 
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.
         {
-            Player.Instance.playerMovement.DoMovement = false;
+            Player.LocalInstance.playerMovement.DoMovement = false;
             StartCoroutine(MovePlayerToNextRoom(direction));
         }
 
@@ -95,9 +95,9 @@ namespace TonyDev.Game.Level.Rooms
                 _currentActiveRoomIndex.y + dy); //Set the active room to the new room
 
             //Move the player into the newly activated room
-            var playerTransform = Player.Instance.transform;
+            var playerTransform = Player.LocalInstance.transform;
             playerTransform.position = room.GetSpawnpoint(direction);
-            Player.Instance.playerMovement.DoMovement = true;
+            Player.LocalInstance.playerMovement.DoMovement = true;
             //
         }
 
@@ -165,7 +165,7 @@ namespace TonyDev.Game.Level.Rooms
 
         public void TeleportPlayerToStart()
         {
-            Player.Instance.transform.position = StartingRoom.transform.position;
+            Player.LocalInstance.transform.position = StartingRoom.transform.position;
             SetActiveRoom(StartingRoomPos.x, StartingRoomPos.y);
         }
     }

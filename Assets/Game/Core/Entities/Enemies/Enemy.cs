@@ -35,9 +35,14 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
             _enemyData = enemyData;
 
-            foreach (var sb in enemyData.baseStats)
+            if (isServer)
             {
-                Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, sb.source);
+                Stats.ValuesOnly = false;
+
+                foreach (var sb in enemyData.baseStats)
+                {
+                    Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, sb.source);
+                }
             }
 
             var hitbox = GetComponent<CircleCollider2D>();
@@ -48,6 +53,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
             enemyAnimator.Set(enemyData);
             CreateMovementComponent(enemyData.movementData);
+            SubscribeAnimatorEvents();
             
             InitProjectiles(enemyData.projectileAttackData);
             InitContactDamage(enemyData.contactAttackData);
@@ -98,8 +104,6 @@ namespace TonyDev.Game.Core.Entities.Enemies
             //Initialize variables
             enemyAnimator = GetComponent<EnemyAnimator>();
             //
-
-            SubscribeAnimatorEvents();
 
             OnDeath += EnemyDie;
         }

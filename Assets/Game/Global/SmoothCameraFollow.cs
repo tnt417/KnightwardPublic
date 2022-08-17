@@ -16,15 +16,13 @@ namespace TonyDev.Game.Global
     
         private Rect _cameraBounds = Rect.zero;
         private float _z;
-        private Transform _playerTransform;
-        private Transform _crystalTransform;
+        private Transform _playerTransform => Player.LocalInstance.transform;
+        private Transform _crystalTransform => Crystal.Instance.transform;
     
         private void Start()
         {
-            _playerTransform = Player.Instance.transform; //Initialize the playerTransform variable
             _z = transform.position.z; //Set the initial z level of the camera so it can be kept constant
             SceneManager.sceneLoaded += ClearCameraBounds; //Set ClearCameraBounds to be called every time a new scene is loaded.
-            _crystalTransform = FindObjectOfType<Crystal>().transform; //Set our crystal object so we can watch it
         }
 
         public void SetCameraBounds(Rect bounds)

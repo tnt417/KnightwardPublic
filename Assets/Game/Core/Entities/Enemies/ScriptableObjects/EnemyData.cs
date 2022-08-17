@@ -14,14 +14,13 @@ namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
         
         [Header("Basic Data")]
         public string enemyName;
-        public Sprite enemyBaseSprite;
         public int baseMoneyReward;
         public float hitboxRadius;
 
         [Header("Stats - some stats may not be implemented")] 
         public StatBonus[] baseStats;
-        
-        [Header("Additional Data")]
+
+        [Header("Additional Data")] 
         public RuntimeAnimatorController animatorController;
         public EnemyAnimationPairs[] animations;
         public EnemyMovementData movementData;

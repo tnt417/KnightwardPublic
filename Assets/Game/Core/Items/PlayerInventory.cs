@@ -20,7 +20,7 @@ namespace TonyDev.Game.Core.Items
 
         public Queue<Item> RelicItems { get; private set; } = new Queue<Item>();
 
-        private void Start()
+        public void Start()
         {
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Weapon,
                 ItemRarity.Common)); //Add a starting sword to the player's inventory.
@@ -67,14 +67,14 @@ namespace TonyDev.Game.Core.Items
             {
                 if (replacedItem != null)
                 {
-                    if(replacedItem.ItemEffects != null) foreach (var effect in replacedItem.ItemEffects) Player.Instance.RemoveEffect(effect);
+                    if(replacedItem.ItemEffects != null) foreach (var effect in replacedItem.ItemEffects) Player.LocalInstance.RemoveEffect(effect);
                     PlayerStats.Stats.RemoveStatBonuses(Enum.GetName(typeof(ItemType),
                         item.itemType)); //Remove stat bonuses of the now removed item
                 }
 
                 if (item.ItemEffects != null)
                     foreach (var effect in item.ItemEffects)
-                        Player.Instance.AddEffect(effect, Player.Instance);
+                        Player.LocalInstance.AddEffect(effect, Player.LocalInstance);
 
                 PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
             }

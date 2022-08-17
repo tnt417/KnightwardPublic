@@ -14,14 +14,14 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         {
             Crystal.CrystalRegen = () => (1f + PlayerStats.Stats.GetStat(Stat.HpRegen)) * 10f; //Sets the crystal regen to be 10x the player's regen
             PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.Armor, 50f, "CrystalNecklace"); //Give the player 50 armor
-            Player.Instance.OnHurt += DamageCrystal; //When the player is damaged, call our DamageCrystal method
+            Player.LocalInstance.OnHurt += DamageCrystal; //When the player is damaged, call our DamageCrystal method
         }
 
         public override void OnRemove() //Runs when an item is unequipped
         {
             Crystal.CrystalRegen = () => 0; //Sets the crystal regen back to 0
             PlayerStats.Stats.RemoveStatBonuses("CrystalNecklace");
-            Player.Instance.OnHurt -= DamageCrystal; //Stop calling DamageCrystal
+            Player.LocalInstance.OnHurt -= DamageCrystal; //Stop calling DamageCrystal
         }
 
         public override void OnUpdate() {}

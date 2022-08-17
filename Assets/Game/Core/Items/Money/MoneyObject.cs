@@ -14,7 +14,7 @@ namespace TonyDev.Game.Core.Items.Money
         private void FixedUpdate()
         {
             var myPos = transform.position;
-            var playerPos = Player.Instance.transform.position;
+            var playerPos = Player.LocalInstance.transform.position;
 
             var distance = Vector2.Distance(myPos, playerPos);
 

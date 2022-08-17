@@ -1,3 +1,4 @@
+using System;
 using TonyDev.Game.Core.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -30,13 +31,26 @@ namespace TonyDev.Game.UI.Healthbar
             healthSlider.maxValue = _attachedDamageable.MaxHealth;
             healthSlider.value = _attachedDamageable.CurrentHealth;
 
-            _attachedDamageable.OnHealthChanged += UpdateUI; //Set the UI to be updated whenever the health is changed
+            _attachedDamageable.OnHealthChanged += (float value) => UpdateUI(); //Set the UI to be updated whenever the health is changed
         }
 
-        private void UpdateUI(float value)
+        private void Update()
         {
-            healthSlider.maxValue = _attachedDamageable.MaxHealth; //Update the slider values.
-            healthSlider.value = _attachedDamageable.CurrentHealth;
+            UpdateUI();
+        }
+
+        private void UpdateUI()
+        {
+            if (_attachedDamageable is GameEntity gameEntity)
+            {
+                healthSlider.maxValue = gameEntity.networkMaxHealth; //Update the slider values.
+                healthSlider.value = gameEntity.networkCurrentHealth;
+            }
+            else
+            {
+                healthSlider.maxValue = _attachedDamageable.MaxHealth; //Update the slider values.
+                healthSlider.value = _attachedDamageable.CurrentHealth;
+            }
         }
     }
 }

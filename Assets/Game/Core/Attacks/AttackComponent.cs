@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
@@ -119,18 +120,33 @@ namespace TonyDev.Game.Core.Attacks
 
         private void TryDamage(Collider2D other)
         {
-            var damageable = other.gameObject.GetComponent<IDamageable>();
+            if (_owner != null && !_owner.hasAuthority) return; //Only call damage code on attacks that are owned by the local player.
+            
+            var damageable = other.GetComponent<IDamageable>();
             //
             if (damageable == null || damageable.Team == team || damageable.IsInvulnerable ||
                 _hitCooldowns.ContainsKey(other.gameObject) ||
                 !other.isTrigger) return; //Check if valid thing to hit
 
-            var damageDealt =
-                damageable.ApplyDamage((int) (damage * damageMultiplier *
-                                              (IsCriticalHit ? 2 : 1))); //Apply the damage. Critical hits deal double.
-            if (damage * damageMultiplier > 0)
-                PopupManager.SpawnPopup(other.transform.position, (int) damageDealt,
-                    IsCriticalHit); //Spawn a popup for the damage text if the damage is greater than zero.
+            var networkIdentity = other.GetComponent<NetworkIdentity>();
+
+            float modifiedDamage = (int) (damage * damageMultiplier *
+                                  (IsCriticalHit
+                                      ? 2
+                                      : 1));
+            
+            if (networkIdentity != null)
+            {
+                GameManager.Instance.CmdDamageEntity(networkIdentity, modifiedDamage, IsCriticalHit);
+            }
+            else
+            {
+                var damageDealt =
+                    damageable.ApplyDamage(modifiedDamage); //Apply the damage. Critical hits deal double.
+                if (damageDealt > 0)
+                    PopupManager.SpawnPopup(other.transform.position, (int) damageDealt,
+                        IsCriticalHit); //Spawn a popup for the damage text if the damage is greater than zero.
+            }
 
 
             var kb = GetKnockbackVector(other.transform) * KnockbackForce; //Calculate the knockback

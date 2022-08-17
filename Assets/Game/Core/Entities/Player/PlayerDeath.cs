@@ -1,4 +1,5 @@
 using System.Linq;
+using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
@@ -6,7 +7,7 @@ using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
-    public class PlayerDeath : MonoBehaviour
+    public class PlayerDeath : NetworkBehaviour
     {
         //Editor variables
         [SerializeField] private float deathCooldown;
@@ -26,6 +27,8 @@ namespace TonyDev.Game.Core.Entities.Player
         
         private void Update()
         {
+            if (!isLocalPlayer) return;
+            
             if (Dead) //Runs while dead
             {
                 _deathTimer += Time.deltaTime; //Tick death timer
@@ -39,11 +42,11 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public void Die() //Called when the player's health drops to 0
         {
-            if (Dead) return; //Don't re-die if already dead
+            if (Dead || !isLocalPlayer) return; //Don't re-die if already dead
             Dead = true; //Die
             healthBarObject.SetActive(false); //Hide health bar
             GameManager.Money = 0; //Reset money as a penalty for dying
-            Player.Instance.playerAnimator.PlayDeadAnimation(); //Play death animation
+            Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
             _rb2d.simulated = false; //De-activate Rigidbody
             walkParticleSystem.Stop(); //Turn off walk particles
             
@@ -55,10 +58,12 @@ namespace TonyDev.Game.Core.Entities.Player
 
         private void Revive() //Called when the player's death timer is up.
         {
+            if (!isLocalPlayer) return;
+            
             Dead = false; //Revive
             _deathTimer = 0; //Reset the death timer
             healthBarObject.SetActive(true); //Re-active the health bar
-            Player.Instance.SetHealth(Player.Instance.MaxHealth); //Fully heal the player
+            Player.LocalInstance.SetHealth(Player.LocalInstance.MaxHealth); //Fully heal the player
             deathTimerText.text = string.Empty; //Clear the death timer text
             _rb2d.simulated = true; //Re-activate the RigidBody
         }

@@ -67,7 +67,7 @@ namespace TonyDev.Game.Level
         {
             foreach (var e in enemyData)
             {
-                EnemySpawnManager.SpawnEnemy(e, spawnPoints[Random.Range(0, spawnPoints.Length)].position
+                GameManager.Instance.CmdSpawnEnemy(e.enemyName, spawnPoints[Random.Range(0, spawnPoints.Length)].position
                                                 + (Vector3)new Vector2(Random.Range(-spawnRadius, spawnRadius), Random.Range(-spawnRadius, spawnRadius)), null);
             }
         }

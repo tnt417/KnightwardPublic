@@ -2,7 +2,6 @@ using System.Collections;
 using TMPro;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Chests;
-using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.Events;
 using Random = System.Random;

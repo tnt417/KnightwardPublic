@@ -100,6 +100,8 @@ GameObject:
   - component: {fileID: 4143216695699966044}
   - component: {fileID: 8564788322872327478}
   - component: {fileID: 408949789115778733}
+  - component: {fileID: 8955302732940848532}
+  - component: {fileID: 1746314677665408342}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
@@ -149,9 +151,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0e2acef1e60784c9f1cbb60f9a3759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   targetTag: 
   targetTeam: 1
   maxTargets: 1
+  networkCurrentHealth: 0
+  networkMaxHealth: 0
   enemyAnimator: {fileID: 7080094185981754640}
 --- !u!95 &7080094185981754642
 Animator:
@@ -288,6 +294,57 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &8955302732940848532
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7080094185981754644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: c4673581ac60785459b6805764360ee4
+  hasSpawned: 0
+--- !u!114 &1746314677665408342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7080094185981754644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 0
+  sendInterval: 0.05
+  syncPosition: 1
+  syncRotation: 0
+  syncScale: 0
+  interpolatePosition: 1
+  interpolateRotation: 0
+  interpolateScale: 0
+  bufferTimeMultiplier: 1
+  bufferSizeLimit: 64
+  catchupThreshold: 4
+  catchupMultiplier: 0.1
+  onlySyncOnChange: 1
+  bufferResetMultiplier: 5
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
 --- !u!1001 &7080094185844148543
 PrefabInstance:
   m_ObjectHideFlags: 0

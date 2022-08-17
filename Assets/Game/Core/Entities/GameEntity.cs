@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities
 {
-    public abstract class GameEntity : MonoBehaviour, IDamageable
+    public abstract class GameEntity : NetworkBehaviour, IDamageable
     {
         public delegate void TargetChangeAction();
         public event TargetChangeAction OnTargetChange;
@@ -29,8 +30,56 @@ namespace TonyDev.Game.Core.Entities
         [SerializeField] private int maxTargets;
         // 
 
-        public readonly EntityStats Stats = new ();
+        public EntityStats Stats = new ();
 
+        #region Network
+
+        public override void OnStartAuthority()
+        {
+            base.OnStartAuthority();
+
+            Stats.ValuesOnly = false;
+            Stats.OnStatsChanged += () => CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdUpdateStats(Stat[] keys, float[] values)
+        {
+            RpcUpdateStats(keys, values);
+        }
+
+        [ClientRpc]
+        public void RpcUpdateStats(Stat[] keys, float[] values)
+        {
+            var newDict = new Dictionary<Stat, float>();
+            
+            for (int i = 0; i < keys.Length; i++)
+            {
+                newDict.Add(keys[i], values[i]);
+            }
+
+            Stats.StatValues = newDict;
+        }
+
+        protected bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
+        
+        [Command(requiresAuthority = false)]
+        public void CmdSetHealth(float currentHealth, float maxHealth)
+        {
+            RpcSetHealth(currentHealth, maxHealth);
+        }
+
+        [ClientRpc]
+        public void RpcSetHealth(float currentHealth, float maxHealth)
+        {
+            networkCurrentHealth = currentHealth;
+            networkMaxHealth = maxHealth;
+        }
+
+        public float networkCurrentHealth;
+        public float networkMaxHealth;
+        
+        #endregion
         
         #region Attack
         protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
@@ -56,6 +105,9 @@ namespace TonyDev.Game.Core.Entities
 
         protected void Update()
         {
+
+            if (!EntityOwnership) return;
+            
             _targetUpdateTimer += Time.deltaTime;
             _attackTimer += Time.deltaTime;
             
@@ -88,7 +140,14 @@ namespace TonyDev.Game.Core.Entities
         {
             GameManager.Entities.Add(this);
 
+            if (!EntityOwnership) return;
+
             CurrentHealth = MaxHealth;
+            OnHealthChanged += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
+            OnHealthChanged?.Invoke(CurrentHealth);
+
+            Stats.ValuesOnly = false;
+            Stats.OnStatsChanged += () => CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
 
             UpdateTarget();
         }
@@ -100,6 +159,7 @@ namespace TonyDev.Game.Core.Entities
 
         public List<Transform> UpdateTarget() //Updates entity's target and returns it.
         {
+            if (!EntityOwnership) return null;
             /* Valid targets match our targetTag variable, match our targetTeam variable, do not target invulnerable or dead things (unless this object is a tower),
              * and only attack things within 10 tiles unless it is the crystal
              * 
@@ -129,7 +189,8 @@ namespace TonyDev.Game.Core.Entities
 
         public void AddEffect(GameEffect effect, GameEntity source)
         {
-            Debug.Log("Added effect: " + nameof(effect));
+            if (!EntityOwnership) return;
+            
             _effects.Add(effect);
             effect.Entity = this;
             effect.OnAdd(source);
@@ -137,6 +198,8 @@ namespace TonyDev.Game.Core.Entities
         
         public void RemoveEffect(GameEffect effect)
         {
+            if (!EntityOwnership) return;
+            
             _effects.Remove(effect);
             effect.OnRemove();
         }
@@ -150,7 +213,7 @@ namespace TonyDev.Game.Core.Entities
         public virtual int MaxHealth => (int)Stats.GetStat(Stat.Health);
         public virtual float CurrentHealth { get; protected set; }
         public virtual bool IsInvulnerable { get; protected set; }
-        public bool IsAlive => CurrentHealth > 0;
+        public bool IsAlive => networkCurrentHealth > 0;
         public virtual float ApplyDamage(float damage)
         {
             if (damage == 0 || IsInvulnerable) return 0;
@@ -183,12 +246,16 @@ namespace TonyDev.Game.Core.Entities
         
         public void SetHealth(int newHealth)
         {
+            if (!EntityOwnership) return;
+            
             OnHealthChanged?.Invoke(newHealth);
             CurrentHealth = newHealth;
         }
 
         public virtual void Die()
         {
+            if (!EntityOwnership) return;
+            
             OnDeath?.Invoke(0);
             Destroy(gameObject);
         }

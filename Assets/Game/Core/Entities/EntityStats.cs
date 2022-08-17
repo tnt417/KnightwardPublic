@@ -69,27 +69,38 @@ namespace TonyDev.Game.Core.Entities
 
         #region Stat List Accessing Methods
 
-        private readonly Dictionary<Stat, StatHandler> _statValues = new();
+        public Dictionary<Stat, float> StatValues = new();
 
+        public bool ValuesOnly = true; //Should this class only be responsible for returning values? Used to allow stat networking where only one client has control.
+        
+        public void ReplaceStatValueDictionary(Dictionary<Stat, float> newDictionary)
+        {
+            StatValues = newDictionary;
+        }
+        
         public float GetStat(Stat stat)
         {
-            if (_buffTimers.Count > 0)
+            if (_buffTimers.Count > 0 && !ValuesOnly)
                 RemoveBuffs(_buffTimers.Where(kv => kv.Value < Time.time).Select(kv => kv.Key)); //Remove expired buffs
 
-            if (!_statValues.ContainsKey(stat)) return 0;
-            return _statValues[stat].Invoke();
+            if (!StatValues.ContainsKey(stat)) return 0;
+            return StatValues[stat];
         }
 
         private void UpdateStatValues()
         {
+            if (ValuesOnly) return;
+            
             foreach (Stat stat in Enum.GetValues(typeof(Stat)))
             {
-                _statValues[stat] = () => GetStatValue(stat);
+                StatValues[stat] = GetStatValue(stat);
             }
         }
 
         private float GetStatValue(Stat stat)
         {
+            if (ValuesOnly) return 0;
+            
             //Check if there is an override for the given stat
             var overrideBonus = _activeStatBonuses.Where(s => s.statType == StatType.Override && s.stat == stat)
                 .ToArray();
@@ -135,18 +146,24 @@ namespace TonyDev.Game.Core.Entities
         public void
             AddStatBonus(StatType statType, Stat stat, float strength, string source) //Adds a stat bonus to the list.
         {
+            if (ValuesOnly) return;
+            
             _activeStatBonuses.Add(new StatBonus(statType, stat, strength, source));
             OnStatsChanged?.Invoke();
         }
 
         public void RemoveStatBonuses(string source) //Removes all stat bonuses from a specific source.
         {
+            if (ValuesOnly) return;
+            
             _activeStatBonuses = _activeStatBonuses.Where(sb => sb.source != source).ToList();
             OnStatsChanged?.Invoke();
         }
 
         public void ClearStatBonuses()
         {
+            if (ValuesOnly) return;
+            
             _activeStatBonuses.Clear();
             OnStatsChanged?.Invoke();
         }
@@ -155,6 +172,8 @@ namespace TonyDev.Game.Core.Entities
             GetStatBonuses(Stat stat,
                 bool returnEmptyBonus) //Returns an array of stat bonuses of stat specified. If returnEmptyBonus is true and no bonuses are found, empty ones will be created.
         {
+            if (ValuesOnly) return null;
+            
             var foundBonuses = _activeStatBonuses.Where(sb => sb.stat == stat).ToArray();
             if (foundBonuses.Length != 0) return foundBonuses;
             return returnEmptyBonus ? new[] {new StatBonus(StatType.Flat, stat, 0, "Empty Bonus")} : foundBonuses;
@@ -171,6 +190,8 @@ namespace TonyDev.Game.Core.Entities
 
         public void AddBuff(StatBonus bonus, float time)
         {
+            if (ValuesOnly) return;
+            
             var source = bonus.source + "_BUFF" + _buffIndex;
             _buffIndex++;
 
@@ -181,12 +202,16 @@ namespace TonyDev.Game.Core.Entities
 
         public void ClearBuffs()
         {
+            if (ValuesOnly) return;
+            
             _activeStatBonuses.RemoveAll(sb => sb.source.Contains("_BUFF"));
             OnStatsChanged?.Invoke();
         }
 
         public void RemoveBuffs(IEnumerable<string> buffIDs)
         {
+            if (ValuesOnly) return;
+            
             foreach (var bid in buffIDs.ToArray())
             {
                 if (!_buffTimers.ContainsKey(bid))

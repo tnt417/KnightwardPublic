@@ -22,7 +22,7 @@ namespace TonyDev.Game.UI.Menu.MainMenu
 
         public void OnPlayClick()
         {
-            SceneManager.LoadScene("MainScene"); //Go to main scene when the play button is clicked
+            SceneManager.LoadScene("LobbyScene"); //Go to main scene when the play button is clicked
         }
     }
 }

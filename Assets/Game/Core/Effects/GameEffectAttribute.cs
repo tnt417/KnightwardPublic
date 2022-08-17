@@ -32,7 +32,6 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
                 
                 if (attr is GameEffectAttribute itemEffectAttribute)
                 {
-                    Debug.Log(itemEffectAttribute.ID);
                     GameEffectsDictionary.Add(itemEffectAttribute.ID, c);
                 }
             }

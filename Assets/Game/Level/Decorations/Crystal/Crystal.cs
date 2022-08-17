@@ -10,9 +10,16 @@ namespace TonyDev.Game.Level.Decorations.Crystal
     public class Crystal : GameEntity
     {
 
+        public static Crystal Instance;
+        
         public static Func<float> CrystalRegen = () => 0;
 
-        private void Update()
+        private void Awake()
+        {
+            if(Instance == null) Instance = this;
+        }
+
+        private new void Update()
         {
             var hpRegen = CrystalRegen.Invoke() * Time.deltaTime;
             ApplyDamage(-hpRegen);
