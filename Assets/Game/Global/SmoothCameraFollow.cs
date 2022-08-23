@@ -63,6 +63,9 @@ namespace TonyDev.Game.Global
 
         private void Update()
         {
+
+            if (Player.LocalInstance == null) return;
+            
             var trackCrystal = Input.GetKey(KeyCode.LeftAlt);
             Vector2 newPos;
             if (GameManager.GamePhase == GamePhase.Dungeon && trackCrystal) //This is done to prevent me from being dizzy.

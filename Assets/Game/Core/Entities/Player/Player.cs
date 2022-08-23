@@ -1,4 +1,5 @@
 using System;
+using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
@@ -11,6 +12,8 @@ namespace TonyDev.Game.Core.Entities.Player
     [RequireComponent(typeof(PlayerMovement))]
     public class Player : GameEntity
     {
+        public static event Action OnLocalPlayerCreated;
+        
         //Singleton code
         public static Player LocalInstance;
 
@@ -37,29 +40,14 @@ namespace TonyDev.Game.Core.Entities.Player
             //
         }
 
-        public override void Die()
+        public override void OnStartLocalPlayer()
         {
-            playerDeath.Die();
-        }
+            LocalInstance = this;
+            OnLocalPlayerCreated?.Invoke();
 
-        private void Awake()
-        {
-            DontDestroyOnLoad(gameObject);
-        }
-
-        private new void Start()
-        {
-            base.Start();
+            Stats.ReadOnly = false;
             
-            Debug.Log($"Player started. Has authority? {hasAuthority}");
-            //Singleton code
-            if (LocalInstance == null && LocalInstance != this && hasAuthority) LocalInstance = this;
-            else return;
-            //
-
             PlayerStats.Stats = Stats;
-
-            DontDestroyOnLoad(gameObject); //Player persists between scenes
 
             //Add base stat bonuses
             PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, 5.0f, "Player");
@@ -76,9 +64,13 @@ namespace TonyDev.Game.Core.Entities.Player
                 foreach (var proj in projectileData)
                     GameManager.Instance.CmdSpawnProjectile(netIdentity, GameManager.MouseDirection, proj);
             };
+            
+            Init();
+        }
 
-            CurrentHealth = MaxHealth;
-            CmdSetHealth(CurrentHealth, MaxHealth);
+        public override void Die()
+        {
+            playerDeath.Die();
         }
 
         [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat,

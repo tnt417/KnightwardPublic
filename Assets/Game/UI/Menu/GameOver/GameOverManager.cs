@@ -8,8 +8,8 @@ namespace TonyDev.Game.UI.Menu.GameOver
     {
         public void Replay()
         {
-            GameManager.Reset();
-            SceneManager.LoadScene("MainScene"); //When clicking the replay button, go back to the main scene.
+            GameManager.ResetGame();
+            SceneManager.LoadScene("CastleScene"); //When clicking the replay button, go back to the main scene.
         }
     }
 }

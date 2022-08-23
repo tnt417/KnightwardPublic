@@ -184,6 +184,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4178251165929004472}
   - component: {fileID: 3736541169630453933}
+  - component: {fileID: -1173334797647341656}
   m_Layer: 0
   m_Name: Room
   m_TagString: Room
@@ -222,7 +223,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 306127234276869190}
   roomDoors:
   - {fileID: 7233540748473221879}
   - {fileID: 2062851405124684956}
@@ -234,6 +234,23 @@ MonoBehaviour:
   entryPointLeft: {fileID: 8797427716417610450}
   entryPointRight: {fileID: 964485585310828326}
   minimapIcon: {fileID: 7479642271789056252, guid: df58e7484986be1448443be92533111f, type: 3}
+--- !u!114 &-1173334797647341656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4178251165929004475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 661bae754a249194491f420422b05e59
+  hasSpawned: 0
 --- !u!1 &4178251166305122773
 GameObject:
   m_ObjectHideFlags: 0

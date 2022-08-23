@@ -23,7 +23,7 @@ namespace TonyDev.Game.Core.Attacks
     [Serializable]
     public class ProjectileData
     {
-        [Header("Prefab")] [CanBeNull] public GameObject prefab;
+        //[Header("Prefab")] [CanBeNull] public GameObject prefab;
 
         [Header("General Projectile Data")] public Sprite projectileSprite;
         public AttackData attackData;
@@ -42,10 +42,8 @@ namespace TonyDev.Game.Core.Attacks
             var rotatedDirection =
                 Tools.Rotate(direction, offsetDegrees * Mathf.Deg2Rad); //Rotates direction vector by our offset
 
-            var projectileObject =
-                prefab == null
-                    ? new GameObject("Projectile")
-                    : Object.Instantiate(prefab); //Generate prefab if not null, otherwise create new empty GameObject.
+            var projectileObject = new GameObject("Projectile");
+                    //: Object.Instantiate(prefab); //Generate prefab if not null, otherwise create new empty GameObject.
 
             //Add all necessary components for projectile functionality...
             var rb = projectileObject.AddComponent<Rigidbody2D>();

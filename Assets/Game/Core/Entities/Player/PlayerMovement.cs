@@ -70,6 +70,8 @@ namespace TonyDev.Game.Core.Entities.Player
             rb2D.MovePosition((Vector2) transform.position +
                               Time.fixedDeltaTime * (new Vector2(dx, dy).normalized * GetSpeedMultiplier() + forceSum));
 
+            if (Player.LocalInstance.playerAnimator == null) return;
+            
             //Set animation directions based on the keys that were pressed.
             if (dy > 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Up;
             if (dy < 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Down;

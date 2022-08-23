@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine.Rendering;
@@ -9,6 +10,19 @@ using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Rooms
 {
+    [Serializable]
+    public struct Map
+    {
+        public Map(Room[,] rooms, Vector2Int startingRoomPos)
+        {
+            Rooms = rooms;
+            StartingRoomPos = startingRoomPos;
+        }
+        
+        public readonly Room[,] Rooms;
+        public readonly Vector2Int StartingRoomPos;
+        public Room StartingRoom => Rooms[StartingRoomPos.x, StartingRoomPos.y];
+    }
     public class RoomGenerator : MonoBehaviour
     {
         //Editor variables
@@ -20,14 +34,14 @@ namespace TonyDev.Game.Level.Rooms
         [SerializeField] private RoomManager roomManager;
         //
 
-        public Vector2Int StartingRoomPos { get; private set; }
+        public Vector2Int startingRoomPos;
         public int MapSize => mapRadius * 2 + 1;
         private bool _generated = false;
         private int _seed;
 
         private void Awake()
         {
-            StartingRoomPos = new Vector2Int(mapRadius, mapRadius);
+            startingRoomPos = new Vector2Int(mapRadius, mapRadius);
             _seed = Random.Range(0, 100000); //Get a random seed to generate the room based on.
         }
 
@@ -36,10 +50,13 @@ namespace TonyDev.Game.Level.Rooms
             _generated = false;
             _seed = Random.Range(0, 100000);
         }
-
-        public Room[,] Generate() //Returns an array of randomly generated rooms
+        
+        [Server]
+        public Map Generate() //Returns an array of randomly generated rooms
         {
-            if (_generated) return roomManager.Rooms;
+            if (!GameManager.Instance.isServer) return default;
+            
+            if (_generated) return roomManager.map;
 
             Random.InitState(_seed);
 
@@ -72,7 +89,7 @@ namespace TonyDev.Game.Level.Rooms
 
             foreach (var go in guaranteedGeneratePrefabs)
             {
-                var replaceAt = go.CompareTag("StartRoom") ? StartingRoomPos : Tools.SelectRandom(validReplaces);
+                var replaceAt = go.CompareTag("StartRoom") ? startingRoomPos : Tools.SelectRandom(validReplaces);
                 prefabs[replaceAt.x, replaceAt.y] = go;
                 validReplaces.Remove(replaceAt);
             }
@@ -81,9 +98,9 @@ namespace TonyDev.Game.Level.Rooms
             for (var j = 0; j < MapSize; j++)
                 rooms[i, j] = GenerateRoom(new Vector2Int(i, j), prefabs[i, j]);
 
-            rooms[StartingRoomPos.x, StartingRoomPos.y].gameObject.SetActive(true);
+            rooms[startingRoomPos.x, startingRoomPos.y].gameObject.SetActive(true);
             _generated = true;
-            return rooms;
+            return new Map(rooms, startingRoomPos);
         }
 
         private GameObject GetRandomValidPrefab(Vector2Int index, int[,] shape)
@@ -114,9 +131,11 @@ namespace TonyDev.Game.Level.Rooms
             //Instantiate a room prefab, set its index, deactivate it, and add it to the array.
             var go = Instantiate(prefab,
                 new Vector2(roomOffset.x * (index.x - mapRadius), roomOffset.y * (index.y - mapRadius)),
-                Quaternion.identity, GameObject.FindGameObjectWithTag("RoomContainer").transform);
+                Quaternion.identity);
             go.SendMessage("SetRoomIndex", new Vector2Int(index.x, index.y));
-            go.SetActive(false);
+
+            NetworkServer.Spawn(go);
+            
             return go.GetComponent<Room>();
             //
         }

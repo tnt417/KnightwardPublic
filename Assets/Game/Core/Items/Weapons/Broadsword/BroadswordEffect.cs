@@ -10,7 +10,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
     {
         protected override void OnAbilityActivate()
         {
-            Object.Instantiate(ObjectDictionaries.Prefabs["broadswordEffect"], Player.LocalInstance.transform.position, Quaternion.identity);
+            Object.Instantiate(ObjectFinder.GetPrefab("broadswordEffect"), Player.LocalInstance.transform.position, Quaternion.identity);
         }
 
         protected override void OnAbilityDeactivate()

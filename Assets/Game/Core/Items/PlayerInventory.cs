@@ -10,30 +10,29 @@ using Object = UnityEngine.Object;
 
 namespace TonyDev.Game.Core.Items
 {
-    public class PlayerInventory : MonoBehaviour
+    public class PlayerInventory
     {
-        public static PlayerInventory Instance;
+        static PlayerInventory()
+        {
+            Instance = new PlayerInventory();
+            Instance.InsertStarterItems();
+        }
+        
+        public static readonly PlayerInventory Instance;
 
         //5 item variables, 1 for each inventory slot. A bit inefficient but works for now.
         public Item WeaponItem { get; private set; }
         public Item ArmorItem { get; private set; }
 
-        public Queue<Item> RelicItems { get; private set; } = new Queue<Item>();
+        public Queue<Item> RelicItems { get; private set; } = new ();
 
-        public void Start()
+        private void InsertStarterItems()
         {
+            Debug.Log("Inserting items.");
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Weapon,
                 ItemRarity.Common)); //Add a starting sword to the player's inventory.
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Armor,
                 ItemRarity.Common)); //Add armor to inventory
-        }
-
-        private void Awake()
-        {
-            //Singleton code
-            if (Instance == null && Instance != this) Instance = this;
-            else Destroy(this);
-            //
         }
 
         [GameCommand(Keyword = "insertitem", PermissionLevel = PermissionLevel.Cheat,

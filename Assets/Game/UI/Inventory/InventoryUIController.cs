@@ -30,10 +30,14 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private TMP_Text cooldownText;
         //
 
-        private void Start()
+        private void Awake()
+        {
+            Player.OnLocalPlayerCreated += Init;
+        }
+
+        private void Init()
         {
             Player.LocalInstance.Stats.OnStatsChanged += UpdateStatText;
-            UpdateStatText();
         }
 
         private void UpdateStatText()

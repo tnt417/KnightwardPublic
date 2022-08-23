@@ -23,7 +23,6 @@ namespace TonyDev.Game.Level
             _transitionAnimator = GetComponent<Animator>(); //Initialize animator component
         
             SceneManager.sceneLoaded += OnSceneLoaded; //Call OnSceneLoaded whenever a new scene is loaded.
-            SceneManager.LoadScene("CastleScene"); //Load the CastleScene initially
         }
 
         public void FadeInOut() //Plays a fade out and fade in animation while transitioning to a new scene if valid

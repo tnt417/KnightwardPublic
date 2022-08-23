@@ -291,6 +291,7 @@ MonoBehaviour:
   maxTargets: 0
   networkCurrentHealth: 0
   networkMaxHealth: 0
+  currentParentIdentity: {fileID: 0}
   playerMovement: {fileID: 1277911643}
   playerAnimator: {fileID: 2453021677114858237}
   playerDeath: {fileID: 1270234476}

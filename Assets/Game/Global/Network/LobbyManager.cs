@@ -3,6 +3,7 @@ using System.Linq;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global.Console;
 using TonyDev.Game.UI.Lobby;
 using UnityEditor;
 using UnityEngine;
@@ -18,16 +19,16 @@ namespace TonyDev.Game.Global.Network
         [SerializeField] private TMP_Text playerCountText;
         [SerializeField] private Button playButton;
         [SerializeField] private GameObject playerPrefab;
-        [SerializeField] private GameObject gameManagerPrefab;
 
-        [SyncVar(hook=nameof(OnPlayerCountChange))] private int _lobbyPlayerCount;
-        
-        private readonly Dictionary<int, ConnectedPlayerTile> _playerTiles = new ();
+        [SyncVar(hook = nameof(OnPlayerCountChange))]
+        private int _lobbyPlayerCount;
+
+        private readonly Dictionary<int, ConnectedPlayerTile> _playerTiles = new();
 
         public delegate void LobbyEvent();
-        
+
         public event LobbyEvent OnPlay;
-        
+
         private void OnPlayerCountChange(int oldValue, int newValue)
         {
             playerCountText.text = newValue + "/4";
@@ -35,6 +36,7 @@ namespace TonyDev.Game.Global.Network
 
         private void Awake()
         {
+            GameConsole.Log("Re-awoke");
             playButton.interactable = false;
         }
 
@@ -49,27 +51,21 @@ namespace TonyDev.Game.Global.Network
         [Server]
         private void Play()
         {
-            OnPlay?.Invoke();
-            
             playButton.interactable = false;
-            Debug.Log("Starting game...");
-            
-            foreach (var connection in NetworkServer.connections.Values)
+            GameConsole.Log("Starting game...");
+
+            /*NetworkServer.SendToAll(new SceneMessage()
             {
-                connection.Send(new SceneMessage
-                {
-                    sceneName = "MainScene",
-                    sceneOperation = SceneOperation.Normal
-                });
-            }
+               sceneName = "CastleScene",
+               sceneOperation = SceneOperation.Normal
+            });
 
-            SceneManager.LoadScene("MainScene");
+            SceneManager.LoadScene("CastleScene");*/
+            
+            NetworkServer.UnSpawn(gameObject);
+            Destroy(gameObject);
 
-            var gameManagerObject = Instantiate(gameManagerPrefab);
-            
-            NetworkServer.Spawn(gameManagerObject);
-            
-            gameManagerObject.GetComponent<GameManager>().netIdentity.AssignClientAuthority(NetworkServer.localConnection);
+            OnPlay?.Invoke();
         }
 
         [Server]
@@ -78,21 +74,22 @@ namespace TonyDev.Game.Global.Network
             if (conn == null) return;
 
             var connId = conn.connectionId;
-            
-            Debug.Log($"Adding player {connId} to the lobby.");
+
+            GameConsole.Log($"Adding player {connId} to the lobby.");
 
             foreach (var tileObject in _playerTiles.Select(pt => pt.Value.gameObject))
             {
-                NetworkServer.Spawn(tileObject, conn); //Instantiate all the tiles that were created before the new player connected.
+                NetworkServer.Spawn(tileObject,
+                    conn); //Instantiate all the tiles that were created before the new player connected.
                 TargetOnNewTileCreated(conn, tileObject, connId);
             }
 
             var newTile = Instantiate(playerTilePrefab, playerGridTransform);
 
             NetworkServer.Spawn(newTile);
-            
+
             newTile.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
-            
+
             RpcOnNewTileCreated(newTile, connId); //Instantiate a tile for the newly joined player on all clients.
 
             _lobbyPlayerCount += 1;
@@ -102,15 +99,15 @@ namespace TonyDev.Game.Global.Network
         private void TargetOnNewTileCreated(NetworkConnection target, GameObject tileObject, int connId)
         {
             tileObject.transform.SetParent(playerGridTransform);
-            
+
             _playerTiles[connId] = tileObject.GetComponent<ConnectedPlayerTile>();
         }
-        
+
         [ClientRpc]
         private void RpcOnNewTileCreated(GameObject tileObject, int connId)
         {
             tileObject.transform.SetParent(playerGridTransform);
-            
+
             _playerTiles[connId] = tileObject.GetComponent<ConnectedPlayerTile>();
         }
     }

@@ -1,5 +1,6 @@
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms;
 using Unity.Mathematics;
 using UnityEngine;
@@ -24,7 +25,7 @@ namespace TonyDev.Game.Level.Decorations.Chests
         {
             var item = ItemGenerator.GenerateItem(rarityBoost);
 
-            Debug.Log("Item type: " + item?.itemType + ", Item sprite: " + item?.uiSprite);
+            GameConsole.Log("Item type: " + item?.itemType + ", Item sprite: " + item?.uiSprite);
             
             var parentTransform = transform;
 

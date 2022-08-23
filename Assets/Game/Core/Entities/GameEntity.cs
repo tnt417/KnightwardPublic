@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Console;
+using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities
@@ -22,7 +26,7 @@ namespace TonyDev.Game.Core.Entities
         private float _targetUpdateTimer;
 
         protected virtual bool CanAttack => IsAlive;
-        
+
         //Editor fields
         [Header("Targeting")]
         [SerializeField] private string targetTag;
@@ -30,57 +34,35 @@ namespace TonyDev.Game.Core.Entities
         [SerializeField] private int maxTargets;
         // 
 
-        public EntityStats Stats = new ();
+        //Value is only accurate on the host
+        public bool visibleToHost = true;
+
+        public readonly EntityStats Stats = new ();
 
         #region Network
-
-        public override void OnStartAuthority()
-        {
-            base.OnStartAuthority();
-
-            Stats.ValuesOnly = false;
-            Stats.OnStatsChanged += () => CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
-        }
-
-        [Command(requiresAuthority = false)]
-        public void CmdUpdateStats(Stat[] keys, float[] values)
-        {
-            RpcUpdateStats(keys, values);
-        }
-
-        [ClientRpc]
-        public void RpcUpdateStats(Stat[] keys, float[] values)
-        {
-            var newDict = new Dictionary<Stat, float>();
-            
-            for (int i = 0; i < keys.Length; i++)
-            {
-                newDict.Add(keys[i], values[i]);
-            }
-
-            Stats.StatValues = newDict;
-        }
 
         protected bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
         
         [Command(requiresAuthority = false)]
         public void CmdSetHealth(float currentHealth, float maxHealth)
         {
-            RpcSetHealth(currentHealth, maxHealth);
-        }
-
-        [ClientRpc]
-        public void RpcSetHealth(float currentHealth, float maxHealth)
-        {
             networkCurrentHealth = currentHealth;
             networkMaxHealth = maxHealth;
         }
 
-        public float networkCurrentHealth;
-        public float networkMaxHealth;
+        [SyncVar] public float networkCurrentHealth;
+        [SyncVar] public float networkMaxHealth;
         
         #endregion
+
+        [SyncVar] public NetworkIdentity currentParentIdentity;
         
+        [Command(requiresAuthority = false)]
+        public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
+        {
+            currentParentIdentity = roomIdentity;
+        }
+
         #region Attack
         protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
         private float _attackTimer;
@@ -96,16 +78,15 @@ namespace TonyDev.Game.Core.Entities
         #endregion
 
         private delegate void TargetAction();
-        protected void Start()
+        protected void Awake()
         {
-            Init();
+            if(isLocalPlayer) Player.Player.OnLocalPlayerCreated += Init;
 
             OnAttack += () => _attackTimer = 0;
         }
 
         protected void Update()
         {
-
             if (!EntityOwnership) return;
             
             _targetUpdateTimer += Time.deltaTime;
@@ -136,22 +117,51 @@ namespace TonyDev.Game.Core.Entities
             }
         }
 
-        private void Init()
+        protected void Init()
         {
             GameManager.Entities.Add(this);
 
             if (!EntityOwnership) return;
 
+            CustomNetworkManager.OnAllPlayersSpawned += UpdateStats;
+            
             CurrentHealth = MaxHealth;
             OnHealthChanged += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
             OnHealthChanged?.Invoke(CurrentHealth);
 
-            Stats.ValuesOnly = false;
-            Stats.OnStatsChanged += () => CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
+            Stats.ReadOnly = false;
+            Stats.OnStatsChanged += UpdateStats;
 
+            UpdateStats();
+            
             UpdateTarget();
         }
-        
+
+        [ClientRpc]
+        private void RpcRequestStatUpdate()
+        {
+            if(EntityOwnership) UpdateStats();
+        }
+
+        private void UpdateStats()
+        {
+            CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdUpdateStats(Stat[] keys, float[] values)
+        {
+            RpcUpdateStats(keys, values);
+        }
+
+        [ClientRpc]
+        private void RpcUpdateStats(Stat[] keys, float[] values)
+        {
+            GameConsole.Log("Setting stats for: " + gameObject.name);
+            
+            if(Stats.ReadOnly) Stats.ReplaceStatValueDictionary(keys, values);
+        }
+
         private void OnDestroy()
         {
             GameManager.Entities.Remove(this);
@@ -160,6 +170,7 @@ namespace TonyDev.Game.Core.Entities
         public List<Transform> UpdateTarget() //Updates entity's target and returns it.
         {
             if (!EntityOwnership) return null;
+
             /* Valid targets match our targetTag variable, match our targetTeam variable, do not target invulnerable or dead things (unless this object is a tower),
              * and only attack things within 10 tiles unless it is the crystal
              * 
@@ -176,7 +187,7 @@ namespace TonyDev.Game.Core.Entities
                 .Select(e => e.transform).Take(maxTargets).ToList(); //Finds closest non-dead game entity object on the opposing team
             
             if (transforms.Count == 0) return null;
-            
+
             Targets = transforms;
             OnTargetChange?.Invoke(); //Invoke the target changed method
 
@@ -235,21 +246,27 @@ namespace TonyDev.Game.Core.Entities
                     break;
             }
 
-            OnHealthChanged?.Invoke(modifiedDamage);
-
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth); //Clamp health
             
+            OnHealthChanged?.Invoke(modifiedDamage);
+
             if (CurrentHealth <= 0) Die();
 
             return modifiedDamage;
         }
         
-        public void SetHealth(int newHealth)
+        public void SetHealth(float newHealth)
         {
             if (!EntityOwnership) return;
             
             OnHealthChanged?.Invoke(newHealth);
             CurrentHealth = newHealth;
+        }
+
+        [ClientRpc]
+        public void RpcSetParent(NetworkIdentity transformIdentity)
+        {
+            transform.parent = transformIdentity.transform;
         }
 
         public virtual void Die()

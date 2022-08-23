@@ -14,7 +14,7 @@ namespace TonyDev.Game.Global.Network
         public static Sprite ReadSprite(this NetworkReader reader)
         {
             var spriteName = reader.ReadString();
-            var sprite = ObjectDictionaries.SpriteAtlas.GetSprite(spriteName);
+            var sprite = ObjectFinder.GetSprite(spriteName);
 
             return sprite;
         }

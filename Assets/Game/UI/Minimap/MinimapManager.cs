@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms;
@@ -32,6 +33,7 @@ namespace TonyDev.Game.UI.Minimap
 
         public void Reset()
         {
+            if (_uiRoomObjects == null) return;
             foreach (var go in _uiRoomObjects)
             {
                 Destroy(go);
@@ -40,8 +42,17 @@ namespace TonyDev.Game.UI.Minimap
     
         public void UpdateMinimap()
         {
+            GameConsole.Log("Updating minimap!");
+            
             _roomManager = FindObjectOfType<RoomManager>();
-            _rooms = _roomManager.Rooms;
+            _rooms = _roomManager.map.Rooms;
+            
+            if (_rooms == null) return;
+
+            Reset();
+            
+            GameConsole.Log("Rooms is not null!");
+            
             _discoveredRooms = new int[_roomManager.MapSize, _roomManager.MapSize];
             _uiRoomObjects = new GameObject[_roomManager.MapSize, _roomManager.MapSize];
 
@@ -54,7 +65,7 @@ namespace TonyDev.Game.UI.Minimap
                     var go = Instantiate(minimapRoomPrefab, uiRoomGridLayout.transform);
                     _uiRoomObjects[i, j] = go;
                     var symbolImage = go.GetComponentsInChildren<Image>().FirstOrDefault(img => img.CompareTag("MinimapIcon"));
-                
+
                     if (_rooms[i, j] != null) continue;
                 
                     go.GetComponent<Image>().enabled = false;

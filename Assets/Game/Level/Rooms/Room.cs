@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using Unity.Mathematics;
 using UnityEngine;
@@ -8,7 +11,47 @@ using UnityEngine.Tilemaps;
 
 namespace TonyDev.Game.Level.Rooms
 {
-    public class Room : MonoBehaviour
+    public static class ReadWriteRooms
+    {
+        public static void WriteRoomArray(this NetworkWriter writer, Room[,] value)
+        {
+            var dimension0 = value.GetLength(0);
+            var dimension1 = value.GetLength(1);
+            
+            writer.WriteInt(dimension0);
+            writer.WriteInt(dimension1); //write the number of dimensions of the 2nd dimension
+
+            for (var i = 0; i < dimension0; i++)
+            {
+                for (var j = 0; j < dimension1; j++)
+                {
+                    writer.Write(value[i,j]?.netIdentity);
+                }
+            }
+        }
+
+        public static Room[,] ReadRoomArray(this NetworkReader reader)
+        {
+            var dimension0 = reader.ReadInt();
+            var dimension1 = reader.ReadInt();
+
+            var rooms = new Room[dimension0, dimension1];
+            
+            for (var i = 0; i < dimension0; i++)
+            {
+                for (var j = 0; j < dimension1; j++)
+                {
+                    var netId = reader.Read<NetworkIdentity>();
+                    if (netId == null) continue;
+                    rooms[i, j] = netId.GetComponent<Room>();
+                }
+            }
+
+            return rooms;
+        }
+    }
+    
+    public class Room : NetworkBehaviour
     {
         //Editor variables
         [SerializeField] private RoomDoor[] roomDoors;
@@ -102,7 +145,19 @@ namespace TonyDev.Game.Level.Rooms
             LockAllDoors();
         }
 
-        public void OnEnemyDie(float value)
+        private int _previousChildCount = 0;
+        
+        private void Update()
+        {
+            if (_previousChildCount != gameObject.transform.childCount)
+            {
+                OnChildCountChange();
+            }
+
+            _previousChildCount = gameObject.transform.childCount;
+        }
+
+        public void OnChildCountChange()
         {
             CheckShouldLockDoors();
         }
@@ -119,9 +174,10 @@ namespace TonyDev.Game.Level.Rooms
 
             OpenAllDoors(); //Otherwise, open/close the doors as normal.
         }
-
+        
         private void OpenAllDoors()
         {
+            if (_openDirections == null) return;
             foreach (var rd in roomDoors)
             {
                 if (_openDirections.Contains(rd.direction)) rd.Open();

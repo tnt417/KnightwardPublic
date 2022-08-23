@@ -1,3 +1,4 @@
+using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
@@ -34,7 +35,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 
         private void Update()
         {
-            if (!autoSpawn) return;
+            if (!autoSpawn || !NetworkServer.active) return;
             
             _timer += Time.deltaTime; //Tick the timer
         
@@ -44,20 +45,24 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                 _timer = 0; //And reset the timer
             }
         }
-
+        
+        [ServerCallback]
         private void SpawnEnemy(Vector3 position, EnemyData data) //Spawns an enemy at specific position
         {
+            if (_parentRoom != null && !_parentRoom.isServer) return;
+            
             if (destroyAfterSpawns == 0)
             {
                 GameManager.EnemySpawners.Remove(this); //Don't spawn the enemy if 0 things are supposed to be spawned
                 Destroy(this); //And destroy the script
                 return;
             }
+
+            GameManager.Instance.CmdSpawnEnemy(data.enemyName, position, _parentRoom.netIdentity);
+            //var enemy = ObjectSpawner.SpawnEnemy(enemyData, position, _parentRoom.netIdentity); //Instantiate the enemy
             
-            var enemy = EnemySpawnManager.SpawnEnemy(data, position, transform); //Instantiate the enemy
             if (_parentRoom != null)
             {
-                enemy.OnDeath += _parentRoom.OnEnemyDie;
                 _parentRoom.OnEnemySpawn();
             }
             Spawns++; //Increase the spawn count

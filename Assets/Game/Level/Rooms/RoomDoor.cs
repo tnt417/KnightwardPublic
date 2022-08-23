@@ -47,7 +47,7 @@ namespace TonyDev.Game.Level.Rooms
     
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if(other.GetComponent<Player>() != null && other.isTrigger) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
+            if(other.GetComponent<Player>() == Player.LocalInstance && other.isTrigger) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
         }
 
         public void OnDrawGizmos()

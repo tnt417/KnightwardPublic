@@ -14,10 +14,8 @@ namespace TonyDev.Game.Core.Entities.Towers
         [SerializeField] private ProjectileData[] projectileData; //Prefab spawned upon fire
         //
 
-        private new void Start()
+        private void Start()
         {
-            base.Start();
-
             OnAttack += () =>
             {
                 towerAnimator.PlayAnimation(TowerAnimationState.Fire);

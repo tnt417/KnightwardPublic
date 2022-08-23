@@ -9,7 +9,7 @@ using UnityEngine.EventSystems;
 
 namespace TonyDev.Game.Global.Console
 {
-    public class GameConsoleController : MonoBehaviour
+    public class GameConsole : MonoBehaviour
     {
         //Editor variables
         [SerializeField] private GameObject consoleUIObject;
@@ -20,7 +20,7 @@ namespace TonyDev.Game.Global.Console
 
         private readonly StringBuilder _consoleStringBuilder = new StringBuilder();
 
-        private static GameConsoleController _instance;
+        private static GameConsole _instance;
 
         public static bool IsTyping => _instance.consoleUIInput.isFocused;
 
@@ -33,6 +33,8 @@ namespace TonyDev.Game.Global.Console
             else Destroy(this);
             //
 
+            DontDestroyOnLoad(gameObject.transform.root.gameObject);
+
             consoleUIInput.onFocusSelectAll = false;
 
             consoleUIInput.onSubmit.AddListener(OnTextInput);
@@ -41,7 +43,7 @@ namespace TonyDev.Game.Global.Console
 
         private void Start()
         {
-            LogToConsole("Welcome!");
+            Log("Welcome!");
         }
 
         private void Update()
@@ -91,7 +93,7 @@ namespace TonyDev.Game.Global.Console
                 return;
             }
 
-            LogToConsole("[Player] " + input);
+            Log("[Player] " + input);
         }
 
         private readonly Dictionary<string, MethodInfo> _commandMethods = new();
@@ -122,7 +124,7 @@ namespace TonyDev.Game.Global.Console
 
             if (method == null || method.DeclaringType == null)
             {
-                LogToConsole("<color=red>Invalid command!</color>");
+                Log("<color=red>Invalid command!</color>");
                 return;
             }
 
@@ -135,7 +137,7 @@ namespace TonyDev.Game.Global.Console
 
             if (paramText.Length < parameters.Length)
             {
-                LogToConsole("<color=red>Insufficient parameters!</color>");
+                Log("<color=red>Insufficient parameters!</color>");
                 return;
             }
 
@@ -150,13 +152,14 @@ namespace TonyDev.Game.Global.Console
             var successMessage = ((GameCommand) method.GetCustomAttributes(typeof(GameCommand), false).FirstOrDefault())
                 ?.SuccessMessage;
 
-            LogToConsole(successMessage);
+            Log(successMessage);
         }
 
-        public static void LogToConsole(string text)
+        public static void Log(string text)
         {
             if (string.IsNullOrEmpty(text)) return;
-
+            Debug.Log(text);
+            
             _instance._consoleStringBuilder.AppendLine(text);
             _instance.consoleUIText.text = _instance._consoleStringBuilder.ToString();
         }

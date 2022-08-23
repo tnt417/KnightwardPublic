@@ -17,13 +17,17 @@ namespace TonyDev.Game.Core.Items
         private static Sprite[] _armorSprites; //Possible armor sprites to pick from
         private static Sprite[] _relicSprites; //Possible relic sprites to pick from
 
-        public static void
+        static ItemGenerator()
+        {
+            ObjectFinder.OnDoneInitialized += InitSprites;
+        }
+        
+        private static void
             InitSprites() //Load sprites from SpriteDictionary based on the prefix to be used in randomly generated items.
         {
-            _weaponSprites = SpriteDictionary.Sprites.Where(s => s.Key.StartsWith("wi_")).Select(s => s.Value)
-                .ToArray();
-            _armorSprites = SpriteDictionary.Sprites.Where(s => s.Key.StartsWith("ai_")).Select(s => s.Value).ToArray();
-            _relicSprites = SpriteDictionary.Sprites.Where(s => s.Key.StartsWith("ri_")).Select(s => s.Value).ToArray();
+            _weaponSprites = ObjectFinder.GetSpritesWithPrefix("wi_");
+            _armorSprites = ObjectFinder.GetSpritesWithPrefix("ai_");
+            _relicSprites = ObjectFinder.GetSpritesWithPrefix("ri_");
         }
 
         private static Item RandomCustomItem => Tools.SelectRandom(GameManager.AllItems.ToArray());

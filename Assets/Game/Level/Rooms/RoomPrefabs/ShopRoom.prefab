@@ -2672,6 +2672,7 @@ GameObject:
   m_Component:
   - component: {fileID: 373691286257917632}
   - component: {fileID: 1083506137588999125}
+  - component: {fileID: -6149731234572078668}
   m_Layer: 0
   m_Name: ShopRoom
   m_TagString: Room
@@ -2714,7 +2715,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  grid: {fileID: 4101699995477329726}
   roomDoors:
   - {fileID: 6390904252563177871}
   - {fileID: 2338220459388030948}
@@ -2726,6 +2726,23 @@ MonoBehaviour:
   entryPointLeft: {fileID: 5099485001917915562}
   entryPointRight: {fileID: 3580702506829694046}
   minimapIcon: {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
+--- !u!114 &-6149731234572078668
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 373691286257917635}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 13a45a52d081ff64baf23106a3b8a578
+  hasSpawned: 0
 --- !u!1 &2435248489329980271
 GameObject:
   m_ObjectHideFlags: 0

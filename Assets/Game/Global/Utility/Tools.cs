@@ -10,6 +10,8 @@ namespace TonyDev.Game.Global
     {
         public static T SelectRandom<T>(IEnumerable<T> iEnumerable)
         {
+            if (iEnumerable == null) return default;
+            
             var array = iEnumerable.ToArray();
             if (array.Length == 0) return default;
             var index = Random.Range(0, array.Length);

@@ -9,15 +9,10 @@ namespace TonyDev.Game.Level.Decorations.Ladder
     public class LadderController : MonoBehaviour
     {
         [SerializeField] private GameObject indicator;
-        private Player _player;
         private RoomManager _roomManager;
-        private void Awake()
-        {
-            _player = FindObjectOfType<Player>();
-        }
         private void Update()
         {
-            var isPlayerInRange = Vector2.Distance(transform.position, _player.transform.position) < 1.5f;
+            var isPlayerInRange = Vector2.Distance(transform.position, Player.LocalInstance.transform.position) < 1.5f;
             indicator.SetActive(isPlayerInRange);
             if (isPlayerInRange && Input.GetKeyDown(KeyCode.E))
             {

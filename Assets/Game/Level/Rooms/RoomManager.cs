@@ -1,14 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Console;
 using TonyDev.Game.UI.Minimap;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.Level.Rooms
 {
-    public class RoomManager : MonoBehaviour
+    public class RoomManager : NetworkBehaviour
     {
         public static RoomManager Instance; //Singleton instance
 
@@ -24,11 +29,23 @@ namespace TonyDev.Game.Level.Rooms
         //Room-related variables
         public int MapSize => roomGenerator.MapSize; //The shared width/height of the map
         private Vector2Int _currentActiveRoomIndex;
-        public Room[,] Rooms { get; private set; }
-        public bool InStartingRoom => _currentActiveRoomIndex == StartingRoomPos;
-        private Vector2Int StartingRoomPos => roomGenerator.StartingRoomPos;
-        private Room StartingRoom => Rooms[StartingRoomPos.x, StartingRoomPos.y];
-        //
+
+        [SyncVar(hook = nameof(MapHook))] public Map map;
+
+        private void MapHook(Map oldMap, Map newMap)
+        {
+            OnRoomsChanged?.Invoke();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdSetMap(Map newMap)
+        {
+            map = newMap;
+        }
+
+        private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
+        public bool CanSwitchPhases => InStartingRoom;
+        public event Action OnRoomsChanged;
 
         private void Awake()
         {
@@ -41,20 +58,25 @@ namespace TonyDev.Game.Level.Rooms
         private void Start()
         {
             _smoothCameraFollow = FindObjectOfType<SmoothCameraFollow>(); //Initialize the camera follow variables
-            StartRoomPhase(); //Run starting code
+            
+            OnRoomsChanged += MinimapManager.Instance.UpdateMinimap;
+            OnRoomsChanged += DoDoorClosing;
+            OnRoomsChanged?.Invoke();
         }
 
         private void Update()
         {
             minimapObject.SetActive(GameManager.GamePhase == GamePhase.Dungeon);
-            MinimapManager.Instance.SetPlayerPosition(Player.LocalInstance.transform.position, roomGenerator.roomOffset);
+            if (Player.LocalInstance != null)
+                MinimapManager.Instance.SetPlayerPosition(Player.LocalInstance.transform.position,
+                    roomGenerator.roomOffset);
         }
 
-        private void StartRoomPhase()
+        [Server]
+        public void GenerateRooms()
         {
-            Rooms = roomGenerator.Generate(); //Randomly generate rooms
-            DoDoorClosing(); //Close doors that need closing
-            MinimapManager.Instance.UpdateMinimap(); //Update the minimap now that we generated rooms
+            GameConsole.Log("Generating rooms...");
+            CmdSetMap(roomGenerator.Generate()); //Randomly generate rooms
         }
 
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.
@@ -89,7 +111,7 @@ namespace TonyDev.Game.Level.Rooms
                     break;
             }
 
-            var room = Rooms[_currentActiveRoomIndex.x + dx, _currentActiveRoomIndex.y + dy];
+            var room = map.Rooms[_currentActiveRoomIndex.x + dx, _currentActiveRoomIndex.y + dy];
 
             SetActiveRoom(_currentActiveRoomIndex.x + dx,
                 _currentActiveRoomIndex.y + dy); //Set the active room to the new room
@@ -103,15 +125,31 @@ namespace TonyDev.Game.Level.Rooms
 
         public void SetActiveRoom(int x, int y)
         {
-            var newRoom = Rooms[x, y]; //Get the new room from the array
+            var newRoom = map.Rooms[x, y]; //Get the new room from the array
             if (newRoom == null) return; //If it's null, do nothing
 
-            if (currentActiveRoom != null) currentActiveRoom.gameObject.SetActive(false); //Deactivate the current room
+            DeactivateAllRooms(); //Deactivate all rooms.
+
             currentActiveRoom = newRoom; //Update currentActiveRoom variable
             currentActiveRoom.gameObject.SetActive(true); //Activate the new room
             MinimapManager.Instance.UncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
             _smoothCameraFollow.SetCameraBounds(currentActiveRoom.RoomRect); //Update the camera bounds
             _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
+            
+            Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
+        }
+
+        public void DeactivateAllRooms()
+        {
+            if (map.Rooms == null) return;
+
+            foreach (var r in map.Rooms)
+            {
+                if (r != null)
+                {
+                    r.gameObject.SetActive(false);
+                }
+            }
         }
 
         //Performs all actions necessary to disable the room phase.
@@ -119,20 +157,26 @@ namespace TonyDev.Game.Level.Rooms
         {
             _currentActiveRoomIndex = Vector2Int.zero;
             if (_smoothCameraFollow != null) _smoothCameraFollow.SetCameraBounds(Rect.zero);
-            if (currentActiveRoom != null)
-            {
-                currentActiveRoom.gameObject.SetActive(false);
-                currentActiveRoom = null;
-            }
+
+            Player.LocalInstance.CmdSetParentIdentity(null);
+            
+            DeactivateAllRooms();
+            currentActiveRoom = null;
         }
 
         private void DoDoorClosing()
         {
+            if (map.Rooms == null)
+            {
+                Debug.LogWarning("Room array is null!");
+                return;
+            }
+
             for (var i = 0; i < roomGenerator.MapSize; i++) //Loop through all the rooms
             {
                 for (var j = 0; j < roomGenerator.MapSize; j++)
                 {
-                    if (Rooms[i, j] == null) continue; //If there's no room, move on
+                    if (map.Rooms[i, j] == null) continue; //If there's no room, move on
 
                     //Set open directions based on room adjacency
                     var openDirections = new List<Direction>();
@@ -140,7 +184,7 @@ namespace TonyDev.Game.Level.Rooms
                     if (CheckIfRoomExistsAndHasDoor(i + 1, j, Direction.Left)) openDirections.Add(Direction.Right);
                     if (CheckIfRoomExistsAndHasDoor(i, j - 1, Direction.Up)) openDirections.Add(Direction.Down);
                     if (CheckIfRoomExistsAndHasDoor(i, j + 1, Direction.Down)) openDirections.Add(Direction.Up);
-                    Rooms[i, j].SetOpenDirections(openDirections);
+                    map.Rooms[i, j].SetOpenDirections(openDirections);
                     //
                 }
             }
@@ -149,24 +193,24 @@ namespace TonyDev.Game.Level.Rooms
         private bool CheckIfRoomExistsAndHasDoor(int x, int y, Direction direction)
         {
             if (x < 0 || y < 0 || x > roomGenerator.MapSize - 1 || y > roomGenerator.MapSize - 1) return false;
-            return Rooms[x, y] != null && Rooms[x, y].GetDoorDirections().Contains(direction);
+            return map.Rooms[x, y] != null && map.Rooms[x, y].GetDoorDirections().Contains(direction);
         }
 
         public void ResetRooms()
         {
-            foreach (var r in Rooms) //Destroy all rooms...
+            foreach (var r in map.Rooms) //Destroy all rooms...
                 if (r != null)
                     Destroy(r.gameObject);
 
             MinimapManager.Instance.Reset();
             roomGenerator.Reset();
-            StartRoomPhase();
+            DeactivateAllRooms();
         }
 
         public void TeleportPlayerToStart()
         {
-            Player.LocalInstance.transform.position = StartingRoom.transform.position;
-            SetActiveRoom(StartingRoomPos.x, StartingRoomPos.y);
+            Player.LocalInstance.transform.position = map.StartingRoom.transform.position;
+            SetActiveRoom(map.StartingRoomPos.x, map.StartingRoomPos.y);
         }
     }
 }

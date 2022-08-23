@@ -37,7 +37,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
             if (isServer)
             {
-                Stats.ValuesOnly = false;
+                Stats.ReadOnly = false;
 
                 foreach (var sb in enemyData.baseStats)
                 {
@@ -57,6 +57,8 @@ namespace TonyDev.Game.Core.Entities.Enemies
             
             InitProjectiles(enemyData.projectileAttackData);
             InitContactDamage(enemyData.contactAttackData);
+
+            Init();
         }
 
         //Add movement components based on movement data
@@ -97,10 +99,8 @@ namespace TonyDev.Game.Core.Entities.Enemies
         }
         
         //Initialize variables and events
-        private new void Start()
+        private void Start()
         {
-            base.Start();
-
             //Initialize variables
             enemyAnimator = GetComponent<EnemyAnimator>();
             //
@@ -121,7 +121,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //Give money reward and destroy self.
         private void EnemyDie(float value)
         {
-            PickupSpawner.SpawnMoney(MoneyReward, transform.position);
+            ObjectSpawner.SpawnMoney(MoneyReward, transform.position);
             Destroy(gameObject);
         }
     }

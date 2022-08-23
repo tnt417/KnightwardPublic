@@ -7,7 +7,6 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
-using TonyDev.Game.UI.Popups;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Attacks
@@ -144,7 +143,7 @@ namespace TonyDev.Game.Core.Attacks
                 var damageDealt =
                     damageable.ApplyDamage(modifiedDamage); //Apply the damage. Critical hits deal double.
                 if (damageDealt > 0)
-                    PopupManager.SpawnPopup(other.transform.position, (int) damageDealt,
+                    ObjectSpawner.SpawnPopup(other.transform.position, (int) damageDealt,
                         IsCriticalHit); //Spawn a popup for the damage text if the damage is greater than zero.
             }
 

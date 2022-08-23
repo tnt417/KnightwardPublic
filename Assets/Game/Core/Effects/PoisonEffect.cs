@@ -1,6 +1,7 @@
+using System.Runtime.Serialization;
 using TonyDev.Game.Core.Effects.ItemEffects;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.UI.Popups;
+using TonyDev.Game.Global;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects
@@ -31,7 +32,7 @@ namespace TonyDev.Game.Core.Effects
             if (_timer > Frequency)
             {
                 Entity.ApplyDamage(Damage);
-                PopupManager.SpawnPopup(Entity.transform.position, (int)Damage, false);
+                ObjectSpawner.SpawnPopup(Entity.transform.position, (int)Damage, false);
                 _timer = 0f;
                 
                 Ticks--;

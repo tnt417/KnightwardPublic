@@ -745,6 +745,7 @@ MonoBehaviour:
   - {fileID: 408570853607279018, guid: bd6d8105085b8474cb40d3c5c7d19d6a, type: 3}
   connectUIObject: {fileID: 7946368391365645739}
   lobbyManagerPrefab: {fileID: 6097897818081006955, guid: 4c493b66d2d662742bf60ed6050984a0, type: 3}
+  networkedManagersPrefab: {fileID: 0}
 --- !u!114 &7946368391397325075
 MonoBehaviour:
   m_ObjectHideFlags: 0
