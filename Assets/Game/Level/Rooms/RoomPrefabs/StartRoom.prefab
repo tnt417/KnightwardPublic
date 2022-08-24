@@ -259,6 +259,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   roomDoors:
   - {fileID: 4435586639663016863}
   - {fileID: 4993458568167761396}

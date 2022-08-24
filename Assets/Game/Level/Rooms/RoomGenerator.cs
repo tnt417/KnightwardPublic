@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using Mirror;
+using PlasticPipe.PlasticProtocol.Messages;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine.Rendering;
@@ -43,6 +44,15 @@ namespace TonyDev.Game.Level.Rooms
         {
             startingRoomPos = new Vector2Int(mapRadius, mapRadius);
             _seed = Random.Range(0, 100000); //Get a random seed to generate the room based on.
+            
+            var prefabs = generateRoomPrefabs.ToList();
+
+            prefabs.AddRange(guaranteedGeneratePrefabs);
+            
+            foreach (var prefab in prefabs)
+            {
+                NetworkClient.RegisterPrefab(prefab);
+            }
         }
 
         public void Reset()
@@ -135,7 +145,7 @@ namespace TonyDev.Game.Level.Rooms
             go.SendMessage("SetRoomIndex", new Vector2Int(index.x, index.y));
 
             NetworkServer.Spawn(go);
-            
+
             return go.GetComponent<Room>();
             //
         }

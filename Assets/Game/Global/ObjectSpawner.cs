@@ -71,7 +71,7 @@ namespace TonyDev.Game.Global
             
             enemy.SetEnemyData(enemyData);
             
-            if(parent != null) enemy.RpcSetParent(parent);
+            enemy.CmdSetParentIdentity(parent);
 
             return;
         }

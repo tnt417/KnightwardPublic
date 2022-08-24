@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Net.NetworkInformation;
+using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
 using UnityEngine.Tilemaps;
@@ -20,6 +22,8 @@ namespace TonyDev.Game.Level.Rooms
         private BoxCollider2D _collider;
         //
 
+        public bool open;
+        
         public void Awake()
         {
             _collider = GetComponent<BoxCollider2D>();
@@ -32,7 +36,8 @@ namespace TonyDev.Game.Level.Rooms
                 wallTilemap.SetTile((Vector3Int) pos, null);
             }
 
-            _collider.enabled = true;
+            open = true;
+            _collider.enabled = open;
         }
 
         public void Close()
@@ -42,14 +47,25 @@ namespace TonyDev.Game.Level.Rooms
                 wallTilemap.SetTile((Vector3Int) pos, doorTile);   
             }
 
-            _collider.enabled = false;
+            open = false;
+            _collider.enabled = open;
         }
     
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (!_hostInterestVisibility && NetworkClient.isHostClient) return;
             if(other.GetComponent<Player>() == Player.LocalInstance && other.isTrigger) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
         }
 
+        private bool _hostInterestVisibility;
+
+        [Server]
+        public void SetHostVisibility(bool visible)
+        {
+            _hostInterestVisibility = visible;
+            _collider.enabled = open && visible;
+        }
+        
         public void OnDrawGizmos()
         {
             for (var i = 0; i < wallTileSpots.Length; i++)

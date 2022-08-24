@@ -147,7 +147,7 @@ namespace TonyDev.Game.Level.Rooms
             {
                 if (r != null)
                 {
-                    r.gameObject.SetActive(false);
+                    //r.gameObject.SetActive(false);
                 }
             }
         }

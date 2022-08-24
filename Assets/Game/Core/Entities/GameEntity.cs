@@ -61,6 +61,7 @@ namespace TonyDev.Game.Core.Entities
         public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
         {
             currentParentIdentity = roomIdentity;
+            if(this is Player.Player) FindObjectOfType<ParentInterestManagement>().ForceRebuild();
         }
 
         #region Attack
@@ -76,8 +77,6 @@ namespace TonyDev.Game.Core.Entities
             if(CanAttack) OnAttack?.Invoke();
         }
         #endregion
-
-        private delegate void TargetAction();
         protected void Awake()
         {
             if(isLocalPlayer) Player.Player.OnLocalPlayerCreated += Init;
@@ -119,7 +118,7 @@ namespace TonyDev.Game.Core.Entities
 
         protected void Init()
         {
-            GameManager.Entities.Add(this);
+            GameManager.AddEntity(this);
 
             if (!EntityOwnership) return;
 
@@ -137,12 +136,6 @@ namespace TonyDev.Game.Core.Entities
             UpdateTarget();
         }
 
-        [ClientRpc]
-        private void RpcRequestStatUpdate()
-        {
-            if(EntityOwnership) UpdateStats();
-        }
-
         private void UpdateStats()
         {
             CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
@@ -157,19 +150,17 @@ namespace TonyDev.Game.Core.Entities
         [ClientRpc]
         private void RpcUpdateStats(Stat[] keys, float[] values)
         {
-            GameConsole.Log("Setting stats for: " + gameObject.name);
-            
             if(Stats.ReadOnly) Stats.ReplaceStatValueDictionary(keys, values);
         }
 
         private void OnDestroy()
         {
-            GameManager.Entities.Remove(this);
+            GameManager.RemoveEntity(this);
         }
 
-        public List<Transform> UpdateTarget() //Updates entity's target and returns it.
+        public void UpdateTarget() //Updates entity's target and returns it.
         {
-            if (!EntityOwnership) return null;
+            if (!EntityOwnership) return;
 
             /* Valid targets match our targetTag variable, match our targetTeam variable, do not target invulnerable or dead things (unless this object is a tower),
              * and only attack things within 10 tiles unless it is the crystal
@@ -179,19 +170,20 @@ namespace TonyDev.Game.Core.Entities
             var range = 10f;
             if (this is Tower t) range = t.targetRadius;
             
-            var transforms = GameManager.Entities
-                .Where(e => (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) &&
-                            e.Team == targetTeam && (this is Tower || !e.IsInvulnerable && e.IsAlive) && e != this
-                            && ((e is Crystal && Vector2.Distance(e.transform.position, transform.position) < 200f)|| Vector2.Distance(e.transform.position, transform.position) < range))
+            var transforms = GameManager.EntitiesReadonly
+                .Where(e => e != null 
+                            && e.currentParentIdentity == currentParentIdentity //If both have the same parent netId
+                            && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
+                            && e.Team == targetTeam //Target things of our target team
+                            && (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
+                            && e != this //Don't target self
+                            && (e is Crystal && Vector2.Distance(e.transform.position, transform.position) < 200f 
+                                || Vector2.Distance(e.transform.position, transform.position) < range)) //Distance check
                 .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
-                .Select(e => e.transform).Take(maxTargets).ToList(); //Finds closest non-dead game entity object on the opposing team
-            
-            if (transforms.Count == 0) return null;
+                .Select(e => e.transform).Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
 
             Targets = transforms;
             OnTargetChange?.Invoke(); //Invoke the target changed method
-
-            return transforms; //Returns the game object
         }
         
         #region Effects
@@ -261,12 +253,6 @@ namespace TonyDev.Game.Core.Entities
             
             OnHealthChanged?.Invoke(newHealth);
             CurrentHealth = newHealth;
-        }
-
-        [ClientRpc]
-        public void RpcSetParent(NetworkIdentity transformIdentity)
-        {
-            transform.parent = transformIdentity.transform;
         }
 
         public virtual void Die()

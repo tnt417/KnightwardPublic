@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using Unity.Mathematics;
@@ -17,7 +19,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             var dimension0 = value.GetLength(0);
             var dimension1 = value.GetLength(1);
-            
+
             writer.WriteInt(dimension0);
             writer.WriteInt(dimension1); //write the number of dimensions of the 2nd dimension
 
@@ -25,7 +27,7 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < dimension1; j++)
                 {
-                    writer.Write(value[i,j]?.netIdentity);
+                    writer.Write(value[i, j]?.netIdentity);
                 }
             }
         }
@@ -36,7 +38,7 @@ namespace TonyDev.Game.Level.Rooms
             var dimension1 = reader.ReadInt();
 
             var rooms = new Room[dimension0, dimension1];
-            
+
             for (var i = 0; i < dimension0; i++)
             {
                 for (var j = 0; j < dimension1; j++)
@@ -50,7 +52,7 @@ namespace TonyDev.Game.Level.Rooms
             return rooms;
         }
     }
-    
+
     public class Room : NetworkBehaviour
     {
         //Editor variables
@@ -71,9 +73,11 @@ namespace TonyDev.Game.Level.Rooms
 
         private void Start()
         {
+            GameManager.OnEnemyAdd += OnEntityChange;
+            GameManager.OnEnemyRemove += OnEntityChange;
             CheckShouldLockDoors();
         }
-        
+
         //Returns a rect, representing the room's position and shape in the world based on its tilemaps
         private Rect FindRoomRect()
         {
@@ -108,7 +112,9 @@ namespace TonyDev.Game.Level.Rooms
             };
         }
 
-        public void SetOpenDirections(List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
+        public void
+            SetOpenDirections(
+                List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
         {
             _openDirections = directions;
             foreach (var rd in
@@ -129,8 +135,12 @@ namespace TonyDev.Game.Level.Rooms
         private void CheckShouldLockDoors()
         {
             var enemySpawner = GetComponentInChildren<EnemySpawner>();
-            
-            if (GetComponentsInChildren<Enemy>().Any(e => e.IsAlive) || enemySpawner != null && enemySpawner.CurrentlySpawning)
+
+            var shouldLock = GameManager.EntitiesReadonly.Any(entity =>
+                                 entity is Enemy {IsAlive: true} && entity.currentParentIdentity == netIdentity)
+                             || enemySpawner != null && enemySpawner.CurrentlySpawning; //Check if there are any alive enemies in our room or if our spawner is spawning.
+
+            if (shouldLock)
             {
                 LockAllDoors(); //Lock doors while enemies are alive in the room.
             }
@@ -145,19 +155,7 @@ namespace TonyDev.Game.Level.Rooms
             LockAllDoors();
         }
 
-        private int _previousChildCount = 0;
-        
-        private void Update()
-        {
-            if (_previousChildCount != gameObject.transform.childCount)
-            {
-                OnChildCountChange();
-            }
-
-            _previousChildCount = gameObject.transform.childCount;
-        }
-
-        public void OnChildCountChange()
+        public void OnEntityChange(GameEntity entity)
         {
             CheckShouldLockDoors();
         }
@@ -174,7 +172,7 @@ namespace TonyDev.Game.Level.Rooms
 
             OpenAllDoors(); //Otherwise, open/close the doors as normal.
         }
-        
+
         private void OpenAllDoors()
         {
             if (_openDirections == null) return;

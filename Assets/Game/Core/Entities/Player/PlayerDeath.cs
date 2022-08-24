@@ -50,10 +50,7 @@ namespace TonyDev.Game.Core.Entities.Player
             _rb2d.simulated = false; //De-activate Rigidbody
             walkParticleSystem.Stop(); //Turn off walk particles
             
-            foreach (var enemy in GameManager.Entities.Where(e => e is Enemy))
-            {
-                enemy.UpdateTarget(); //Set new targets for all enemies, so that they don't target the dead player
-            }
+            GameManager.ReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
         }
 
         private void Revive() //Called when the player's death timer is up.

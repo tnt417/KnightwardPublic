@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 922445376998541849}
   - component: {fileID: 3622657746569862949}
   - component: {fileID: 8167611084454580651}
+  - component: {fileID: 3319039379709736289}
   m_Layer: 0
   m_Name: Crystal
   m_TagString: Crystal
@@ -176,9 +177,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eced12fa32c2bc1419cc42585fcfb5b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   targetTag: 
   targetTeam: 0
   maxTargets: 0
+  visibleToHost: 1
+  networkCurrentHealth: 0
+  networkMaxHealth: 0
+  currentParentIdentity: {fileID: 0}
 --- !u!50 &8167611084454580651
 Rigidbody2D:
   serializedVersion: 4
@@ -200,6 +207,23 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3319039379709736289
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043387988716007450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 2
+  m_AssetId: 8d3f408f264fc6b448bfee518430f6d6
+  hasSpawned: 0
 --- !u!1 &2822787910284825786
 GameObject:
   m_ObjectHideFlags: 0

@@ -352,6 +352,7 @@ GameObject:
   - component: {fileID: 8245161763792584619}
   - component: {fileID: 8245161763792584618}
   - component: {fileID: 8245161763792584621}
+  - component: {fileID: 3942199210727578334}
   m_Layer: 0
   m_Name: RoomManager
   m_TagString: Untagged
@@ -387,6 +388,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5801ac10887b28843ae62e6b808835a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   currentActiveRoom: {fileID: 0}
   roomGenerator: {fileID: 8245161763792584618}
   minimapObject: {fileID: 8245161762205361817}
@@ -414,6 +417,7 @@ MonoBehaviour:
   - {fileID: 4178251165929004475, guid: b71cf7820fc441448b35c6a9a7ed72a0, type: 3}
   - {fileID: 4178251165929004475, guid: b5acb44ebdb8fdc41a3889cacd458f95, type: 3}
   roomManager: {fileID: 8245161763792584619}
+  startingRoomPos: {x: 0, y: 0}
 --- !u!114 &8245161763792584621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,3 +433,20 @@ MonoBehaviour:
   uiRoomGridLayout: {fileID: 8245161763383142388}
   minimapRoomPrefab: {fileID: 7725183104483211476, guid: c0f4eea19c93a5b4a977c64d4966de67, type: 3}
   unknownRoomSprite: {fileID: 21300000, guid: 19cd53e03b6a6784fa485bb207f6e5af, type: 3}
+--- !u!114 &3942199210727578334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8245161763792584617}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 2
+  m_AssetId: 1252036d4bd7a6a43af0665d6600076e
+  hasSpawned: 0

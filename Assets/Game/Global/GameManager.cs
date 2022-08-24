@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using Mirror;
 using TonyDev.Game.Core;
@@ -46,10 +47,26 @@ namespace TonyDev.Game.Global
         #region Entity
 
         public static float CrystalHealth = 1000f;
-        public static List<GameEntity> Entities = new();
+        private static readonly List<GameEntity> Entities = new();
+        public static IEnumerable<GameEntity> EntitiesReadonly => Entities.AsReadOnly();
+
+        public static void AddEntity(GameEntity entity)
+        {
+            Entities.Add(entity);
+            OnEnemyAdd?.Invoke(entity);
+        }
+
+        public static void RemoveEntity(GameEntity entity)
+        {
+            Entities.Remove(entity);
+            OnEnemyRemove?.Invoke(entity);
+        }
+        
+        public static Action<GameEntity> OnEnemyAdd;
+        public static Action<GameEntity> OnEnemyRemove;
         public static readonly List<EnemySpawner> EnemySpawners = new();
 
-        private void ReTargetEnemies()
+        public static void ReTargetEnemies()
         {
             foreach (var e in Entities)
             {
@@ -115,11 +132,11 @@ namespace TonyDev.Game.Global
         }
 
         [Command(requiresAuthority = false)]
-        public void CmdSpawnEnemy(string enemyName, Vector2 position, NetworkIdentity parent)
+        public void CmdSpawnEnemy(string enemyName, Vector2 position, NetworkIdentity parentRoom)
         {
             var enemyData = ObjectFinder.GetEnemyData(enemyName);
 
-            ObjectSpawner.SpawnEnemy(enemyData, position, parent);
+            ObjectSpawner.SpawnEnemy(enemyData, position, parentRoom);
         }
 
         [Command(requiresAuthority = false)]
@@ -135,7 +152,6 @@ namespace TonyDev.Game.Global
             
             var entity = owner.GetComponent<GameEntity>();
             if (!entity.visibleToHost && isClient && isServer) return; //If we are the host and the entity is not visible to the host, return.
-            GameConsole.Log("Spawning projectile!");
             AttackFactory.CreateProjectileAttack(entity, direction, projectileData);
         }
 
@@ -203,7 +219,7 @@ namespace TonyDev.Game.Global
 
         //Teleports player to the arena and sets GamePhase to Arena.
         [GameCommand(Keyword = "arena", PermissionLevel = PermissionLevel.Cheat)]
-        private void EnterArenaPhase()
+        public void EnterArenaPhase()
         {
             RoomManager.Instance.DeactivateRoomPhase();
             GamePhase = GamePhase.Arena;
