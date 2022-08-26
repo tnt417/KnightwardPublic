@@ -46,6 +46,7 @@ namespace TonyDev.Game.Level.Rooms
         private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public event Action OnRoomsChanged;
+        public event Action<NetworkIdentity> OnActiveRoomChanged;
 
         private void Awake()
         {
@@ -128,8 +129,6 @@ namespace TonyDev.Game.Level.Rooms
             var newRoom = map.Rooms[x, y]; //Get the new room from the array
             if (newRoom == null) return; //If it's null, do nothing
 
-            DeactivateAllRooms(); //Deactivate all rooms.
-
             currentActiveRoom = newRoom; //Update currentActiveRoom variable
             currentActiveRoom.gameObject.SetActive(true); //Activate the new room
             MinimapManager.Instance.UncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
@@ -137,19 +136,7 @@ namespace TonyDev.Game.Level.Rooms
             _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
             
             Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
-        }
-
-        public void DeactivateAllRooms()
-        {
-            if (map.Rooms == null) return;
-
-            foreach (var r in map.Rooms)
-            {
-                if (r != null)
-                {
-                    //r.gameObject.SetActive(false);
-                }
-            }
+            OnActiveRoomChanged?.Invoke(newRoom.netIdentity);
         }
 
         //Performs all actions necessary to disable the room phase.
@@ -160,7 +147,8 @@ namespace TonyDev.Game.Level.Rooms
 
             Player.LocalInstance.CmdSetParentIdentity(null);
             
-            DeactivateAllRooms();
+            OnActiveRoomChanged?.Invoke(null);
+            
             currentActiveRoom = null;
         }
 
@@ -196,15 +184,16 @@ namespace TonyDev.Game.Level.Rooms
             return map.Rooms[x, y] != null && map.Rooms[x, y].GetDoorDirections().Contains(direction);
         }
 
+        [Server]
         public void ResetRooms()
         {
             foreach (var r in map.Rooms) //Destroy all rooms...
                 if (r != null)
-                    Destroy(r.gameObject);
+                    NetworkServer.Destroy(r.gameObject);
 
             MinimapManager.Instance.Reset();
             roomGenerator.Reset();
-            DeactivateAllRooms();
+            OnActiveRoomChanged?.Invoke(null);
         }
 
         public void TeleportPlayerToStart()

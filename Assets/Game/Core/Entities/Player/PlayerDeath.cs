@@ -17,50 +17,82 @@ namespace TonyDev.Game.Core.Entities.Player
         private Rigidbody2D _rb2d;
         //
     
-        public static bool Dead;
+        public bool dead;
         private float _deathTimer;
 
         private void Awake()
         {
             _rb2d = GetComponent<Rigidbody2D>();
         }
-        
+
+        public override void OnStartLocalPlayer()
+        {
+            Player.LocalInstance.OnDeath += (float f) => DieLocal();
+        }
+
         private void Update()
         {
-            if (!isLocalPlayer) return;
-            
-            if (Dead) //Runs while dead
+            if (dead) //Runs while dead
             {
                 _deathTimer += Time.deltaTime; //Tick death timer
                 deathTimerText.text = Mathf.CeilToInt(deathCooldown - _deathTimer).ToString(); //Update death timer text
                 if (_deathTimer >= deathCooldown)
                 {
-                    Revive(); //Revive if cooldown is up.
+                    if(isLocalPlayer) ReviveLocal(); //Revive if cooldown is up.
                 }
             }
         }
-
-        public void Die() //Called when the player's health drops to 0
+        
+        private void DieLocal()
         {
-            if (Dead || !isLocalPlayer) return; //Don't re-die if already dead
-            Dead = true; //Die
-            healthBarObject.SetActive(false); //Hide health bar
-            GameManager.Money = 0; //Reset money as a penalty for dying
-            Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
-            _rb2d.simulated = false; //De-activate Rigidbody
-            walkParticleSystem.Stop(); //Turn off walk particles
-            
-            GameManager.ReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
+            if(isLocalPlayer) CmdDie();
         }
 
-        private void Revive() //Called when the player's death timer is up.
+        [Command(requiresAuthority = false)]
+        private void CmdDie()
         {
-            if (!isLocalPlayer) return;
+            RpcDie();
+        }
+
+        [ClientRpc]
+        private void RpcDie()
+        {
+            dead = true; //Die
             
-            Dead = false; //Revive
-            _deathTimer = 0; //Reset the death timer
+            if (isLocalPlayer)
+            {
+                GameManager.Money = 0; //Reset money as a penalty for dying (LOCAL PLAYER ONLY)
+                Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
+                GameManager.ReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
+            }
+            healthBarObject.SetActive(false); //Hide health bar
+            _rb2d.simulated = false; //De-activate Rigidbody
+            walkParticleSystem.Stop(); //Turn off walk particles
+        }
+        
+        private void ReviveLocal()
+        {
+            if(isLocalPlayer) CmdRevive();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdRevive()
+        {
+            RpcRevive();
+        }
+
+        [ClientRpc]
+        private void RpcRevive()
+        {
+            dead = false; //Revive
+            
+            if (isLocalPlayer)
+            {
+                Player.LocalInstance.SetHealth(Player.LocalInstance.networkMaxHealth); //Fully heal the player
+            }
+            
             healthBarObject.SetActive(true); //Re-active the health bar
-            Player.LocalInstance.SetHealth(Player.LocalInstance.MaxHealth); //Fully heal the player
+            _deathTimer = 0; //Reset the death timer
             deathTimerText.text = string.Empty; //Clear the death timer text
             _rb2d.simulated = true; //Re-activate the RigidBody
         }

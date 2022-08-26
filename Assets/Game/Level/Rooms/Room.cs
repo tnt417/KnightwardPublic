@@ -4,12 +4,15 @@ using System.Linq;
 using Mirror;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using UnityEngine.U2D;
+using UnityEngine.UI;
 
 namespace TonyDev.Game.Level.Rooms
 {
@@ -70,6 +73,37 @@ namespace TonyDev.Game.Level.Rooms
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
         private bool _clearPrefabSpawned;
+
+        private void Awake()
+        {
+            RoomManager.Instance.OnActiveRoomChanged += CheckRoomVisibility;
+        }
+
+        public override void OnStartClient()
+        {
+            SetVisibility(false);
+        }
+
+        [ClientCallback]
+        private void CheckRoomVisibility(NetworkIdentity newRoom)
+        {
+            if (Player.LocalInstance == null) return;
+            SetVisibility(newRoom == netIdentity);
+        }
+
+        private void SetVisibility(bool visible)
+        {
+            foreach (var rend in GetComponentsInChildren<Renderer>())
+                rend.enabled = visible;
+            foreach (var img in GetComponentsInChildren<Image>())
+                img.enabled = visible;
+            foreach (var l2d in GetComponentsInChildren<Light2DBase>())
+                l2d.enabled = visible;
+            foreach (var coll in GetComponentsInChildren<Collider2D>())
+                coll.enabled = visible;
+            foreach (var roomDoor in GetComponentsInChildren<RoomDoor>())
+                roomDoor.SetHostVisibility(visible);
+        }
 
         private void Start()
         {
@@ -137,7 +171,7 @@ namespace TonyDev.Game.Level.Rooms
             var enemySpawner = GetComponentInChildren<EnemySpawner>();
 
             var shouldLock = GameManager.EntitiesReadonly.Any(entity =>
-                                 entity is Enemy {IsAlive: true} && entity.currentParentIdentity == netIdentity)
+                                 entity is Enemy {IsAlive: true} && entity.CurrentParentIdentity == netIdentity)
                              || enemySpawner != null && enemySpawner.CurrentlySpawning; //Check if there are any alive enemies in our room or if our spawner is spawning.
 
             if (shouldLock)

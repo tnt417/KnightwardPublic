@@ -68,11 +68,6 @@ namespace TonyDev.Game.Core.Entities.Player
             Init();
         }
 
-        public override void Die()
-        {
-            playerDeath.Die();
-        }
-
         [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Toggled invulnerability.")]
         public static void ToggleInvulnerable()

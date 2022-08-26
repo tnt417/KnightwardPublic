@@ -16,17 +16,23 @@ namespace TonyDev.Game.Level.Decorations.Ladder
             indicator.SetActive(isPlayerInRange);
             if (isPlayerInRange && Input.GetKeyDown(KeyCode.E))
             {
-                StartCoroutine(Use());
+                Use();
+                //StartCoroutine(Use());
             }
         }
 
-        private IEnumerator Use()
+        private static void Use()
+        {
+            GameManager.Instance.CmdProgressNextDungeonFloor();
+        }
+
+        /*private IEnumerator Use()
         {
             TransitionController.Instance.FadeInOut();
             yield return new WaitUntil(() => TransitionController.Instance.OutTransitionDone);
             GameManager.DungeonFloor += 1;
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.TeleportPlayerToStart();
-        }
+        }*/
     }
 }

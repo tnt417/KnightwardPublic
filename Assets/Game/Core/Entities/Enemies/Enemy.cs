@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Enemies.Movement;
@@ -28,8 +29,20 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
         #endregion
 
-        //Set enemy data, called on spawn
-        public void SetEnemyData(EnemyData enemyData)
+        [Command(requiresAuthority = false)]
+        public void CmdSetEnemyData(string enemyName)
+        {
+            RpcSetEnemyData(enemyName);
+        }
+
+        [ClientRpc]
+        private void RpcSetEnemyData(string enemyName)
+        {
+            SetEnemyData(ObjectFinder.GetEnemyData(enemyName));
+        }
+        
+        //Set enemy data, called on every client on spawn
+        private void SetEnemyData(EnemyData enemyData)
         {
             if (_enemyData != null) return;
 

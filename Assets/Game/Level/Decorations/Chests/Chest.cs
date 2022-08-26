@@ -1,41 +1,75 @@
+using System;
+using Mirror;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
+using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Rooms;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Decorations.Chests
 {
-    public class Chest : MonoBehaviour
+    public class Chest : NetworkBehaviour, IHideable
     {
-        [SerializeField] private int rarityBoost;
-        [SerializeField] private GameObject groundItemPrefab;
+        [SerializeField] public int rarityBoost;
         [SerializeField] private Animator chestAnimator;
+
+        public UnityEvent onOpenServer;
+
+        private bool _opened = false;
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player") && other.isTrigger)
             {
-                DropItems(); //Drop items when player touches the chest
+                var id = other.GetComponent<NetworkIdentity>();
+                
+                if (id == null || !id.isLocalPlayer) return;
+                
+                CmdDropItems(); //Drop items when player touches the chest
             }
         }
 
+        [Command(requiresAuthority = false)]
+        private void CmdDropItems()
+        {
+            DropItems();
+            RpcSetOpen();
+        }
+
+        [ClientRpc]
+        private void RpcSetOpen()
+        {
+            chestAnimator.Play("ChestOpen");
+            enabled = false;
+        }
+
+        private Item _item = null;
+        
+        public void SetItem(Item newItem)
+        {
+            _item = newItem;
+        }
+
+        [Server]
         private void DropItems()
         {
-            var item = ItemGenerator.GenerateItem(rarityBoost);
-
-            GameConsole.Log("Item type: " + item?.itemType + ", Item sprite: " + item?.uiSprite);
+            if (_opened) return;
+            _opened = true;
             
-            var parentTransform = transform;
+            var dropItem = _item ?? ItemGenerator.GenerateItem(rarityBoost);
 
-            //Instantiate the item and change the chest sprite
-            var groundItem = Instantiate(groundItemPrefab, parentTransform.position, quaternion.identity, parentTransform);
-            groundItem.SendMessage("SetItem", item);
-            chestAnimator.Play("ChestOpen");
+            GameConsole.Log("Item type: " + _item?.itemType + ", Item sprite: " + _item?.uiSprite);
+
+            //Spawn the item and change the chest sprite
+            ObjectSpawner.SpawnGroundItem(_item, 0, transform.position, CurrentParentIdentity);
+            onOpenServer.Invoke();
             //
-        
-            Destroy(this); //Destroy this script so no more items drop.
         }
+
+        public NetworkIdentity CurrentParentIdentity { get; set; }
     }
 }

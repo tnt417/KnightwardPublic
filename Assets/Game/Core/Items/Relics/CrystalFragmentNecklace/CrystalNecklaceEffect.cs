@@ -28,7 +28,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         private void DamageCrystal(float damage)
         {
-            GameManager.CrystalHealth -= damage * Multiplier * 10; //Damage the crystal for 40% of incoming player damage times 10
+            Crystal.Instance.ApplyDamage(damage * Multiplier * 10); //Damage the crystal for 40% of incoming player damage times 10
         }
     }
 }

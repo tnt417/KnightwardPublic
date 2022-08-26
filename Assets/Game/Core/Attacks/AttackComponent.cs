@@ -30,6 +30,8 @@ namespace TonyDev.Game.Core.Attacks
         [Tooltip("The base damage of the attack. May be altered based on the owner entity's stats.")] [SerializeField]
         public float damage;
 
+        private float Damage => _owner != null ? _owner.Stats.GetStat(Stat.Damage) : damage;
+
         [Tooltip("Multiplies the damage dealt to things.")] [SerializeField]
         public float damageMultiplier;
 
@@ -59,8 +61,7 @@ namespace TonyDev.Game.Core.Attacks
         private bool IsCriticalHit =>
             _owner != null && _owner.Stats.CritSuccessful; //Rolls for critical hit using owner entity's bool.
 
-        [NonSerialized]
-        private GameEntity
+        [NonSerialized] private GameEntity
             _owner; //The owner of the object. Set upon creation. Used to access stats and to ensure that attacks don't harm the owner.
 
         private Dictionary<GameObject, float>
@@ -80,7 +81,7 @@ namespace TonyDev.Game.Core.Attacks
 
         private void Update()
         {
-            if (team == Team.Enemy && damage > 0)
+            if (team == Team.Enemy && Damage > 0)
             {
                 damageMultiplier =
                     1 + Mathf.Log10(GameManager.EnemyDifficultyScale) * 0.5f; //Enemy damage scales as time passes.
@@ -119,24 +120,29 @@ namespace TonyDev.Game.Core.Attacks
 
         private void TryDamage(Collider2D other)
         {
-            if (_owner != null && !_owner.hasAuthority) return; //Only call damage code on attacks that are owned by the local player.
-            
+            var netId = other.GetComponent<NetworkIdentity>();
+
+            //Don't want to return in cases where the thing being hit is local player, so hit detection doesn't have latency with the player.
+            if (_owner != null && !_owner.hasAuthority && !(netId != null && netId.isLocalPlayer)) return; //Only call damage code on attacks that are owned by our client.
+
             var damageable = other.GetComponent<IDamageable>();
             //
             if (damageable == null || damageable.Team == team || damageable.IsInvulnerable ||
                 _hitCooldowns.ContainsKey(other.gameObject) ||
                 !other.isTrigger) return; //Check if valid thing to hit
 
-            var networkIdentity = other.GetComponent<NetworkIdentity>();
+            float modifiedDamage = (int) (Damage * damageMultiplier *
+                                          (IsCriticalHit
+                                              ? 2
+                                              : 1));
 
-            float modifiedDamage = (int) (damage * damageMultiplier *
-                                  (IsCriticalHit
-                                      ? 2
-                                      : 1));
+            var entity = other.GetComponent<GameEntity>();
             
-            if (networkIdentity != null)
+            if (netId != null)
             {
-                GameManager.Instance.CmdDamageEntity(networkIdentity, modifiedDamage, IsCriticalHit);
+                Debug.Log($"Dealing damage to entity {entity.gameObject.name}, {modifiedDamage}");
+                var dmg = netId.isLocalPlayer ? entity.ApplyDamage(modifiedDamage) : modifiedDamage; //Do damage before command if hitting player
+                GameManager.Instance.CmdDamageEntity(netId, dmg, IsCriticalHit);
             }
             else
             {
@@ -159,7 +165,6 @@ namespace TonyDev.Game.Core.Attacks
             _hitCooldowns.Add(other.gameObject, damageCooldown); //Put the object on cooldown
 
             //Add inflict buffs and effects
-            var entity = other.GetComponent<GameEntity>();
             if (entity != null)
             {
                 if (inflictBuffs != null) //Inflict buffs...
@@ -209,7 +214,6 @@ namespace TonyDev.Game.Core.Attacks
         //Sets necessary data when given AttackData and GameEntity. To be called upon being instantiated as part of an Entity's attack.
         public void SetData(AttackData attackData, GameEntity owner)
         {
-            damage = owner.Stats.GetStat(Stat.Damage);
             damageMultiplier = attackData?.damageMultiplier ?? damageMultiplier;
             team = attackData?.team ?? team;
             damageCooldown = 0.5f;

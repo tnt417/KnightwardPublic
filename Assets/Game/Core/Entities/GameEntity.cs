@@ -16,7 +16,7 @@ using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities
 {
-    public abstract class GameEntity : NetworkBehaviour, IDamageable
+    public abstract class GameEntity : NetworkBehaviour, IDamageable, IHideable
     {
         public delegate void TargetChangeAction();
         public event TargetChangeAction OnTargetChange;
@@ -55,12 +55,13 @@ namespace TonyDev.Game.Core.Entities
         
         #endregion
 
-        [SyncVar] public NetworkIdentity currentParentIdentity;
-        
+        [field: SyncVar]
+        public NetworkIdentity CurrentParentIdentity { get; set; }
+
         [Command(requiresAuthority = false)]
         public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
         {
-            currentParentIdentity = roomIdentity;
+            CurrentParentIdentity = roomIdentity;
             if(this is Player.Player) FindObjectOfType<ParentInterestManagement>().ForceRebuild();
         }
 
@@ -79,8 +80,8 @@ namespace TonyDev.Game.Core.Entities
         #endregion
         protected void Awake()
         {
-            if(isLocalPlayer) Player.Player.OnLocalPlayerCreated += Init;
-
+            GameManager.AddEntity(this);
+            
             OnAttack += () => _attackTimer = 0;
         }
 
@@ -118,8 +119,6 @@ namespace TonyDev.Game.Core.Entities
 
         protected void Init()
         {
-            GameManager.AddEntity(this);
-
             if (!EntityOwnership) return;
 
             CustomNetworkManager.OnAllPlayersSpawned += UpdateStats;
@@ -172,7 +171,7 @@ namespace TonyDev.Game.Core.Entities
             
             var transforms = GameManager.EntitiesReadonly
                 .Where(e => e != null 
-                            && e.currentParentIdentity == currentParentIdentity //If both have the same parent netId
+                            && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
                             && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
                             && e.Team == targetTeam //Target things of our target team
                             && (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
@@ -239,7 +238,7 @@ namespace TonyDev.Game.Core.Entities
             }
 
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth); //Clamp health
-            
+
             OnHealthChanged?.Invoke(modifiedDamage);
 
             if (CurrentHealth <= 0) Die();
@@ -251,8 +250,8 @@ namespace TonyDev.Game.Core.Entities
         {
             if (!EntityOwnership) return;
             
-            OnHealthChanged?.Invoke(newHealth);
             CurrentHealth = newHealth;
+            OnHealthChanged?.Invoke(newHealth);
         }
 
         public virtual void Die()
@@ -260,7 +259,8 @@ namespace TonyDev.Game.Core.Entities
             if (!EntityOwnership) return;
             
             OnDeath?.Invoke(0);
-            Destroy(gameObject);
+            
+            if(this is not Player.Player) NetworkServer.Destroy(gameObject);
         }
 
         public event IDamageable.HealthAction OnHealthChanged;

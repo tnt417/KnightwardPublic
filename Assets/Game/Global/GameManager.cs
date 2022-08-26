@@ -46,7 +46,6 @@ namespace TonyDev.Game.Global
 
         #region Entity
 
-        public static float CrystalHealth = 1000f;
         private static readonly List<GameEntity> Entities = new();
         public static IEnumerable<GameEntity> EntitiesReadonly => Entities.AsReadOnly();
 
@@ -121,7 +120,14 @@ namespace TonyDev.Game.Global
         public void CmdDamageEntity(NetworkIdentity entityObject, float damage, bool isCrit)
         {
             var entity = entityObject.GetComponent<GameEntity>();
-            var dmg = entity.ApplyDamage(damage);
+            
+            if (entity == null)
+            {
+                Debug.LogWarning($"Net object {entityObject.gameObject.name} is not an entity!");
+                return;
+            }
+            
+            var dmg = entity is Player ? damage : entity.ApplyDamage(damage); //Players should have already been damaged on the client
             RpcSpawnDmgPopup(entity.transform.position, dmg, isCrit);
         }
 
@@ -201,7 +207,7 @@ namespace TonyDev.Game.Global
 
         public static void ResetGame()
         {
-            CrystalHealth = 1000f;
+            Crystal.Instance.SetHealth(1000f);
             Money = 0;
             Timer.GameTimer = 0;
             AllItems.Clear();
@@ -239,9 +245,22 @@ namespace TonyDev.Game.Global
         private void EnterDungeonPhase()
         {
             GamePhase = GamePhase.Dungeon;
-            RoomManager.Instance.DeactivateAllRooms();
             RoomManager.Instance.TeleportPlayerToStart(); //Move the player to the starting room and activate it
             ReTargetEnemies();
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdProgressNextDungeonFloor()
+        {
+            DungeonFloor += 1;
+            RoomManager.Instance.ResetRooms();
+            RpcTeleportAllToStart();
+        }
+
+        [ClientRpc]
+        public void RpcTeleportAllToStart()
+        {
+            RoomManager.Instance.TeleportPlayerToStart();
         }
 
         #endregion

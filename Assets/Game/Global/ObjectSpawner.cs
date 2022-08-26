@@ -3,8 +3,13 @@ using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
+using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global.Console;
+using TonyDev.Game.Global.Network;
+using TonyDev.Game.Level.Decorations.Chests;
+using Unity.Mathematics;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
 {
@@ -13,8 +18,10 @@ namespace TonyDev.Game.Global
         private static ObjectSpawner _instance;
         [SerializeField] private GameObject enemyPrefab;
         [SerializeField] private GameObject moneyPrefab;
-        [SerializeField] private float moneyOutwardForce;
         [SerializeField] private GameObject damageNumberPrefab;
+        [SerializeField] private GameObject groundItemPrefab;
+        [SerializeField] private GameObject chestPrefab;
+        [SerializeField] private float moneyOutwardForce;
         [SerializeField] private int objectPoolSize;
         private static readonly Queue<GameObject> PopupObjectPool = new ();
         
@@ -69,7 +76,7 @@ namespace TonyDev.Game.Global
 
             enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
             
-            enemy.SetEnemyData(enemyData);
+            enemy.CmdSetEnemyData(enemyData.enemyName);
             
             enemy.CmdSetParentIdentity(parent);
 
@@ -83,6 +90,40 @@ namespace TonyDev.Game.Global
                 if (Camera.main is not null)
                     GameManager.Instance.CmdSpawnEnemy(enemyName,
                         Camera.main.ScreenToWorldPoint(Input.mousePosition), null);
+        }
+
+        [Server]
+        public static GroundItem SpawnGroundItem(Item item, float costMultiplier, Vector2 position, NetworkIdentity parent)
+        {
+            var groundItemObject = Instantiate(_instance.groundItemPrefab, position, Quaternion.identity);
+            var gi = groundItemObject.GetComponent<GroundItem>();
+
+            gi.CurrentParentIdentity = parent;
+
+            NetworkServer.Spawn(groundItemObject);
+            gi.CmdSetItem(item);
+            gi.GenerateCost(costMultiplier);
+
+            return gi;
+        }
+
+        public static Chest SpawnChest(int rarityBoost, Vector2 position, NetworkIdentity parent) => SpawnChest(rarityBoost, null, position, parent);
+        public static Chest SpawnChest(Item presetItem, Vector2 position, NetworkIdentity parent) => SpawnChest(0, presetItem, position, parent);
+        
+        [Server]
+        private static Chest SpawnChest(int rarityBoost, Item presetItem, Vector2 position, NetworkIdentity parent)
+        {
+            var chestObject = Instantiate(_instance.chestPrefab, position, Quaternion.identity);
+            var chest = chestObject.GetComponent<Chest>();
+
+            chest.CurrentParentIdentity = parent;
+            chest.rarityBoost = rarityBoost;
+            
+            if(presetItem != null) chest.SetItem(presetItem);
+            
+            NetworkServer.Spawn(chestObject);
+
+            return chest;
         }
     }
 }

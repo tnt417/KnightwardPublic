@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Mirror;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -35,25 +36,25 @@ namespace TonyDev.Game.Global.Network
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver)
         {
             var identityParentRoom = identity.GetComponent<Room>();
-            var identityParentEntity = identity.GetComponent<GameEntity>();
+            var identityParentHideable = identity.GetComponent<IHideable>();
 
-            if (identityParentEntity == null && identityParentRoom == null)
+            if (identityParentHideable == null && identityParentRoom == null)
                 return true; //If identity is not an entity or room, make it visible.
-            if (identityParentEntity != null && identityParentEntity.currentParentIdentity == null)
+            if (identityParentHideable != null && identityParentHideable.CurrentParentIdentity == null)
                 return true; //If identity has no parent identity, can see them
 
-            var observerParentEntity = newObserver.identity.GetComponent<GameEntity>();
-            if (observerParentEntity == null) return true; //If observer is not an entity, make it see everything.
+            var observerParentHideable = newObserver.identity.GetComponent<IHideable>();
+            if (observerParentHideable == null) return true; //If observer is not an entity, make it see everything.
 
             if (identityParentRoom != null)
             {
                 return identityParentRoom.netIdentity ==
-                       observerParentEntity
-                           .currentParentIdentity; //If observing a room, check if room is the observer's current room.
+                       observerParentHideable
+                           .CurrentParentIdentity; //If observing a room, check if room is the observer's current room.
             }
 
-            return identityParentEntity.currentParentIdentity ==
-                   observerParentEntity.currentParentIdentity; //Otherwise, check if the parents are equal.
+            return identityParentHideable == null || identityParentHideable.CompareVisibility(observerParentHideable
+                .CurrentParentIdentity); //Otherwise, check if the parents are equal.
         }
 
         public override void OnRebuildObservers(NetworkIdentity identity,
@@ -71,6 +72,16 @@ namespace TonyDev.Game.Global.Network
         [ServerCallback]
         public override void SetHostVisibility(NetworkIdentity identity, bool visible)
         {
+            if (identity.GetComponent<Room>() != null) return;
+
+            var hideable = identity.GetComponent<IHideable>();
+            if (hideable != null)
+            {
+                if (Player.LocalInstance != null)
+                    visible = hideable.CompareVisibility(Player.LocalInstance.CurrentParentIdentity);
+                if (hideable is GameEntity ge) ge.visibleToHost = visible;
+            }
+
             foreach (var rend in identity.GetComponentsInChildren<Renderer>())
                 rend.enabled = visible;
             foreach (var img in identity.GetComponentsInChildren<Image>())
@@ -81,9 +92,6 @@ namespace TonyDev.Game.Global.Network
                 coll.enabled = visible;
             foreach (var roomDoor in identity.GetComponentsInChildren<RoomDoor>())
                 roomDoor.SetHostVisibility(visible);
-
-            var entity = identity.GetComponent<GameEntity>();
-            if (entity != null) entity.visibleToHost = visible;
         }
     }
 }

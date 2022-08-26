@@ -14,9 +14,15 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         
         public static Func<float> CrystalRegen = () => 0;
 
-        private void Awake()
+        private new void Awake()
         {
             if(Instance == null) Instance = this;
+            base.Awake();
+        }
+
+        private void Start()
+        {
+            Init();
         }
 
         private new void Update()
@@ -29,11 +35,6 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         #region IDamageable
         public override Team Team => Team.Player;
         public override int MaxHealth => 1000;
-        public override float CurrentHealth {
-            get => GameManager.CrystalHealth;
-            protected set => GameManager.CrystalHealth = value;
-        }
-
         #endregion
 
         [GameCommand(Keyword = "ci", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled crystal invulnerability.")]
