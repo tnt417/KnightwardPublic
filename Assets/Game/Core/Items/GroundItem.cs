@@ -124,14 +124,14 @@ namespace TonyDev.Game.Core.Items
         {
             if (!other.CompareTag("Player")) return;
 
-            if (Input.GetKeyDown(KeyCode.E))
-            {
-                var id = other.GetComponent<NetworkIdentity>();
+            if (!Input.GetKey(KeyCode.E) || !_pickupAble) return;
+            
+            var id = other.GetComponent<NetworkIdentity>();
 
-                if (id == null || !id.isLocalPlayer) return;
+            if (id == null || !id.isLocalPlayer) return;
 
-                CmdRequestPickup(GameManager.Money);
-            }
+            CmdRequestPickup(GameManager.Money);
+            StartCoroutine(DisablePickupForSeconds(0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
         }
 
         [Command(requiresAuthority = false)]
@@ -186,9 +186,13 @@ namespace TonyDev.Game.Core.Items
 
         private void OnTriggerExit2D(Collider2D other)
         {
-            if (other.CompareTag("Player"))
-                pickupIndicator
-                    .SetActive(false); //Deactivate pickup indicator when the player is no longer on top of the item
+            if (!other.CompareTag("Player")) return;
+
+            var id = other.GetComponent<NetworkIdentity>();
+
+            if (id == null || !id.isLocalPlayer) return;
+                
+            pickupIndicator.SetActive(false); //Deactivate pickup indicator when the player is no longer on top of the item
         }
 
         [field: SyncVar] public NetworkIdentity CurrentParentIdentity { get; set; }

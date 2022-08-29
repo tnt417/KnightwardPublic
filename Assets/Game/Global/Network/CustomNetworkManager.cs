@@ -55,18 +55,10 @@ namespace TonyDev.Game.Global.Network
         public override void OnServerReady(NetworkConnectionToClient conn)
         {
             base.OnServerReady(conn);
-
+            
             GameConsole.Log($"Player {conn.connectionId} ready!");
 
-            if (SceneManager.GetActiveScene().name == "CastleScene")
-            {
-                if (AllClientsReady)
-                {
-                    RoomManager.Instance.GenerateRooms();
-                }
-                
-                return;
-            }
+            if (SceneManager.GetActiveScene().name == "CastleScene") return;
 
             if (_lobbyManager == null)
             {
@@ -79,16 +71,10 @@ namespace TonyDev.Game.Global.Network
                 _lobbyManager.netIdentity.AssignClientAuthority(conn);
 
                 _lobbyManager.OnNewPlayerConnected(conn);
-
-                /*SceneManager.sceneLoaded += (scene, sceneMode) =>
-                {
-                    if (scene.name == "CastleScene")
-                    {
-                        SpawnPlayers();
-                    }
-                };*/
+                
                 _lobbyManager.OnPlay += () =>
                 {
+                    NetworkServer.maxConnections = numPlayers;
                     ServerChangeScene("CastleScene");
                 };
             }
@@ -100,14 +86,6 @@ namespace TonyDev.Game.Global.Network
             }
         }
 
-        public override void OnServerSceneChanged(string sceneName)
-        {
-            if (sceneName == "CastleScene")
-            {
-                SpawnPlayers();
-            }
-        }
-
         public override void OnClientSceneChanged()
         {
             if (SceneManager.GetActiveScene().name == "CastleScene")
@@ -115,13 +93,18 @@ namespace TonyDev.Game.Global.Network
                 NetworkClient.Ready();
                 NetworkClient.AddPlayer();
             }
+            
+            base.OnClientSceneChanged();
         }
 
-        public void SpawnPlayers()
+        public override void OnServerDisconnect(NetworkConnectionToClient conn)
         {
-            foreach (var connection in NetworkServer.connections.Values)
+            base.OnServerDisconnect(conn);
+
+            if (SceneManager.GetActiveScene().name == "CastleScene")
             {
-                //OnServerAddPlayer(connection);
+                //Don't allow players to reconnect to the castle scene.
+                NetworkServer.maxConnections--;
             }
         }
 

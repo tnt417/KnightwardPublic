@@ -13,25 +13,13 @@ namespace TonyDev.Game.Core.Items
 {
     public static class ItemGenerator
     {
-        private static Sprite[] _weaponSprites; //Possible weapon sprites to pick from
         private static Sprite[] _armorSprites; //Possible armor sprites to pick from
-        private static Sprite[] _relicSprites; //Possible relic sprites to pick from
 
-        static ItemGenerator()
-        {
-            ObjectFinder.OnDoneInitialized += InitSprites;
-        }
-        
-        private static void
+        public static void
             InitSprites() //Load sprites from SpriteDictionary based on the prefix to be used in randomly generated items.
         {
-            _weaponSprites = ObjectFinder.GetSpritesWithPrefix("wi_");
             _armorSprites = ObjectFinder.GetSpritesWithPrefix("ai_");
-            _relicSprites = ObjectFinder.GetSpritesWithPrefix("ri_");
         }
-
-        private static Item RandomCustomItem => Tools.SelectRandom(GameManager.AllItems.ToArray());
-        //private static Item RandomTowerItem => Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Tower).ToArray());
 
         private static Item GetTowerItem(ItemRarity itemRarity)
         {
@@ -48,6 +36,8 @@ namespace TonyDev.Game.Core.Items
         //Returns a randomly generated item based on input parameters
         public static Item GenerateItemOfType(ItemType type, ItemRarity rarity)
         {
+            Debug.Log($"Trying to generate item of type {type} and rarity {rarity}");
+            
             //Instantiate local variables that will end up at the parameters for the generated item.
             Item item = null;
             var itemName = string.Empty;
@@ -64,7 +54,11 @@ namespace TonyDev.Game.Core.Items
             switch (type)
             {
                 case ItemType.Weapon:
-                    if (item == null) return null;
+                    if (item == null)
+                    {
+                        Debug.LogWarning("Failed to generate weapon item!");
+                        return null;
+                    }
                     sprite = item.uiSprite;
                     itemName = item.itemName;
                     break;

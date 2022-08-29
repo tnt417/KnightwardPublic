@@ -22,7 +22,7 @@ namespace TonyDev.Game.Level.Rooms
         private BoxCollider2D _collider;
         //
 
-        public bool open;
+        public bool IsOpen { get; private set; }
         
         public void Awake()
         {
@@ -36,8 +36,8 @@ namespace TonyDev.Game.Level.Rooms
                 wallTilemap.SetTile((Vector3Int) pos, null);
             }
 
-            open = true;
-            _collider.enabled = open;
+            IsOpen = true;
+            _collider.enabled = IsOpen;
         }
 
         public void Close()
@@ -47,8 +47,8 @@ namespace TonyDev.Game.Level.Rooms
                 wallTilemap.SetTile((Vector3Int) pos, doorTile);   
             }
 
-            open = false;
-            _collider.enabled = open;
+            IsOpen = false;
+            _collider.enabled = IsOpen;
         }
     
         private void OnTriggerEnter2D(Collider2D other)
@@ -59,11 +59,11 @@ namespace TonyDev.Game.Level.Rooms
 
         private bool _hostInterestVisibility;
 
-        [Server]
+        [ServerCallback]
         public void SetHostVisibility(bool visible)
         {
             _hostInterestVisibility = visible;
-            _collider.enabled = open && visible;
+            _collider.enabled = IsOpen && visible;
         }
         
         public void OnDrawGizmos()

@@ -63,7 +63,7 @@ namespace TonyDev.Game.Core.Entities.Player
             {
                 GameManager.Money = 0; //Reset money as a penalty for dying (LOCAL PLAYER ONLY)
                 Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
-                GameManager.ReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
+                GameManager.Instance.CmdReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
             }
             healthBarObject.SetActive(false); //Hide health bar
             _rb2d.simulated = false; //De-activate Rigidbody

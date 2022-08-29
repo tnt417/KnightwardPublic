@@ -62,7 +62,13 @@ namespace TonyDev.Game.Core.Entities.Player
                 if (projectileData == null) return;
 
                 foreach (var proj in projectileData)
-                    GameManager.Instance.CmdSpawnProjectile(netIdentity, GameManager.MouseDirection, proj);
+                {
+                    var direction = GameManager.MouseDirection;
+                    var pos = transform.position;
+                    
+                    AttackFactory.CreateProjectileAttack(this, pos, direction, proj);
+                    GameManager.Instance.CmdSpawnProjectile(netIdentity, pos, GameManager.MouseDirection, proj);
+                }
             };
             
             Init();

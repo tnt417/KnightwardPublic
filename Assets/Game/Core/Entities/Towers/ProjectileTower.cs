@@ -1,9 +1,11 @@
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TonyDev.Game.Core.Entities.Towers
 {
@@ -16,21 +18,41 @@ namespace TonyDev.Game.Core.Entities.Towers
 
         private void Start()
         {
-            OnAttack += () =>
+            if (!EntityOwnership) return;
+            
+            Stats.ReadOnly = false;
+            Stats.AddStatBonus(StatType.Flat, Stat.AttackSpeed, 1.0f, "ProjectileTower");
+            Stats.AddStatBonus(StatType.Flat, Stat.AoeSize, 1.0f, "ProjectileTower");
+            Stats.AddStatBonus(StatType.Flat, Stat.Damage, 1.0f, "ProjectileTower");
+            
+            OnAttack += CmdFire;
+            
+            Init();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdFire()
+        {
+            Debug.Log("Fire!");
+            var rpcSent = false;
+            
+            foreach (var direction in Targets.Where(t => t != null).Select(t =>
+                (t.transform.position - transform.position).normalized))
             {
-                towerAnimator.PlayAnimation(TowerAnimationState.Fire);
-
-                foreach (var direction in Targets.Where(t => t != null).Select(t =>
-                    (t.transform.position - transform.position).normalized))
+                foreach (var projData in projectileData)
                 {
-                    foreach (var projData in projectileData)
-                    {
-                        if (rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
-
-                        AttackFactory.CreateProjectileAttack(this, direction, projData);
-                    }
+                    GameManager.Instance.CmdSpawnProjectile(netIdentity, transform.position, direction, projData);
                 }
-            };
+                if(!rpcSent) RpcFire(direction);
+                rpcSent = true;
+            }
+        }
+
+        [ClientRpc]
+        private void RpcFire(Vector2 direction)
+        {
+            towerAnimator.PlayAnimation(TowerAnimationState.Fire);
+            if (rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
         }
     }
 }

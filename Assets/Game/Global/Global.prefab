@@ -656,6 +656,10 @@ MonoBehaviour:
     value: {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
   - key: chest
     value: {fileID: 7876539795197064780, guid: d366340610a237340be5830e57a02b98, type: 3}
+  - key: ballista
+    value: {fileID: 1150477889065159250, guid: 4984220720a15ef42bdfeff35a0e4b40, type: 3}
+  - key: spin
+    value: {fileID: 1150477889065159250, guid: 7591538168fe32242ae5ef4cd358f346, type: 3}
   animatorEntries:
   - key: Slime
     value: {fileID: 9100000, guid: 54cdb3cb100dbe94baa6a5254c230175, type: 2}

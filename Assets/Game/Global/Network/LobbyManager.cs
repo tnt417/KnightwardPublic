@@ -25,6 +25,8 @@ namespace TonyDev.Game.Global.Network
 
         private readonly Dictionary<int, ConnectedPlayerTile> _playerTiles = new();
 
+        public static Dictionary<int, string> UsernameDict = new();
+        
         public delegate void LobbyEvent();
 
         public event LobbyEvent OnPlay;
@@ -54,18 +56,37 @@ namespace TonyDev.Game.Global.Network
             playButton.interactable = false;
             GameConsole.Log("Starting game...");
 
-            /*NetworkServer.SendToAll(new SceneMessage()
+            foreach (var (key, value) in _playerTiles)
             {
-               sceneName = "CastleScene",
-               sceneOperation = SceneOperation.Normal
-            });
+                Debug.Log(key + ":" + value.username);
+                UsernameDict[key] = value.username;
+            }
 
-            SceneManager.LoadScene("CastleScene");*/
-            
-            NetworkServer.UnSpawn(gameObject);
-            Destroy(gameObject);
+            CmdFinishLobby(UsernameDict.Keys.ToArray(), UsernameDict.Values.ToArray());
 
             OnPlay?.Invoke();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdFinishLobby(int[] keys, string[] values)
+        {
+            RpcSetUsernames(keys, values);
+            Debug.Log("Cmd!");
+            NetworkServer.Destroy(gameObject);
+        }
+
+        [ClientRpc]
+        private void RpcSetUsernames(int[] keys, string[] values)
+        {
+            var newDict = new Dictionary<int, string>();
+            for (var i = 0; i < keys.Length; i++)
+            {
+                Debug.Log(keys[i] + ":" + values[i]);
+                newDict[keys[i]] = values[i];
+            }
+
+            Debug.Log("Rpc!");
+            UsernameDict = newDict;
         }
 
         [Server]

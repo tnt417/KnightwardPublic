@@ -1,9 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
+using Mirror;
 using TMPro;
+using TonyDev.Game.Global.Network;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -93,7 +96,10 @@ namespace TonyDev.Game.Global.Console
                 return;
             }
 
-            Log("[Player] " + input);
+            if (GameManager.Instance != null)
+            {
+                GameManager.Instance.CmdWriteChatMessage(input);
+            }
         }
 
         private readonly Dictionary<string, MethodInfo> _commandMethods = new();

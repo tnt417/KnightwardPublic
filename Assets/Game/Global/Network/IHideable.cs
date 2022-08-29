@@ -6,6 +6,6 @@ namespace TonyDev.Game.Global.Network
     {
         NetworkIdentity CurrentParentIdentity { get; set; }
 
-        public bool CompareVisibility(NetworkIdentity other) => other == CurrentParentIdentity;
+        // public bool CompareVisibility(NetworkIdentity other) => other.netId == this.CurrentParentIdentity.netId;
     }
 }

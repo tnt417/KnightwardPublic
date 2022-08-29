@@ -1,11 +1,15 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Mirror;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
+using TonyDev.Game.Global.Network;
+using TonyDev.Game.Level.Decorations.Chests;
 using TonyDev.Game.UI.Minimap;
 using UnityEditor;
 using UnityEngine;
@@ -32,15 +36,31 @@ namespace TonyDev.Game.Level.Rooms
 
         [SyncVar(hook = nameof(MapHook))] public Map map;
 
-        private void MapHook(Map oldMap, Map newMap)
-        {
-            OnRoomsChanged?.Invoke();
-        }
-
         [Command(requiresAuthority = false)]
         private void CmdSetMap(Map newMap)
         {
-            map = newMap;
+            map = new Map(newMap.Rooms, newMap.StartingRoomPos);
+        }
+
+        private const float RequestRate = 0.25f;
+        private double _nextRequestTime;
+
+        private void Update()
+        {
+            minimapObject.SetActive(GameManager.GamePhase == GamePhase.Dungeon);
+            if (Player.LocalInstance != null)
+                MinimapManager.Instance.SetPlayerPosition(Player.LocalInstance.transform.position,
+                    roomGenerator.roomOffset);
+        }
+
+        private void MapHook(Map oldMap, Map newMap)
+        {
+            OnRoomsChanged?.Invoke();
+            
+            if (GameManager.GamePhase == GamePhase.Dungeon)
+            {
+                TeleportPlayerToStart();
+            }
         }
 
         private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
@@ -59,24 +79,18 @@ namespace TonyDev.Game.Level.Rooms
         private void Start()
         {
             _smoothCameraFollow = FindObjectOfType<SmoothCameraFollow>(); //Initialize the camera follow variables
-            
+
+            OnRoomsChanged += MinimapManager.Instance.Reset;
             OnRoomsChanged += MinimapManager.Instance.UpdateMinimap;
             OnRoomsChanged += DoDoorClosing;
             OnRoomsChanged?.Invoke();
+
+            GenerateRooms();
         }
 
-        private void Update()
-        {
-            minimapObject.SetActive(GameManager.GamePhase == GamePhase.Dungeon);
-            if (Player.LocalInstance != null)
-                MinimapManager.Instance.SetPlayerPosition(Player.LocalInstance.transform.position,
-                    roomGenerator.roomOffset);
-        }
-
-        [Server]
+        [ServerCallback]
         public void GenerateRooms()
         {
-            GameConsole.Log("Generating rooms...");
             CmdSetMap(roomGenerator.Generate()); //Randomly generate rooms
         }
 
@@ -127,14 +141,18 @@ namespace TonyDev.Game.Level.Rooms
         public void SetActiveRoom(int x, int y)
         {
             var newRoom = map.Rooms[x, y]; //Get the new room from the array
-            if (newRoom == null) return; //If it's null, do nothing
+            if (newRoom == null)
+            {
+                Debug.LogWarning("New room is null!");
+                return; //If it's null, do nothing
+            }
 
             currentActiveRoom = newRoom; //Update currentActiveRoom variable
             currentActiveRoom.gameObject.SetActive(true); //Activate the new room
             MinimapManager.Instance.UncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
             _smoothCameraFollow.SetCameraBounds(currentActiveRoom.RoomRect); //Update the camera bounds
             _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
-            
+
             Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
             OnActiveRoomChanged?.Invoke(newRoom.netIdentity);
         }
@@ -146,9 +164,9 @@ namespace TonyDev.Game.Level.Rooms
             if (_smoothCameraFollow != null) _smoothCameraFollow.SetCameraBounds(Rect.zero);
 
             Player.LocalInstance.CmdSetParentIdentity(null);
-            
+
             OnActiveRoomChanged?.Invoke(null);
-            
+
             currentActiveRoom = null;
         }
 
@@ -187,19 +205,28 @@ namespace TonyDev.Game.Level.Rooms
         [Server]
         public void ResetRooms()
         {
-            foreach (var r in map.Rooms) //Destroy all rooms...
+            foreach (var r in map.Rooms) //Destroy all rooms and their child objects...
                 if (r != null)
+                {
+                    foreach (var go in r.roomChildObjects.Where(go => go.GetComponent<Player>() == null))
+                    {
+                        NetworkServer.Destroy(go);
+                    }
+
                     NetworkServer.Destroy(r.gameObject);
+                }
+
+            DeactivateRoomPhase();
 
             MinimapManager.Instance.Reset();
             roomGenerator.Reset();
-            OnActiveRoomChanged?.Invoke(null);
         }
 
         public void TeleportPlayerToStart()
         {
             Player.LocalInstance.transform.position = map.StartingRoom.transform.position;
             SetActiveRoom(map.StartingRoomPos.x, map.StartingRoomPos.y);
+            Debug.Log("Teleporting to start!");
         }
     }
 }

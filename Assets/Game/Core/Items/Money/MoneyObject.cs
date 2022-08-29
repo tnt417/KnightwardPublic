@@ -25,7 +25,8 @@ namespace TonyDev.Game.Core.Items.Money
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.GetComponent<Player>() == null) return;
+            var player = other.GetComponent<Player>();
+            if (player == null || !player.isLocalPlayer) return;
             
             SoundManager.PlayRampingPitchSound("moneyPickup", transform.position);
             GameManager.Money += 1;

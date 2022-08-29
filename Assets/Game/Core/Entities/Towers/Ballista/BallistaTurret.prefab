@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6938340393128323355}
   - component: {fileID: 2598763644231202126}
   - component: {fileID: 9117518813328103301}
+  - component: {fileID: 330042881028611830}
   m_Layer: 0
   m_Name: BallistaTurret
   m_TagString: Untagged
@@ -85,18 +86,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609f77bd4fcb4e94db92f5f804f88634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   targetTag: 
   targetTeam: 0
   maxTargets: 1
+  visibleToHost: 1
+  networkCurrentHealth: 0
+  networkMaxHealth: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
-  fireCooldown: 0.5
-  projectileOriginOffset: {x: 0, y: 0}
-  projectileTargetOffset: {x: 0, y: 0}
   rotateToFaceTargetObject: {fileID: 5988369303423483918}
-  projectilePrefab: {fileID: 5620128404347004703, guid: 9fb8590f630b2734793d63ac5c2f4b0e, type: 3}
-  setProjectileRotation: 1
-  projectileTravelSpeed: 20
+  projectileData:
+  - projectileSprite: {fileID: 21300000, guid: b8cf5e6e4483c834ca3cc04fd6a606b4, type: 3}
+    attackData:
+      damageMultiplier: 1
+      hitboxRadius: 0.3
+      team: 1
+      destroyOnApply: 1
+      lifetime: 0.6666667
+      spawnOnDestroy: {fileID: 0}
+    travelSpeed: 30
+    offsetDegrees: 0
+    waveAmplitude: 0
+    waveFrequency: 0
+    waveDistance: 0
+    effectIDs: []
 --- !u!58 &9117518813328103301
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -113,6 +128,23 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
+--- !u!114 &330042881028611830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150477889065159250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 4984220720a15ef42bdfeff35a0e4b40
+  hasSpawned: 0
 --- !u!1 &4032208556319356246
 GameObject:
   m_ObjectHideFlags: 0

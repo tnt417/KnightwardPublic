@@ -23,6 +23,13 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             FromGenerated
         }
 
+        private void OnDrawGizmos()
+        {
+            Gizmos.color = Color.green;
+
+            Gizmos.DrawSphere(transform.position, 0.5f);
+        }
+
         //Inspector
         [Tooltip("Should the item be spawned on start?")]
         public bool autoSpawn = true;

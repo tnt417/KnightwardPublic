@@ -5,7 +5,7 @@ using UnityEditor;
 
 namespace TonyDev.Editor
 {
-    [CustomEditor(typeof(LevelItemSpawner))]
+    [CustomEditor(typeof(LevelItemSpawner)), CanEditMultipleObjects]
     public class ItemSpawnerEditor : UnityEditor.Editor
     {
         private SerializedProperty _autoSpawn;

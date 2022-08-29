@@ -28,23 +28,20 @@ namespace TonyDev.Game.Core.Items
 
         private void InsertStarterItems()
         {
-            Debug.Log("Inserting items.");
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Weapon,
                 ItemRarity.Common)); //Add a starting sword to the player's inventory.
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Armor,
                 ItemRarity.Common)); //Add armor to inventory
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common)); //Add armor to inventory
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common)); //Add armor to inventory
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common)); //Add armor to inventory
+            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
+                ItemRarity.Common)); //Add armor to inventory
         }
 
-        [GameCommand(Keyword = "insertitem", PermissionLevel = PermissionLevel.Cheat,
-            SuccessMessage = "Inserted item.")]
-        public static void InsertItemCommand(string itemType, string itemRarity)
-        {
-            var it = Enum.Parse<ItemType>(itemType, true);
-            var ir = Enum.Parse<ItemRarity>(itemRarity, true);
-            
-            Instance.InsertItem(ItemGenerator.GenerateItemOfType(it, ir));
-        }
-        
         private static void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI
         {
             if (!item.IsSpawnable) return;

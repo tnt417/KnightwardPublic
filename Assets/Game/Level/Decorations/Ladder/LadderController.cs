@@ -1,6 +1,8 @@
 using System.Collections;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 
@@ -21,7 +23,8 @@ namespace TonyDev.Game.Level.Decorations.Ladder
             }
         }
 
-        private static void Use()
+        [GameCommand(Keyword = "regen", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Success!")]
+        public static void Use()
         {
             GameManager.Instance.CmdProgressNextDungeonFloor();
         }

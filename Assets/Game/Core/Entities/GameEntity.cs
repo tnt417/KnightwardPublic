@@ -25,7 +25,7 @@ namespace TonyDev.Game.Core.Entities
         private const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
 
-        protected virtual bool CanAttack => IsAlive;
+        protected virtual bool CanAttack => IsAlive || this is Tower;
 
         //Editor fields
         [Header("Targeting")]
@@ -55,27 +55,42 @@ namespace TonyDev.Game.Core.Entities
         
         #endregion
 
-        [field: SyncVar]
-        public NetworkIdentity CurrentParentIdentity { get; set; }
+        [SyncVar] private NetworkIdentity _currentParentIdentity;
+        public NetworkIdentity CurrentParentIdentity { get => _currentParentIdentity; set => CmdSetParentIdentity(value); }
 
         [Command(requiresAuthority = false)]
         public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
         {
-            CurrentParentIdentity = roomIdentity;
-            if(this is Player.Player) FindObjectOfType<ParentInterestManagement>().ForceRebuild();
+            if (_currentParentIdentity != null)
+            {
+                var oldRoom = _currentParentIdentity.GetComponent<Room>();
+                if(oldRoom != null) oldRoom.roomChildObjects.Remove(gameObject);
+            }
+            
+            _currentParentIdentity = roomIdentity;
+
+            if (roomIdentity != null)
+            {
+                var room = roomIdentity.GetComponent<Room>();
+                if(room != null) room.roomChildObjects.Add(gameObject);
+            }
+            
+            FindObjectOfType<ParentInterestManagement>().ForceRebuild();
         }
 
         #region Attack
         protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
         private float _attackTimer;
-        
-        public delegate void AttackAction();
-        public event AttackAction OnAttack;
+        public Action OnAttack;
         
         //Invokes the attack event
         public void Attack() //Called in animator events on some entities
         {
-            if(CanAttack) OnAttack?.Invoke();
+            if (CanAttack)
+            {
+                if(this is Tower) Debug.Log("Attack");
+                OnAttack.Invoke();
+            }
         }
         #endregion
         protected void Awake()
@@ -100,6 +115,7 @@ namespace TonyDev.Game.Core.Entities
 
             if (_attackTimer > AttackTimerMax)
             {
+                if(this is Tower) Debug.Log("Attack");
                 Attack();
             }
 

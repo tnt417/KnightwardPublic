@@ -199,7 +199,6 @@ SpriteAtlas:
   - {fileID: -7329591253019825581, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: -5672041578588515963, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
-  - {fileID: 21300000, guid: a0f5830c000fac0429e83a0ac38383ed, type: 3}
   - {fileID: 21300000, guid: 9047db0ce93be6a46a5226c25f8a9050, type: 3}
   - {fileID: 1913745569, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
   - {fileID: 1350662678, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
@@ -282,7 +281,7 @@ SpriteAtlas:
   - CelestialTower_1
   - CelestialTower_0
   - CelestialTower_4
-  - dagger
+  - wi_dagger
   - castleWallLUp
   - castleWallVerticalEndcapBottom
   - castleWallLDown
@@ -345,8 +344,8 @@ SpriteAtlas:
   - castleWallTInverted
   - castleWallIntersect
   - castleWallVerticalSegmentTop
-  - glacialArmor
-  - crimsonArmor
+  - ai_glacialArmor
+  - ai_crimsonArmor
   - dragon_2
   - dragon_1
   - dragon_0
@@ -354,7 +353,7 @@ SpriteAtlas:
   - goldTile
   - daggerShot
   - UIBackground1
-  - hammer
+  - wi_hammer
   - CelestialTowerUI
   - spinTower_1
   - spinTower_0
@@ -394,13 +393,13 @@ SpriteAtlas:
   - woodTile_6
   - spinTowerUI
   - darkArcherArrow
-  - sword
+  - wi_sword
   - crystal_2
   - crystal_3
   - crystal_0
   - crystal_4
   - crystal_5
-  - spear
+  - wi_spear
   - inventoryIcons_12
   - inventoryIcons_11
   - inventoryIcons_10
@@ -426,7 +425,6 @@ SpriteAtlas:
   - hanginglantern_4
   - hanginglantern_5
   - swordSlash2
-  - cursor
   - IceTowerUI
   - IceWizard_10
   - IceWizard_8
@@ -500,7 +498,7 @@ SpriteAtlas:
   - rugTile_17
   - rugTile_16
   - whiteBox
-  - verdantArmor
+  - ai_verdantArmor
   - OmniJewel
   - spectralStep
   m_RenderDataMap: {}

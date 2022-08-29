@@ -69,6 +69,14 @@ namespace TonyDev.Game.Core.Attacks
 
         #endregion
 
+        private Vector3 _velocity;
+        private Vector3 _oneFrameAgo;
+ 
+        private void FixedUpdate () {
+            _velocity = transform.position - _oneFrameAgo;
+            _oneFrameAgo = transform.position;
+        }
+        
         private void Start()
         {
             rb2d = GetComponent<Rigidbody2D>();
@@ -123,7 +131,8 @@ namespace TonyDev.Game.Core.Attacks
             var netId = other.GetComponent<NetworkIdentity>();
 
             //Don't want to return in cases where the thing being hit is local player, so hit detection doesn't have latency with the player.
-            if (_owner != null && !_owner.hasAuthority && !(netId != null && netId.isLocalPlayer)) return; //Only call damage code on attacks that are owned by our client.
+            if (_owner != null && !_owner.hasAuthority && !(netId != null && netId.isLocalPlayer))
+                return; //Only call damage code on attacks that are owned by our client.
 
             var damageable = other.GetComponent<IDamageable>();
             //
@@ -137,11 +146,12 @@ namespace TonyDev.Game.Core.Attacks
                                               : 1));
 
             var entity = other.GetComponent<GameEntity>();
-            
+
             if (netId != null)
             {
-                Debug.Log($"Dealing damage to entity {entity.gameObject.name}, {modifiedDamage}");
-                var dmg = netId.isLocalPlayer ? entity.ApplyDamage(modifiedDamage) : modifiedDamage; //Do damage before command if hitting player
+                var dmg = netId.isLocalPlayer
+                    ? entity.ApplyDamage(modifiedDamage)
+                    : modifiedDamage; //Do damage before command if hitting player
                 GameManager.Instance.CmdDamageEntity(netId, dmg, IsCriticalHit);
             }
             else
@@ -154,12 +164,15 @@ namespace TonyDev.Game.Core.Attacks
             }
 
 
-            var kb = GetKnockbackVector(other.transform) * KnockbackForce; //Calculate the knockback
+            var kb = GetKnockbackVector() * KnockbackForce; //Calculate the knockback
 
-            if (kb.sqrMagnitude > 0)
+            if (kb.x != 0 || kb.y != 0)
             {
                 var rb = other.gameObject.GetComponent<Rigidbody2D>();
-                if (rb != null) rb.AddForce(kb); //Apply the knockback
+                if (rb != null)
+                {
+                    rb.AddForce(kb); //Apply the knockback
+                }
             }
 
             _hitCooldowns.Add(other.gameObject, damageCooldown); //Put the object on cooldown
@@ -224,11 +237,9 @@ namespace TonyDev.Game.Core.Attacks
         #endregion
 
         //Gets a knockback vector. Either based on a vector between the attack and other or based on the RigidBody's velocity.
-        private Vector2 GetKnockbackVector(Transform other)
+        private Vector2 GetKnockbackVector()
         {
-            return rb2d == null
-                ? (other.position - transform.position).normalized
-                : rb2d.velocity.normalized; //Otherwise, return a calculated vector.
+            return _velocity.normalized;
         }
     }
 }

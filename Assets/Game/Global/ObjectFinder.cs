@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
+using TonyDev.Game.Core.Items;
 using UnityEngine;
 using UnityEngine.U2D;
 using Object = UnityEngine.Object;
@@ -24,8 +26,6 @@ namespace TonyDev.Game.Global
         private static readonly Dictionary<string, GameObject> Prefabs = new ();
         private static SpriteAtlas _spriteAtlas;
 
-        public static event Action OnDoneInitialized;
-
         private void Awake()
         {
             foreach (var de in dictionaryEntries)
@@ -35,18 +35,25 @@ namespace TonyDev.Game.Global
             }
             foreach (var pe in prefabEntries)
             {
-                if(pe.value is GameObject go)
+                if (pe.value is GameObject go)
+                {
+                    if (go.GetComponent<NetworkIdentity>() != null)
+                    {
+                        NetworkClient.RegisterPrefab(go);
+                    }
+                    
                     Prefabs.Add(pe.key, go);
+                }
             }
 
             _spriteAtlas = mainSpriteAtlas;
-            
-            OnDoneInitialized?.Invoke();
+            ItemGenerator.InitSprites();
         }
 
         public static EnemyData GetEnemyData(string name) => Enemies.ContainsKey(name.ToLowerInvariant()) ? Enemies[name.ToLowerInvariant()] : null;
 
         public static GameObject GetPrefab(string name) => Prefabs.ContainsKey(name) ? Prefabs[name] : null;
+        public static string GetNameOfPrefab(GameObject prefab) => Prefabs.ContainsValue(prefab) ? Prefabs.FirstOrDefault(k => k.Value == prefab).Key : "";
 
         public static Sprite GetSprite(string name) => _spriteAtlas.GetSprite(name);
 
@@ -56,7 +63,7 @@ namespace TonyDev.Game.Global
             _spriteAtlas.GetSprites(sprites);
 
             sprites = sprites.Where(s => s.name.StartsWith(prefix)).ToArray();
-            
+
             return sprites;
         }
     }

@@ -7,6 +7,7 @@ using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Chests;
+using TonyDev.Game.Level.Rooms;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -79,8 +80,6 @@ namespace TonyDev.Game.Global
             enemy.CmdSetEnemyData(enemyData.enemyName);
             
             enemy.CmdSetParentIdentity(parent);
-
-            return;
         }
 
         [GameCommand(Keyword = "spawn", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawned.")]
@@ -98,6 +97,14 @@ namespace TonyDev.Game.Global
             var groundItemObject = Instantiate(_instance.groundItemPrefab, position, Quaternion.identity);
             var gi = groundItemObject.GetComponent<GroundItem>();
 
+            var room = parent.GetComponent<Room>();
+            
+            if (parent != null && room != null)
+            {
+                room.roomChildObjects.Add(groundItemObject);
+            }
+
+            
             gi.CurrentParentIdentity = parent;
 
             NetworkServer.Spawn(groundItemObject);

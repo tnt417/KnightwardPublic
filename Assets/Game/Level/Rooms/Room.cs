@@ -20,6 +20,11 @@ namespace TonyDev.Game.Level.Rooms
     {
         public static void WriteRoomArray(this NetworkWriter writer, Room[,] value)
         {
+            var isNull = value == null;
+            writer.WriteBool(isNull);
+            
+            if (isNull) return;
+
             var dimension0 = value.GetLength(0);
             var dimension1 = value.GetLength(1);
 
@@ -30,13 +35,17 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < dimension1; j++)
                 {
-                    writer.Write(value[i, j]?.netIdentity);
+                    var netId = value[i, j]?.netIdentity;
+                    writer.WriteNetworkIdentity(netId);
                 }
             }
         }
-
         public static Room[,] ReadRoomArray(this NetworkReader reader)
         {
+            var isNull = reader.ReadBool();
+
+            if (isNull) return null;
+            
             var dimension0 = reader.ReadInt();
             var dimension1 = reader.ReadInt();
 
@@ -46,13 +55,25 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < dimension1; j++)
                 {
-                    var netId = reader.Read<NetworkIdentity>();
+                    var netId = reader.ReadNetworkIdentity();
                     if (netId == null) continue;
                     rooms[i, j] = netId.GetComponent<Room>();
                 }
             }
 
             return rooms;
+        }
+
+        public static void WriteMap(this NetworkWriter writer, Map value)
+        {
+            writer.WriteRoomArray(value.Rooms);
+            writer.WriteVector2Int(value.StartingRoomPos);
+        }
+        public static Map ReadMap(this NetworkReader reader, Map value)
+        {
+            var rooms = reader.ReadRoomArray();
+            var startingRoomPos = reader.ReadVector2Int();
+            return new Map(rooms, startingRoomPos);
         }
     }
 
@@ -74,9 +95,29 @@ namespace TonyDev.Game.Level.Rooms
         public Rect RoomRect => FindRoomRect();
         private bool _clearPrefabSpawned;
 
+        private readonly SyncDictionary<Direction, bool> _openDoorsDictionary = new ();
+        
+        //The child GameObjects of this room, as dictated by IHideable
+        public List<GameObject> roomChildObjects = new ();
+
+        private void OnOpenDoorsDictionaryChange(SyncDictionary<Direction, bool>.Operation op, Direction key, bool open)
+        {
+            foreach (var (direction, value) in _openDoorsDictionary)
+            {
+                var first = roomDoors.FirstOrDefault(rd => rd.direction == direction);
+
+                if (first != null)
+                {
+                    if(value) first.Open();
+                    else first.Close();
+                }
+            }
+        }
+        
         private void Awake()
         {
             RoomManager.Instance.OnActiveRoomChanged += CheckRoomVisibility;
+            _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
         }
 
         public override void OnStartClient()
@@ -84,10 +125,16 @@ namespace TonyDev.Game.Level.Rooms
             SetVisibility(false);
         }
 
+        [Command(requiresAuthority = false)]
+        private void CmdSetDoorOpen(Direction direction, bool open)
+        {
+            _openDoorsDictionary[direction] = open;
+        }
+
         [ClientCallback]
         private void CheckRoomVisibility(NetworkIdentity newRoom)
         {
-            if (Player.LocalInstance == null) return;
+            if (Player.LocalInstance == null || this == null) return;
             SetVisibility(newRoom == netIdentity);
         }
 
@@ -146,18 +193,13 @@ namespace TonyDev.Game.Level.Rooms
             };
         }
 
-        public void
-            SetOpenDirections(
-                List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
+        [ServerCallback]
+        public void SetOpenDirections(List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
         {
             _openDirections = directions;
-            foreach (var rd in
-                from d in directions
-                from rd in roomDoors
-                where rd.direction == d
-                select rd) //Not sure what Ryder did for me here
+            foreach (var d in directions)
             {
-                rd.Open();
+                CmdSetDoorOpen(d, true);
             }
         }
 
@@ -168,6 +210,8 @@ namespace TonyDev.Game.Level.Rooms
 
         private void CheckShouldLockDoors()
         {
+            if (this == null) return;
+            
             var enemySpawner = GetComponentInChildren<EnemySpawner>();
 
             var shouldLock = GameManager.EntitiesReadonly.Any(entity =>
@@ -191,9 +235,11 @@ namespace TonyDev.Game.Level.Rooms
 
         public void OnEntityChange(GameEntity entity)
         {
-            CheckShouldLockDoors();
+            if(this == null)
+                CheckShouldLockDoors();
         }
 
+        [ServerCallback]
         private void OnClear()
         {
             if (!_clearPrefabSpawned && spawnPrefabOnClear != null)
@@ -201,27 +247,29 @@ namespace TonyDev.Game.Level.Rooms
                 var myTransform = transform;
                 Instantiate(spawnPrefabOnClear, myTransform.position, quaternion.identity,
                     myTransform); //Instantiate the on clear prefab in the center of the room
-                _clearPrefabSpawned = true;
+                _clearPrefabSpawned = true; //TODO: won't work on multiplayer
             }
 
             OpenAllDoors(); //Otherwise, open/close the doors as normal.
         }
 
+        [ServerCallback]
         private void OpenAllDoors()
         {
             if (_openDirections == null) return;
             foreach (var rd in roomDoors)
             {
-                if (_openDirections.Contains(rd.direction)) rd.Open();
-                else rd.Close();
+                if (_openDirections.Contains(rd.direction)) CmdSetDoorOpen(rd.direction, true);
+                else CmdSetDoorOpen(rd.direction, false);
             }
         }
 
+        [ServerCallback]
         private void LockAllDoors() //Closes all doors
         {
             foreach (var rd in roomDoors)
             {
-                rd.Close();
+                CmdSetDoorOpen(rd.direction, false);
             }
         }
 

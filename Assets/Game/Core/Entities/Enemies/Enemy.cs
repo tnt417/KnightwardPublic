@@ -40,7 +40,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             SetEnemyData(ObjectFinder.GetEnemyData(enemyName));
         }
-        
+
         //Set enemy data, called on every client on spawn
         private void SetEnemyData(EnemyData enemyData)
         {
@@ -101,7 +101,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 {
                     foreach (var direction in Targets.Select(
                         t => (t.transform.position - transform.position).normalized))
-                        AttackFactory.CreateProjectileAttack(this, direction, data);
+                        AttackFactory.CreateProjectileAttack(this, transform.position, direction, data);
                 };
             }
         }
@@ -118,7 +118,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             enemyAnimator = GetComponent<EnemyAnimator>();
             //
 
-            OnDeath += EnemyDie;
+            if(isServer) OnDeath += (value) => CmdEnemyDie();
         }
 
         //Sets up the animator to play certain animations on certain events
@@ -131,11 +131,23 @@ namespace TonyDev.Game.Core.Entities.Enemies
             _enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Stop);
         }
 
+        [Command(requiresAuthority = false)]
+        private void CmdEnemyDie()
+        {
+            EnemyDie();
+            RpcEnemyDie();
+        }
+        
+        [ClientRpc]
+        private void RpcEnemyDie()
+        {
+            if(!isServer) EnemyDie();
+        }
+
         //Give money reward and destroy self.
-        private void EnemyDie(float value)
+        private void EnemyDie()
         {
             ObjectSpawner.SpawnMoney(MoneyReward, transform.position);
-            Destroy(gameObject);
         }
     }
 }

@@ -14,8 +14,6 @@ namespace TonyDev.Game.UI.Tower
         [SerializeField] private GameObject towerPlacementIndicator;
         [SerializeField] private Image rangeIndicator;
         //
-        
-        private readonly List<Core.Entities.Towers.Tower> _placedTowers = new ();
         private bool Placing => towerPlacementIndicator.activeSelf;
         private Camera _mainCamera;
         private GameObject _selectedTowerPrefab;
@@ -53,10 +51,8 @@ namespace TonyDev.Game.UI.Tower
         //Spawns a tower at the indicator position and exits from placing mode
         private void SpawnTower()
         {
-            var t = towerPlacementIndicator.transform;
-            var go = Instantiate(_selectedTowerPrefab, t.position, Quaternion.identity, transform);
+            GameManager.Instance.CmdSpawnTower(ObjectFinder.GetNameOfPrefab(_selectedTowerPrefab), towerPlacementIndicator.transform.position);
             TowerUIController.Instance.ConfirmPlace();
-            _placedTowers.Add(go.GetComponent<Core.Entities.Towers.Tower>());
             towerPlacementIndicator.SetActive(false);
         }
     }

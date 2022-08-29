@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Mirror;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
@@ -22,7 +23,7 @@ namespace TonyDev.Game.Global.Network
             // rebuild all spawned NetworkIdentity's observers every interval
             if (NetworkTime.time >= _lastRebuildTime + rebuildInterval)
             {
-                RebuildAll();
+                ForceRebuild();
                 _lastRebuildTime = NetworkTime.time;
             }
         }
@@ -35,16 +36,26 @@ namespace TonyDev.Game.Global.Network
 
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver)
         {
+            if (identity == newObserver.identity) return true;
+            
             var identityParentRoom = identity.GetComponent<Room>();
             var identityParentHideable = identity.GetComponent<IHideable>();
 
             if (identityParentHideable == null && identityParentRoom == null)
+            {
                 return true; //If identity is not an entity or room, make it visible.
+            }
+
             if (identityParentHideable != null && identityParentHideable.CurrentParentIdentity == null)
+            {
                 return true; //If identity has no parent identity, can see them
+            }
 
             var observerParentHideable = newObserver.identity.GetComponent<IHideable>();
-            if (observerParentHideable == null) return true; //If observer is not an entity, make it see everything.
+            if (observerParentHideable == null)
+            {
+                return true; //If observer is not an entity, make it see everything.
+            }
 
             if (identityParentRoom != null)
             {
@@ -53,20 +64,30 @@ namespace TonyDev.Game.Global.Network
                            .CurrentParentIdentity; //If observing a room, check if room is the observer's current room.
             }
 
-            return identityParentHideable == null || identityParentHideable.CompareVisibility(observerParentHideable
-                .CurrentParentIdentity); //Otherwise, check if the parents are equal.
+            var visible = identityParentHideable == null || observerParentHideable.CurrentParentIdentity ==
+                identityParentHideable
+                    .CurrentParentIdentity;
+
+            return visible; //Otherwise, check if the parents are equal.
         }
 
-        public override void OnRebuildObservers(NetworkIdentity identity,
-            HashSet<NetworkConnectionToClient> newObservers)
+        public override void OnRebuildObservers(NetworkIdentity identity, HashSet<NetworkConnectionToClient> newObservers)
         {
             // for each connection
-            foreach (NetworkConnectionToClient conn in NetworkServer.connections.Values)
-                // if authenticated and joined the world
-                if (conn != null && conn.isAuthenticated && conn.identity != null)
-                    // check if other identity has the same parent identity as us.
-                    if (OnCheckObserver(identity, conn))
-                        newObservers.Add(conn);
+            foreach (var conn in NetworkServer.connections.Values)
+            {
+                // if not authenticated or not joined the world, don't rebuild
+                if (conn == null || !conn.isAuthenticated || conn.identity == null) continue;
+
+                // check observer (checks if other identity has the same parent identity as us)
+                var visible = OnCheckObserver(identity, conn);
+                if(visible) newObservers.Add(conn);
+                
+                //Don't set host visibility according to the observing of clients
+                if (!conn.identity.isLocalPlayer) return;
+                
+                SetHostVisibility(identity, visible); //Set host visibility ourselves
+            }
         }
 
         [ServerCallback]
@@ -74,13 +95,8 @@ namespace TonyDev.Game.Global.Network
         {
             if (identity.GetComponent<Room>() != null) return;
 
-            var hideable = identity.GetComponent<IHideable>();
-            if (hideable != null)
-            {
-                if (Player.LocalInstance != null)
-                    visible = hideable.CompareVisibility(Player.LocalInstance.CurrentParentIdentity);
-                if (hideable is GameEntity ge) ge.visibleToHost = visible;
-            }
+            var entity = identity.GetComponent<GameEntity>();
+            if (entity != null) entity.visibleToHost = visible;
 
             foreach (var rend in identity.GetComponentsInChildren<Renderer>())
                 rend.enabled = visible;

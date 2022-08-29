@@ -6,6 +6,7 @@ using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine.Rendering;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Rooms
