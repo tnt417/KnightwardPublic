@@ -9,9 +9,9 @@ namespace TonyDev.Game.Core.Attacks
     public static class AttackFactory
     {
         //Responsible for creation of all projectile attacks.
-        public static void CreateProjectileAttack(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData)
+        public static void CreateProjectileAttack(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
         {
-            projectileData.SpawnSelf(pos, direction, owner, owner.Stats.GetStat(Stat.AoeSize));
+            projectileData.SpawnSelf(pos, direction, owner, owner.Stats.GetStat(Stat.AoeSize), identifier);
         }
 
         //Responsible for creation of all non-projectile attacks.

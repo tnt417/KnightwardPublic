@@ -101,7 +101,7 @@ GameObject:
   - component: {fileID: 8564788322872327478}
   - component: {fileID: 408949789115778733}
   - component: {fileID: 8955302732940848532}
-  - component: {fileID: 1746314677665408342}
+  - component: {fileID: -5837359734184844230}
   m_Layer: 8
   m_Name: Enemy
   m_TagString: Untagged
@@ -138,6 +138,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123d362b97c6cf04486ba1b2372ef39e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   animator: {fileID: 7080094185981754642}
 --- !u!114 &7080094185981754641
 MonoBehaviour:
@@ -156,6 +158,8 @@ MonoBehaviour:
   targetTag: 
   targetTeam: 1
   maxTargets: 1
+  baseStats: []
+  clientHealthDisparity: 0
   networkCurrentHealth: 0
   networkMaxHealth: 0
   enemyAnimator: {fileID: 7080094185981754640}
@@ -311,7 +315,7 @@ MonoBehaviour:
   visible: 0
   m_AssetId: c4673581ac60785459b6805764360ee4
   hasSpawned: 0
---- !u!114 &1746314677665408342
+--- !u!114 &-5837359734184844230
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -324,7 +328,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   syncMode: 0
-  syncInterval: 0.1
+  syncInterval: 0.05
   clientAuthority: 0
   sendInterval: 0.05
   syncPosition: 1
@@ -333,9 +337,9 @@ MonoBehaviour:
   interpolatePosition: 1
   interpolateRotation: 0
   interpolateScale: 0
-  bufferTimeMultiplier: 1
+  bufferTimeMultiplier: 3
   bufferSizeLimit: 64
-  catchupThreshold: 4
+  catchupThreshold: 6
   catchupMultiplier: 0.1
   onlySyncOnChange: 1
   bufferResetMultiplier: 5

@@ -19,12 +19,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         private void Start()
         {
             if (!EntityOwnership) return;
-            
-            Stats.ReadOnly = false;
-            Stats.AddStatBonus(StatType.Flat, Stat.AttackSpeed, 1.0f, "ProjectileTower");
-            Stats.AddStatBonus(StatType.Flat, Stat.AoeSize, 1.0f, "ProjectileTower");
-            Stats.AddStatBonus(StatType.Flat, Stat.Damage, 1.0f, "ProjectileTower");
-            
+
             OnAttack += CmdFire;
             
             Init();
@@ -41,7 +36,7 @@ namespace TonyDev.Game.Core.Entities.Towers
             {
                 foreach (var projData in projectileData)
                 {
-                    GameManager.Instance.CmdSpawnProjectile(netIdentity, transform.position, direction, projData);
+                    GameManager.Instance.CmdSpawnProjectile(netIdentity, transform.position, direction, projData, AttackComponent.GetUniqueIdentifier(this));
                 }
                 if(!rpcSent) RpcFire(direction);
                 rpcSent = true;

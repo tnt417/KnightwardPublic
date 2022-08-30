@@ -2,18 +2,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Mirror;
-using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
-using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
-using TonyDev.Game.Level.Decorations.Chests;
 using TonyDev.Game.UI.Minimap;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.Level.Rooms
 {
@@ -59,14 +53,25 @@ namespace TonyDev.Game.Level.Rooms
             
             if (GameManager.GamePhase == GamePhase.Dungeon)
             {
-                TeleportPlayerToStart();
+                StartCoroutine(RegenerateTransition());
             }
+        }
+        
+        private IEnumerator RegenerateTransition()
+        {
+            TransitionController.Instance.FadeInOut(); //Transition to make it less jarring.
+            yield return
+                new WaitUntil(() =>
+                    TransitionController.Instance.OutTransitionDone); //Wait until the transition is over
+
+            TeleportPlayerToStart();
+            
+            FindObjectOfType<SmoothCameraFollow>().FixateOnPlayer();
         }
 
         private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public event Action OnRoomsChanged;
-        public event Action<NetworkIdentity> OnActiveRoomChanged;
 
         private void Awake()
         {
@@ -85,8 +90,14 @@ namespace TonyDev.Game.Level.Rooms
             OnRoomsChanged += DoDoorClosing;
             OnRoomsChanged?.Invoke();
 
-            GenerateRooms();
+            if (isServer) StartCoroutine(GenerateWhenReady());
         }
+
+        private IEnumerator GenerateWhenReady()
+        {
+            yield return new WaitUntil(()=>CustomNetworkManager.ReadyToStart);
+            GenerateRooms();
+        } 
 
         [ServerCallback]
         public void GenerateRooms()
@@ -127,15 +138,23 @@ namespace TonyDev.Game.Level.Rooms
             }
 
             var room = map.Rooms[_currentActiveRoomIndex.x + dx, _currentActiveRoomIndex.y + dy];
+            
+            if (room != null)
+            {
+                SetActiveRoom(_currentActiveRoomIndex.x + dx,
+                    _currentActiveRoomIndex.y + dy); //Set the active room to the new room
 
-            SetActiveRoom(_currentActiveRoomIndex.x + dx,
-                _currentActiveRoomIndex.y + dy); //Set the active room to the new room
-
-            //Move the player into the newly activated room
-            var playerTransform = Player.LocalInstance.transform;
-            playerTransform.position = room.GetSpawnpoint(direction);
-            Player.LocalInstance.playerMovement.DoMovement = true;
-            //
+                //Move the player into the newly activated room
+                var playerTransform = Player.LocalInstance.transform;
+                playerTransform.position = room.GetSpawnpoint(direction);
+                Player.LocalInstance.playerMovement.DoMovement = true;
+                //
+            }
+            else
+            {
+                Player.LocalInstance.transform.position = currentActiveRoom.transform.position;
+                Player.LocalInstance.playerMovement.DoMovement = true;
+            }
         }
 
         public void SetActiveRoom(int x, int y)
@@ -154,7 +173,6 @@ namespace TonyDev.Game.Level.Rooms
             _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
 
             Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
-            OnActiveRoomChanged?.Invoke(newRoom.netIdentity);
         }
 
         //Performs all actions necessary to disable the room phase.
@@ -164,8 +182,8 @@ namespace TonyDev.Game.Level.Rooms
             if (_smoothCameraFollow != null) _smoothCameraFollow.SetCameraBounds(Rect.zero);
 
             Player.LocalInstance.CmdSetParentIdentity(null);
-
-            OnActiveRoomChanged?.Invoke(null);
+            
+            Debug.Log("Deactivated");
 
             currentActiveRoom = null;
         }
@@ -208,11 +226,13 @@ namespace TonyDev.Game.Level.Rooms
             foreach (var r in map.Rooms) //Destroy all rooms and their child objects...
                 if (r != null)
                 {
+                    r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
                     foreach (var go in r.roomChildObjects.Where(go => go.GetComponent<Player>() == null))
                     {
-                        NetworkServer.Destroy(go);
+                        if(go!=null)NetworkServer.Destroy(go);
                     }
 
+                    r.enabled = false;
                     NetworkServer.Destroy(r.gameObject);
                 }
 

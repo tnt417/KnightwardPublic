@@ -93,11 +93,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4226409429262604995}
-  - component: {fileID: 8818585932547927586}
   - component: {fileID: 5306708627611350420}
-  - component: {fileID: 440167816253129492}
   - component: {fileID: 1850413612171510036}
-  - component: {fileID: 61457816368861377}
   - component: {fileID: 5477388304631976754}
   - component: {fileID: 2934682449965143009}
   - component: {fileID: 7352403182745582490}
@@ -124,27 +121,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!50 &8818585932547927586
-Rigidbody2D:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620128404347004703}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!212 &5306708627611350420
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -197,32 +173,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!61 &440167816253129492
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620128404347004703}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.024537921, y: 0.121053696}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.61, y: 0.47}
-    oldSize: {x: 1.125, y: 1.1875}
-    newSize: {x: 0.16, y: 0.16}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.8490758, y: 0.99175644}
-  m_EdgeRadius: 0
 --- !u!114 &1850413612171510036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -237,27 +187,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 25
   damageMultiplier: 1
+  knockbackMultiplier: 1
   damageCooldown: 0
   team: 1
   destroyOnApply: 1
   destroyOnAnyCollide: 0
-  knockbackForce: 300
-  knockbackMultiplier: 1
-  enemySpeedModifier: 0
---- !u!114 &61457816368861377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5620128404347004703}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a37d3413993769548879c11be84b68fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seconds: 10
-  spawnPrefabOnDestroy: {fileID: 2801006091708425565, guid: 2f06c53d652076b4ba3d151ee91d88a2, type: 3}
+  inflictBuffs: []
+  inflictEffects: []
+  rb2d: {fileID: 0}
 --- !u!95 &5477388304631976754
 Animator:
   serializedVersion: 4

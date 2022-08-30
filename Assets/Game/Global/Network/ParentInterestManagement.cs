@@ -96,7 +96,7 @@ namespace TonyDev.Game.Global.Network
             if (identity.GetComponent<Room>() != null) return;
 
             var entity = identity.GetComponent<GameEntity>();
-            if (entity != null) entity.visibleToHost = visible;
+            if (entity != null) entity.VisibleToHost = visible;
 
             foreach (var rend in identity.GetComponentsInChildren<Renderer>())
                 rend.enabled = visible;

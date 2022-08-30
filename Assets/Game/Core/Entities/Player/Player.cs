@@ -4,6 +4,7 @@ using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
+using TonyDev.Game.Global.Network;
 using UnityEngine;
 using UnityEngine.U2D;
 
@@ -22,7 +23,7 @@ namespace TonyDev.Game.Core.Entities.Player
         public PlayerAnimator playerAnimator;
         public PlayerDeath playerDeath;
 
-        protected override bool CanAttack => Input.GetMouseButton(0) && base.CanAttack;
+        protected override bool CanAttack => Input.GetMouseButton(0) && base.CanAttack && !playerDeath.dead;
 
         //All implementations of IDamageable contained in a region
 
@@ -32,28 +33,33 @@ namespace TonyDev.Game.Core.Entities.Player
 
         #endregion
 
-        private new void Update()
+        [SyncVar(hook=nameof(UsernameHook))] public string username;
+
+        public Action<string> OnUsernameChange;
+        
+        public void UsernameHook(string oldUser, string newUser)
         {
-            base.Update();
-            //Enable/disable parts of the player depending on if player is alive //TODO not good
-            playerMovement.enabled = IsAlive;
-            //
+            OnUsernameChange?.Invoke(username);
+        }
+        
+        public override void OnStartServer()
+        {
+            CmdSetUsername(LobbyManager.UsernameDict[netIdentity.connectionToClient.connectionId]);
+            base.OnStartServer();
         }
 
+        [Command(requiresAuthority = false)]
+        private void CmdSetUsername(string user)
+        {
+            username = user;
+        }
+        
         public override void OnStartLocalPlayer()
         {
             LocalInstance = this;
             OnLocalPlayerCreated?.Invoke();
 
-            Stats.ReadOnly = false;
-            
             PlayerStats.Stats = Stats;
-
-            //Add base stat bonuses
-            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, 5.0f, "Player");
-            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.AoeSize, 1.0f, "Player");
-            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.Health, 100f, "Player");
-            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.HpRegen, 1f, "Player");
 
             OnAttack += () =>
             {
@@ -65,9 +71,10 @@ namespace TonyDev.Game.Core.Entities.Player
                 {
                     var direction = GameManager.MouseDirection;
                     var pos = transform.position;
-                    
-                    AttackFactory.CreateProjectileAttack(this, pos, direction, proj);
-                    GameManager.Instance.CmdSpawnProjectile(netIdentity, pos, GameManager.MouseDirection, proj);
+
+                    var identifier = AttackComponent.GetUniqueIdentifier(this);
+                    AttackFactory.CreateProjectileAttack(this, pos, direction, proj, identifier);
+                    GameManager.Instance.CmdSpawnProjectile(netIdentity, pos, GameManager.MouseDirection, proj, identifier);
                 }
             };
             

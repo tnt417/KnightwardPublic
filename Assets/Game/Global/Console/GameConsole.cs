@@ -165,6 +165,10 @@ namespace TonyDev.Game.Global.Console
         {
             if (string.IsNullOrEmpty(text)) return;
             Debug.Log(text);
+
+            
+            _instance._sleepTimer = 0;
+            _instance.consoleUIObject.SetActive(true);
             
             _instance._consoleStringBuilder.AppendLine(text);
             _instance.consoleUIText.text = _instance._consoleStringBuilder.ToString();

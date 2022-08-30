@@ -6,6 +6,7 @@ using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
@@ -18,11 +19,10 @@ namespace TonyDev.Game.Core.Entities
 {
     public abstract class GameEntity : NetworkBehaviour, IDamageable, IHideable
     {
-        public delegate void TargetChangeAction();
-        public event TargetChangeAction OnTargetChange;
-        [NonSerialized] public List<Transform> Targets = new ();
+        public event Action OnTargetChangeOwner;
+        [NonSerialized] public SyncList<NetworkIdentity> Targets = new ();
         
-        private const float EntityTargetUpdatingRate = 0.1f;
+        protected const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
 
         protected virtual bool CanAttack => IsAlive || this is Tower;
@@ -32,10 +32,11 @@ namespace TonyDev.Game.Core.Entities
         [SerializeField] private string targetTag;
         [SerializeField] private Team targetTeam;
         [SerializeField] private int maxTargets;
+        [SerializeField] protected StatBonus[] baseStats;
         // 
 
         //Value is only accurate on the host
-        public bool visibleToHost = true;
+        [NonSerialized] public bool VisibleToHost = true;
 
         public readonly EntityStats Stats = new ();
 
@@ -50,14 +51,46 @@ namespace TonyDev.Game.Core.Entities
             networkMaxHealth = maxHealth;
         }
 
-        [SyncVar] public float networkCurrentHealth;
+        public void ApplyKnockbackGlobal(Vector2 force)
+        {
+            GetComponent<Rigidbody2D>()?.AddForce(force);
+            CmdApplyKnockback(force);
+        }
+        
+        [Command(requiresAuthority = false)]
+        private void CmdApplyKnockback(Vector2 force)
+        {
+            GetComponent<Rigidbody2D>()?.AddForce(force);
+        }
+
+        public float clientHealthDisparity;
+        
+        [SyncVar(hook = nameof(CurrentHealthHook))] public float networkCurrentHealth;
         [SyncVar] public float networkMaxHealth;
+        
+        private void CurrentHealthHook(float oldHealth, float newHealth)
+        {
+            if (clientHealthDisparity == 0 || this is Player.Player) return;
+            
+            if (oldHealth == 0) clientHealthDisparity = 0;
+            else
+            {
+                clientHealthDisparity -= newHealth-oldHealth;   
+            }
+        }
         
         #endregion
 
-        [SyncVar] private NetworkIdentity _currentParentIdentity;
+        [SyncVar(hook = nameof(ParentIdentityHook))] private NetworkIdentity _currentParentIdentity;
         public NetworkIdentity CurrentParentIdentity { get => _currentParentIdentity; set => CmdSetParentIdentity(value); }
 
+        public Action<NetworkIdentity> OnParentIdentityChange;
+        
+        private void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
+        {
+            OnParentIdentityChange?.Invoke(newIdentity);
+        }
+        
         [Command(requiresAuthority = false)]
         public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
         {
@@ -81,14 +114,15 @@ namespace TonyDev.Game.Core.Entities
         #region Attack
         protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
         private float _attackTimer;
-        public Action OnAttack;
+        protected Action OnAttack;
         
         //Invokes the attack event
         public void Attack() //Called in animator events on some entities
         {
+            if (!EntityOwnership) return;
+            
             if (CanAttack)
             {
-                if(this is Tower) Debug.Log("Attack");
                 OnAttack.Invoke();
             }
         }
@@ -138,13 +172,19 @@ namespace TonyDev.Game.Core.Entities
             if (!EntityOwnership) return;
 
             CustomNetworkManager.OnAllPlayersSpawned += UpdateStats;
+
+            Stats.ReadOnly = false;
+            
+            foreach (var sb in baseStats)
+            {
+                Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, "GameEntity");
+            }
+            
+            Stats.OnStatsChanged += UpdateStats;
             
             CurrentHealth = MaxHealth;
             OnHealthChanged += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
             OnHealthChanged?.Invoke(CurrentHealth);
-
-            Stats.ReadOnly = false;
-            Stats.OnStatsChanged += UpdateStats;
 
             UpdateStats();
             
@@ -154,6 +194,24 @@ namespace TonyDev.Game.Core.Entities
         private void UpdateStats()
         {
             CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
+        }
+
+        public override void OnStartClient()
+        {
+            base.OnStartClient();
+            CmdRequestUpdateStats();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdRequestUpdateStats(NetworkConnectionToClient sender = null)
+        {
+            TargetUpdateStats(sender, Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
+        }
+        
+        [TargetRpc]
+        private void TargetUpdateStats(NetworkConnection target, Stat[] keys, float[] values)
+        {
+            if(Stats.ReadOnly) Stats.ReplaceStatValueDictionary(keys, values);
         }
 
         [Command(requiresAuthority = false)]
@@ -171,6 +229,14 @@ namespace TonyDev.Game.Core.Entities
         private void OnDestroy()
         {
             GameManager.RemoveEntity(this);
+        }
+
+        public Action OnLocalHurt;
+        
+        public void LocalHurt(float damage, bool isCrit)
+        {
+            ObjectSpawner.SpawnPopup(transform.position, (int)damage, isCrit);
+            OnLocalHurt?.Invoke();
         }
 
         public void UpdateTarget() //Updates entity's target and returns it.
@@ -195,10 +261,20 @@ namespace TonyDev.Game.Core.Entities
                             && (e is Crystal && Vector2.Distance(e.transform.position, transform.position) < 200f 
                                 || Vector2.Distance(e.transform.position, transform.position) < range)) //Distance check
                 .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
-                .Select(e => e.transform).Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
+                .Select(e => e.netIdentity).Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
+            
+            CmdSetTargets(transforms.ToArray());
+            OnTargetChangeOwner?.Invoke(); //Invoke the target changed method
+        }
 
-            Targets = transforms;
-            OnTargetChange?.Invoke(); //Invoke the target changed method
+        [Command(requiresAuthority = false)]
+        private void CmdSetTargets(NetworkIdentity[] networkIdentities)
+        {
+            Targets.Clear();
+            foreach (var identity in networkIdentities)
+            {
+                Targets.Add(identity);
+            }
         }
         
         #region Effects

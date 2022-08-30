@@ -44,7 +44,7 @@ namespace TonyDev.Game.UI.Healthbar
             if (_attachedDamageable is GameEntity gameEntity)
             {
                 healthSlider.maxValue = gameEntity.networkMaxHealth; //Update the slider values.
-                healthSlider.value = gameEntity.networkCurrentHealth;
+                healthSlider.value = gameEntity.networkCurrentHealth + gameEntity.clientHealthDisparity;
             }
             else
             {

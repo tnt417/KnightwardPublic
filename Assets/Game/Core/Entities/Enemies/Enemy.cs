@@ -19,7 +19,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
     {
         #region Variables
 
-        private EnemyData _enemyData = null;
+        [SyncVar(hook=nameof(EnemyDataHook))] private EnemyData _enemyData;
 
         [SerializeField] private EnemyAnimator enemyAnimator;
         private EnemyMovementBase _enemyMovementBase;
@@ -29,34 +29,26 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
         #endregion
 
-        [Command(requiresAuthority = false)]
-        public void CmdSetEnemyData(string enemyName)
+        private void EnemyDataHook(EnemyData oldData, EnemyData newData)
         {
-            RpcSetEnemyData(enemyName);
+            if (oldData == null && newData != null)
+            {
+                SetEnemyData(newData);
+            }
         }
-
-        [ClientRpc]
-        private void RpcSetEnemyData(string enemyName)
+        
+        [Command(requiresAuthority = false)]
+        public void CmdSetEnemyData(EnemyData enemyData)
         {
-            SetEnemyData(ObjectFinder.GetEnemyData(enemyName));
+            _enemyData = enemyData;
         }
 
         //Set enemy data, called on every client on spawn
         private void SetEnemyData(EnemyData enemyData)
         {
-            if (_enemyData != null) return;
-
             _enemyData = enemyData;
-
-            if (isServer)
-            {
-                Stats.ReadOnly = false;
-
-                foreach (var sb in enemyData.baseStats)
-                {
-                    Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, sb.source);
-                }
-            }
+            
+            baseStats = enemyData.baseStats;
 
             var hitbox = GetComponent<CircleCollider2D>();
             var coll = GetComponent<BoxCollider2D>();
@@ -65,7 +57,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             if (coll != null) coll.size = _enemyData.hitboxRadius * Vector2.one;
 
             enemyAnimator.Set(enemyData);
-            CreateMovementComponent(enemyData.movementData);
+            if(EntityOwnership) CreateMovementComponent(enemyData.movementData);
             SubscribeAnimatorEvents();
             
             InitProjectiles(enemyData.projectileAttackData);
@@ -101,7 +93,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 {
                     foreach (var direction in Targets.Select(
                         t => (t.transform.position - transform.position).normalized))
-                        AttackFactory.CreateProjectileAttack(this, transform.position, direction, data);
+                        GameManager.Instance.CmdSpawnProjectile(netIdentity, transform.position, direction, data, AttackComponent.GetUniqueIdentifier(this));
                 };
             }
         }
@@ -118,36 +110,24 @@ namespace TonyDev.Game.Core.Entities.Enemies
             enemyAnimator = GetComponent<EnemyAnimator>();
             //
 
-            if(isServer) OnDeath += (value) => CmdEnemyDie();
+            if(isServer) OnDeath += (value) => EnemyDie();
         }
 
         //Sets up the animator to play certain animations on certain events
         private void SubscribeAnimatorEvents()
         {
-            OnDeath += (float value) => enemyAnimator.PlayAnimation(EnemyAnimationState.Die);
-            OnHurt += (float value) => enemyAnimator.PlayAnimation(EnemyAnimationState.Hurt);
-            OnAttack += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Attack);
-            _enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Move);
-            _enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimation(EnemyAnimationState.Stop);
-        }
-
-        [Command(requiresAuthority = false)]
-        private void CmdEnemyDie()
-        {
-            EnemyDie();
-            RpcEnemyDie();
-        }
-        
-        [ClientRpc]
-        private void RpcEnemyDie()
-        {
-            if(!isServer) EnemyDie();
+            OnLocalHurt += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Hurt);
+            if (!EntityOwnership) return;
+            OnDeath += (float value) => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Die);
+            OnAttack += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Attack);
+            _enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Move);
+            _enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Stop);
         }
 
         //Give money reward and destroy self.
         private void EnemyDie()
         {
-            ObjectSpawner.SpawnMoney(MoneyReward, transform.position);
+            GameManager.Instance.CmdSpawnMoney(MoneyReward, transform.position, CurrentParentIdentity);
         }
     }
 }

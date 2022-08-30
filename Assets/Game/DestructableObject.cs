@@ -30,7 +30,7 @@ namespace TonyDev.Game
 
         public void Die()
         {
-            ObjectSpawner.SpawnMoney(moneyDrop, transform.position);
+            //TODO ObjectSpawner.SpawnMoney(moneyDrop, transform.position);
             Destroy(gameObject);
         }
 

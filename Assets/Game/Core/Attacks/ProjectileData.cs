@@ -13,17 +13,20 @@ namespace TonyDev.Game.Core.Attacks
     public class AttackData
     {
         public float damageMultiplier;
+        public float knockbackMultiplier = 1;
         public float hitboxRadius;
         public Team team;
         public bool destroyOnApply;
         [Tooltip("-1 for infinite")] public float lifetime;
-        public GameObject spawnOnDestroy;
+        public string spawnOnDestroyKey;
     }
 
     [Serializable]
     public class ProjectileData
     {
-        //[Header("Prefab")] [CanBeNull] public GameObject prefab;
+        [Tooltip("The key of the prefab in ObjectFinder to use for the projectile. Can be left empty.")]
+        [Header("Prefab")]
+        public string prefabKey;
 
         [Header("General Projectile Data")] public Sprite projectileSprite;
         public AttackData attackData;
@@ -37,21 +40,30 @@ namespace TonyDev.Game.Core.Attacks
         [Header("Effects")] public List<string> effectIDs;
 
         //The only place that projectiles should be spawned from. Creates a projectile using this instance of the class.
-        public GameObject SpawnSelf(Vector2 position, Vector2 direction, GameEntity owner, float sizeMultiplier)
+        public GameObject SpawnSelf(Vector2 position, Vector2 direction, GameEntity owner, float sizeMultiplier, string identifier)
         {
             var rotatedDirection =
                 Tools.Rotate(direction, offsetDegrees * Mathf.Deg2Rad); //Rotates direction vector by our offset
 
-            var projectileObject = new GameObject("Projectile");
-                    //: Object.Instantiate(prefab); //Generate prefab if not null, otherwise create new empty GameObject.
+            var alternatePrefab = ObjectFinder.GetPrefab(prefabKey);
+
+            var projectileObject = alternatePrefab == null
+                ? new GameObject("Projectile")
+                : Object.Instantiate(
+                    alternatePrefab); //Generate prefab if not null, otherwise create new empty GameObject.
 
             //Add all necessary components for projectile functionality...
             var rb = projectileObject.AddComponent<Rigidbody2D>();
             var col = projectileObject.GetComponent<CircleCollider2D>();
-            if (col == null) col = projectileObject.AddComponent<CircleCollider2D>(); //Add collider if one doesn't already exist
-            var attack = projectileObject.AddComponent<AttackComponent>();
+            if (col == null)
+                col = projectileObject.AddComponent<CircleCollider2D>(); //Add collider if one doesn't already exist
+            var attack = projectileObject.GetComponent<AttackComponent>();
+            if(attack == null) 
+                attack = projectileObject.AddComponent<AttackComponent>(); //Don't override existing attack components.
             var sprite = projectileObject.GetComponentInChildren<SpriteRenderer>();
-            if (sprite == null) sprite = projectileObject.AddComponent<SpriteRenderer>(); //Add SpriteRenderer if one doesn't already exist
+            if (sprite == null)
+                sprite = projectileObject
+                    .AddComponent<SpriteRenderer>(); //Add SpriteRenderer if one doesn't already exist
             var destroy = projectileObject.AddComponent<DestroyAfterSeconds>();
             var move = projectileObject.AddComponent<ProjectileMovement>();
 
@@ -59,11 +71,12 @@ namespace TonyDev.Game.Core.Attacks
 
             //Populate component variables...
             destroy.seconds = attackData.lifetime;
-            destroy.spawnPrefabOnDestroy = attackData.spawnOnDestroy;
+            destroy.spawnPrefabOnDestroy = ObjectFinder.GetPrefab(attackData.spawnOnDestroyKey);
             destroy.SetOwner(owner);
 
             //Set the AttackComponent's data and owner.
             attack.SetData(attackData, owner);
+            attack.identifier = identifier;
 
             //Populate the AttackComponent's inflict effects
             foreach (var e in effectIDs)
@@ -82,13 +95,14 @@ namespace TonyDev.Game.Core.Attacks
             projectileObject.transform.up = rotatedDirection; //Set the projectile's direction
             projectileObject.transform.localScale *= sizeMultiplier;
             projectileObject.layer = LayerMask.NameToLayer("Attacks");
-            
+
             //Set Rigidbody configuration...
             rb.gravityScale = 0;
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
             rb.isKinematic = true;
             rb.velocity = projectileObject.transform.up * travelSpeed; //Set the projectile's velocity
 
+            GameManager.Instance.projectiles.Add(projectileObject);
             return projectileObject; //Return the GameObject we have created
         }
     }

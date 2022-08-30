@@ -10,7 +10,6 @@ namespace TonyDev.Game.Level
         public static TransitionController Instance;
         private Animator _transitionAnimator;
         private static string _queuedScene;
-        [NonSerialized] public bool InSceneTransition;
         [NonSerialized] public bool OutTransitionDone;
 
         private void Awake()
@@ -21,8 +20,8 @@ namespace TonyDev.Game.Level
             //
         
             _transitionAnimator = GetComponent<Animator>(); //Initialize animator component
-        
-            SceneManager.sceneLoaded += OnSceneLoaded; //Call OnSceneLoaded whenever a new scene is loaded.
+            
+            _transitionAnimator.Play("SceneFadeIn"); //Fade in when scene is loaded
         }
 
         public void FadeInOut() //Plays a fade out and fade in animation while transitioning to a new scene if valid
@@ -31,24 +30,9 @@ namespace TonyDev.Game.Level
             _transitionAnimator.Play("SceneFadeOut"); //Play the animation
         }
 
-        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        public void FadeOutDone()
         {
-            if(_transitionAnimator != null) _transitionAnimator.Play("SceneFadeIn"); //Fade in when a scene is loaded
-        }
-
-        public void LoadScene(string scene) //Transitions to a new scene
-        {
-            _queuedScene = scene; //Update queuedScene variable.
-            InSceneTransition = true; //We are now in scene transition
-            FadeInOut(); //Transition to new scene
-        }
-
-        public void GoToQueuedScene() //Tries to go to the queued scene, if it is valid.
-        {
-            OutTransitionDone = true; //Mark the transition as finished
-            if (_queuedScene == null || _queuedScene == SceneManager.GetActiveScene().name) return; //Return if not a valid scene destination
-            InSceneTransition = false;
-            SceneManager.LoadScene(_queuedScene); //Loads the queued scene
+            OutTransitionDone = true;
         }
     }
 }

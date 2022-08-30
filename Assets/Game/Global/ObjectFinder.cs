@@ -52,7 +52,7 @@ namespace TonyDev.Game.Global
 
         public static EnemyData GetEnemyData(string name) => Enemies.ContainsKey(name.ToLowerInvariant()) ? Enemies[name.ToLowerInvariant()] : null;
 
-        public static GameObject GetPrefab(string name) => Prefabs.ContainsKey(name) ? Prefabs[name] : null;
+        public static GameObject GetPrefab(string name) => string.IsNullOrEmpty(name) ? null : Prefabs.ContainsKey(name) ? Prefabs[name] : null;
         public static string GetNameOfPrefab(GameObject prefab) => Prefabs.ContainsValue(prefab) ? Prefabs.FirstOrDefault(k => k.Value == prefab).Key : "";
 
         public static Sprite GetSprite(string name) => _spriteAtlas.GetSprite(name);

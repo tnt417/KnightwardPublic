@@ -20,10 +20,20 @@ namespace TonyDev.Game.Core.Attacks
 
     public class AttackComponent : MonoBehaviour
     {
+        public string identifier;
+
+        private static int _nextIdentifierSuffix;
+        
+        public static string GetUniqueIdentifier(GameEntity owner)
+        {
+            _nextIdentifierSuffix++;
+            return "CONN" + NetworkClient.localPlayer.netId + "_OWNER" + owner.netIdentity.netId + "_" + _nextIdentifierSuffix;
+        }
+        
+        
         #region Variables
 
-        private const float
-            KnockbackForce = 1000f; //A multiplier so knockback values can be for example 20 instead of 20000
+        private const float KnockbackForce = 1000f; //A multiplier so knockback values can be for example 20 instead of 20000
 
         #region Inspector Variables
 
@@ -35,6 +45,9 @@ namespace TonyDev.Game.Core.Attacks
         [Tooltip("Multiplies the damage dealt to things.")] [SerializeField]
         public float damageMultiplier;
 
+        [Tooltip("Multiplies the knockback applied to things.")] [SerializeField]
+        public float knockbackMultiplier = 1f;
+        
         [Tooltip("Cooldown in seconds between applying damage to individual GameObjects.")] [SerializeField]
         public float damageCooldown;
 
@@ -69,11 +82,11 @@ namespace TonyDev.Game.Core.Attacks
 
         #endregion
 
-        private Vector3 _velocity;
-        private Vector3 _oneFrameAgo;
+        private Vector2 _velocity;
+        private Vector2 _oneFrameAgo;
  
         private void FixedUpdate () {
-            _velocity = transform.position - _oneFrameAgo;
+            _velocity = (Vector2)transform.position - _oneFrameAgo;
             _oneFrameAgo = transform.position;
         }
         
@@ -114,6 +127,21 @@ namespace TonyDev.Game.Core.Attacks
             //
         }
 
+        private bool _quitting;
+        
+        private void OnApplicationQuit()
+        {
+            _quitting = true;
+        }
+
+        private void OnDestroy()
+        {
+            if (_quitting) return;
+            
+            GameManager.Instance.projectiles.Remove(gameObject);
+            GameManager.Instance.CmdDestroyProjectile(identifier);
+        }
+
         #region DamageHandling
 
         private void
@@ -129,9 +157,10 @@ namespace TonyDev.Game.Core.Attacks
         private void TryDamage(Collider2D other)
         {
             var netId = other.GetComponent<NetworkIdentity>();
+            var entity = other.GetComponent<GameEntity>();
 
             //Don't want to return in cases where the thing being hit is local player, so hit detection doesn't have latency with the player.
-            if (_owner != null && !_owner.hasAuthority && !(netId != null && netId.isLocalPlayer))
+            if (_owner != null && !_owner.hasAuthority && (entity == null || entity is not Player))
                 return; //Only call damage code on attacks that are owned by our client.
 
             var damageable = other.GetComponent<IDamageable>();
@@ -140,19 +169,23 @@ namespace TonyDev.Game.Core.Attacks
                 _hitCooldowns.ContainsKey(other.gameObject) ||
                 !other.isTrigger) return; //Check if valid thing to hit
 
+            var crit = IsCriticalHit;
+            
             float modifiedDamage = (int) (Damage * damageMultiplier *
-                                          (IsCriticalHit
+                                          (crit
                                               ? 2
                                               : 1));
 
-            var entity = other.GetComponent<GameEntity>();
-
+            if (entity is Player && entity != Player.LocalInstance) return;
+            
             if (netId != null)
             {
-                var dmg = netId.isLocalPlayer
+                var dmg = netId == NetworkClient.localPlayer
                     ? entity.ApplyDamage(modifiedDamage)
                     : modifiedDamage; //Do damage before command if hitting player
-                GameManager.Instance.CmdDamageEntity(netId, dmg, IsCriticalHit);
+                if(entity is not Player) entity.clientHealthDisparity -= dmg;
+                entity.LocalHurt(dmg, crit);
+                GameManager.Instance.CmdDamageEntity(netId, dmg, crit, NetworkClient.localPlayer);
             }
             else
             {
@@ -160,19 +193,15 @@ namespace TonyDev.Game.Core.Attacks
                     damageable.ApplyDamage(modifiedDamage); //Apply the damage. Critical hits deal double.
                 if (damageDealt > 0)
                     ObjectSpawner.SpawnPopup(other.transform.position, (int) damageDealt,
-                        IsCriticalHit); //Spawn a popup for the damage text if the damage is greater than zero.
+                        crit); //Spawn a popup for the damage text if the damage is greater than zero.
             }
 
 
-            var kb = GetKnockbackVector() * KnockbackForce; //Calculate the knockback
+            var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
 
             if (kb.x != 0 || kb.y != 0)
             {
-                var rb = other.gameObject.GetComponent<Rigidbody2D>();
-                if (rb != null)
-                {
-                    rb.AddForce(kb); //Apply the knockback
-                }
+                if(entity != null) entity.ApplyKnockbackGlobal(kb); //Apply the knockback
             }
 
             _hitCooldowns.Add(other.gameObject, damageCooldown); //Put the object on cooldown
@@ -224,21 +253,37 @@ namespace TonyDev.Game.Core.Attacks
             inflictEffects.Remove(effect);
         }
 
+        private bool _set;
+        
         //Sets necessary data when given AttackData and GameEntity. To be called upon being instantiated as part of an Entity's attack.
         public void SetData(AttackData attackData, GameEntity owner)
         {
+            if (_set)
+            {
+                Debug.LogWarning("AttackComponent has been set twice!");
+                return;
+            }
+            
             damageMultiplier = attackData?.damageMultiplier ?? damageMultiplier;
+            knockbackMultiplier = attackData?.knockbackMultiplier ?? knockbackMultiplier;
             team = attackData?.team ?? team;
-            damageCooldown = 0.5f;
+            if(damageCooldown == 0) damageCooldown = 0.5f;
             destroyOnApply = attackData?.destroyOnApply ?? destroyOnApply;
             _owner = owner;
+
+            _set = true;
         }
 
         #endregion
 
         //Gets a knockback vector. Either based on a vector between the attack and other or based on the RigidBody's velocity.
-        private Vector2 GetKnockbackVector()
+        private Vector2 GetKnockbackVector(Vector2 otherPos)
         {
+            var velocity = _velocity.normalized;
+            if (velocity.x == 0 && velocity.y == 0)
+            {
+                return otherPos - (Vector2)transform.position;
+            }
             return _velocity.normalized;
         }
     }

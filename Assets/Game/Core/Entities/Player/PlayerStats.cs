@@ -17,7 +17,7 @@ namespace TonyDev.Game.Core.Entities.Player
         public StatType statType;
         public Stat stat;
         public float strength;
-        public string source;
+        [HideInInspector] public string source;
 
         public StatBonus(StatType statType, Stat stat, float strength, string source)
         {

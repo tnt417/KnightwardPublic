@@ -33,7 +33,7 @@ namespace TonyDev.Game.Global
             {
                 var spawned = Instantiate(spawnPrefabOnDestroy, transform.position, Quaternion.identity);
                 var attackComponent = spawned.GetComponent<AttackComponent>();
-                attackComponent.SetData(null, _owner);
+                if(attackComponent != null) attackComponent.SetData(null, _owner);
             }
         }
 

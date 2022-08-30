@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Items;
+using TonyDev.Game.Core.Items.Money;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Chests;
@@ -33,6 +35,7 @@ namespace TonyDev.Game.Global
 
         public static void SpawnPopup(Vector2 position, int damage, bool critical)
         {
+            Debug.Log("Spawning popup!");
             var go = PopupObjectPool.Count >= _instance.objectPoolSize ? PopupObjectPool.Dequeue() : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
 
             go.transform.position = position;
@@ -42,13 +45,18 @@ namespace TonyDev.Game.Global
             
             anim.Play("DamagePopup");
 
-            tmp.text = "-" + damage;
-            tmp.color = critical ? Color.red : Color.white;
+            tmp.text = (-damage).ToString(); //Negative, so positive damage has a '-' and healing doesn't.
             
+            //Yellow = normal damage
+            //Red = crit damage
+            //Green = normal healing
+            //Magenta = crit healing
+            tmp.color = damage > 0 ? critical ? Color.red : Color.yellow : critical ? Color.magenta : Color.green;
+
             PopupObjectPool.Enqueue(go);
         }
 
-        public static void SpawnMoney(int amount, Vector2 originPos)
+        public static void SpawnMoney(int amount, Vector2 originPos, NetworkIdentity parentRoom)
         {
             for (var i = 0; i < amount; i++)
             {
@@ -58,6 +66,20 @@ namespace TonyDev.Game.Global
                 var dir = new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle));
                 
                 var moneyObject = Instantiate(_instance.moneyPrefab, originPos, Quaternion.identity);
+
+                if (parentRoom != null)
+                {
+                    var room = parentRoom.GetComponent<Room>();
+
+                    if (room != null)
+                    {
+                        var money = moneyObject.GetComponent<MoneyObject>();
+                        
+                        money.CurrentParentIdentity = parentRoom;
+                        
+                        room.roomChildObjects.Add(moneyObject);
+                    }
+                }
 
                 var rb2d = moneyObject.GetComponent<Rigidbody2D>();
                 rb2d.velocity = dir * _instance.moneyOutwardForce;
@@ -77,7 +99,7 @@ namespace TonyDev.Game.Global
 
             enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
             
-            enemy.CmdSetEnemyData(enemyData.enemyName);
+            enemy.CmdSetEnemyData(enemyData);
             
             enemy.CmdSetParentIdentity(parent);
         }
@@ -123,6 +145,13 @@ namespace TonyDev.Game.Global
             var chestObject = Instantiate(_instance.chestPrefab, position, Quaternion.identity);
             var chest = chestObject.GetComponent<Chest>();
 
+            var room = parent.GetComponent<Room>();
+            
+            if (parent != null && room != null)
+            {
+                room.roomChildObjects.Add(chestObject);
+            }
+            
             chest.CurrentParentIdentity = parent;
             chest.rarityBoost = rarityBoost;
             

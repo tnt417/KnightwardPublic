@@ -62,8 +62,6 @@ namespace TonyDev.Game.Level.Decorations.Chests
             
             var dropItem = _item ?? ItemGenerator.GenerateItem(rarityBoost);
 
-            GameConsole.Log("Item type: " + _item?.itemType + ", Item sprite: " + _item?.uiSprite);
-
             //Spawn the item and change the chest sprite
             ObjectSpawner.SpawnGroundItem(_item, 0, transform.position, CurrentParentIdentity);
             onOpenServer.Invoke();

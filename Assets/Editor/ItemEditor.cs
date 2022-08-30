@@ -58,7 +58,7 @@ namespace TonyDev.Editor
         private void DisplaySpawnableInfo(SerializedProperty sp)
         {
             EditorGUILayout.LabelField("Spawnable Item Data:", EditorStyles.largeLabel);
-            EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.spawnablePrefab)));
+            EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.spawnablePrefabName)));
         }
     }
 }

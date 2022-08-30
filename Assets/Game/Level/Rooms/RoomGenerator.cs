@@ -142,7 +142,6 @@ namespace TonyDev.Game.Level.Rooms
             var go = Instantiate(prefab,
                 new Vector2(roomOffset.x * (index.x - mapRadius), roomOffset.y * (index.y - mapRadius)),
                 Quaternion.identity);
-            go.SendMessage("SetRoomIndex", new Vector2Int(index.x, index.y));
 
             NetworkServer.Spawn(go);
 

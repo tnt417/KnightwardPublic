@@ -42,17 +42,13 @@ namespace TonyDev.Game.UI.Minimap
     
         public void UpdateMinimap()
         {
-            GameConsole.Log("Updating minimap!");
-            
             _roomManager = FindObjectOfType<RoomManager>();
             _rooms = _roomManager.map.Rooms;
             
             if (_rooms == null) return;
 
             Reset();
-            
-            GameConsole.Log("Rooms is not null!");
-            
+
             _discoveredRooms = new int[_roomManager.MapSize, _roomManager.MapSize];
             _uiRoomObjects = new GameObject[_roomManager.MapSize, _roomManager.MapSize];
 

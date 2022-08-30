@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
@@ -26,14 +27,14 @@ namespace TonyDev.Game.Core.Entities.Enemies.Movement
             if (FirstTarget == null) return;
             
             UpdateMovement(); //Call UpdateMovement
-            if(EnemyMovementData.doXFlipping) _spriteRenderer.flipX = FirstTarget.position.x > transform.position.x;
+            if(EnemyMovementData.doXFlipping) _spriteRenderer.flipX = FirstTarget.transform.position.x > transform.position.x;
         }
 
         public bool DoMovement => true;
         public abstract void UpdateMovement();
         public float Speed { get; protected set; }
         public float SpeedMultiplier => _enemy.Stats.GetStat(Stat.MoveSpeed);
-        protected Transform FirstTarget => _enemy.Targets.FirstOrDefault();
+        protected NetworkIdentity FirstTarget => _enemy.Targets.FirstOrDefault();
 
         public delegate void MoveAction();
 

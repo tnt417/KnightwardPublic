@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Mirror;
 using TonyDev.Game.Core.Entities.Enemies.Movement;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
@@ -17,7 +18,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
     }
 
     [RequireComponent(typeof(Animator))]
-    public class EnemyAnimator : MonoBehaviour
+    public class EnemyAnimator : NetworkBehaviour
     {
         //Editor Variables
         [SerializeField] private Animator animator;
@@ -25,9 +26,38 @@ namespace TonyDev.Game.Core.Entities.Enemies
         
         private readonly Dictionary<EnemyAnimationState, string> _animationPairs = new();
 
-        public void PlayAnimation(EnemyAnimationState state)
+        [Command(requiresAuthority = false)]
+        private void CmdPlayAnimation(EnemyAnimationState state, NetworkIdentity exclude)
         {
-            if (!_animationPairs.ContainsKey(state)) return;
+            if (!_animationPairs.ContainsKey(state))
+            {
+                Debug.LogWarning("Invalid anim state!");
+                return;
+            }
+            RpcPlayAnimation(state, exclude);
+        }
+
+        public void PlayAnimationGlobal(EnemyAnimationState state)
+        {
+            PlayAnim(state);
+            CmdPlayAnimation(state, NetworkClient.localPlayer);
+        }
+
+        [ClientRpc]
+        private void RpcPlayAnimation(EnemyAnimationState state, NetworkIdentity exclude)
+        {
+            if (NetworkClient.localPlayer == exclude) return;
+            
+            PlayAnim(state);
+        }
+
+        private void PlayAnim(EnemyAnimationState state)
+        {
+            if (!_animationPairs.ContainsKey(state))
+            {
+                Debug.LogWarning("Invalid anim state!");
+                return;
+            }
             animator.Play(_animationPairs[state]);
         }
 

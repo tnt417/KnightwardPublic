@@ -7,6 +7,7 @@ using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global;
 using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -62,11 +63,13 @@ namespace TonyDev.Game.Core.Items
         public ItemType itemType;
         public ItemRarity itemRarity;
         public StatBonus[] statBonuses;
-        public GameObject spawnablePrefab;
         public string[] itemEffectIds;
         [NonSerialized] public List<GameEffect> ItemEffects = new ();
         public ProjectileData[] projectiles;
         //
+
+        public GameObject spawnablePrefab => ObjectFinder.GetPrefab(spawnablePrefabName);
+        public string spawnablePrefabName;
 
         public static ItemRarity RandomRarity(int rarityBoost)
         {

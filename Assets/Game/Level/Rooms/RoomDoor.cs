@@ -28,33 +28,22 @@ namespace TonyDev.Game.Level.Rooms
         {
             _collider = GetComponent<BoxCollider2D>();
         }
-        
-        public void Open()
+
+        public void SetOpen(bool open)
         {
             foreach (var pos in wallTileSpots)
             {
-                wallTilemap.SetTile((Vector3Int) pos, null);
+                wallTilemap.SetTile((Vector3Int) pos, open ? null : doorTile);   
             }
 
-            IsOpen = true;
-            _collider.enabled = IsOpen;
+            IsOpen = open;
+            _collider.enabled = open;
         }
 
-        public void Close()
-        {
-            foreach (var pos in wallTileSpots)
-            {
-                wallTilemap.SetTile((Vector3Int) pos, doorTile);   
-            }
-
-            IsOpen = false;
-            _collider.enabled = IsOpen;
-        }
-    
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!_hostInterestVisibility && NetworkClient.isHostClient) return;
-            if(other.GetComponent<Player>() == Player.LocalInstance && other.isTrigger) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
+            if(other.GetComponent<Player>() == Player.LocalInstance && other.isTrigger && IsOpen) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
         }
 
         private bool _hostInterestVisibility;

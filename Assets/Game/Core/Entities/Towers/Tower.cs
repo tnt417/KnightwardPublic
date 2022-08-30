@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies;
@@ -14,6 +15,11 @@ namespace TonyDev.Game.Core.Entities.Towers
         [SerializeField] protected TowerAnimator towerAnimator;
         [SerializeField] public float targetRadius;
         //
+
+        private void Start()
+        {
+            Init();
+        }
 
         public override Team Team => Team.Player;
         public override bool IsInvulnerable => true;

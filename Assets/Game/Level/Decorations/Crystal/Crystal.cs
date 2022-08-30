@@ -34,7 +34,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         //Interface code. Only abnormal thing is the game is over when the crystal dies.
         #region IDamageable
         public override Team Team => Team.Player;
-        public override int MaxHealth => 1000;
+        public override int MaxHealth => 5000;
         #endregion
 
         [GameCommand(Keyword = "ci", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled crystal invulnerability.")]

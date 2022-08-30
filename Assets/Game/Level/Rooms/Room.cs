@@ -89,8 +89,6 @@ namespace TonyDev.Game.Level.Rooms
 
         public Sprite minimapIcon;
         //
-
-        private Vector2Int _roomIndex;
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
         private bool _clearPrefabSpawned;
@@ -102,27 +100,7 @@ namespace TonyDev.Game.Level.Rooms
 
         private void OnOpenDoorsDictionaryChange(SyncDictionary<Direction, bool>.Operation op, Direction key, bool open)
         {
-            foreach (var (direction, value) in _openDoorsDictionary)
-            {
-                var first = roomDoors.FirstOrDefault(rd => rd.direction == direction);
-
-                if (first != null)
-                {
-                    if(value) first.Open();
-                    else first.Close();
-                }
-            }
-        }
-        
-        private void Awake()
-        {
-            RoomManager.Instance.OnActiveRoomChanged += CheckRoomVisibility;
-            _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
-        }
-
-        public override void OnStartClient()
-        {
-            SetVisibility(false);
+            roomDoors.FirstOrDefault(rd => rd.direction == key)?.SetOpen(open);
         }
 
         [Command(requiresAuthority = false)]
@@ -152,11 +130,23 @@ namespace TonyDev.Game.Level.Rooms
                 roomDoor.SetHostVisibility(visible);
         }
 
+        private void Awake()
+        {
+            Player.LocalInstance.OnParentIdentityChange += CheckRoomVisibility;
+            _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
+        }
+
         private void Start()
         {
             GameManager.OnEnemyAdd += OnEntityChange;
             GameManager.OnEnemyRemove += OnEntityChange;
             CheckShouldLockDoors();
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.OnEnemyAdd -= OnEntityChange;
+            GameManager.OnEnemyRemove -= OnEntityChange;
         }
 
         //Returns a rect, representing the room's position and shape in the world based on its tilemaps
@@ -196,6 +186,7 @@ namespace TonyDev.Game.Level.Rooms
         [ServerCallback]
         public void SetOpenDirections(List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
         {
+            if (this == null) return;
             _openDirections = directions;
             foreach (var d in directions)
             {
@@ -211,12 +202,12 @@ namespace TonyDev.Game.Level.Rooms
         private void CheckShouldLockDoors()
         {
             if (this == null) return;
-            
+
             var enemySpawner = GetComponentInChildren<EnemySpawner>();
 
             var shouldLock = GameManager.EntitiesReadonly.Any(entity =>
                                  entity is Enemy {IsAlive: true} && entity.CurrentParentIdentity == netIdentity)
-                             || enemySpawner != null && enemySpawner.CurrentlySpawning; //Check if there are any alive enemies in our room or if our spawner is spawning.
+                             /*|| enemySpawner != null && enemySpawner.CurrentlySpawning*/; //Check if there are any alive enemies in our room or if our spawner is spawning.
 
             if (shouldLock)
             {
@@ -233,10 +224,10 @@ namespace TonyDev.Game.Level.Rooms
             LockAllDoors();
         }
 
-        public void OnEntityChange(GameEntity entity)
+        private void OnEntityChange(GameEntity entity)
         {
-            if(this == null)
-                CheckShouldLockDoors();
+            if (this == null) return;
+            CheckShouldLockDoors();
         }
 
         [ServerCallback]
@@ -256,7 +247,7 @@ namespace TonyDev.Game.Level.Rooms
         [ServerCallback]
         private void OpenAllDoors()
         {
-            if (_openDirections == null) return;
+            if (this == null || _openDirections == null) return;
             foreach (var rd in roomDoors)
             {
                 if (_openDirections.Contains(rd.direction)) CmdSetDoorOpen(rd.direction, true);
@@ -267,15 +258,11 @@ namespace TonyDev.Game.Level.Rooms
         [ServerCallback]
         private void LockAllDoors() //Closes all doors
         {
+            if (this == null) return;
             foreach (var rd in roomDoors)
             {
                 CmdSetDoorOpen(rd.direction, false);
             }
-        }
-
-        public void SetRoomIndex(Vector2Int v2) //Called with event. Communicates where this room is on the grid.
-        {
-            _roomIndex = v2;
         }
     }
 }

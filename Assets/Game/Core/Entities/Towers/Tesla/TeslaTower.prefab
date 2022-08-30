@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9117518813328103301}
   - component: {fileID: 3454711787081810835}
   - component: {fileID: 1164224523793290007}
+  - component: {fileID: 330042881028611830}
   m_Layer: 0
   m_Name: TeslaTower
   m_TagString: Tesla
@@ -48,18 +49,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609f77bd4fcb4e94db92f5f804f88634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   targetTag: Tesla
   targetTeam: 1
   maxTargets: 5
+  baseStats:
+  - statType: 0
+    stat: 0
+    strength: 10
+    source: 
+  - statType: 0
+    stat: 1
+    strength: 10
+    source: 
+  - statType: 0
+    stat: 3
+    strength: 1
+    source: 
+  networkCurrentHealth: 0
+  networkMaxHealth: 0
   towerAnimator: {fileID: 3454711787081810835}
   targetRadius: 5
-  fireCooldown: 0.1
-  projectileOriginOffset: {x: 0, y: 0.2}
-  projectileTargetOffset: {x: 0, y: 0.2}
   rotateToFaceTargetObject: {fileID: 0}
-  projectilePrefab: {fileID: 2666719200309487284, guid: e6d4ebab25dae134293c80bad793fe45, type: 3}
-  setProjectileRotation: 1
-  projectileTravelSpeed: 10
+  projectileData:
+  - prefabKey: teslaShot
+    projectileSprite: {fileID: 0}
+    attackData:
+      damageMultiplier: 1
+      knockbackMultiplier: 0
+      hitboxRadius: 0.1
+      team: 1
+      destroyOnApply: 0
+      lifetime: 5
+      spawnOnDestroyKey: 
+    travelSpeed: 10
+    offsetDegrees: 0
+    waveAmplitude: 0
+    waveFrequency: 0
+    waveDistance: 0
+    effectIDs: []
 --- !u!58 &9117518813328103301
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -110,6 +139,23 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &330042881028611830
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150477889065159250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: 268971c8fa1580d43a904332b20b728f
+  hasSpawned: 0
 --- !u!1 &5988369303423483918
 GameObject:
   m_ObjectHideFlags: 0

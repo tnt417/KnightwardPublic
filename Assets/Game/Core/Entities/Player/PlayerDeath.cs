@@ -17,7 +17,7 @@ namespace TonyDev.Game.Core.Entities.Player
         private Rigidbody2D _rb2d;
         //
     
-        public bool dead;
+        [SyncVar] public bool dead;
         private float _deathTimer;
 
         private void Awake()
@@ -51,19 +51,21 @@ namespace TonyDev.Game.Core.Entities.Player
         [Command(requiresAuthority = false)]
         private void CmdDie()
         {
+            dead = true;
             RpcDie();
         }
 
         [ClientRpc]
         private void RpcDie()
         {
-            dead = true; //Die
-            
             if (isLocalPlayer)
             {
+                ObjectSpawner.SpawnMoney(GameManager.Money, Player.LocalInstance.transform.position, Player.LocalInstance.CurrentParentIdentity);
                 GameManager.Money = 0; //Reset money as a penalty for dying (LOCAL PLAYER ONLY)
+                Player.LocalInstance.playerMovement.DoMovement = false;
                 Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
                 GameManager.Instance.CmdReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
+                GameManager.Instance.EnterArenaPhase();
             }
             healthBarObject.SetActive(false); //Hide health bar
             _rb2d.simulated = false; //De-activate Rigidbody
@@ -78,16 +80,16 @@ namespace TonyDev.Game.Core.Entities.Player
         [Command(requiresAuthority = false)]
         private void CmdRevive()
         {
+            dead = false;
             RpcRevive();
         }
 
         [ClientRpc]
         private void RpcRevive()
         {
-            dead = false; //Revive
-            
             if (isLocalPlayer)
             {
+                Player.LocalInstance.playerMovement.DoMovement = true;
                 Player.LocalInstance.SetHealth(Player.LocalInstance.networkMaxHealth); //Fully heal the player
             }
             

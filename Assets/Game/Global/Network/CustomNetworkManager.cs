@@ -25,8 +25,6 @@ namespace TonyDev.Game.Global.Network
             base.Awake();
 
             _ipAddressInputField = GetComponentInChildren<TMP_InputField>();
-
-            SceneManager.sceneLoaded += (arg0, sceneMode) => { GameConsole.Log("Scene loaded: " + arg0.name); };
         }
 
         [Client]
@@ -51,14 +49,18 @@ namespace TonyDev.Game.Global.Network
             }
         }
 
+        public static bool ReadyToStart;
+        
         [Server]
         public override void OnServerReady(NetworkConnectionToClient conn)
         {
             base.OnServerReady(conn);
-            
-            GameConsole.Log($"Player {conn.connectionId} ready!");
 
-            if (SceneManager.GetActiveScene().name == "CastleScene") return;
+            if (SceneManager.GetActiveScene().name == "CastleScene")
+            {
+                ReadyToStart = AllClientsReady;
+                return;
+            }
 
             if (_lobbyManager == null)
             {

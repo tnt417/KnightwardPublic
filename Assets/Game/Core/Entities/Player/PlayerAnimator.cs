@@ -88,7 +88,7 @@ namespace TonyDev.Game.Core.Entities.Player
         //Sets the anim state to dead
         public void PlayDeadAnimation()
         {
-            _playerAnimState = PlayerAnimState.Dead;
+            PlayerAnimState = PlayerAnimState.Dead;
         }
     }
 }

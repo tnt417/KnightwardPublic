@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
@@ -7,22 +8,31 @@ namespace TonyDev.Game.Core.Entities.Towers.Celestial
 {
     public class BuffTower : Tower
     {
-        [SerializeField] private float allyStrengthBonusPercent;
-        [SerializeField] private float allyAttackSpeedBonusPercent;
+        public List<StatBonus> buffs;
 
-        private void Awake()
+        private void Start()
         {
-            OnTargetChange += DoBuffing;
+            if (!EntityOwnership) return;
+
+            OnTargetChangeOwner += DoBuffing;
+        }
+
+        
+        
+        private new void Update()
+        {
+            base.Update();
+            
         }
 
         private void DoBuffing()
         {
             foreach (var pt in Targets.Select(t => t.GetComponent<ProjectileTower>()).Where(pt => pt != null))
             {
-                var source = GetInstanceID().ToString();
-                pt.Stats.RemoveStatBonuses(source);
-                pt.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, allyStrengthBonusPercent, source);
-                pt.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, allyAttackSpeedBonusPercent, source);
+                foreach (var sb in buffs)
+                {
+                    pt.Stats.AddBuff(sb, EntityTargetUpdatingRate);
+                }
             }
         }
 

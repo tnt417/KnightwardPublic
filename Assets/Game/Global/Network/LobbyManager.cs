@@ -38,7 +38,6 @@ namespace TonyDev.Game.Global.Network
 
         private void Awake()
         {
-            GameConsole.Log("Re-awoke");
             playButton.interactable = false;
         }
 
@@ -95,8 +94,6 @@ namespace TonyDev.Game.Global.Network
             if (conn == null) return;
 
             var connId = conn.connectionId;
-
-            GameConsole.Log($"Adding player {connId} to the lobby.");
 
             foreach (var tileObject in _playerTiles.Select(pt => pt.Value.gameObject))
             {

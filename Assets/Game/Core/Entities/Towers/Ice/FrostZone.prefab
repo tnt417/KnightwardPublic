@@ -66,19 +66,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd879a871c0f7974b89c47103732aefb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
-  damageMultiplier: 1
+  damage: 0
+  damageMultiplier: 0.05
+  knockbackMultiplier: 0
   damageCooldown: 0.2
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
-  knockbackForce: 0
-  knockbackMultiplier: 1
   inflictBuffs:
   - statType: 1
-    stat: 4
-    strength: -0.5
+    stat: 5
+    strength: -0.25
     source: 
+  inflictEffects: []
+  rb2d: {fileID: 0}
 --- !u!114 &8604458101966122574
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -67,14 +67,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 10
-  damageMultiplier: 1
+  damageMultiplier: 0.2
+  knockbackMultiplier: 0
   damageCooldown: 0.2
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
-  knockbackForce: 0
-  knockbackMultiplier: 1
-  enemySpeedModifier: 1
+  inflictBuffs: []
+  inflictEffects: []
+  rb2d: {fileID: 0}
 --- !u!114 &8604458101966122574
 MonoBehaviour:
   m_ObjectHideFlags: 0
