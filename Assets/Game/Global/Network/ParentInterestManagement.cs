@@ -43,7 +43,7 @@ namespace TonyDev.Game.Global.Network
 
             if (identityParentHideable == null && identityParentRoom == null)
             {
-                return true; //If identity is not an entity or room, make it visible.
+                return true; //If identity is not hideable or a room, make it visible.
             }
 
             if (identityParentHideable != null && identityParentHideable.CurrentParentIdentity == null)
@@ -54,7 +54,7 @@ namespace TonyDev.Game.Global.Network
             var observerParentHideable = newObserver.identity.GetComponent<IHideable>();
             if (observerParentHideable == null)
             {
-                return true; //If observer is not an entity, make it see everything.
+                return true; //If observer is not a hideable(entity), make it see everything.
             }
 
             if (identityParentRoom != null)
@@ -77,14 +77,18 @@ namespace TonyDev.Game.Global.Network
             foreach (var conn in NetworkServer.connections.Values)
             {
                 // if not authenticated or not joined the world, don't rebuild
-                if (conn == null || !conn.isAuthenticated || conn.identity == null) continue;
+                if (conn == null || !conn.isAuthenticated || conn.identity == null)
+                {
+                    Debug.Log("Connection not ready for rebuild: " + conn?.connectionId);
+                    continue;
+                }
 
                 // check observer (checks if other identity has the same parent identity as us)
                 var visible = OnCheckObserver(identity, conn);
                 if(visible) newObservers.Add(conn);
                 
                 //Don't set host visibility according to the observing of clients
-                if (!conn.identity.isLocalPlayer) return;
+                if (conn.identity != NetworkClient.localPlayer) continue;
                 
                 SetHostVisibility(identity, visible); //Set host visibility ourselves
             }

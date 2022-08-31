@@ -4,6 +4,7 @@ using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Core.Items.Money;
 using TonyDev.Game.Global.Console;
@@ -33,9 +34,8 @@ namespace TonyDev.Game.Global
             if (_instance == null) _instance = this;
         }
 
-        public static void SpawnPopup(Vector2 position, int damage, bool critical)
+        public static void SpawnDmgPopup(Vector2 position, int damage, bool critical)
         {
-            Debug.Log("Spawning popup!");
             var go = PopupObjectPool.Count >= _instance.objectPoolSize ? PopupObjectPool.Dequeue() : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
 
             go.transform.position = position;
@@ -43,7 +43,7 @@ namespace TonyDev.Game.Global
             var tmp = go.GetComponentInChildren<TextMeshPro>();
             var anim = go.GetComponent<Animator>();
             
-            anim.Play("DamagePopup");
+            anim.Play("Popup");
 
             tmp.text = (-damage).ToString(); //Negative, so positive damage has a '-' and healing doesn't.
             
@@ -55,10 +55,27 @@ namespace TonyDev.Game.Global
 
             PopupObjectPool.Enqueue(go);
         }
+        
+        public static void SpawnTextPopup(Vector2 position, string text, Color color)
+        {
+            var go = PopupObjectPool.Count >= _instance.objectPoolSize ? PopupObjectPool.Dequeue() : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
+
+            go.transform.position = position;
+            
+            var tmp = go.GetComponentInChildren<TextMeshPro>();
+            var anim = go.GetComponent<Animator>();
+            
+            anim.Play("Popup");
+
+            tmp.text = text;
+            tmp.color = color;
+
+            PopupObjectPool.Enqueue(go);
+        }
 
         public static void SpawnMoney(int amount, Vector2 originPos, NetworkIdentity parentRoom)
         {
-            for (var i = 0; i < amount; i++)
+            for (var i = 0; i < amount; i+=0)
             {
                 var angle = Random.Range(0, 360);
 
@@ -66,17 +83,31 @@ namespace TonyDev.Game.Global
                 var dir = new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle));
                 
                 var moneyObject = Instantiate(_instance.moneyPrefab, originPos, Quaternion.identity);
+                var money = moneyObject.GetComponent<MoneyObject>();
 
+                var remMoney = amount - i;
+                var addAmount = remMoney / 5f > 1 ? remMoney / 25f > 1 ? remMoney / 100f > 1 ? 100 : 25 : 5 : 1;
+                
+                money.amount = addAmount;
+                i += addAmount;
+
+                moneyObject.transform.localScale = addAmount switch
+                {
+                    1 => Vector3.one,
+                    5 => Vector3.one * 1.2f,
+                    25 => Vector3.one * 1.4f,
+                    100 => Vector3.one * 1.6f,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                
                 if (parentRoom != null)
                 {
                     var room = parentRoom.GetComponent<Room>();
 
                     if (room != null)
                     {
-                        var money = moneyObject.GetComponent<MoneyObject>();
-                        
                         money.CurrentParentIdentity = parentRoom;
-                        
+
                         room.roomChildObjects.Add(moneyObject);
                     }
                 }
@@ -110,7 +141,7 @@ namespace TonyDev.Game.Global
             for (var i = 0; i < amount; i++)
                 if (Camera.main is not null)
                     GameManager.Instance.CmdSpawnEnemy(enemyName,
-                        Camera.main.ScreenToWorldPoint(Input.mousePosition), null);
+                        Camera.main.ScreenToWorldPoint(Input.mousePosition), Player.LocalInstance.CurrentParentIdentity);
         }
 
         [Server]

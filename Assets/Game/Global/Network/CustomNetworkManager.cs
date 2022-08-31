@@ -14,7 +14,6 @@ namespace TonyDev.Game.Global.Network
     {
         [Header("Custom")] [SerializeField] private GameObject connectUIObject;
         [SerializeField] private GameObject lobbyManagerPrefab;
-        [SerializeField] private GameObject networkedManagersPrefab;
 
         private LobbyManager _lobbyManager;
 
@@ -38,13 +37,13 @@ namespace TonyDev.Game.Global.Network
         private static bool AllClientsReady => NetworkServer.connections.Values.All(conn => conn.isReady);
         private static bool AllPlayersSpawned => NetworkServer.connections.Values.All(conn => conn.identity != null);
         public static Action OnAllPlayersSpawned;
-        private static bool playerSpawnEventCalled = false;
+        private static bool _playerSpawnEventCalled;
 
         private void Update()
         {
-            if (!playerSpawnEventCalled && AllPlayersSpawned)
+            if (!_playerSpawnEventCalled && AllPlayersSpawned)
             {
-                playerSpawnEventCalled = true;
+                _playerSpawnEventCalled = true;
                 OnAllPlayersSpawned?.Invoke();
             }
         }
@@ -106,7 +105,7 @@ namespace TonyDev.Game.Global.Network
             if (SceneManager.GetActiveScene().name == "CastleScene")
             {
                 //Don't allow players to reconnect to the castle scene.
-                NetworkServer.maxConnections--;
+                //NetworkServer.maxConnections--;
             }
         }
 

@@ -192,7 +192,7 @@ namespace TonyDev.Game.Core.Attacks
                 var damageDealt =
                     damageable.ApplyDamage(modifiedDamage); //Apply the damage. Critical hits deal double.
                 if (damageDealt > 0)
-                    ObjectSpawner.SpawnPopup(other.transform.position, (int) damageDealt,
+                    ObjectSpawner.SpawnDmgPopup(other.transform.position, (int) damageDealt,
                         crit); //Spawn a popup for the damage text if the damage is greater than zero.
             }
 

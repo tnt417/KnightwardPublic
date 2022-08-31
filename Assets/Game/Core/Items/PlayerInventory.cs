@@ -43,6 +43,8 @@ namespace TonyDev.Game.Core.Items
         //Replaces/inserts items into inventory and returns the item that was replaced, if any.
         public Item InsertItem(Item item)
         {
+            item.Init();
+            
             if (item.itemType == ItemType.Tower)
             {
                 InsertTower(item); //If it's a tower, insert it

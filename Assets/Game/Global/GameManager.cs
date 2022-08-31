@@ -206,7 +206,7 @@ namespace TonyDev.Game.Global
         {
             if (NetworkClient.localPlayer == exclude) return;
             
-            ObjectSpawner.SpawnPopup(position, (int) value, isCrit);
+            ObjectSpawner.SpawnDmgPopup(position, (int) value, isCrit);
         }
 
         [Command(requiresAuthority = false)]
@@ -258,7 +258,6 @@ namespace TonyDev.Game.Global
             foreach (var id in itemData.Select(Instantiate))
             {
                 AllItems.Add(id.item);
-                id.item.Init();
             }
         }
 

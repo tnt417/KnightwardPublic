@@ -104,9 +104,7 @@ namespace TonyDev.Game.Global.Network
 
             var newTile = Instantiate(playerTilePrefab, playerGridTransform);
 
-            NetworkServer.Spawn(newTile);
-
-            newTile.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+            NetworkServer.Spawn(newTile, conn);
 
             RpcOnNewTileCreated(newTile, connId); //Instantiate a tile for the newly joined player on all clients.
 

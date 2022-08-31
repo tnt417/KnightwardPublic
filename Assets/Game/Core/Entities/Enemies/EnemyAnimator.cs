@@ -55,7 +55,6 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             if (!_animationPairs.ContainsKey(state))
             {
-                Debug.LogWarning("Invalid anim state!");
                 return;
             }
             animator.Play(_animationPairs[state]);

@@ -235,7 +235,7 @@ namespace TonyDev.Game.Core.Entities
         
         public void LocalHurt(float damage, bool isCrit)
         {
-            ObjectSpawner.SpawnPopup(transform.position, (int)damage, isCrit);
+            ObjectSpawner.SpawnDmgPopup(transform.position, (int)damage, isCrit);
             OnLocalHurt?.Invoke();
         }
 

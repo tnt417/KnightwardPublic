@@ -27,14 +27,21 @@ namespace TonyDev.Game.Core.Items
     [Serializable]
     public class Item
     {
+        public Item()
+        {
+            Init();
+        }
+        
         public void Init()
         {
+            if (itemEffectIds == null || ItemEffects.Count > 0) return;
+
             foreach (var id in itemEffectIds)
             {
                 ItemEffects.Add(GameEffect.FromString(id));
             }
         }
-        
+
         public static ItemType RandomItemType
         {
             get

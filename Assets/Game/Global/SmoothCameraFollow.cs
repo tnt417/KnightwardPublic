@@ -23,6 +23,20 @@ namespace TonyDev.Game.Global
         {
             _z = transform.position.z; //Set the initial z level of the camera so it can be kept constant
             SceneManager.sceneLoaded += ClearCameraBounds; //Set ClearCameraBounds to be called every time a new scene is loaded.
+            _resolution = new Vector2Int(Screen.width, Screen.height);
+        }
+
+        private Vector2Int _resolution;
+
+        private void LateUpdate()
+        {
+            if (_resolution.x != Screen.width || _resolution.y != Screen.height)
+            {
+                SetCameraBounds(_cameraBounds); //Re-set on resolution change
+ 
+                _resolution.x = Screen.width;
+                _resolution.y = Screen.height;
+            }
         }
 
         public void SetCameraBounds(Rect bounds)
@@ -47,6 +61,8 @@ namespace TonyDev.Game.Global
         
         private Rect FixCameraRect(Rect rect)
         {
+            if (rect == Rect.zero) return Rect.zero;
+            
             //Do some math to figure out the bounds of the camera in world coordinates
             var cameraRect = camera.pixelRect;
             var cameraTopRight = camera.ScreenToWorldPoint(new Vector2(cameraRect.xMax, cameraRect.yMax));

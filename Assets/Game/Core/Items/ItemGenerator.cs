@@ -80,7 +80,7 @@ namespace TonyDev.Game.Core.Items
                 itemName = itemName,
                 statBonuses = item == null ? GenerateItemStats(type, rarity) : StatBonus.Combine(GenerateItemStats(type, rarity), item.statBonuses).ToArray(),
                 uiSprite = sprite,
-                ItemEffects = item?.ItemEffects,
+                itemEffectIds = item?.itemEffectIds,
                 projectiles = item?.projectiles
             };
         }

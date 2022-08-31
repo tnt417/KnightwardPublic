@@ -113,11 +113,6 @@ namespace TonyDev.Game.Level.Rooms
 
         private IEnumerator MovePlayerToNextRoom(Direction direction) //Moves a player to the next room in a direction.
         {
-            TransitionController.Instance.FadeInOut(); //Transition to make it less jarring.
-            yield return
-                new WaitUntil(() =>
-                    TransitionController.Instance.OutTransitionDone); //Wait until the transition is over
-
             var dx = 0; //delta x
             var dy = 0; //delta y
 
@@ -136,9 +131,14 @@ namespace TonyDev.Game.Level.Rooms
                     dy = -1;
                     break;
             }
-
+            
             var room = map.Rooms[_currentActiveRoomIndex.x + dx, _currentActiveRoomIndex.y + dy];
             
+            TransitionController.Instance.FadeInOut(); //Transition to make it less jarring.
+            yield return
+                new WaitUntil(() =>
+                    TransitionController.Instance.OutTransitionDone); //Wait until the transition is over
+
             if (room != null)
             {
                 SetActiveRoom(_currentActiveRoomIndex.x + dx,
@@ -152,7 +152,7 @@ namespace TonyDev.Game.Level.Rooms
             }
             else
             {
-                Player.LocalInstance.transform.position = currentActiveRoom.transform.position;
+                if(currentActiveRoom != null) Player.LocalInstance.transform.position = currentActiveRoom.transform.position;
                 Player.LocalInstance.playerMovement.DoMovement = true;
             }
         }
@@ -229,7 +229,7 @@ namespace TonyDev.Game.Level.Rooms
                     r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
                     foreach (var go in r.roomChildObjects.Where(go => go.GetComponent<Player>() == null))
                     {
-                        if(go!=null)NetworkServer.Destroy(go);
+                        if(go!=null)Destroy(go);
                     }
 
                     r.enabled = false;

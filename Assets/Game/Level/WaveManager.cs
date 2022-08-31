@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
@@ -30,6 +31,7 @@ namespace TonyDev.Game.Level
         public int wavesSpawned = 0;
         public int TimeUntilNextWaveSeconds => (int)(_waveCooldown - _waveTimer);
 
+        [ServerCallback]
         private void Update()
         {
             _waveCooldown = wavesSpawned % 5 == 0 ? 120 : 30; //Every 5 waves, have a 2 minute break. Otherwise 30 seconds in between waves.
@@ -39,7 +41,7 @@ namespace TonyDev.Game.Level
         }
         
         //Spawns a wave of enemies
-        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawning next wave.")]
+        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawning next wave.")] [Server]
         public void SpawnWave()
         {
             /* DESCRIPTION:
@@ -63,6 +65,7 @@ namespace TonyDev.Game.Level
         }
 
         //Instantiates enemies from a group of prefabs
+        [ServerCallback]
         private void SpawnEnemies(IEnumerable<EnemyData> enemyData)
         {
             foreach (var e in enemyData)

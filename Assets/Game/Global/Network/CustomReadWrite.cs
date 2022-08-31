@@ -1,5 +1,6 @@
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
+using TonyDev.Game.Core.Items;
 using UnityEngine;
 using UnityEngine.U2D;
 

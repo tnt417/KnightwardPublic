@@ -78,7 +78,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 6
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &1267436117056664255
 MonoBehaviour:
@@ -183,7 +183,7 @@ GameObject:
   - component: {fileID: 31863766833012011}
   - component: {fileID: 2158572968929533948}
   m_Layer: 0
-  m_Name: DamagePopup
+  m_Name: Popup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

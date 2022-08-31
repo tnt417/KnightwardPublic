@@ -10,6 +10,7 @@ using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
 using UnityEngine.UI;
@@ -87,11 +88,12 @@ namespace TonyDev.Game.Level.Rooms
         [SerializeField] private Transform entryPointLeft;
         [SerializeField] private Transform entryPointRight;
 
+        public UnityEvent onRoomClearServer;
+
         public Sprite minimapIcon;
         //
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
-        private bool _clearPrefabSpawned;
 
         private readonly SyncDictionary<Direction, bool> _openDoorsDictionary = new ();
         
@@ -118,14 +120,14 @@ namespace TonyDev.Game.Level.Rooms
 
         private void SetVisibility(bool visible)
         {
+            foreach (var coll in GetComponentsInChildren<Collider2D>())
+                coll.enabled = visible;
             foreach (var rend in GetComponentsInChildren<Renderer>())
                 rend.enabled = visible;
             foreach (var img in GetComponentsInChildren<Image>())
                 img.enabled = visible;
             foreach (var l2d in GetComponentsInChildren<Light2DBase>())
                 l2d.enabled = visible;
-            foreach (var coll in GetComponentsInChildren<Collider2D>())
-                coll.enabled = visible;
             foreach (var roomDoor in GetComponentsInChildren<RoomDoor>())
                 roomDoor.SetHostVisibility(visible);
         }
@@ -207,7 +209,7 @@ namespace TonyDev.Game.Level.Rooms
 
             var shouldLock = GameManager.EntitiesReadonly.Any(entity =>
                                  entity is Enemy {IsAlive: true} && entity.CurrentParentIdentity == netIdentity)
-                             /*|| enemySpawner != null && enemySpawner.CurrentlySpawning*/; //Check if there are any alive enemies in our room or if our spawner is spawning.
+                             || enemySpawner != null && enemySpawner.CurrentlySpawning; //Check if there are any alive enemies in our room or if our spawner is spawning.
 
             if (shouldLock)
             {
@@ -233,14 +235,7 @@ namespace TonyDev.Game.Level.Rooms
         [ServerCallback]
         private void OnClear()
         {
-            if (!_clearPrefabSpawned && spawnPrefabOnClear != null)
-            {
-                var myTransform = transform;
-                Instantiate(spawnPrefabOnClear, myTransform.position, quaternion.identity,
-                    myTransform); //Instantiate the on clear prefab in the center of the room
-                _clearPrefabSpawned = true; //TODO: won't work on multiplayer
-            }
-
+            onRoomClearServer?.Invoke();
             OpenAllDoors(); //Otherwise, open/close the doors as normal.
         }
 

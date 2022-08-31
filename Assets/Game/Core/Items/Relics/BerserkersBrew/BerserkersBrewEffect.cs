@@ -11,7 +11,8 @@ namespace TonyDev.Game.Core.Items.Relics.BerserkersBrew
     {
         public override void OnAdd(GameEntity source)
         {
-            Cooldown = 20;
+            Debug.Log("Effect added.");
+            Cooldown = 10;
             Duration = 5;
             ActivateButton = KeyCode.E;
         }

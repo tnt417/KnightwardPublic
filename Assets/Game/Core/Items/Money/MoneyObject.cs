@@ -13,6 +13,8 @@ namespace TonyDev.Game.Core.Items.Money
         [SerializeField] private float attractRange;
         [SerializeField] private float attractSpeed;
 
+        public int amount;
+        
         private void FixedUpdate()
         {
             var myPos = transform.position;
@@ -31,7 +33,8 @@ namespace TonyDev.Game.Core.Items.Money
             if (player == null || !other.isTrigger || !player.isLocalPlayer || player.CurrentParentIdentity != CurrentParentIdentity) return;
 
             SoundManager.PlayRampingPitchSound("moneyPickup", transform.position);
-            GameManager.Money += 1;
+            ObjectSpawner.SpawnTextPopup(transform.position, "+" + amount, Color.yellow);
+            GameManager.Money += amount;
             enabled = false;
             Destroy(gameObject);
         }

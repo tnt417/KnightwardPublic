@@ -117,15 +117,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd879a871c0f7974b89c47103732aefb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  identifier: 
   damage: 50
   damageMultiplier: 1
+  knockbackMultiplier: 0.2
   damageCooldown: 100
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
-  knockbackForce: 1000
-  knockbackMultiplier: 1
   inflictBuffs: []
+  inflictEffects: []
   rb2d: {fileID: 6376418217251907206}
 --- !u!50 &6376418217251907206
 Rigidbody2D:

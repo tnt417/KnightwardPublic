@@ -11,7 +11,7 @@ namespace TonyDev.Game.Core.Items.Relics.EmpoweringToxin
     {
         public override void OnAdd(GameEntity source)
         {
-            Cooldown = 20;
+            Cooldown = 10;
             Duration = 5;
             ActivateButton = KeyCode.E;
         }
