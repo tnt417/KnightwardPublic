@@ -226,13 +226,20 @@ namespace TonyDev.Game.Level.Rooms
             foreach (var r in map.Rooms) //Destroy all rooms and their child objects...
                 if (r != null)
                 {
+                    r.enabled = false;
+
                     r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
                     foreach (var go in r.roomChildObjects.Where(go => go.GetComponent<Player>() == null))
                     {
-                        if(go!=null)Destroy(go);
+                        if (go != null)
+                        {
+                            Debug.Log(go.name);
+                            var networkIdentity = go.GetComponent<NetworkIdentity>();
+                            if(networkIdentity == null) Destroy(go);
+                            else NetworkServer.Destroy(go);
+                        }
                     }
-
-                    r.enabled = false;
+                    
                     NetworkServer.Destroy(r.gameObject);
                 }
 
@@ -240,6 +247,20 @@ namespace TonyDev.Game.Level.Rooms
 
             MinimapManager.Instance.Reset();
             roomGenerator.Reset();
+        }
+        
+        [ClientRpc]
+        public void RpcResetRooms()
+        {
+            foreach (var r in map.Rooms) //Destroy all rooms and their child objects...
+                if (r != null)
+                {
+                    r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
+                    foreach (var go in r.roomChildObjects.Where(go => go.GetComponent<NetworkIdentity>() == null))
+                    {
+                        Destroy(go);
+                    }
+                }
         }
 
         public void TeleportPlayerToStart()

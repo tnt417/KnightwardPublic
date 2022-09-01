@@ -406,16 +406,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mapRadius: 5
-  roomOffset: {x: 20, y: 20}
+  roomOffset: {x: 100, y: 100}
   generateRoomPrefabs:
-  - {fileID: 4178251165929004475, guid: 17f17f099c725e14f82d710c2e8efb6c, type: 3}
-  - {fileID: 4178251165929004475, guid: 5968f0faa2ba53b4d8092436ea9fcf4b, type: 3}
-  - {fileID: 4178251165929004475, guid: d8f80c69ab22d0149bed1097394f4e3d, type: 3}
-  - {fileID: 4178251165929004475, guid: 6bbcb435fabc7e44d994050086300d67, type: 3}
-  - {fileID: 4178251165929004475, guid: bc1448a181eb43240a681d8570998e87, type: 3}
+  - {fileID: 373691286257917635, guid: 13a45a52d081ff64baf23106a3b8a578, type: 3}
+  - {fileID: 4963471365818316660, guid: bc8450211a8be15428d3b7b7b2fe46e5, type: 3}
+  - {fileID: 4109244739143478866, guid: d8f80c69ab22d0149bed1097394f4e3d, type: 3}
+  - {fileID: 4178251165929004475, guid: aaabc7c9f51f0804087bb4fbe147a9b5, type: 3}
+  - {fileID: 4178251165929004475, guid: 66a72d55e2c30dc41b0ff6d39c824a28, type: 3}
+  - {fileID: 4178251165929004475, guid: c2f6992808ebf3747a73cb75031d047d, type: 3}
   guaranteedGeneratePrefabs:
-  - {fileID: 4178251165929004475, guid: b71cf7820fc441448b35c6a9a7ed72a0, type: 3}
-  - {fileID: 4178251165929004475, guid: b5acb44ebdb8fdc41a3889cacd458f95, type: 3}
+  - {fileID: 6922258286344746195, guid: 0ef473b97d52f994ea57a5c2cb613fc2, type: 3}
+  - {fileID: 1124590283425073302, guid: b5acb44ebdb8fdc41a3889cacd458f95, type: 3}
   roomManager: {fileID: 8245161763792584619}
   startingRoomPos: {x: 0, y: 0}
 --- !u!114 &8245161763792584621

@@ -101,8 +101,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd879a871c0f7974b89c47103732aefb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  identifier: 
+  damage: 25
   damageMultiplier: 1
+  knockbackMultiplier: 1
   damageCooldown: 0.2
   team: 1
   destroyOnApply: 0
@@ -136,6 +138,7 @@ MonoBehaviour:
     stat: 3
     strength: 1
     source: 
+  clientHealthDisparity: 0
   networkCurrentHealth: 0
   networkMaxHealth: 0
   towerAnimator: {fileID: 6938340393128323355}

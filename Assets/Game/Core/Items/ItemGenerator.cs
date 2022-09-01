@@ -43,8 +43,7 @@ namespace TonyDev.Game.Core.Items
             var itemName = string.Empty;
             Sprite sprite = null;
             //
-            
-            
+
             if (type == ItemType.Weapon)
             {
                 item = Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Weapon));

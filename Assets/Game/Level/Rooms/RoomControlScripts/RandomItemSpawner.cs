@@ -1,3 +1,4 @@
+using Mirror;
 using TonyDev.Game.Global;
 using UnityEngine;
 using Tools = TonyDev.Game.Global.Tools;
@@ -9,7 +10,8 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         [SerializeField] private int count;
         [SerializeField] private LevelItemSpawner[] spawners;
 
-        public void Awake()
+        [ServerCallback]
+        public void Start()
         {
             foreach (var s in spawners)
             {

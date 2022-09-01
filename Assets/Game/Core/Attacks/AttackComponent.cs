@@ -186,6 +186,12 @@ namespace TonyDev.Game.Core.Attacks
                 if(entity is not Player) entity.clientHealthDisparity -= dmg;
                 entity.LocalHurt(dmg, crit);
                 GameManager.Instance.CmdDamageEntity(netId, dmg, crit, NetworkClient.localPlayer);
+                
+                if (inflictEffects != null) //Inflict effects...
+                    foreach (var e in inflictEffects)
+                    {
+                        GameManager.Instance.CmdApplyEffect(entity, _owner, e);
+                    }
             }
             else
             {
@@ -216,7 +222,7 @@ namespace TonyDev.Game.Core.Attacks
                             damageCooldown);
                     }
 
-                if (inflictEffects != null) //Inflict effects...
+                if (inflictEffects != null && netId == null) //Inflict effects...
                     foreach (var e in inflictEffects)
                     {
                         entity.AddEffect(GameEffect.FromString(e), _owner);

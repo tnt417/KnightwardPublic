@@ -120,8 +120,6 @@ namespace TonyDev.Game.Level.Rooms
 
         private void SetVisibility(bool visible)
         {
-            foreach (var coll in GetComponentsInChildren<Collider2D>())
-                coll.enabled = visible;
             foreach (var rend in GetComponentsInChildren<Renderer>())
                 rend.enabled = visible;
             foreach (var img in GetComponentsInChildren<Image>())
@@ -145,8 +143,11 @@ namespace TonyDev.Game.Level.Rooms
             CheckShouldLockDoors();
         }
 
+        private bool _destroyed;
+        
         private void OnDestroy()
         {
+            _destroyed = true;
             GameManager.OnEnemyAdd -= OnEntityChange;
             GameManager.OnEnemyRemove -= OnEntityChange;
         }
@@ -228,13 +229,14 @@ namespace TonyDev.Game.Level.Rooms
 
         private void OnEntityChange(GameEntity entity)
         {
-            if (this == null) return;
+            if (this == null || !enabled) return;
             CheckShouldLockDoors();
         }
 
         [ServerCallback]
         private void OnClear()
         {
+            if (this == null || !enabled) return;
             onRoomClearServer?.Invoke();
             OpenAllDoors(); //Otherwise, open/close the doors as normal.
         }
@@ -242,7 +244,7 @@ namespace TonyDev.Game.Level.Rooms
         [ServerCallback]
         private void OpenAllDoors()
         {
-            if (this == null || _openDirections == null) return;
+            if (this == null || _openDirections == null || !enabled) return;
             foreach (var rd in roomDoors)
             {
                 if (_openDirections.Contains(rd.direction)) CmdSetDoorOpen(rd.direction, true);

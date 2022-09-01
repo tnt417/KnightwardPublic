@@ -150,14 +150,22 @@ namespace TonyDev.Game.Global
             var groundItemObject = Instantiate(_instance.groundItemPrefab, position, Quaternion.identity);
             var gi = groundItemObject.GetComponent<GroundItem>();
 
-            var room = parent.GetComponent<Room>();
-            
-            if (parent != null && room != null)
+            if (gi == null)
             {
-                room.roomChildObjects.Add(groundItemObject);
+                Debug.LogWarning("Something went wrong while spawning ground item!");
+                return null;
             }
 
-            
+            if (parent != null)
+            {
+                var room = parent.GetComponent<Room>();
+                
+                if (room != null)
+                {
+                    room.roomChildObjects.Add(groundItemObject);
+                }
+            }
+
             gi.CurrentParentIdentity = parent;
 
             NetworkServer.Spawn(groundItemObject);
@@ -176,13 +184,16 @@ namespace TonyDev.Game.Global
             var chestObject = Instantiate(_instance.chestPrefab, position, Quaternion.identity);
             var chest = chestObject.GetComponent<Chest>();
 
-            var room = parent.GetComponent<Room>();
-            
-            if (parent != null && room != null)
+            if (parent != null)
             {
-                room.roomChildObjects.Add(chestObject);
+                var room = parent.GetComponent<Room>();
+
+                if (room != null)
+                {
+                    room.roomChildObjects.Add(chestObject);
+                }
             }
-            
+
             chest.CurrentParentIdentity = parent;
             chest.rarityBoost = rarityBoost;
             

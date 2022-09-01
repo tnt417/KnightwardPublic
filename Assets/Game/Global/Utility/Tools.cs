@@ -12,6 +12,8 @@ namespace TonyDev.Game.Global
         {
             if (iEnumerable == null) return default;
             
+            Random.InitState(DateTime.Now.Millisecond);
+            
             var array = iEnumerable.ToArray();
             if (array.Length == 0) return default;
             var index = Random.Range(0, array.Length);

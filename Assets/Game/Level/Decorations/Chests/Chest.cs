@@ -19,8 +19,16 @@ namespace TonyDev.Game.Level.Decorations.Chests
 
         public UnityEvent onOpenServer;
 
-        private bool _opened = false;
-        
+        [SyncVar] public bool opened;
+
+        private void Start()
+        {
+            if (opened)
+            {
+                chestAnimator.Play("ChestOpen");
+            }
+        }
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.CompareTag("Player") && other.isTrigger)
@@ -36,6 +44,8 @@ namespace TonyDev.Game.Level.Decorations.Chests
         [Command(requiresAuthority = false)]
         private void CmdDropItems()
         {
+            if (opened) return;
+            opened = true;
             DropItems();
             RpcSetOpen();
         }
@@ -44,7 +54,6 @@ namespace TonyDev.Game.Level.Decorations.Chests
         private void RpcSetOpen()
         {
             chestAnimator.Play("ChestOpen");
-            enabled = false;
         }
 
         private Item _item = null;
@@ -57,13 +66,10 @@ namespace TonyDev.Game.Level.Decorations.Chests
         [Server]
         private void DropItems()
         {
-            if (_opened) return;
-            _opened = true;
-            
             var dropItem = _item ?? ItemGenerator.GenerateItem(rarityBoost);
 
             //Spawn the item and change the chest sprite
-            ObjectSpawner.SpawnGroundItem(_item, 0, transform.position, CurrentParentIdentity);
+            ObjectSpawner.SpawnGroundItem(dropItem, 0, transform.position, CurrentParentIdentity);
             onOpenServer.Invoke();
             //
         }

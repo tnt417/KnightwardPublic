@@ -43,7 +43,8 @@ namespace TonyDev.Game.Level.Rooms
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!_hostInterestVisibility && NetworkClient.isHostClient) return;
-            if(other.GetComponent<Player>() == Player.LocalInstance && other.isTrigger && IsOpen) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
+            var player = other.GetComponent<Player>();
+            if(player == Player.LocalInstance && other.isTrigger && IsOpen && player.CurrentParentIdentity == GetComponentInParent<NetworkIdentity>()) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
         }
 
         private bool _hostInterestVisibility;

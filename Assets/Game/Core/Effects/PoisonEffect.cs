@@ -31,8 +31,7 @@ namespace TonyDev.Game.Core.Effects
 
             if (_timer > Frequency)
             {
-                Entity.ApplyDamage(Damage);
-                ObjectSpawner.SpawnDmgPopup(Entity.transform.position, (int)Damage, false);
+                GameManager.Instance.CmdDamageEntity(Entity.netIdentity, Damage, false, null);
                 _timer = 0f;
                 
                 Ticks--;

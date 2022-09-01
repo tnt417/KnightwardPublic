@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Mirror;
 using TonyDev.Game.Core;
 using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
@@ -233,6 +234,14 @@ namespace TonyDev.Game.Global
             AttackFactory.CreateProjectileAttack(entity, pos, direction, projectileData, identifier);
         }
 
+        [Command(requiresAuthority = false)]
+        public void CmdApplyEffect(GameEntity target, GameEntity source, string effectName)
+        {
+            if (target == null) return;
+            
+            target.AddEffect(GameEffect.FromString(effectName), source);
+        }
+
         #endregion
 
         #region Initialization
@@ -343,6 +352,7 @@ namespace TonyDev.Game.Global
         public void CmdProgressNextDungeonFloor()
         {
             dungeonFloor += 1;
+            RoomManager.Instance.RpcResetRooms();
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.GenerateRooms();
         }

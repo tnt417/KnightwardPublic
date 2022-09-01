@@ -180,6 +180,7 @@ GameObject:
   - component: {fileID: 1433687265463069625}
   - component: {fileID: 2027090442732723703}
   - component: {fileID: 3480099948076729621}
+  - component: {fileID: 7690578877732773178}
   m_Layer: 0
   m_Name: Chest
   m_TagString: Untagged
@@ -242,9 +243,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65d34db50f0b29c4cacbcdafb67138e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
   rarityBoost: -5
-  groundItemPrefab: {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
   chestAnimator: {fileID: 3480099948076729621}
+  onOpenServer:
+    m_PersistentCalls:
+      m_Calls: []
+  opened: 0
 --- !u!95 &3480099948076729621
 Animator:
   serializedVersion: 4
@@ -265,3 +271,20 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &7690578877732773178
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7876539795197064780}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  visible: 0
+  m_AssetId: d366340610a237340be5830e57a02b98
+  hasSpawned: 0

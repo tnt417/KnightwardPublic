@@ -60,8 +60,8 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             if (isLocalPlayer)
             {
-                ObjectSpawner.SpawnMoney(GameManager.Money, Player.LocalInstance.transform.position, Player.LocalInstance.CurrentParentIdentity);
-                GameManager.Money = 0; //Reset money as a penalty for dying (LOCAL PLAYER ONLY)
+                ObjectSpawner.SpawnMoney(GameManager.Money, Player.LocalInstance.transform.position, Player.LocalInstance.CurrentParentIdentity); //Drop money on the ground
+                GameManager.Money = 0; //Reset money
                 Player.LocalInstance.playerMovement.DoMovement = false;
                 Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
                 GameManager.Instance.CmdReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player

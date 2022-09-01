@@ -86,7 +86,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         {
             if (spawned) return; //Don't spawn twice.
 
-            var parent = transform.root.GetComponent<NetworkIdentity>(); //Parent is the root netIdentity
+            var parent = transform.GetComponentInParent<Room>().netIdentity; //Parent is the root netIdentity
 
             Item item = null;
 
@@ -123,12 +123,10 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                         onItemInteractServer.Invoke()); //Invoke interact event when the chest is opened
                     break;
                 case ItemSpawnType.Item: //If spawn an item...
-
                     var groundItem =
                         ObjectSpawner.SpawnGroundItem(item, costMultiplier, transform.position, parent); //Spawn a ground item
                     groundItem.onPickupServer.AddListener(() =>
                         onItemInteractServer.Invoke()); //Invoke interact event when the item is picked up
-
                     break;
             }
 
