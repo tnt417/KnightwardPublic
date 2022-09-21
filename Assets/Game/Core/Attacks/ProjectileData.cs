@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Global;
@@ -37,7 +38,7 @@ namespace TonyDev.Game.Core.Attacks
         public float waveFrequency;
         public float waveDistance;
 
-        [Header("Effects")] public List<string> effectIDs;
+        [Header("Effects")] [SerializeReference] [SerializeField] public List<GameEffect> effects;
 
         //The only place that projectiles should be spawned from. Creates a projectile using this instance of the class.
         public GameObject SpawnSelf(Vector2 position, Vector2 direction, GameEntity owner, float sizeMultiplier, string identifier)
@@ -79,7 +80,7 @@ namespace TonyDev.Game.Core.Attacks
             attack.identifier = identifier;
 
             //Populate the AttackComponent's inflict effects
-            foreach (var e in effectIDs)
+            foreach (var e in effects)
             {
                 attack.AddInflictEffect(e);
             }

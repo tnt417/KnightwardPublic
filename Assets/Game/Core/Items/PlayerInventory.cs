@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
+using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.UI.Tower;
 using UnityEngine;
@@ -15,7 +16,13 @@ namespace TonyDev.Game.Core.Items
         static PlayerInventory()
         {
             Instance = new PlayerInventory();
-            Instance.InsertStarterItems();
+        }
+
+        public void Clear()
+        {
+            WeaponItem = null;
+            ArmorItem = null;
+            RelicItems.Clear();
         }
         
         public static readonly PlayerInventory Instance;
@@ -26,7 +33,9 @@ namespace TonyDev.Game.Core.Items
 
         public Queue<Item> RelicItems { get; private set; } = new ();
 
-        private void InsertStarterItems()
+        public static Action<Item> OnItemInsertLocal;
+
+        public void InsertStarterItems()
         {
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Weapon,
                 ItemRarity.Common)); //Add a starting sword to the player's inventory.
@@ -43,31 +52,39 @@ namespace TonyDev.Game.Core.Items
         //Replaces/inserts items into inventory and returns the item that was replaced, if any.
         public Item InsertItem(Item item)
         {
-            item.Init();
-            
             if (item.itemType == ItemType.Tower)
             {
                 InsertTower(item); //If it's a tower, insert it
+                OnItemInsertLocal?.Invoke(item);
                 return null;
             }
 
             var replacedItem = SwapSlot(item); //Holds the replaced item to be returned at the end.
 
+            if (replacedItem == item) return item; //If swapping slot was "rejected", don't continue on.
+
             if (item.IsEquippable)
             {
                 if (replacedItem != null)
                 {
-                    if(replacedItem.ItemEffects != null) foreach (var effect in replacedItem.ItemEffects) Player.LocalInstance.RemoveEffect(effect);
+                    if (replacedItem.itemEffects != null)
+                    {
+                        foreach (var effect in replacedItem.itemEffects) Player.LocalInstance.CmdRemoveEffect(effect);
+                    }
                     PlayerStats.Stats.RemoveStatBonuses(Enum.GetName(typeof(ItemType),
                         item.itemType)); //Remove stat bonuses of the now removed item
                 }
 
-                if (item.ItemEffects != null)
-                    foreach (var effect in item.ItemEffects)
-                        Player.LocalInstance.AddEffect(effect, Player.LocalInstance);
+                if (item.itemEffects != null)
+                    foreach (var effect in item.itemEffects)
+                    {
+                        Player.LocalInstance.CmdAddEffect(effect, Player.LocalInstance);
+                    }
 
                 PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
             }
+
+            OnItemInsertLocal?.Invoke(item);
 
             return replacedItem; //Return the item that was replaced. If nothing was replaced, returns null.
         }
@@ -86,6 +103,9 @@ namespace TonyDev.Game.Core.Items
                     ArmorItem = item;
                     break;
                 case ItemType.Relic: //If it's a relic, it goes in the relic slot.
+                    
+                    if (RelicItems.Any(i => i.itemName == item.itemName)) return item; //Can only have one of each relic
+                    
                     RelicItems.Enqueue(item);
                     if (RelicItems.Count > 3) replacedItem = RelicItems.Dequeue();
                     break;

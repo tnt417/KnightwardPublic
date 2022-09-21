@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Enemies.Movement;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
@@ -24,8 +25,9 @@ namespace TonyDev.Game.Core.Entities.Enemies
         [SerializeField] private EnemyAnimator enemyAnimator;
         private EnemyMovementBase _enemyMovementBase;
         private int MoneyReward => _enemyData.baseMoneyReward;
-        public override Team Team => Team.Enemy;
         protected override float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
+
+        public string EnemyName => _enemyData == null ? "" : _enemyData.enemyName;
 
         #endregion
 
@@ -47,6 +49,8 @@ namespace TonyDev.Game.Core.Entities.Enemies
         private void SetEnemyData(EnemyData enemyData)
         {
             _enemyData = enemyData;
+
+            Team = Team.Enemy;
             
             baseStats = enemyData.baseStats;
 
@@ -64,6 +68,8 @@ namespace TonyDev.Game.Core.Entities.Enemies
             InitContactDamage(enemyData.contactAttackData);
 
             Init();
+            
+            CmdAddEffect(GameEffect.CreateEffect<EnemyScalingEffect>(), this);
         }
 
         //Add movement components based on movement data
@@ -100,7 +106,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
         private void InitContactDamage(AttackData contactAttackData)
         {
-            AttackFactory.CreateStaticAttack(this, contactAttackData, true, null);
+            AttackFactory.CreateStaticAttack(this, Vector2.zero, contactAttackData, true, null);
         }
         
         //Initialize variables and events

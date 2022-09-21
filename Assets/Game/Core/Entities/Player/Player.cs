@@ -56,6 +56,7 @@ namespace TonyDev.Game.Core.Entities.Player
         
         public override void OnStartLocalPlayer()
         {
+            Team = Team.Player;
             LocalInstance = this;
             OnLocalPlayerCreated?.Invoke();
 
@@ -79,6 +80,8 @@ namespace TonyDev.Game.Core.Entities.Player
             };
             
             Init();
+            
+            PlayerInventory.Instance.InsertStarterItems();
         }
 
         [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat,

@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: CelestialWrenchData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: f632064391e136d448fb20b20d6bc46d, type: 3}
+    itemName: Celestial Wrench
+    itemDescription: '<color=green>You can now place towers in the dungeon. Nearby
+      towers deal are significantly buffed.</color>
+
+      <color=grey>Towers in
+      the dungeon are automatically picked up when switching rooms.</color>'
+    itemType: 2
+    itemRarity: 3
+    statBonuses: []
+    itemEffects:
+    - rid: 4292349832393654272
+    - rid: 4292349832393654273
+    projectiles: []
+    spawnablePrefabName: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 4292349832393654272
+      type: {class: CelestialWrenchEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+    - rid: 4292349832393654273
+      type: {class: TowerBuffEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        AttackSpeedBonus: 0.5
+        DamageBonus: 0.5
+        Radius: 5

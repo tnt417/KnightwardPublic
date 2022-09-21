@@ -1,12 +1,16 @@
+using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
+using UnityEngine.Events;
 
 namespace TonyDev.Game
 {
     public class DestructableObject : MonoBehaviour, IDamageable
     {
+        public UnityEvent onDestroy;
         public int hitsRemaining;
         
         public int moneyDrop;
@@ -30,7 +34,8 @@ namespace TonyDev.Game
 
         public void Die()
         {
-            //TODO ObjectSpawner.SpawnMoney(moneyDrop, transform.position);
+            ObjectSpawner.SpawnMoney(moneyDrop, transform.position, GetComponentInParent<NetworkIdentity>());
+            onDestroy?.Invoke();
             Destroy(gameObject);
         }
 

@@ -1,14 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Core.Items.Money;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
+using TonyDev.Game.Level.Decorations;
 using TonyDev.Game.Level.Decorations.Chests;
 using TonyDev.Game.Level.Rooms;
 using Unity.Mathematics;
@@ -45,26 +48,52 @@ namespace TonyDev.Game.Global
             
             anim.Play("Popup");
 
-            tmp.text = (-damage).ToString(); //Negative, so positive damage has a '-' and healing doesn't.
+            tmp.text = damage == 0 ? "Dodge" : (-damage).ToString(); //Negative, so positive damage has a '-' and healing doesn't.
             
             //Yellow = normal damage
             //Red = crit damage
             //Green = normal healing
             //Magenta = crit healing
-            tmp.color = damage > 0 ? critical ? Color.red : Color.yellow : critical ? Color.magenta : Color.green;
+            tmp.color = damage == 0 ? Color.gray : damage > 0 ? critical ? Color.red : Color.yellow : critical ? Color.magenta : Color.green;
 
             PopupObjectPool.Enqueue(go);
         }
         
-        public static void SpawnTextPopup(Vector2 position, string text, Color color)
+        public static void SpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
+        {
+            var prefab = ObjectFinder.GetPrefab(prefabName);
+            
+            var go = Instantiate(prefab, pos, Quaternion.identity);
+
+            var coll = go.AddComponent<BoxCollider2D>();
+            coll.size = new Vector2(0.2f, 0.2f);
+            coll.isTrigger = true;
+
+            NetworkServer.Spawn(go, NetworkServer.localConnection);
+            
+            var tower = go.GetComponent<Tower>();
+            
+            tower.CmdSetParentIdentity(parent);
+            tower.prefab = prefab;
+            
+            var interact = go.AddComponent<InteractableButton>();
+            interact.SetLabel("Pickup");
+            interact.onInteract.AddListener(() =>
+            {
+                if (tower != null) tower.Pickup();
+            });
+        }
+        
+        public static void SpawnTextPopup(Vector2 position, string text, Color color, float speedMultiplier = 1f)
         {
             var go = PopupObjectPool.Count >= _instance.objectPoolSize ? PopupObjectPool.Dequeue() : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
 
             go.transform.position = position;
-            
+
             var tmp = go.GetComponentInChildren<TextMeshPro>();
             var anim = go.GetComponent<Animator>();
-            
+
+            anim.speed = speedMultiplier;
             anim.Play("Popup");
 
             tmp.text = text;

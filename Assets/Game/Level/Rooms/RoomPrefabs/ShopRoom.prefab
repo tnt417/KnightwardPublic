@@ -2727,7 +2727,11 @@ MonoBehaviour:
   entryPointDown: {fileID: 1612954742835559007}
   entryPointLeft: {fileID: 5099485001917915562}
   entryPointRight: {fileID: 3580702506829694046}
+  onRoomClearServer:
+    m_PersistentCalls:
+      m_Calls: []
   minimapIcon: {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
+  roomChildObjects: []
 --- !u!114 &-6149731234572078668
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2796,7 +2800,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 50
+  rarityBoost: 15
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -2854,7 +2858,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 50
+  rarityBoost: 15
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -3026,7 +3030,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 50
+  rarityBoost: 15
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -3192,7 +3196,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 50
+  rarityBoost: 15
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:

@@ -1,16 +1,11 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using JetBrains.Annotations;
 using Mirror;
-using TonyDev.Game.Core;
 using TonyDev.Game.Core.Attacks;
-using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
-using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global.Console;
@@ -21,7 +16,7 @@ using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
 {
@@ -38,8 +33,11 @@ namespace TonyDev.Game.Global
         #region Items
 
         [SerializeField] private List<ItemData> itemData;
+        [SerializeField] private Vector2 arenaSpawnPos;
         public static readonly List<Item> AllItems = new();
         public static int Money = 0;
+
+        [SyncVar] public int timeSeconds;
 
         [GameCommand(Keyword = "money", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Added money.")]
         public void AddMoney(int amount)
@@ -110,11 +108,6 @@ namespace TonyDev.Game.Global
         public static Vector2 MouseDirection =>
             (_mainCamera.ScreenToWorldPoint(Input.mousePosition) - Player.LocalInstance.transform.position).normalized;
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.R) && GameControlsActive && !Player.LocalInstance.playerDeath.dead) TogglePhase(); //Toggle the phase when R is pressed and we are alive
-        }
-
         [Command(requiresAuthority = false)]
         public void CmdWriteChatMessage(string message, NetworkConnectionToClient sender = null)
         {
@@ -167,27 +160,9 @@ namespace TonyDev.Game.Global
         }
         
         [Command(requiresAuthority = false)]
-        public void CmdSpawnTower(string prefabName, Vector2 pos)
+        public void CmdSpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
         {
-            var go = Instantiate(ObjectFinder.GetPrefab(prefabName), pos, Quaternion.identity);
-            NetworkServer.Spawn(go, NetworkServer.localConnection);
-        }
-        
-        [Command(requiresAuthority = false)]
-        public void CmdDamageEntity(NetworkIdentity entityObject, float damage, bool isCrit, NetworkIdentity exclude)
-        {
-            if (entityObject == null) return;
-            
-            var entity = entityObject.GetComponent<GameEntity>();
-
-            if (entity == null)
-            {
-                Debug.LogWarning($"Net object {entityObject.gameObject.name} is not an entity!");
-                return;
-            }
-            
-            var dmg = entity is Player ? damage : entity.ApplyDamage(damage); //Players should have already been damaged on the client
-            RpcSpawnDmgPopup(entity.transform.position, dmg, isCrit, exclude);
+            ObjectSpawner.SpawnTower(prefabName, pos, parent);
         }
 
         [Command(requiresAuthority = false)]
@@ -203,7 +178,7 @@ namespace TonyDev.Game.Global
         }
 
         [ClientRpc]
-        private void RpcSpawnDmgPopup(Vector2 position, float value, bool isCrit, NetworkIdentity exclude)
+        public void RpcSpawnDmgPopup(Vector2 position, float value, bool isCrit, NetworkIdentity exclude)
         {
             if (NetworkClient.localPlayer == exclude) return;
             
@@ -234,14 +209,6 @@ namespace TonyDev.Game.Global
             AttackFactory.CreateProjectileAttack(entity, pos, direction, projectileData, identifier);
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdApplyEffect(GameEntity target, GameEntity source, string effectName)
-        {
-            if (target == null) return;
-            
-            target.AddEffect(GameEffect.FromString(effectName), source);
-        }
-
         #endregion
 
         #region Initialization
@@ -254,6 +221,8 @@ namespace TonyDev.Game.Global
         {
             if (Instance == null) Instance = this;
             else Destroy(this);
+
+            Random.InitState((int) DateTime.Now.Ticks);
 
             Player.OnLocalPlayerCreated += Init;
 
@@ -283,20 +252,21 @@ namespace TonyDev.Game.Global
         #endregion
 
         #region Gamestate Control
-
-        public static void ResetGame()
+        private static void ResetGame()
         {
             Crystal.Instance.SetHealth(5000f);
             Money = 0;
             Timer.GameTimer = 0;
             AllItems.Clear();
             Entities.Clear();
+            Destroy(FindObjectOfType<CustomNetworkManager>().gameObject);
             EnemySpawners.Clear();
+            PlayerInventory.Instance.Clear();
             PlayerStats.Stats.ClearStatBonuses();
         }
 
         //Switches back and forth between Arena and Dungeon phases
-        private void TogglePhase()
+        public void TogglePhase()
         {
             if (GamePhase == GamePhase.Arena) StartCoroutine(PhaseTransition(GamePhase.Dungeon));
             else if (RoomManager.Instance.CanSwitchPhases) StartCoroutine(PhaseTransition(GamePhase.Arena));
@@ -328,15 +298,16 @@ namespace TonyDev.Game.Global
         {
             RoomManager.Instance.DeactivateRoomPhase();
             GamePhase = GamePhase.Arena;
-            Player.LocalInstance.gameObject.transform.position =
-                GameObject.FindGameObjectWithTag("Castle").transform.position;
+            Player.LocalInstance.gameObject.transform.position = arenaSpawnPos;
             CmdReTargetEnemies();
         }
 
         private void GameOver()
         {
-            Destroy(gameObject);
+            ResetGame();
             NetworkServer.Shutdown();
+            NetworkClient.Shutdown();
+            Destroy(gameObject);
             SceneManager.LoadScene("GameOver");
         }
 
@@ -355,21 +326,6 @@ namespace TonyDev.Game.Global
             RoomManager.Instance.RpcResetRooms();
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.GenerateRooms();
-        }
-
-        [Command(requiresAuthority = false)]
-        public void CmdTeleportAllInDungeonToStart()
-        {
-            RpcTeleportToStart();
-        }
-
-        [ClientRpc]
-        private void RpcTeleportToStart()
-        {
-            if (GamePhase == GamePhase.Dungeon)
-            {
-                RoomManager.Instance.TeleportPlayerToStart();
-            }
         }
 
         #endregion

@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
   enemyName: Dragon
-  enemyBaseSprite: {fileID: 1705161211, guid: cd10e1c2d92657c41a838506da9d3145, type: 3}
   baseMoneyReward: 10
   hitboxRadius: 0.8
   baseStats:
@@ -32,7 +31,7 @@ MonoBehaviour:
     source: 
   - statType: 0
     stat: 6
-    strength: 300
+    strength: 600
     source: 
   - statType: 0
     stat: 1
@@ -45,37 +44,40 @@ MonoBehaviour:
   movementData: {fileID: 11400000, guid: fb158c11d1319284ead228e98e651faa, type: 2}
   contactAttackData:
     damageMultiplier: 0
+    knockbackMultiplier: 1
     hitboxRadius: 0
     team: 0
     destroyOnApply: 0
     lifetime: 0
-    spawnOnDestroy: {fileID: 0}
+    spawnOnDestroyKey: 
   projectileAttackData:
-  - prefab: {fileID: 1002176068994504789, guid: b5a1572995282a34f86144a70b1a57fb, type: 3}
+  - prefabKey: dragonShot
     projectileSprite: {fileID: 0}
     attackData:
       damageMultiplier: 1
+      knockbackMultiplier: 1
       hitboxRadius: 0.5
       team: 0
       destroyOnApply: 1
       lifetime: 1
-      spawnOnDestroy: {fileID: 2801006091708425565, guid: 70e0c41dbb980c0449e2ebafd593f654, type: 3}
-    travelSpeed: 10
+      spawnOnDestroyKey: dragonPool
+    travelSpeed: 15
     offsetDegrees: 0
     waveAmplitude: -0.1
     waveFrequency: 1
     waveDistance: 7
     effectIDs: []
-  - prefab: {fileID: 1002176068994504789, guid: b5a1572995282a34f86144a70b1a57fb, type: 3}
+  - prefabKey: dragonShot
     projectileSprite: {fileID: 0}
     attackData:
       damageMultiplier: 1
+      knockbackMultiplier: 1
       hitboxRadius: 0.5
       team: 0
       destroyOnApply: 1
       lifetime: 1
-      spawnOnDestroy: {fileID: 2801006091708425565, guid: 70e0c41dbb980c0449e2ebafd593f654, type: 3}
-    travelSpeed: 10
+      spawnOnDestroyKey: dragonPool
+    travelSpeed: 15
     offsetDegrees: 0
     waveAmplitude: 0.1
     waveFrequency: 1

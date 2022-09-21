@@ -26,8 +26,13 @@ namespace TonyDev.Game.Global
         private static readonly Dictionary<string, GameObject> Prefabs = new ();
         private static SpriteAtlas _spriteAtlas;
 
+        private static bool _initialized;
+        
         private void Awake()
         {
+            if (_initialized) return;
+            _initialized = true;
+            
             foreach (var de in dictionaryEntries)
             {
                 if(de.value is EnemyData ed)

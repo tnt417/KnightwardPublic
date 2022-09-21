@@ -1,43 +1,49 @@
+using System;
 using TonyDev.Game.Core.Entities;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects
 {
-    public abstract class AbilityEffect : GameEffect
+    [Serializable]
+    public class AbilityEffect : GameEffect
     {
         protected KeyCode ActivateButton;
-        
-        protected float Cooldown;
-        protected float Duration;
+
+        public float Cooldown;
+        public float Duration;
         private float ModifiedCooldown => Cooldown * (1 - Entity.Stats.GetStat(Stat.CooldownReduce));
-        
-        private bool _active;
+
+        protected bool Active { get; private set; }
 
         private float _activeTimer;
         private float _cooldownTimer;
-        
-        protected abstract void OnAbilityActivate();
 
-        protected abstract void OnAbilityDeactivate();
-        
-        public override void OnUpdate()
+        protected virtual void OnAbilityActivate()
+        {
+        }
+
+        protected virtual void OnAbilityDeactivate()
+        {
+        }
+
+        public override void OnUpdateOwner()
         {
             _cooldownTimer += Time.deltaTime;
 
             if (_cooldownTimer > ModifiedCooldown && Input.GetKeyDown(ActivateButton))
             {
-                _active = true;
+                Active = true;
                 OnAbilityActivate();
                 _activeTimer = 0;
                 _cooldownTimer = 0;
             }
 
-            if (_active)
+            if (Active)
             {
                 _activeTimer += Time.deltaTime;
                 if (_activeTimer > Duration)
                 {
-                    _active = false;
+                    Active = false;
                     OnAbilityDeactivate();
                 }
             }

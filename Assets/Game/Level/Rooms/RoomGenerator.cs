@@ -58,7 +58,6 @@ namespace TonyDev.Game.Level.Rooms
         public void Reset()
         {
             _generated = false;
-            _seed = Random.Range(0, 100000);
         }
         
         [Server]
@@ -67,8 +66,6 @@ namespace TonyDev.Game.Level.Rooms
             if (!GameManager.Instance.isServer) return default;
             
             if (_generated) return roomManager.map;
-
-            Random.InitState(_seed);
 
             var roomCount = Random.Range(0, 2) + 7;
 

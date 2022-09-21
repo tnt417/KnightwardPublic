@@ -1,15 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
-using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
-using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
@@ -42,6 +39,21 @@ namespace TonyDev.Game.Core.Entities
 
         #region Network
 
+        [Command(requiresAuthority = false)]
+        public void CmdDamageEntity(float damage, bool isCrit, NetworkIdentity exclude)
+        {
+            /*var entity = entityObject.GetComponent<GameEntity>();
+
+            if (entity == null)
+            {
+                Debug.LogWarning($"Net object {entityObject.gameObject.name} is not an entity!");
+                return;
+            }*/
+            
+            var dmg = this is Player.Player ? damage : ApplyDamage(damage); //Players should have already been damaged on the client
+            GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
+        }
+
         protected bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
         
         [Command(requiresAuthority = false)]
@@ -53,6 +65,7 @@ namespace TonyDev.Game.Core.Entities
 
         public void ApplyKnockbackGlobal(Vector2 force)
         {
+            if (!NetworkClient.active) return;
             GetComponent<Rigidbody2D>()?.AddForce(force);
             CmdApplyKnockback(force);
         }
@@ -70,7 +83,7 @@ namespace TonyDev.Game.Core.Entities
         
         private void CurrentHealthHook(float oldHealth, float newHealth)
         {
-            if (clientHealthDisparity == 0 || this is Player.Player) return;
+            if (clientHealthDisparity == 0 || isServer || this is Player.Player) return;
             
             if (oldHealth == 0) clientHealthDisparity = 0;
             else
@@ -132,10 +145,19 @@ namespace TonyDev.Game.Core.Entities
             GameManager.AddEntity(this);
             
             OnAttack += () => _attackTimer = 0;
+            _effects.Callback += OnEffectsUpdated;
         }
 
         protected void Update()
         {
+            if (isServer)
+            {
+                foreach (var effect in _effects.ToArray())
+                {
+                    effect.OnUpdateServer();
+                }
+            }
+            
             if (!EntityOwnership) return;
             
             _targetUpdateTimer += Time.deltaTime;
@@ -157,7 +179,7 @@ namespace TonyDev.Game.Core.Entities
             
             foreach (var effect in _effects.ToArray())
             {
-                effect.OnUpdate();
+                effect.OnUpdateOwner();
             }
             
             if (IsAlive)
@@ -191,8 +213,11 @@ namespace TonyDev.Game.Core.Entities
             UpdateTarget();
         }
 
+        public Action<float, GameEntity> OnDamageOther;
+
         private void UpdateStats()
         {
+            if (!NetworkClient.active) return;
             CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
         }
 
@@ -235,7 +260,7 @@ namespace TonyDev.Game.Core.Entities
         
         public void LocalHurt(float damage, bool isCrit)
         {
-            ObjectSpawner.SpawnDmgPopup(transform.position, (int)damage, isCrit);
+            ObjectSpawner.SpawnDmgPopup(transform.position, (int)Stats.ModifyIncomingDamage(damage), isCrit);
             OnLocalHurt?.Invoke();
         }
 
@@ -276,32 +301,93 @@ namespace TonyDev.Game.Core.Entities
                 Targets.Add(identity);
             }
         }
-        
+
         #region Effects
 
-        private readonly List<GameEffect> _effects = new();
+        private SyncList<GameEffect> _effects = new();
 
-        public void AddEffect(GameEffect effect, GameEntity source)
+        private void OnEffectsUpdated(SyncList<GameEffect>.Operation op, int index, GameEffect oldEffect,
+            GameEffect newEffect)
         {
+            Debug.Log("HOOK: " + Enum.GetName(typeof(SyncList<>.Operation), op));
+            
             if (!EntityOwnership) return;
             
-            _effects.Add(effect);
+            switch (op)
+            {
+                case SyncList<GameEffect>.Operation.OP_ADD:
+                    Debug.Log("Add owner");
+                    newEffect.Entity = this;
+                    newEffect.OnAddOwner();
+                    break;
+                case SyncList<GameEffect>.Operation.OP_REMOVEAT:
+                    oldEffect.OnRemoveOwner();
+                    break;
+            }
+        }
+        
+        [Command(requiresAuthority = false)]
+        public void CmdAddEffect(GameEffect effect, GameEntity source)
+        {
             effect.Entity = this;
-            effect.OnAdd(source);
+            effect.Source = this;
+            
+            Debug.Log("Add server");
+            _effects.Add(effect);
+            effect.OnAddServer();
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdRemoveEffect(GameEffect effect)
+        {
+            _effects.Remove(effect);
+            
+            if(GameEffect.GameEffectIdentifiers.ContainsKey(effect.EffectIdentifier)) GameEffect.GameEffectIdentifiers.Remove(effect.EffectIdentifier);
+            
+            effect.OnRemoveServer();
         }
         
-        public void RemoveEffect(GameEffect effect)
+        public void RemoveEffectsOfType<T>() where T : GameEffect
         {
             if (!EntityOwnership) return;
-            
-            _effects.Remove(effect);
-            effect.OnRemove();
+
+            var removals = _effects.Where(ge => ge.GetType() == typeof(T)).ToList();
+
+            foreach (var ge in removals)
+            {
+                CmdRemoveEffect(ge);
+            }
         }
         
+        public void RemoveEffectsOfType(string type)
+        {
+            if (!EntityOwnership) return;
+
+            var removals = _effects.Where(ge => ge.GetType().Name == type).ToList();
+
+            foreach (var ge in removals)
+            {
+                CmdRemoveEffect(ge);
+            }
+        }
+
         #endregion
         
         #region IDamageable
         public virtual Team Team { get; protected set; } = default;
+
+        public Action<Team> OnTeamChange;
+        
+        public void SetTeam(Team newTeam, Team newTargetTeam) //Changes our team, invoking an event. WILL ONLY CONVERT ATTACKS' TEAMS THAT ARE ON THE SAME TEAM
+        {
+            if (newTeam == Team) return;
+
+            OnTeamChange?.Invoke(newTeam);
+            
+            targetTeam = newTargetTeam;
+            Team = newTeam;
+        }
+        
         public virtual float DamageMultiplier { get; protected set; } = 1f;
         public virtual float HealMultiplier { get; protected set; } = 1f;
         public virtual int MaxHealth => (int)Stats.GetStat(Stat.Health);
@@ -312,11 +398,11 @@ namespace TonyDev.Game.Core.Entities
         {
             if (damage == 0 || IsInvulnerable) return 0;
 
-            if (Stats.DodgeSuccessful) return 0; //Don't apply damage is dodge rolls successful.
+            if (damage > 0 && Stats.DodgeSuccessful) return 0; //Don't apply damage is dodge rolls successful.
             var modifiedDamage = damage >= 0
                 ? Mathf.Clamp(Stats.ModifyIncomingDamage(damage), 0, Mathf.Infinity)
                 : damage;
-            
+
             (modifiedDamage > 0 ? OnHurt : OnHeal)?.Invoke(modifiedDamage);
 
             switch (modifiedDamage)

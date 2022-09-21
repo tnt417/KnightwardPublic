@@ -4,6 +4,7 @@ using System.Linq;
 using Mirror;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
@@ -64,7 +65,7 @@ namespace TonyDev.Game.Core.Attacks
         private List<StatBonus> inflictBuffs = new();
 
         [Tooltip("Effects inflicted to GameEntities upon applying damage")] [SerializeField]
-        private List<string> inflictEffects = new();
+        private List<GameEffect> inflictEffects = new();
 
         [Tooltip("The Rigidbody used to check collisions for attack logic.")]
         public Rigidbody2D rb2d;
@@ -154,8 +155,12 @@ namespace TonyDev.Game.Core.Attacks
                 TryDamage(otherTrigger);
         }
 
+        public Action<float, GameEntity> OnDamageDealt;
+        
         private void TryDamage(Collider2D other)
         {
+            if (!NetworkClient.active) return;
+
             var netId = other.GetComponent<NetworkIdentity>();
             var entity = other.GetComponent<GameEntity>();
 
@@ -164,6 +169,7 @@ namespace TonyDev.Game.Core.Attacks
                 return; //Only call damage code on attacks that are owned by our client.
 
             var damageable = other.GetComponent<IDamageable>();
+
             //
             if (damageable == null || damageable.Team == team || damageable.IsInvulnerable ||
                 _hitCooldowns.ContainsKey(other.gameObject) ||
@@ -177,31 +183,34 @@ namespace TonyDev.Game.Core.Attacks
                                               : 1));
 
             if (entity is Player && entity != Player.LocalInstance) return;
+
+            float damageDealt = 0;
             
             if (netId != null)
             {
-                var dmg = netId == NetworkClient.localPlayer
+                damageDealt = netId == NetworkClient.localPlayer
                     ? entity.ApplyDamage(modifiedDamage)
                     : modifiedDamage; //Do damage before command if hitting player
-                if(entity is not Player) entity.clientHealthDisparity -= dmg;
-                entity.LocalHurt(dmg, crit);
-                GameManager.Instance.CmdDamageEntity(netId, dmg, crit, NetworkClient.localPlayer);
+                if(entity is Enemy && !NetworkServer.active) entity.clientHealthDisparity -= damageDealt;
+                entity.LocalHurt(damageDealt, crit);
+                entity.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer);
                 
                 if (inflictEffects != null) //Inflict effects...
                     foreach (var e in inflictEffects)
                     {
-                        GameManager.Instance.CmdApplyEffect(entity, _owner, e);
+                        entity.CmdAddEffect(e, _owner);
                     }
             }
             else
             {
-                var damageDealt =
+                damageDealt =
                     damageable.ApplyDamage(modifiedDamage); //Apply the damage. Critical hits deal double.
                 if (damageDealt > 0)
                     ObjectSpawner.SpawnDmgPopup(other.transform.position, (int) damageDealt,
                         crit); //Spawn a popup for the damage text if the damage is greater than zero.
             }
 
+            OnDamageDealt?.Invoke(damageDealt, entity);
 
             var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
 
@@ -225,7 +234,7 @@ namespace TonyDev.Game.Core.Attacks
                 if (inflictEffects != null && netId == null) //Inflict effects...
                     foreach (var e in inflictEffects)
                     {
-                        entity.AddEffect(GameEffect.FromString(e), _owner);
+                        entity.CmdAddEffect(e, _owner);
                     }
             }
             //
@@ -237,7 +246,7 @@ namespace TonyDev.Game.Core.Attacks
         {
             if (destroyOnAnyCollide && other.gameObject != _owner.gameObject)
                 Destroy(gameObject); //Destroy if destroyOnAnyCollide is true.
-            if (!_hitCooldowns.ContainsKey(other.gameObject))
+            if (!_hitCooldowns.ContainsKey(other.transform.root.gameObject))
             {
                 TryDamage(other); //On trigger enter, try to damage the other collider.
             }
@@ -248,13 +257,13 @@ namespace TonyDev.Game.Core.Attacks
         #region Accessors
 
         //Adds an effect to the list of inflicting effects
-        public void AddInflictEffect(string effect)
+        public void AddInflictEffect(GameEffect effect)
         {
             inflictEffects.Add(effect);
         }
 
         //Adds an effect from the list of inflicting effects
-        public void RemoveInflictEffect(string effect)
+        public void RemoveInflictEffect(GameEffect effect)
         {
             inflictEffects.Remove(effect);
         }
@@ -273,6 +282,12 @@ namespace TonyDev.Game.Core.Attacks
             damageMultiplier = attackData?.damageMultiplier ?? damageMultiplier;
             knockbackMultiplier = attackData?.knockbackMultiplier ?? knockbackMultiplier;
             team = attackData?.team ?? team;
+
+            if (team == owner.Team) //If the attack's team is the same as the owner's team...
+            {
+                owner.OnTeamChange += (newTeam) => team = newTeam; //Change the attack's team when the owner's team is changed.
+            }
+            
             if(damageCooldown == 0) damageCooldown = 0.5f;
             destroyOnApply = attackData?.destroyOnApply ?? destroyOnApply;
             _owner = owner;

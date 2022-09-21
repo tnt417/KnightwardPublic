@@ -500,6 +500,12 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 14f4ff29017e4374fbebfd286a21306c, type: 2}
   - {fileID: 11400000, guid: 95ace397c06cb2d47818221c716c1f0f, type: 2}
   - {fileID: 11400000, guid: 9e4e352ddb3fd59499cc0c1b1f7a84b6, type: 2}
+  - {fileID: 11400000, guid: a8c20976197ba8642a6aa579ca4a12e0, type: 2}
+  - {fileID: 11400000, guid: c3ac47e7e67117e47a633f43a2a1e98d, type: 2}
+  - {fileID: 11400000, guid: d12c400263cf95442bdfe7641adf5a52, type: 2}
+  - {fileID: 11400000, guid: a228adcb97e889f41a4ae498e1a2e88a, type: 2}
+  arenaSpawnPos: {x: 4978.5, y: -6}
+  timeSeconds: 0
   dungeonFloor: 1
   projectiles: []
 --- !u!114 &8211467678594754331
@@ -581,6 +587,16 @@ MonoBehaviour:
     value: {fileID: 5252816401415666444, guid: 63d199c7d21207d4faae5144ee6f5ca2, type: 3}
   - key: hammerPool
     value: {fileID: 8269245536949468360, guid: 5dd558cf9d3778c459a85b96999b5e05, type: 3}
+  - key: dragonShot
+    value: {fileID: 1002176068994504789, guid: b5a1572995282a34f86144a70b1a57fb, type: 3}
+  - key: dragonPool
+    value: {fileID: 2801006091708425565, guid: 70e0c41dbb980c0449e2ebafd593f654, type: 3}
+  - key: indicator
+    value: {fileID: 3847870000451203287, guid: 790eff88a9854f94aaa3a78683327429, type: 3}
+  - key: firePath
+    value: {fileID: 2801006091708425565, guid: 079d08151f951e742b66d9b39ca16748, type: 3}
+  - key: particleTrail
+    value: {fileID: 622507783171182362, guid: 4cd8e5b9cbe869c4abb46046ace23618, type: 3}
   animatorEntries:
   - key: Slime
     value: {fileID: 9100000, guid: 54cdb3cb100dbe94baa6a5254c230175, type: 2}

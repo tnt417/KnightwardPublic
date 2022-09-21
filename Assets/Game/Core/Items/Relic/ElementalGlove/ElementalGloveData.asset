@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: ElementalGloveData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: fc0e20655c99aec43b6733b8061e5e43, type: 3}
+    itemName: Elemental Glove
+    itemDescription: <color=green>Using your weapon ability will grant effects based
+      on a random element.</color>
+    itemType: 2
+    itemRarity: 2
+    statBonuses:
+    - statType: 1
+      stat: 0
+      strength: 0.3
+      source: 
+    itemEffects:
+    - rid: 4292349781139259392
+    projectiles: []
+    spawnablePrefabName: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 4292349781139259392
+      type: {class: ElementalGloveEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        Cooldown: 0
+        Duration: 0
+        SlowAmount: 0.5
+        BurnDamagePerSecondMultiplier: 0.25
+        Frequency: 0.1
+        Ticks: 40
+        LeechPercent: 0.2

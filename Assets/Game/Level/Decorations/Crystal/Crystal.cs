@@ -29,6 +29,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         {
             var hpRegen = CrystalRegen.Invoke() * Time.deltaTime;
             ApplyDamage(-hpRegen);
+            base.Update();
         }
         
         //Interface code. Only abnormal thing is the game is over when the crystal dies.

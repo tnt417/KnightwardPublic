@@ -17,8 +17,13 @@ namespace TonyDev.Game
         public List<GameSound> gameSounds = new ();
         private static readonly Dictionary<string, AudioClip> AudioClips = new ();
 
+        private static bool _initialized;
+        
         public void Awake()
         {
+            if (_initialized) return;
+            _initialized = true;
+            
             foreach (var s in gameSounds)
             {
                 AudioClips.Add(s.name, s.audioClip);

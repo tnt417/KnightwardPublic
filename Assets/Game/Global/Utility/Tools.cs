@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using UnityEditor;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,9 +13,7 @@ namespace TonyDev.Game.Global
         public static T SelectRandom<T>(IEnumerable<T> iEnumerable)
         {
             if (iEnumerable == null) return default;
-            
-            Random.InitState(DateTime.Now.Millisecond);
-            
+
             var array = iEnumerable.ToArray();
             if (array.Length == 0) return default;
             var index = Random.Range(0, array.Length);
@@ -38,6 +38,29 @@ namespace TonyDev.Game.Global
             v.x = (cos * tx) - (sin * ty);
             v.y = (sin * tx) + (cos * ty);
             return v;
+        }
+        
+        public static List<Type> GetTypes<T>()
+        {
+            var assembly = Assembly.Load("TonyDev");
+
+            return assembly.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T))).ToList();
+        }
+        
+        public static List<T> FindAssetsByType<T>() where T : UnityEngine.Object
+        {
+            List<T> assets = new List<T>();
+            string[] guids = AssetDatabase.FindAssets(string.Format("t:{0}", typeof(T)));
+            for( int i = 0; i < guids.Length; i++ )
+            {
+                string assetPath = AssetDatabase.GUIDToAssetPath( guids[i] );
+                T asset = AssetDatabase.LoadAssetAtPath<T>( assetPath );
+                if( asset != null )
+                {
+                    assets.Add(asset);
+                }
+            }
+            return assets;
         }
     }
 }

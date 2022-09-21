@@ -79,7 +79,7 @@ namespace TonyDev.Game.Core.Items
                 itemName = itemName,
                 statBonuses = item == null ? GenerateItemStats(type, rarity) : StatBonus.Combine(GenerateItemStats(type, rarity), item.statBonuses).ToArray(),
                 uiSprite = sprite,
-                itemEffectIds = item?.itemEffectIds,
+                itemEffects = item?.itemEffects.AsReadOnly().ToList(),
                 projectiles = item?.projectiles
             };
         }
@@ -89,8 +89,8 @@ namespace TonyDev.Game.Core.Items
         private static float StatStrengthFactor => 1 + GameManager.DungeonFloor/15f;
         private static float DamageStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 25f;
         private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * StatStrengthFactor;
-        private static float ArmorStrength => Random.Range(0.6f, 1f) * 10 * StatStrengthFactor;
-        private static float HealthStrength => Random.Range(0.6f, 1f) * 10 * StatStrengthFactor;
+        private static float ArmorStrength => Random.Range(0.6f, 1f) * 25 * StatStrengthFactor;
+        private static float HealthStrength => Random.Range(0.6f, 1f) * 40 * StatStrengthFactor;
         private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity)
         {
             if (itemType is not (ItemType.Armor or ItemType.Weapon)) return null;

@@ -17,14 +17,6 @@ namespace TonyDev.Game.Core.Entities.Towers.Celestial
             OnTargetChangeOwner += DoBuffing;
         }
 
-        
-        
-        private new void Update()
-        {
-            base.Update();
-            
-        }
-
         private void DoBuffing()
         {
             foreach (var pt in Targets.Select(t => t.GetComponent<ProjectileTower>()).Where(pt => pt != null))

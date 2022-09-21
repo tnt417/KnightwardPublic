@@ -51,7 +51,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -109,7 +109,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -244,7 +244,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -368,7 +368,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -426,7 +426,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -484,7 +484,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -542,7 +542,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -642,7 +642,11 @@ MonoBehaviour:
   entryPointDown: {fileID: 3047595156119964366}
   entryPointLeft: {fileID: 8857565585366192443}
   entryPointRight: {fileID: 979624841372677327}
+  onRoomClearServer:
+    m_PersistentCalls:
+      m_Calls: []
   minimapIcon: {fileID: -6296560401822800073, guid: 9eae086de756a624dbf5eb480c577b45, type: 3}
+  roomChildObjects: []
 --- !u!114 &3707861888881928319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13497,7 +13501,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:
@@ -13555,7 +13559,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 0
+  rarityBoost: -5
   itemData: {fileID: 0}
   costMultiplier: 1
   onItemInteractServer:

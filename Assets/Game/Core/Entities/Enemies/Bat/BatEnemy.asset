@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
   enemyName: Bat
-  enemyBaseSprite: {fileID: -881900851, guid: e32f0907fb5c1cc448b948a448e2a09c, type: 3}
   baseMoneyReward: 1
   hitboxRadius: 0.3
   baseStats:
@@ -45,9 +44,10 @@ MonoBehaviour:
   movementData: {fileID: 11400000, guid: 67c7aa5da8002f24f8a6a9319e56972f, type: 2}
   contactAttackData:
     damageMultiplier: 1
+    knockbackMultiplier: 1
     hitboxRadius: 0.3
     team: 0
     destroyOnApply: 0
     lifetime: -1
-    spawnOnDestroy: {fileID: 0}
+    spawnOnDestroyKey: 
   projectileAttackData: []

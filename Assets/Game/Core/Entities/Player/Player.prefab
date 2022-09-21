@@ -537,7 +537,7 @@ MonoBehaviour:
     source: 
   - statType: 0
     stat: 9
-    strength: 1
+    strength: 5
     source: 
   clientHealthDisparity: 0
   networkCurrentHealth: 0
@@ -986,7 +986,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.5
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1
+  m_Intensity: 0.4
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: 00000000

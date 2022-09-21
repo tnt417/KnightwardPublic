@@ -8,22 +8,30 @@ namespace TonyDev.Game.Core.Attacks
 {
     public static class AttackFactory
     {
+        
+        //TODO can probably combine these two at some point
         //Responsible for creation of all projectile attacks.
         public static void CreateProjectileAttack(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
         {
-            projectileData.SpawnSelf(pos, direction, owner, owner.Stats.GetStat(Stat.AoeSize), identifier);
+            var go = projectileData.SpawnSelf(pos, direction, owner, owner.Stats.GetStat(Stat.AoeSize), identifier);
+            var attacks = go.GetComponentsInChildren<AttackComponent>();
+
+            foreach (var att in attacks)
+            {
+                att.OnDamageDealt += (f, ge) => owner.OnDamageOther?.Invoke(f, ge);
+            }
         }
 
         //Responsible for creation of all non-projectile attacks.
-        public static void CreateStaticAttack(GameEntity owner, AttackData attackData, bool child, [CanBeNull] GameObject prefab)
+        public static void CreateStaticAttack(GameEntity owner, Vector2 pos, AttackData attackData, bool childOfOwner, [CanBeNull] GameObject prefab)
         {
             var attackObject = prefab == null ? new GameObject("Attack Object") : Object.Instantiate(prefab);
 
-            attackObject.transform.parent = child ? owner.transform : null;
+            attackObject.transform.parent = childOfOwner ? owner.transform : null;
             attackObject.layer = LayerMask.NameToLayer("Attacks");
             
-            if(child) attackObject.transform.localPosition = Vector3.zero;
-
+            attackObject.transform.localPosition = pos;
+            
             var col = attackObject.AddComponent<CircleCollider2D>();
             col.radius = attackData.hitboxRadius;
             col.isTrigger = true;
@@ -33,6 +41,7 @@ namespace TonyDev.Game.Core.Attacks
 
             var attack = attackObject.AddComponent<AttackComponent>();
             attack.SetData(attackData, owner);
+            attack.OnDamageDealt += (f, ge) => owner.OnDamageOther?.Invoke(f, ge);
         }
     }
 }

@@ -4,8 +4,10 @@ using TMPro;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
+using TonyDev.Game.Level.Decorations;
 using TonyDev.Game.Level.Decorations.Chests;
 using TonyDev.Game.Level.Rooms;
+using TonyDev.Game.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Serialization;
@@ -18,11 +20,9 @@ namespace TonyDev.Game.Core.Items
         //Editor variables
         [SerializeField] private int rarityBoost;
         [SerializeField] private SpriteRenderer spriteRenderer;
-        [SerializeField] private GameObject pickupIndicator;
-        [SerializeField] private GameObject moneyIcon;
-
-        [SerializeField] private TMP_Text moneyLabel;
         //
+
+        private Interactable _interactable;
 
         private bool _pickupAble = true;
 
@@ -33,6 +33,14 @@ namespace TonyDev.Game.Core.Items
             spriteRenderer.sharedMaterial =
                 new Material(spriteRenderer
                     .sharedMaterial); //Create a copy of the renderer's material to allow temporary editing.
+            
+            _interactable = GetComponent<Interactable>();
+            
+            _interactable.onInteract.AddListener(() =>
+            {
+                CmdRequestPickup(GameManager.Money);
+                StartCoroutine(DisablePickupForSeconds(0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
+            });
         }
 
         public override void OnStartServer()
@@ -78,9 +86,7 @@ namespace TonyDev.Game.Core.Items
 
         private void OnCostChangeHook(int oldCost, int newCost)
         {
-            moneyIcon.SetActive(cost != 0);
-            moneyLabel.enabled = cost != 0;
-            moneyLabel.text = cost.ToString();
+            _interactable.SetCost(newCost);
         }
 
         [Command(requiresAuthority = false)]
@@ -107,31 +113,6 @@ namespace TonyDev.Game.Core.Items
                     spriteRenderer.sharedMaterial.SetColor("_OutlineColor", Color.red);
                     break;
             }
-        }
-
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            if (!other.CompareTag("Player")) return;
-
-            var id = other.GetComponent<NetworkIdentity>();
-
-            if (id == null || !id.isLocalPlayer) return;
-
-            pickupIndicator.SetActive(true); //Show pickup indicator when the player is on top of the item
-        }
-
-        private void OnTriggerStay2D(Collider2D other)
-        {
-            if (!other.CompareTag("Player")) return;
-
-            if (!Input.GetKey(KeyCode.E) || !_pickupAble) return;
-            
-            var id = other.GetComponent<NetworkIdentity>();
-
-            if (id == null || !id.isLocalPlayer) return;
-
-            CmdRequestPickup(GameManager.Money);
-            StartCoroutine(DisablePickupForSeconds(0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
         }
 
         [Command(requiresAuthority = false)]
@@ -183,18 +164,6 @@ namespace TonyDev.Game.Core.Items
             yield return new WaitForSeconds(seconds);
             _pickupAble = true;
         }
-
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            if (!other.CompareTag("Player")) return;
-
-            var id = other.GetComponent<NetworkIdentity>();
-
-            if (id == null || !id.isLocalPlayer) return;
-                
-            pickupIndicator.SetActive(false); //Deactivate pickup indicator when the player is no longer on top of the item
-        }
-
         [field: SyncVar] public NetworkIdentity CurrentParentIdentity { get; set; }
     }
 }

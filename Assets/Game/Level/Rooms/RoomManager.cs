@@ -72,7 +72,8 @@ namespace TonyDev.Game.Level.Rooms
         private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public event Action OnRoomsChanged;
-
+        public event Action OnActiveRoomChanged;
+        
         private void Awake()
         {
             //Singleton code
@@ -173,6 +174,8 @@ namespace TonyDev.Game.Level.Rooms
             _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
 
             Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
+            
+            OnActiveRoomChanged?.Invoke();
         }
 
         //Performs all actions necessary to disable the room phase.

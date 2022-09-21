@@ -51,7 +51,7 @@ MonoBehaviour:
   generateItemType: 0
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 50
+  rarityBoost: 25
   itemData: {fileID: 0}
   costMultiplier: 0
   onItemInteractServer:
@@ -313,7 +313,11 @@ MonoBehaviour:
   entryPointDown: {fileID: 3076489300640938279}
   entryPointLeft: {fileID: 8797427716417610450}
   entryPointRight: {fileID: 964485585310828326}
+  onRoomClearServer:
+    m_PersistentCalls:
+      m_Calls: []
   minimapIcon: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
+  roomChildObjects: []
 --- !u!114 &-4400890791826256157
 MonoBehaviour:
   m_ObjectHideFlags: 0

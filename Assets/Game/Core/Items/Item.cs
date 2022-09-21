@@ -16,32 +16,23 @@ namespace TonyDev.Game.Core.Items
 {
     public enum ItemType
     {
-        Weapon, Armor, Relic, Tower
+        Weapon,
+        Armor,
+        Relic,
+        Tower
     }
 
     public enum ItemRarity
     {
-        Common, Uncommon, Rare, Unique
+        Common,
+        Uncommon,
+        Rare,
+        Unique
     }
 
     [Serializable]
     public class Item
     {
-        public Item()
-        {
-            Init();
-        }
-        
-        public void Init()
-        {
-            if (itemEffectIds == null || ItemEffects.Count > 0) return;
-
-            foreach (var id in itemEffectIds)
-            {
-                ItemEffects.Add(GameEffect.FromString(id));
-            }
-        }
-
         public static ItemType RandomItemType
         {
             get
@@ -61,22 +52,44 @@ namespace TonyDev.Game.Core.Items
 
         public bool IsEquippable => itemType is ItemType.Armor or ItemType.Relic or ItemType.Weapon;
         public bool IsSpawnable => itemType is ItemType.Tower;
-        
+
         //Editor variables
         public Sprite uiSprite;
         public string itemName;
-        [TextArea(3,3)]
-        public string itemDescription;
+        [TextArea(3, 3)] public string itemDescription;
         public ItemType itemType;
         public ItemRarity itemRarity;
         public StatBonus[] statBonuses;
-        public string[] itemEffectIds;
-        [NonSerialized] public List<GameEffect> ItemEffects = new ();
+        [SerializeReference] [SerializeField] public List<GameEffect> itemEffects;
+
         public ProjectileData[] projectiles;
         //
 
         public GameObject spawnablePrefab => ObjectFinder.GetPrefab(spawnablePrefabName);
         public string spawnablePrefabName;
+
+        public void AddInflictEffect(GameEffect effect, bool allProjectiles)
+        {
+            if (allProjectiles)
+            {
+                foreach (var t in projectiles)
+                {
+                    t.effects.Add(effect);
+                }
+            }
+            else
+            {
+                projectiles[0].effects.Add(effect);
+            }
+        }
+
+        public void RemoveInflictEffect(GameEffect effect)
+        {
+            foreach (var t in projectiles)
+            {
+                if(t.effects.Contains(effect)) t.effects.Remove(effect);
+            }
+        }
 
         public static ItemRarity RandomRarity(int rarityBoost)
         {
@@ -91,17 +104,20 @@ namespace TonyDev.Game.Core.Items
                 _ => ItemRarity.Common
             };
             //
-            
+
             return itemRarity;
         }
-        
-        public string GetItemDescription() //Returns a string that contains a specified item's name and stats, all on their own line
+
+        public string
+            GetItemDescription() //Returns a string that contains a specified item's name and stats, all on their own line
         {
             var stringBuilder = new StringBuilder();
-            
-            if(itemDescription != string.Empty) stringBuilder.AppendLine(itemDescription);
 
-            if(IsEquippable) stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true) + "</color>");
+            if (itemDescription != string.Empty) stringBuilder.AppendLine(itemDescription);
+
+            if (IsEquippable)
+                stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true) +
+                                         "</color>");
 
             return stringBuilder.ToString(); //Return the string
         }

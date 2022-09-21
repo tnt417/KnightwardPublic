@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,18 +19,36 @@ namespace TonyDev.Game.UI.Tower
         private bool Placing => towerPlacementIndicator.activeSelf;
         private Camera _mainCamera;
         private GameObject _selectedTowerPrefab;
+        
+        public List<GamePhase> placeablePhases = new ();
+        private bool CanPlace => placeablePhases.Contains(GameManager.GamePhase);
 
-        private void Awake()
+        private void Start()
         {
-            if (Instance == null) Instance = this;
-            else Destroy(this);
+            if(Instance != null && Instance != this) Destroy(Instance);
+            Instance = this;
+
+            placeablePhases.Add(GamePhase.Arena);
             
             _mainCamera = Camera.main;
+
+            RoomManager.Instance.OnActiveRoomChanged += () =>
+            {
+                Debug.Log("ABC");
+                foreach (var t in FindObjectsOfType<Core.Entities.Towers.Tower>())
+                {
+                    Debug.Log(t.CurrentParentIdentity);
+                    if (t.CurrentParentIdentity.GetComponent<Room>() != null)
+                    {
+                        t.Pickup(); //Pickup all towers that are in the dungeon, whenever rooms are changed
+                    }
+                }
+            };
         }
         
         private void Update()
         {
-            if(GameManager.GamePhase == GamePhase.Dungeon) towerPlacementIndicator.SetActive(false);
+            if(!CanPlace) towerPlacementIndicator.SetActive(false);
             if (!Placing) return; //Don't move on if not placing
 
             var mousePos = _mainCamera.ScreenToWorldPoint(Input.mousePosition); //Get the mouse position
@@ -51,7 +71,7 @@ namespace TonyDev.Game.UI.Tower
         //Spawns a tower at the indicator position and exits from placing mode
         private void SpawnTower()
         {
-            GameManager.Instance.CmdSpawnTower(ObjectFinder.GetNameOfPrefab(_selectedTowerPrefab), towerPlacementIndicator.transform.position);
+            GameManager.Instance.CmdSpawnTower(ObjectFinder.GetNameOfPrefab(_selectedTowerPrefab), towerPlacementIndicator.transform.position, Player.LocalInstance.CurrentParentIdentity);
             TowerUIController.Instance.ConfirmPlace();
             towerPlacementIndicator.SetActive(false);
         }

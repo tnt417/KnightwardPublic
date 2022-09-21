@@ -36,6 +36,8 @@ namespace TonyDev.Game.Core.Entities.Player
 
         [NonSerialized] public bool DoMovement = true;
 
+        public Action<Vector2> OnPlayerMove;
+
         private Vector2 _lastMovementInput;
 
         private List<GameForce> _forceVectors = new();
@@ -66,10 +68,14 @@ namespace TonyDev.Game.Core.Entities.Player
             //Used for dashing direction
             _lastMovementInput = new Vector2(dx, dy);
 
+            var movement = Time.fixedDeltaTime * (new Vector2(dx, dy).normalized * GetSpeedMultiplier() + forceSum);
+            
             //Move the rigidbody to the correct position
             rb2D.MovePosition((Vector2) transform.position +
-                              Time.fixedDeltaTime * (new Vector2(dx, dy).normalized * GetSpeedMultiplier() + forceSum));
+                              movement);
 
+            OnPlayerMove?.Invoke(movement);
+            
             if (Player.LocalInstance.playerAnimator == null) return;
             
             //Set animation directions based on the keys that were pressed.

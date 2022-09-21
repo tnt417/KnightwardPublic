@@ -1,8 +1,10 @@
 using System;
 using System.Linq;
+using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using UnityEngine;
@@ -16,6 +18,8 @@ namespace TonyDev.Game.Core.Entities.Towers
         [SerializeField] public float targetRadius;
         //
 
+        public GameObject prefab;
+
         private void Start()
         {
             Init();
@@ -23,5 +27,11 @@ namespace TonyDev.Game.Core.Entities.Towers
 
         public override Team Team => Team.Player;
         public override bool IsInvulnerable => true;
+
+        public void Pickup()
+        {
+            NetworkServer.Destroy(gameObject);
+            PlayerInventory.Instance.InsertItem(GameManager.AllItems.FirstOrDefault(i => i.spawnablePrefab == prefab));
+        }
     }
 }
