@@ -235,7 +235,11 @@ MonoBehaviour:
   entryPointDown: {fileID: 3076489300640938279}
   entryPointLeft: {fileID: 8797427716417610450}
   entryPointRight: {fileID: 964485585310828326}
+  onRoomClearServer:
+    m_PersistentCalls:
+      m_Calls: []
   minimapIcon: {fileID: 7479642271789056252, guid: df58e7484986be1448443be92533111f, type: 3}
+  roomChildObjects: []
 --- !u!114 &-1173334797647341656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -266,7 +270,7 @@ GameObject:
   - component: {fileID: 4178251166305122763}
   m_Layer: 0
   m_Name: FloorLayer
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

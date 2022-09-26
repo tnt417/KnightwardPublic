@@ -138,11 +138,9 @@ MonoBehaviour:
     stat: 3
     strength: 1
     source: 
-  clientHealthDisparity: 0
-  networkCurrentHealth: 0
-  networkMaxHealth: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 0.5
+  prefab: {fileID: 0}
 --- !u!114 &330042881028611830
 MonoBehaviour:
   m_ObjectHideFlags: 0

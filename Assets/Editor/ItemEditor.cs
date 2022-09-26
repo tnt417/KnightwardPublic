@@ -7,6 +7,7 @@ using TonyDev.Game.Core.Items;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 namespace TonyDev.Editor
 {
@@ -133,6 +134,8 @@ namespace TonyDev.Editor
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         }
 
+        private bool recording = false;
+        
         private void DisplayEffectInfo(SerializedProperty sp)
         {
             itemEffects.RemoveAll(ie => ie == null);
@@ -191,27 +194,65 @@ namespace TonyDev.Editor
 
                 EditorGUILayout.EndHorizontal();
 
-                foreach (var field in ge.GetType().GetFields())
-                {
+                foreach (var field in ge.GetType().GetFields().Where(f => !f.IsNotSerialized && f.IsPublic))
+                { //Any changes here should be reflected in CustomReadWrite as well
+                    if (field.FieldType.IsEnum)
+                    {
+                        EditorGUILayout.BeginHorizontal();
+
+                        var index = (int) field.GetValue(ge);
+                        
+                        var e = (Enum) Enum.ToObject(field.FieldType, index);
+                        
+                        field.SetValue(ge,Enum.ToObject(field.FieldType, EditorGUILayout.EnumPopup(field.Name, e)));
+
+                        if (field.FieldType == typeof(KeyCode))
+                        {
+                            if (GUILayout.Button(recording ? "..." : "Record", EditorStyles.miniButton))
+                            {
+                                recording = true;
+                            }
+
+                            if (recording)
+                            {
+                                var k = CheckForKey();
+                                if (k != KeyCode.None)
+                                {
+                                    field.SetValue(ge, k);
+                                    recording = false;
+                                }
+                            }
+                        }
+
+                        EditorGUILayout.EndHorizontal();
+                        continue;
+                    }
+                    
                     switch (Type.GetTypeCode(field.FieldType))
                     {
                         case TypeCode.Int32:
                             field.SetValue(ge, EditorGUILayout.IntField(field.Name, (int) field.GetValue(ge)));
-                            break;
+                            continue;
                         case TypeCode.Boolean:
                             field.SetValue(ge, EditorGUILayout.Toggle(field.Name, (bool) field.GetValue(ge)));
-                            break;
+                            continue;
                         case TypeCode.String:
                             field.SetValue(ge, EditorGUILayout.TextField(field.Name, (string) field.GetValue(ge)));
-                            break;
+                            continue;
                         case TypeCode.Double:
                             field.SetValue(ge, EditorGUILayout.DoubleField(field.Name, (double) field.GetValue(ge)));
-                            break;
+                            continue;
                         case TypeCode.Single:
                             field.SetValue(ge, EditorGUILayout.FloatField(field.Name, (float) field.GetValue(ge)));
-                            break;
+                            continue;
                         default:
                             break;
+                    }
+
+                    if (field.FieldType == typeof(Sprite))
+                    {
+                        field.SetValue(ge, EditorGUILayout.ObjectField(field.Name, (Sprite) field.GetValue(ge), typeof(Sprite), false));
+                        continue;
                     }
                 }
 
@@ -223,11 +264,29 @@ namespace TonyDev.Editor
             }
         }
 
+        private KeyCode CheckForKey()
+        {
+            var current = Event.current;
+            
+            return current.type switch
+            {
+                EventType.KeyDown => Event.current.keyCode,
+                _ => KeyCode.None
+            };
+        }
+
         private void AddEffect(Type t)
         {
             if (serializedObject.targetObject is ItemData id)
             {
-                itemEffects.Add((GameEffect) Activator.CreateInstance(t));
+                var ge = (GameEffect) Activator.CreateInstance(t);
+                
+                itemEffects.Add(ge);
+
+                if (ge is AbilityEffect ae)
+                {
+                    ae.abilitySprite = id.item.uiSprite;
+                }
             }
         }
 

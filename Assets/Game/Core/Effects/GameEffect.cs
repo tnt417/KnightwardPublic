@@ -6,8 +6,6 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Global.Console;
 using System.Reflection;
 using TonyDev.Game.Core.Entities.Player;
-using UnityEditor;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using Tools = TonyDev.Game.Global.Tools;
 
@@ -21,7 +19,7 @@ namespace TonyDev.Game.Core.Effects
 
         //Identifier to hold reference to game effect to allow sending references to GameEffect across the network
         [NonSerialized] public string EffectIdentifier;
-        
+
         [NonSerialized] public GameEntity Entity;
         [NonSerialized] public GameEntity Source;
 

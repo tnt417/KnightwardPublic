@@ -59,8 +59,8 @@ namespace TonyDev.Game.Core.Entities
         [Command(requiresAuthority = false)]
         public void CmdSetHealth(float currentHealth, float maxHealth)
         {
-            networkCurrentHealth = currentHealth;
-            networkMaxHealth = maxHealth;
+            NetworkCurrentHealth = currentHealth;
+            NetworkMaxHealth = maxHealth;
         }
 
         public void ApplyKnockbackGlobal(Vector2 force)
@@ -76,19 +76,19 @@ namespace TonyDev.Game.Core.Entities
             GetComponent<Rigidbody2D>()?.AddForce(force);
         }
 
-        public float clientHealthDisparity;
+        [NonSerialized] public float ClientHealthDisparity;
         
-        [SyncVar(hook = nameof(CurrentHealthHook))] public float networkCurrentHealth;
-        [SyncVar] public float networkMaxHealth;
+        [SyncVar(hook = nameof(CurrentHealthHook))] [NonSerialized] public float NetworkCurrentHealth;
+        [SyncVar] [NonSerialized] public float NetworkMaxHealth;
         
         private void CurrentHealthHook(float oldHealth, float newHealth)
         {
-            if (clientHealthDisparity == 0 || isServer || this is Player.Player) return;
+            if (ClientHealthDisparity == 0 || isServer || this is Player.Player) return;
             
-            if (oldHealth == 0) clientHealthDisparity = 0;
+            if (oldHealth == 0) ClientHealthDisparity = 0;
             else
             {
-                clientHealthDisparity -= newHealth-oldHealth;   
+                ClientHealthDisparity -= newHealth-oldHealth;   
             }
         }
         
@@ -213,7 +213,7 @@ namespace TonyDev.Game.Core.Entities
             UpdateTarget();
         }
 
-        public Action<float, GameEntity> OnDamageOther;
+        public Action<float, GameEntity, bool> OnDamageOther;
 
         private void UpdateStats()
         {
@@ -393,7 +393,7 @@ namespace TonyDev.Game.Core.Entities
         public virtual int MaxHealth => (int)Stats.GetStat(Stat.Health);
         public virtual float CurrentHealth { get; protected set; }
         public virtual bool IsInvulnerable { get; protected set; }
-        public bool IsAlive => networkCurrentHealth > 0;
+        public bool IsAlive => NetworkCurrentHealth > 0;
         public virtual float ApplyDamage(float damage)
         {
             if (damage == 0 || IsInvulnerable) return 0;

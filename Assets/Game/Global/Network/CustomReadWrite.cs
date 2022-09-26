@@ -65,7 +65,7 @@ namespace TonyDev.Game.Global.Network
             }
             else
             {
-                var id = Player.LocalInstance.netId + "_" + _identifierIndex;
+                var id = Player.LocalInstance.netId + "_" + _identifierIndex + effect.GetType().Name;
                 _identifierIndex++;
                 return id;
             }
@@ -79,7 +79,7 @@ namespace TonyDev.Game.Global.Network
 
             //GameEffect is new if it doesn't have a generated identifier or if GameEffectIdentifiers doesn't contain the identifier
             var isNew = string.IsNullOrEmpty(value.EffectIdentifier) || !GameEffect.GameEffectIdentifiers.ContainsKey(value.EffectIdentifier);
-            writer.WriteBool(isNew);
+            //writer.WriteBool(isNew);
             
             if(isNew) //If GameEffect is new, generate an identifier
             {
@@ -88,9 +88,11 @@ namespace TonyDev.Game.Global.Network
                 GameEffect.GameEffectIdentifiers[id] = value;
             }
             
+            Debug.Log("WRITE Is new: " + isNew + " id: " + value.EffectIdentifier);
+
             writer.WriteString(value.EffectIdentifier);
 
-            if (!isNew) return; //If GameEffect already exists, can just send the identifier
+            //if (!isNew) return; //If GameEffect already exists, can just send the identifier
 
             var isSourceNull = value.Source == null;
             writer.WriteBool(isSourceNull);
@@ -104,27 +106,39 @@ namespace TonyDev.Game.Global.Network
 
             writer.WriteString(typeName);
 
-            foreach (var field in value.GetType().GetFields())
-            {
+            foreach (var field in value.GetType().GetFields().Where(f => f.IsPublic && !f.IsNotSerialized))
+            {                
+                if (field.FieldType.IsEnum)
+                {
+                    writer.WriteInt((int) field.GetValue(value));
+                    continue;
+                }
+                
                 switch (Type.GetTypeCode(field.FieldType))
                 {
                     case TypeCode.Int32:
                         writer.WriteInt((int) field.GetValue(value));
-                        break;
+                        continue;
                     case TypeCode.Boolean:
                         writer.WriteBool((bool) field.GetValue(value));
-                        break;
+                        continue;
                     case TypeCode.String:
                         writer.WriteString((string) field.GetValue(value));
-                        break;
+                        continue;
                     case TypeCode.Double:
                         writer.WriteDouble((double) field.GetValue(value));
-                        break;
+                        continue;
                     case TypeCode.Single:
                         writer.WriteFloat((float) field.GetValue(value));
-                        break;
+                        continue;
                     default:
                         break;
+                }
+
+                if (field.FieldType == typeof(Sprite))
+                {
+                    writer.WriteSprite((Sprite) field.GetValue(value));
+                    continue;
                 }
             }
         }
@@ -134,14 +148,13 @@ namespace TonyDev.Game.Global.Network
             var isNull = reader.ReadBool();
             if (isNull) return null;
 
-            var isNew = reader.ReadBool();
+            //var isNew = reader.ReadBool();
 
             var id = reader.ReadString();
             
-            if (!isNew)
-            {
-                return GameEffect.GameEffectIdentifiers[id];
-            }
+            var isNew = !GameEffect.GameEffectIdentifiers.ContainsKey(id);
+
+            Debug.Log("READ Is new: " + isNew + " id: " + id);
 
             var isSourceNull = reader.ReadBool();
 
@@ -154,33 +167,46 @@ namespace TonyDev.Game.Global.Network
 
             var typeName = reader.ReadString();
 
-            var gameEffect =
+            var gameEffect = GameEffect.GameEffectIdentifiers.ContainsKey(id) ?
+                GameEffect.GameEffectIdentifiers[id] : //If key already exists in the dictionary, don't create new effect.
                 (GameEffect) Activator.CreateInstance(
-                    GameEffect.GameEffectTypes.FirstOrDefault(t => t.Name == typeName) ?? typeof(GameEffect));
+                    GameEffect.GameEffectTypes.FirstOrDefault(t => t.Name == typeName) ?? typeof(GameEffect)); //Otherwise, create a new instance
 
             gameEffect.Source = source;
 
-            foreach (var field in gameEffect.GetType().GetFields())
+            foreach (var field in gameEffect.GetType().GetFields().Where(f => f.IsPublic && !f.IsNotSerialized))
             {
+                if (field.FieldType.IsEnum)
+                {
+                    field.SetValue(gameEffect, reader.ReadInt());
+                    continue;
+                }
+                
                 switch (Type.GetTypeCode(field.FieldType))
                 {
                     case TypeCode.Int32:
                         field.SetValue(gameEffect, reader.ReadInt());
-                        break;
+                        continue;
                     case TypeCode.Boolean:
                         field.SetValue(gameEffect, reader.ReadBool());
-                        break;
+                        continue;
                     case TypeCode.String:
                         field.SetValue(gameEffect, reader.ReadString());
-                        break;
+                        continue;
                     case TypeCode.Double:
                         field.SetValue(gameEffect, reader.ReadDouble());
-                        break;
+                        continue;
                     case TypeCode.Single:
                         field.SetValue(gameEffect, reader.ReadFloat());
-                        break;
+                        continue;
                     default:
                         break;
+                }
+
+                if (field.FieldType == typeof(Sprite))
+                {
+                    field.SetValue(gameEffect, reader.ReadSprite());
+                    continue;
                 }
             }
 

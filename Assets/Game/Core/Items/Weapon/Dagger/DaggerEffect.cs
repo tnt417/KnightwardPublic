@@ -6,15 +6,6 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 {
     public class DaggerEffect : AbilityEffect
     {
-        public override void OnAddOwner()
-        {
-            ActivateButton = KeyCode.Q;
-        }
-
-        public override void OnRemoveOwner()
-        {
-            OnAbilityDeactivate();
-        }
 
         protected override void OnAbilityActivate()
         {

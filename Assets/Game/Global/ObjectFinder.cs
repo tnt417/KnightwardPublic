@@ -26,12 +26,12 @@ namespace TonyDev.Game.Global
         private static readonly Dictionary<string, GameObject> Prefabs = new ();
         private static SpriteAtlas _spriteAtlas;
 
-        private static bool _initialized;
-        
+        public static bool Initialized;
+
         private void Awake()
         {
-            if (_initialized) return;
-            _initialized = true;
+            if (Initialized) return;
+            Initialized = true;
             
             foreach (var de in dictionaryEntries)
             {

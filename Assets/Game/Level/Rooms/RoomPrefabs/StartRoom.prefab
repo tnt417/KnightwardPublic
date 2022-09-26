@@ -240,7 +240,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2850201458211836955}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7024988082010825514
 SpriteRenderer:
@@ -1134,7 +1134,7 @@ GameObject:
   - component: {fileID: 6922258286785859747}
   m_Layer: 0
   m_Name: FloorLayer
-  m_TagString: Untagged
+  m_TagString: Floor
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4833,6 +4833,18 @@ PrefabInstance:
     - target: {fileID: 8231626313671587750, guid: 6a19a7ca106484b4a9df130444a95304, type: 3}
       propertyPath: regen
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756610045139501627, guid: 6a19a7ca106484b4a9df130444a95304, type: 3}
+      propertyPath: m_SpriteTilingProperty.pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756610045139501627, guid: 6a19a7ca106484b4a9df130444a95304, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8756610045139501627, guid: 6a19a7ca106484b4a9df130444a95304, type: 3}
+      propertyPath: m_SpriteTilingProperty.oldSize.y
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6a19a7ca106484b4a9df130444a95304, type: 3}

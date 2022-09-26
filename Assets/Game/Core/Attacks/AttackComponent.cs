@@ -155,7 +155,7 @@ namespace TonyDev.Game.Core.Attacks
                 TryDamage(otherTrigger);
         }
 
-        public Action<float, GameEntity> OnDamageDealt;
+        public Action<float, GameEntity, bool> OnDamageDealt;
         
         private void TryDamage(Collider2D other)
         {
@@ -191,7 +191,7 @@ namespace TonyDev.Game.Core.Attacks
                 damageDealt = netId == NetworkClient.localPlayer
                     ? entity.ApplyDamage(modifiedDamage)
                     : modifiedDamage; //Do damage before command if hitting player
-                if(entity is Enemy && !NetworkServer.active) entity.clientHealthDisparity -= damageDealt;
+                if(entity is Enemy && !NetworkServer.active) entity.ClientHealthDisparity -= damageDealt;
                 entity.LocalHurt(damageDealt, crit);
                 entity.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer);
                 
@@ -210,7 +210,7 @@ namespace TonyDev.Game.Core.Attacks
                         crit); //Spawn a popup for the damage text if the damage is greater than zero.
             }
 
-            OnDamageDealt?.Invoke(damageDealt, entity);
+            OnDamageDealt?.Invoke(damageDealt, entity, crit);
 
             var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
 

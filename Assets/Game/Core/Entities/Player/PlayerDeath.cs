@@ -90,7 +90,7 @@ namespace TonyDev.Game.Core.Entities.Player
             if (isLocalPlayer)
             {
                 Player.LocalInstance.playerMovement.DoMovement = true;
-                Player.LocalInstance.SetHealth(Player.LocalInstance.networkMaxHealth); //Fully heal the player
+                Player.LocalInstance.SetHealth(Player.LocalInstance.NetworkMaxHealth); //Fully heal the player
             }
             
             healthBarObject.SetActive(true); //Re-active the health bar

@@ -71,8 +71,7 @@ namespace TonyDev.Game.Core.Items
                     {
                         foreach (var effect in replacedItem.itemEffects) Player.LocalInstance.CmdRemoveEffect(effect);
                     }
-                    PlayerStats.Stats.RemoveStatBonuses(Enum.GetName(typeof(ItemType),
-                        item.itemType)); //Remove stat bonuses of the now removed item
+                    PlayerStats.Stats.RemoveStatBonuses(replacedItem.itemName); //Remove stat bonuses of the now removed item
                 }
 
                 if (item.itemEffects != null)

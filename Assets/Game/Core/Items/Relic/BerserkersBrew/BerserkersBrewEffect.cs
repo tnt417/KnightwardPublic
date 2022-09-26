@@ -8,15 +8,6 @@ namespace TonyDev.Game.Core.Items.Relics.BerserkersBrew
 {
     public class BerserkersBrewEffect : AbilityEffect
     {
-        public override void OnAddOwner()
-        {
-            Debug.Log("Effect added.");
-            ActivateButton = KeyCode.E;
-        }
-
-        public override void OnRemoveOwner()
-        {
-        }
 
         protected override void OnAbilityActivate()
         {

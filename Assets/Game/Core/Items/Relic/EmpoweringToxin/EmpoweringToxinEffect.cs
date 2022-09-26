@@ -8,15 +8,6 @@ namespace TonyDev.Game.Core.Items.Relics.EmpoweringToxin
 {
     public class EmpoweringToxinEffect : AbilityEffect
     {
-        public override void OnAddOwner()
-        {
-            ActivateButton = KeyCode.E;
-        }
-
-        public override void OnRemoveOwner()
-        {
-        }
-
         protected override void OnAbilityActivate()
         {
             PlayerStats.Stats.AddBuff(new StatBonus(StatType.AdditivePercent, Stat.MoveSpeed, 1, "EmpoweringToxin"), Duration);

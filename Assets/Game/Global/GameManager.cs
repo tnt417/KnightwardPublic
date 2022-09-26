@@ -34,7 +34,7 @@ namespace TonyDev.Game.Global
 
         [SerializeField] private List<ItemData> itemData;
         [SerializeField] private Vector2 arenaSpawnPos;
-        public static readonly List<Item> AllItems = new();
+        public static List<Item> AllItems = new();
         public static int Money = 0;
 
         [SyncVar] public int timeSeconds;
@@ -159,10 +159,13 @@ namespace TonyDev.Game.Global
             projectiles = projectiles.Where(go => go != null).ToList();
         }
         
+        public SyncList<Vector2Int> OccupiedTowerSpots = new ();
+        
         [Command(requiresAuthority = false)]
         public void CmdSpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
         {
             ObjectSpawner.SpawnTower(prefabName, pos, parent);
+            OccupiedTowerSpots.Add(new Vector2Int((int)pos.x, (int)pos.y));
         }
 
         [Command(requiresAuthority = false)]
@@ -222,6 +225,10 @@ namespace TonyDev.Game.Global
             if (Instance == null) Instance = this;
             else Destroy(this);
 
+            AllItems = Resources.LoadAll<ItemData>("Items").Select(id => id.item).ToList();
+            
+            Debug.Log("COUNT: " + AllItems.Count);
+            
             Random.InitState((int) DateTime.Now.Ticks);
 
             Player.OnLocalPlayerCreated += Init;
@@ -233,10 +240,10 @@ namespace TonyDev.Game.Global
 
             _mainCamera = Camera.main;
 
-            foreach (var id in itemData.Select(Instantiate))
-            {
-                AllItems.Add(id.item);
-            }
+            // foreach (var id in itemData.Select(Instantiate))
+            // {
+            //     AllItems.Add(id.item);
+            // }
         }
 
         private void Init()

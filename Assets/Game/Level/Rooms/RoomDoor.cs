@@ -33,9 +33,11 @@ namespace TonyDev.Game.Level.Rooms
         {
             foreach (var pos in wallTileSpots)
             {
-                wallTilemap.SetTile((Vector3Int) pos, open ? null : doorTile);   
+                wallTilemap.SetTile((Vector3Int) pos, open ? null : doorTile);
             }
 
+            wallTilemap.CompressBounds();
+            
             IsOpen = open;
             _collider.enabled = open;
         }

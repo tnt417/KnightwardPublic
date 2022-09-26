@@ -10,25 +10,27 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
-  m_Name: EmpoweringToxinItem
+  m_Name: BloodyToothData
   m_EditorClassIdentifier: 
   item:
-    uiSprite: {fileID: 21300000, guid: 9214ccdded46bf7438729b5624c73122, type: 3}
-    itemName: Empowering Toxin
-    itemDescription: Press 'e' to get a temporary boost to critical strike chance,
-      move speed, and attack speed.
+    uiSprite: {fileID: 21300000, guid: b4a86221c84961a4eac4e4f8dd59cd60, type: 3}
+    itemName: Bloody Tooth
+    itemDescription: <color=green>Gain 20% lifesteal. You no longer regenerate health.</color>
     itemType: 2
     itemRarity: 1
-    statBonuses: []
+    statBonuses:
+    - statType: 2
+      stat: 9
+      strength: 0
+      source: 
     itemEffects:
-    - rid: 4292349809548066820
+    - rid: 4292349917669621761
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 4292349809548066820
-      type: {class: EmpoweringToxinEffect, ns: TonyDev.Game.Core.Items.Relics.EmpoweringToxin, asm: TonyDev}
+    - rid: 4292349917669621761
+      type: {class: LifestealEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
-        Cooldown: 10
-        Duration: 5
+        LeechPercent: 0.2

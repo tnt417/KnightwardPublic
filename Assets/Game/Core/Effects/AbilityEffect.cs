@@ -1,5 +1,6 @@
 using System;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.UI.GameInfo;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects
@@ -7,10 +8,11 @@ namespace TonyDev.Game.Core.Effects
     [Serializable]
     public class AbilityEffect : GameEffect
     {
-        protected KeyCode ActivateButton;
+        public KeyCode ActivateButton;
 
         public float Cooldown;
         public float Duration;
+        public Sprite abilitySprite;
         private float ModifiedCooldown => Cooldown * (1 - Entity.Stats.GetStat(Stat.CooldownReduce));
 
         protected bool Active { get; private set; }
@@ -24,6 +26,19 @@ namespace TonyDev.Game.Core.Effects
 
         protected virtual void OnAbilityDeactivate()
         {
+        }
+
+        private int _cooldownID;
+        
+        public override void OnAddOwner()
+        {
+            _cooldownID = CooldownUIController.RegisterCooldown(abilitySprite, () => ModifiedCooldown, () => ModifiedCooldown - _cooldownTimer, ActivateButton);
+        }
+
+        public override void OnRemoveOwner()
+        {
+            OnAbilityDeactivate();
+            CooldownUIController.RemoveCooldown(_cooldownID);
         }
 
         public override void OnUpdateOwner()
@@ -47,6 +62,12 @@ namespace TonyDev.Game.Core.Effects
                     OnAbilityDeactivate();
                 }
             }
+        }
+
+        public void DiscountCooldown(float amount, bool ofTotal)
+        {
+            if(ofTotal) _cooldownTimer += amount * ModifiedCooldown;
+            else _cooldownTimer += (ModifiedCooldown - _cooldownTimer) * amount;
         }
     }
 }

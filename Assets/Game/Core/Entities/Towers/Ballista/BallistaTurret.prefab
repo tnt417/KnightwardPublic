@@ -104,11 +104,9 @@ MonoBehaviour:
     stat: 1
     strength: 25
     source: 
-  clientHealthDisparity: 0
-  networkCurrentHealth: 0
-  networkMaxHealth: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
+  prefab: {fileID: 0}
   rotateToFaceTargetObject: {fileID: 5988369303423483918}
   projectileData:
   - prefabKey: 
@@ -126,7 +124,10 @@ MonoBehaviour:
     waveAmplitude: 0
     waveFrequency: 0
     waveDistance: 0
-    effectIDs: []
+    effects: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!58 &9117518813328103301
 CircleCollider2D:
   m_ObjectHideFlags: 0

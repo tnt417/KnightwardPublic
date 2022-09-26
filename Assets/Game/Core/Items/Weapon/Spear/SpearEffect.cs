@@ -13,31 +13,19 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         public float AttackSpeedMultiplier;
         public float PoisonDPSMultiplier;
 
-        public override void OnAddOwner()
-        {
-            ActivateButton = KeyCode.Q;
-        }
-
-        public override void OnRemoveOwner()
-        {
-            OnAbilityDeactivate();
-        }
-
         private PoisonEffect _poisonEffect;
         
         protected override void OnAbilityActivate()
         {
-            Debug.Log(nameof(PoisonEffect));
             _poisonEffect = new PoisonEffect()
             {
-                Damage = PoisonDPSMultiplier * Entity.DamageMultiplier,
-                Ticks = 40,
-                Frequency = 0.25f
+                Damage = PoisonDPSMultiplier * Entity.Stats.GetStat(Stat.Damage),
+                Ticks = 10,
+                Frequency = 1f
             };
             PlayerInventory.Instance.WeaponItem.projectiles[0].effects.Add(_poisonEffect);
             Entity.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.MoveSpeed, MoveSpeedMultiplier, "spearEffect"), Duration);
             Entity.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.AttackSpeed, AttackSpeedMultiplier, "spearEffect"), Duration);
-            Cooldown -= 1f;
         }
 
         protected override void OnAbilityDeactivate()

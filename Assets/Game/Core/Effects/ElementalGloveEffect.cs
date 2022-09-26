@@ -29,8 +29,6 @@ namespace TonyDev.Game.Core.Effects
 
         public override void OnAddOwner()
         {
-            ActivateButton = KeyCode.Q;
-            
             UpdateCooldown(PlayerInventory.Instance.WeaponItem);
             PlayerInventory.OnItemInsertLocal += UpdateCooldown;
             
@@ -39,6 +37,8 @@ namespace TonyDev.Game.Core.Effects
             _trailEffect.SetVisible(false);
             
             Entity.OnDamageOther += TryLeech;
+            
+            base.OnAddOwner();
         }
 
         private void UpdateCooldown(Item item)
@@ -55,6 +55,7 @@ namespace TonyDev.Game.Core.Effects
         {
             Entity.CmdRemoveEffect(_trailEffect);
             PlayerInventory.OnItemInsertLocal -= UpdateCooldown;
+            base.OnRemoveOwner();
         }
 
         private GameEffect _speedEffect;
@@ -93,13 +94,13 @@ namespace TonyDev.Game.Core.Effects
             }
         }
 
-        protected void TryLeech(float dmg, GameEntity other)
+        protected void TryLeech(float dmg, GameEntity other, bool isCrit)
         {
             if (_activeEffect == Effect.Leech)
             {
                 var leech = -dmg * LeechPercent;
                 
-                ObjectSpawner.SpawnDmgPopup(Entity.transform.position, (int)leech, false);
+                ObjectSpawner.SpawnDmgPopup(Entity.transform.position, (int)leech, isCrit);
                 
                 Entity.ApplyDamage(leech);
             }

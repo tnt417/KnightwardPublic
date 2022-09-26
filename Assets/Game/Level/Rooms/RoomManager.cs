@@ -72,13 +72,12 @@ namespace TonyDev.Game.Level.Rooms
         private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public event Action OnRoomsChanged;
-        public event Action OnActiveRoomChanged;
+        public static event Action OnActiveRoomChanged;
         
         private void Awake()
         {
             //Singleton code
-            if (Instance == null && Instance != this) Instance = this;
-            else Destroy(this);
+            Instance = this;
             //
         }
 

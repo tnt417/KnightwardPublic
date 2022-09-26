@@ -62,5 +62,7 @@ MonoBehaviour:
     - rid: 4292349809548066825
       type: {class: BroadswordEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
+        ActivateButton: 113
         Cooldown: 5
         Duration: 2
+        abilitySprite: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}

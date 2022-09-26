@@ -4,6 +4,7 @@ using TonyDev.Game.Level.Decorations.Crystal;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Global
 {
@@ -11,7 +12,7 @@ namespace TonyDev.Game.Global
     {
         //Editor variables
         [SerializeField] private float followSpeed;
-        [SerializeField] private new Camera camera;
+        [FormerlySerializedAs("camera")] [SerializeField] private Camera cam;
         //
     
         private Rect _cameraBounds = Rect.zero;
@@ -64,9 +65,9 @@ namespace TonyDev.Game.Global
             if (rect == Rect.zero) return Rect.zero;
             
             //Do some math to figure out the bounds of the camera in world coordinates
-            var cameraRect = camera.pixelRect;
-            var cameraTopRight = camera.ScreenToWorldPoint(new Vector2(cameraRect.xMax, cameraRect.yMax));
-            var cameraBottomLeft = camera.ScreenToWorldPoint(Vector3.zero);
+            var cameraRect = cam.pixelRect;
+            var cameraTopRight = cam.ScreenToWorldPoint(new Vector2(cameraRect.xMax, cameraRect.yMax));
+            var cameraBottomLeft = cam.ScreenToWorldPoint(Vector3.zero);
             var cameraWidthInWorldCoords = cameraTopRight.x - cameraBottomLeft.x;
             var cameraHeightInWorldCoords = cameraTopRight.y - cameraBottomLeft.y;
             //
@@ -112,9 +113,9 @@ namespace TonyDev.Game.Global
             if (_cameraBounds != Rect.zero && !trackCrystal) //If CameraBounds is not cleared,
             {
                 //Do some math to figure out the bounds of the camera in world coordinates
-                var cameraRect = camera.pixelRect;
-                var cameraTopRight = camera.ScreenToWorldPoint(new Vector2(cameraRect.xMax, cameraRect.yMax));
-                var cameraBottomLeft = camera.ScreenToWorldPoint(Vector3.zero);
+                var cameraRect = cam.pixelRect;
+                var cameraTopRight = cam.ScreenToWorldPoint(new Vector2(cameraRect.xMax, cameraRect.yMax));
+                var cameraBottomLeft = cam.ScreenToWorldPoint(Vector3.zero);
                 var cameraWidthInWorldCoords = cameraTopRight.x - cameraBottomLeft.x;
                 var cameraHeightInWorldCoords = cameraTopRight.y - cameraBottomLeft.y;
                 //

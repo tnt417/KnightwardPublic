@@ -10,24 +10,28 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
-  m_Name: BerserkersBrewItem
+  m_Name: PerfectedStrikeData
   m_EditorClassIdentifier: 
   item:
-    uiSprite: {fileID: 21300000, guid: fabc999deea937a4faf81de61dd9c7e2, type: 3}
-    itemName: Berserker's Brew
-    itemDescription: Press 'e' to gain health regen and damage for a short time period.
+    uiSprite: {fileID: 21300000, guid: a282611e13de0ee45add7db9b912f837, type: 3}
+    itemName: Perfected Strike
+    itemDescription: <color=green>Critically striking reduces remaining cooldowns
+      by 20%.</color>
     itemType: 2
     itemRarity: 1
-    statBonuses: []
+    statBonuses:
+    - statType: 0
+      stat: 2
+      strength: 0.2
+      source: 
     itemEffects:
-    - rid: 4292349809548066818
+    - rid: 4292349917669621762
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 4292349809548066818
-      type: {class: BerserkersBrewEffect, ns: TonyDev.Game.Core.Items.Relics.BerserkersBrew, asm: TonyDev}
+    - rid: 4292349917669621762
+      type: {class: PerfectedStrikeEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
-        Cooldown: 10
-        Duration: 5
+        remainingCooldownReduce: 0.2

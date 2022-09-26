@@ -45,7 +45,7 @@ MonoBehaviour:
       waveAmplitude: 0
       waveFrequency: 0
       waveDistance: 0
-      effectIDs: []
+      effects: []
     spawnablePrefabName: 
   references:
     version: 2
@@ -53,7 +53,10 @@ MonoBehaviour:
     - rid: 4292349781711257600
       type: {class: SpearEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
+        ActivateButton: 113
         Cooldown: 10
         Duration: 5
+        abilitySprite: {fileID: 21300000, guid: 919dc578ee3403c4cb9d68eecd493a98, type: 3}
         MoveSpeedMultiplier: 1.4
         AttackSpeedMultiplier: 1.4
+        PoisonDPSMultiplier: 0.1

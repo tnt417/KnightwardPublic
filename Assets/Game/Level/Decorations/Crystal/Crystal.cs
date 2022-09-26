@@ -9,7 +9,6 @@ namespace TonyDev.Game.Level.Decorations.Crystal
 {
     public class Crystal : GameEntity
     {
-
         public static Crystal Instance;
         
         public static Func<float> CrystalRegen = () => 0;

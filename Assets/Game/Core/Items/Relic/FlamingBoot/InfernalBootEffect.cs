@@ -13,12 +13,12 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
     {
         public override void OnAddOwner()
         {
-            Player.LocalInstance.playerMovement.OnPlayerMove += (vector2) => { _distanceMoved += vector2.magnitude; };
+            Player.LocalInstance.playerMovement.OnPlayerMove += AddMagnitude;
         }
 
         public override void OnRemoveOwner()
         {
-            
+            Player.LocalInstance.playerMovement.OnPlayerMove -= AddMagnitude;
         }
 
         private double _distanceMoved;
@@ -27,11 +27,16 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
         {
             damageMultiplier = 0.1f,
             destroyOnApply = false,
-            hitboxRadius = 0.5f,
+            hitboxRadius = 0.75f,
             knockbackMultiplier = 0f,
             lifetime = 3f,
             team = Team.Player
         };
+
+        private void AddMagnitude(Vector2 v2)
+        {
+            _distanceMoved += v2.magnitude;
+        }
         
         public override void OnUpdateOwner()
         {

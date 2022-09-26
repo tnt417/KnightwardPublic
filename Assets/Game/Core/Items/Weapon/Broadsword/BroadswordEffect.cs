@@ -16,14 +16,5 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         {
             
         }
-
-        public override void OnAddOwner()
-        {
-            ActivateButton = KeyCode.Q;
-        }
-
-        public override void OnRemoveOwner()
-        {
-        }
     }
 }

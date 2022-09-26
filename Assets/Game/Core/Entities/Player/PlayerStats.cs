@@ -44,7 +44,7 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             foreach (var sb in item.statBonuses)
             {
-                Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, sb.source);
+                Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, item.itemName);
             }
         }
         

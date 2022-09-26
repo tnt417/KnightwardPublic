@@ -94,6 +94,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 19cd53e03b6a6784fa485bb207f6e5af, type: 3}
   - {fileID: 5045073161074915229, guid: 77232101e9d80754089e3481d34866da, type: 3}
   - {fileID: -6834524911116659543, guid: 77232101e9d80754089e3481d34866da, type: 3}
+  - {fileID: 21300000, guid: b4a86221c84961a4eac4e4f8dd59cd60, type: 3}
   - {fileID: -258191169, guid: 6d30f23141189cb46be0a97f508be36d, type: 3}
   - {fileID: -1625980717, guid: 6d30f23141189cb46be0a97f508be36d, type: 3}
   - {fileID: -2051279684, guid: 6d30f23141189cb46be0a97f508be36d, type: 3}
@@ -126,6 +127,7 @@ SpriteAtlas:
   - {fileID: 834677299, guid: 6a03fcc1d089be44a9c12bb2a38347ad, type: 3}
   - {fileID: -1657158624, guid: 6a03fcc1d089be44a9c12bb2a38347ad, type: 3}
   - {fileID: -253757356, guid: 6a03fcc1d089be44a9c12bb2a38347ad, type: 3}
+  - {fileID: 21300000, guid: dbf98a321e4d9db4785d7e73de909ee1, type: 3}
   - {fileID: 21300000, guid: e27c4c6211681df41a38930130a81ec9, type: 3}
   - {fileID: 21300000, guid: 21ed80a234edc954cb8cde6da8e8fdae, type: 3}
   - {fileID: -1550675817, guid: cd10e1c2d92657c41a838506da9d3145, type: 3}
@@ -179,7 +181,9 @@ SpriteAtlas:
   - {fileID: 6698050867923296888, guid: 1bdc8b87d1fe7f94f921069c4a83685b, type: 3}
   - {fileID: 21300000, guid: 964da4c755e82fa43ac4687967355a1f, type: 3}
   - {fileID: 21300000, guid: 29dc1ac709c75eb4c8ea3ba8defaf8ae, type: 3}
+  - {fileID: 21300000, guid: 003650d74f766a442bd990266834cc1d, type: 3}
   - {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
+  - {fileID: 21300000, guid: bc168318aaa461144ad77f4638cb486b, type: 3}
   - {fileID: 21300000, guid: 78df7138278bc7944bea18d9cef252d7, type: 3}
   - {fileID: 21300000, guid: a3e29148baec38143b036c4bd095bc7e, type: 3}
   - {fileID: -3241743515495822150, guid: df58e7484986be1448443be92533111f, type: 3}
@@ -215,6 +219,7 @@ SpriteAtlas:
   - {fileID: -7329591253019825581, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: -5672041578588515963, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
+  - {fileID: 21300000, guid: c46952db8f208354696791e146805669, type: 3}
   - {fileID: 21300000, guid: 9047db0ce93be6a46a5226c25f8a9050, type: 3}
   - {fileID: 1913745569, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
   - {fileID: 1350662678, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
@@ -249,6 +254,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: aa6d0bbd1484b3747892f7b3b5e0c1c4, type: 3}
   - {fileID: 21300000, guid: 9214ccdded46bf7438729b5624c73122, type: 3}
   - {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
+  - {fileID: 21300000, guid: a282611e13de0ee45add7db9b912f837, type: 3}
   - {fileID: 21300000, guid: 1bc7506e8ef39f3438f7bdcb171e19ff, type: 3}
   - {fileID: 21300000, guid: b8cf5e6e4483c834ca3cc04fd6a606b4, type: 3}
   - {fileID: 21300000, guid: 0f082c7e8868af046ae8089ae655cacc, type: 3}
@@ -339,6 +345,7 @@ SpriteAtlas:
   - mysterySymbol
   - chest_1
   - chest_0
+  - bloodytooth
   - blessing_5
   - blessing_4
   - blessing_6
@@ -371,6 +378,7 @@ SpriteAtlas:
   - castleWallTInverted
   - castleWallIntersect
   - castleWallVerticalSegmentTop
+  - RedStimulant
   - ai_glacialArmor
   - ai_crimsonArmor
   - dragon_2
@@ -424,7 +432,9 @@ SpriteAtlas:
   - woodTile_6
   - spinTowerUI
   - darkArcherArrow
+  - GrowthJewel
   - wi_sword
+  - quiver
   - cape
   - TallLadder
   - crystal_2
@@ -460,6 +470,7 @@ SpriteAtlas:
   - hanginglantern_4
   - hanginglantern_5
   - swordSlash2
+  - magichourglass
   - IceTowerUI
   - IceWizard_10
   - IceWizard_8
@@ -494,6 +505,7 @@ SpriteAtlas:
   - shadow
   - empoweringtoxin
   - necklace
+  - perfectedstrike
   - mossyMarble
   - ballistaTurretBolt
   - TeslaTower
