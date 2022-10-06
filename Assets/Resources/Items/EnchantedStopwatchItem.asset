@@ -15,17 +15,17 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: cf147b06c970c464ea750e7f9f6b0e1d, type: 3}
     itemName: Enchanted Stopwatch
-    itemDescription: Time passes at 3/4ths the normal rate. Getting hit passes 3
-      seconds of time.
+    itemDescription: 'TODO: Needs to be made to work in multiplayer.
+
+
+      Time
+      passes at 3/4ths the normal rate. Getting hit passes 3 seconds of time.'
     itemType: 2
     itemRarity: 2
     statBonuses: []
-    itemEffects:
-    - rid: 4292349809548066823
+    itemEffects: []
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
-    RefIds:
-    - rid: 4292349809548066823
-      type: {class: EnchantedStopwatchEffect, ns: TonyDev.Game.Core.Items.Relics.Stopwatch, asm: TonyDev}
+    RefIds: []

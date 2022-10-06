@@ -9,10 +9,12 @@ namespace TonyDev.Game.Core.Effects
     public class ParticleTrailEffect : GameEffect
     {
         [NonSerialized] private GameObject _particleObject;
+        public string OverridePrefab;
 
         public override void OnAddOwner()
         {
-            _particleObject = Object.Instantiate(ObjectFinder.GetPrefab("particleTrail"), Entity.transform.position, Quaternion.identity, Entity.transform);
+            _particleObject = Object.Instantiate(ObjectFinder.GetPrefab(string.IsNullOrEmpty(OverridePrefab) ? "particleTrail" : OverridePrefab), Entity.transform.position, Quaternion.identity, Entity.transform);
+            ParticleSystem = _particleObject.GetComponent<ParticleSystem>();
         }
 
         public override void OnRemoveOwner()
@@ -20,17 +22,20 @@ namespace TonyDev.Game.Core.Effects
             Object.Destroy(_particleObject);
         }
 
+        [NonSerialized] public ParticleSystem ParticleSystem;
+
         public void SetColor(Color color)
         {
             if (_particleObject == null) return;
-            
-            var settings = _particleObject.GetComponent<ParticleSystem>().main;
+            var settings = ParticleSystem.main;
             settings.startColor = new ParticleSystem.MinMaxGradient(color);
         }
         
         public void SetVisible(bool visible)
         {
             if (_particleObject == null) return;
+            
+            _particleObject.SetActive(visible);
             
             if(visible) _particleObject.GetComponent<ParticleSystem>()?.Play();
             else _particleObject.GetComponent<ParticleSystem>()?.Stop();

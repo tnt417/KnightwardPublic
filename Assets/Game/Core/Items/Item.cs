@@ -87,7 +87,7 @@ namespace TonyDev.Game.Core.Items
         {
             foreach (var t in projectiles)
             {
-                if(t.effects.Contains(effect)) t.effects.Remove(effect);
+                if (t.effects.Contains(effect)) t.effects.Remove(effect);
             }
         }
 
@@ -113,11 +113,18 @@ namespace TonyDev.Game.Core.Items
         {
             var stringBuilder = new StringBuilder();
 
-            if (itemDescription != string.Empty) stringBuilder.AppendLine(itemDescription);
+            if (!string.IsNullOrEmpty(itemDescription)) stringBuilder.AppendLine(itemDescription);
 
             if (IsEquippable)
-                stringBuilder.AppendLine("<color=grey>" + PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true) +
-                                         "</color>");
+            {
+                if (itemEffects is {Count: > 0})
+                    foreach (var ge in itemEffects.Where(ge => ge != null && !string.IsNullOrEmpty(ge.effectDescription)))
+                    {
+                        stringBuilder.AppendLine(ge.effectDescription);
+                    }
+
+                stringBuilder.Append(PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true, true));
+            }
 
             return stringBuilder.ToString(); //Return the string
         }

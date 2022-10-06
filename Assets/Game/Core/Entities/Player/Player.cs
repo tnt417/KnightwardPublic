@@ -72,10 +72,8 @@ namespace TonyDev.Game.Core.Entities.Player
                 {
                     var direction = GameManager.MouseDirection;
                     var pos = transform.position;
-
-                    var identifier = AttackComponent.GetUniqueIdentifier(this);
-                    AttackFactory.CreateProjectileAttack(this, pos, direction, proj, identifier);
-                    GameManager.Instance.CmdSpawnProjectile(netIdentity, pos, GameManager.MouseDirection, proj, identifier);
+                    
+                    ObjectSpawner.SpawnProjectile(this, pos, GameManager.MouseDirection, proj);
                 }
             };
             

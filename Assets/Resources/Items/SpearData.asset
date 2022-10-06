@@ -40,11 +40,13 @@ MonoBehaviour:
         destroyOnApply: 0
         lifetime: 2
         spawnOnDestroyKey: 
+      disableMovement: 0
       travelSpeed: 20
       offsetDegrees: 0
       waveAmplitude: 0
       waveFrequency: 0
       waveDistance: 0
+      childOfOwner: 0
       effects: []
     spawnablePrefabName: 
   references:
@@ -53,6 +55,7 @@ MonoBehaviour:
     - rid: 4292349781711257600
       type: {class: SpearEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
+        effectDescription: 
         ActivateButton: 113
         Cooldown: 10
         Duration: 5

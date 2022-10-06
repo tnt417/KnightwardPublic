@@ -15,7 +15,7 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: 069457371cf7ca54da562f2821a5416e, type: 3}
     itemName: Infernal Boot
-    itemDescription: <color=green>Leave a trail of fire behind you.</color>
+    itemDescription: 
     itemType: 2
     itemRarity: 2
     statBonuses:
@@ -28,11 +28,13 @@ MonoBehaviour:
       strength: 0.2
       source: 
     itemEffects:
-    - rid: 4292349809548066821
+    - rid: 8269505155275948032
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 4292349809548066821
+    - rid: 8269505155275948032
       type: {class: InfernalBootEffect, ns: TonyDev.Game.Core.Items.Relics.FlamingBoot, asm: TonyDev}
+      data:
+        effectDescription: <color=orange>Leave a trail of fire behind you.</color>

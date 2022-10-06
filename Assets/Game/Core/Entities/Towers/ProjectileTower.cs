@@ -36,7 +36,7 @@ namespace TonyDev.Game.Core.Entities.Towers
             {
                 foreach (var projData in projectileData)
                 {
-                    GameManager.Instance.CmdSpawnProjectile(netIdentity, transform.position, direction, projData, AttackComponent.GetUniqueIdentifier(this));
+                    ObjectSpawner.SpawnProjectile(this, transform.position, direction, projData);
                 }
                 if(!rpcSent) RpcFire(direction);
                 rpcSent = true;

@@ -45,11 +45,13 @@ MonoBehaviour:
         destroyOnApply: 0
         lifetime: 0.2
         spawnOnDestroyKey: 
+      disableMovement: 0
       travelSpeed: 16
       offsetDegrees: 0
       waveAmplitude: 0
       waveFrequency: 0
       waveDistance: 0
+      childOfOwner: 0
       effects: []
     spawnablePrefabName: 
   references:
@@ -58,6 +60,7 @@ MonoBehaviour:
     - rid: 4292349809548066816
       type: {class: DaggerEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
+        effectDescription: 
         ActivateButton: 113
         Cooldown: 1
         Duration: 0.5

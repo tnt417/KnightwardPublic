@@ -33,4 +33,5 @@ MonoBehaviour:
     - rid: 4292349917669621761
       type: {class: LifestealEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
+        effectDescription: 
         LeechPercent: 0.2

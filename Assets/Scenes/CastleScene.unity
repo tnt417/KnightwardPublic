@@ -3215,6 +3215,12 @@ MonoBehaviour:
     value: {fileID: 2801006091708425565, guid: 079d08151f951e742b66d9b39ca16748, type: 3}
   - key: particleTrail
     value: {fileID: 622507783171182362, guid: 4cd8e5b9cbe869c4abb46046ace23618, type: 3}
+  - key: broadswordParticles
+    value: {fileID: 485460337944506454, guid: 0f08a66316ee4ce4ab63e92c6270c973, type: 3}
+  - key: HammerIndicator
+    value: {fileID: 5103858983301164108, guid: 5163dc7445cba4c43be50946b5c6f48b, type: 3}
+  - key: HammerProjectile
+    value: {fileID: 5404901476592251585, guid: 7ccb62db75597d84681d28a654f9c291, type: 3}
   animatorEntries:
   - key: Slime
     value: {fileID: 9100000, guid: 54cdb3cb100dbe94baa6a5254c230175, type: 2}

@@ -260,7 +260,7 @@ namespace TonyDev.Game.Core.Entities
         
         public void LocalHurt(float damage, bool isCrit)
         {
-            ObjectSpawner.SpawnDmgPopup(transform.position, (int)Stats.ModifyIncomingDamage(damage), isCrit);
+            if(!IsInvulnerable) ObjectSpawner.SpawnDmgPopup(transform.position, Stats.ModifyIncomingDamage(damage), isCrit);
             OnLocalHurt?.Invoke();
         }
 
@@ -281,7 +281,7 @@ namespace TonyDev.Game.Core.Entities
                             && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
                             && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
                             && e.Team == targetTeam //Target things of our target team
-                            && (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
+                            //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
                             && e != this //Don't target self
                             && (e is Crystal && Vector2.Distance(e.transform.position, transform.position) < 200f 
                                 || Vector2.Distance(e.transform.position, transform.position) < range)) //Distance check
@@ -389,14 +389,21 @@ namespace TonyDev.Game.Core.Entities
         }
         
         public virtual float DamageMultiplier { get; protected set; } = 1f;
-        public virtual float HealMultiplier { get; protected set; } = 1f;
+        public virtual float HealMultiplier { get; set; } = 1f;
         public virtual int MaxHealth => (int)Stats.GetStat(Stat.Health);
         public virtual float CurrentHealth { get; protected set; }
-        public virtual bool IsInvulnerable { get; protected set; }
+        public virtual bool IsInvulnerable { get; set; }
         public bool IsAlive => NetworkCurrentHealth > 0;
         public virtual float ApplyDamage(float damage)
         {
-            if (damage == 0 || IsInvulnerable) return 0;
+            if (damage == 0) return 0;
+
+            if (damage > 0 && IsInvulnerable)
+            {
+                Debug.Log("Invulnerable!");
+                OnTryHurtInvulnerable?.Invoke(damage);
+                return 0;
+            }
 
             if (damage > 0 && Stats.DodgeSuccessful) return 0; //Don't apply damage is dodge rolls successful.
             var modifiedDamage = damage >= 0
@@ -417,7 +424,7 @@ namespace TonyDev.Game.Core.Entities
 
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth); //Clamp health
 
-            OnHealthChanged?.Invoke(modifiedDamage);
+            OnHealthChanged?.Invoke(CurrentHealth);
 
             if (CurrentHealth <= 0) Die();
 
@@ -441,6 +448,7 @@ namespace TonyDev.Game.Core.Entities
             if(this is not Player.Player) NetworkServer.Destroy(gameObject);
         }
 
+        public event IDamageable.HealthAction OnTryHurtInvulnerable;
         public event IDamageable.HealthAction OnHealthChanged;
         public event IDamageable.HealthAction OnHeal;
         public event IDamageable.HealthAction OnHurt;

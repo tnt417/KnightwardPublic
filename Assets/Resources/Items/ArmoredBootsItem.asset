@@ -30,6 +30,7 @@ MonoBehaviour:
     - rid: 4292349809548066817
       type: {class: ArmoredBootEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
+        effectDescription: 
         armorBonusFlat: 20
         armorBonusMultiplier: 0.5
         moveSpeedPenalty: 0.2

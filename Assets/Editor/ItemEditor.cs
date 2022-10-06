@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Codice.CM.SEIDInfo;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Items;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -168,6 +171,8 @@ namespace TonyDev.Editor
 
             EditorGUILayout.Space();
 
+            var itemEffectsProp = sp.FindPropertyRelative(nameof(Item.itemEffects));
+            
             for (var i = 0; i < itemEffects.Count; i++)
             {
                 var screenRect = GUILayoutUtility.GetRect(1, 1);
@@ -194,6 +199,8 @@ namespace TonyDev.Editor
 
                 EditorGUILayout.EndHorizontal();
 
+                var effectProp = itemEffectsProp.GetArrayElementAtIndex(i);
+                
                 foreach (var field in ge.GetType().GetFields().Where(f => !f.IsNotSerialized && f.IsPublic))
                 { //Any changes here should be reflected in CustomReadWrite as well
                     if (field.FieldType.IsEnum)
@@ -228,7 +235,7 @@ namespace TonyDev.Editor
                         continue;
                     }
                     
-                    switch (Type.GetTypeCode(field.FieldType))
+                    /*switch (Type.GetTypeCode(field.FieldType))
                     {
                         case TypeCode.Int32:
                             field.SetValue(ge, EditorGUILayout.IntField(field.Name, (int) field.GetValue(ge)));
@@ -247,13 +254,25 @@ namespace TonyDev.Editor
                             continue;
                         default:
                             break;
-                    }
+                    }*/
 
-                    if (field.FieldType == typeof(Sprite))
+                    var prop = effectProp.FindPropertyRelative(field.Name);
+                    EditorGUILayout.PropertyField(prop, new GUIContent(field.Name), true);
+                    
+                    /*if (field.FieldType == typeof(Sprite))
                     {
                         field.SetValue(ge, EditorGUILayout.ObjectField(field.Name, (Sprite) field.GetValue(ge), typeof(Sprite), false));
                         continue;
-                    }
+                    }*/
+
+                    /*if (field.FieldType == typeof(ProjectileData))
+                    {
+
+                        Debug.Log(projProperty.type);
+
+                        EditorGUILayout.PropertyField(projProperty, new GUIContent(field.Name), true);
+                        //How?
+                    }*/
                 }
 
                 EditorGUILayout.Space();
@@ -296,6 +315,50 @@ namespace TonyDev.Editor
 
             EditorGUILayout.LabelField("<size=15><b><color=white>Spawnable</color></b></size>", richTextStyle);
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.spawnablePrefabName)));
+        }
+        
+        private static void BuildInspectorProperties(SerializedObject obj, VisualElement container)
+        {
+            SerializedProperty iterator = obj.GetIterator();
+            Type targetType = obj.targetObject.GetType();
+            List<MemberInfo> members = new List<MemberInfo>(targetType.GetMembers());
+ 
+            if (!iterator.NextVisible(true)) return;
+            do
+            {
+                PropertyField propertyField = new PropertyField(iterator.Copy())
+                {
+                    name = "PropertyField:" + iterator.propertyPath
+                };
+ 
+                MemberInfo member = members.Find(x => x.Name == propertyField.bindingPath);
+                if (member != null)
+                {
+                    IEnumerable<Attribute> headers = member.GetCustomAttributes(typeof(HeaderAttribute));
+                    IEnumerable<Attribute> spaces = member.GetCustomAttributes(typeof(SpaceAttribute));
+ 
+                    foreach (Attribute x in headers)
+                    {
+                        HeaderAttribute actual = (HeaderAttribute) x;
+                        Label header = new Label { text = actual.header};
+                        header.style.unityFontStyleAndWeight = FontStyle.Bold;
+                        container.Add(new Label { text = " ", name = "Header Spacer"});
+                        container.Add(header);
+                    }
+                    foreach (Attribute unused in spaces)
+                    {
+                        container.Add(new Label { text = " " });
+                    }
+                }
+ 
+                if (iterator.propertyPath == "m_Script" && obj.targetObject != null)
+                {
+                    propertyField.SetEnabled(value: false);
+                }
+ 
+                container.Add(propertyField);
+            }
+            while (iterator.NextVisible(false));
         }
     }
 }

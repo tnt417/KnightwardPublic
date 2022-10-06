@@ -8,23 +8,16 @@ namespace TonyDev.Game.Core.Items.Relics.Stopwatch
 {
     public class EnchantedStopwatchEffect : GameEffect
     {
-        public override void OnAddOwner()
+        public override void OnAddServer()
         {
             Timer.TickSpeedMultiplier = 0.75f;
-            Player.LocalInstance.OnHurt += OnPlayerHit;
+            Entity.OnHurt += OnPlayerHit;
         }
-
-        public override void OnRemoveOwner()
+        public override void OnRemoveServer()
         {
             Timer.TickSpeedMultiplier = 1f;
-            Player.LocalInstance.OnHurt -= OnPlayerHit;
+            Entity.OnHurt -= OnPlayerHit;
         }
-
-        public override void OnUpdateOwner()
-        {
-            
-        }
-
         private void OnPlayerHit(float value)
         {
             Timer.GameTimer += 3f;

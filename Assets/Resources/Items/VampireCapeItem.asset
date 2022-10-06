@@ -19,12 +19,9 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 2
     statBonuses: []
-    itemEffects:
-    - rid: 4292349809548066824
+    itemEffects: []
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
-    RefIds:
-    - rid: 4292349809548066824
-      type: {class: VampireCapeEffect, ns: TonyDev.Game.Core.Items.Relics.VampireCape, asm: TonyDev}
+    RefIds: []

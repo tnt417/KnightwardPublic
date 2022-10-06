@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using TMPro;
+using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Entities.Player;
@@ -30,39 +32,51 @@ namespace TonyDev.Game.Global
         [SerializeField] private GameObject chestPrefab;
         [SerializeField] private float moneyOutwardForce;
         [SerializeField] private int objectPoolSize;
-        private static readonly Queue<GameObject> PopupObjectPool = new ();
-        
+        private static readonly Queue<GameObject> PopupObjectPool = new();
+
         private void Awake()
         {
             if (_instance == null) _instance = this;
         }
 
-        public static void SpawnDmgPopup(Vector2 position, int damage, bool critical)
+        public static GameObject SpawnProjectile(GameEntity owner, Vector2 pos, Vector2 direction,
+            ProjectileData projectileData, bool localOnly = false) =>
+            GameManager.Instance.SpawnProjectile(owner, pos, direction, projectileData, localOnly);
+
+        public static void SpawnDmgPopup(Vector2 position, float damage, bool critical)
         {
-            var go = PopupObjectPool.Count >= _instance.objectPoolSize ? PopupObjectPool.Dequeue() : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
+            var roundedDamage = Mathf.CeilToInt(damage);
+
+            var go = PopupObjectPool.Count >= _instance.objectPoolSize
+                ? PopupObjectPool.Dequeue()
+                : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
 
             go.transform.position = position;
-            
+
             var tmp = go.GetComponentInChildren<TextMeshPro>();
             var anim = go.GetComponent<Animator>();
-            
+
             anim.Play("Popup");
 
-            tmp.text = damage == 0 ? "Dodge" : (-damage).ToString(); //Negative, so positive damage has a '-' and healing doesn't.
-            
+            tmp.text = damage == 0
+                ? "Dodge"
+                : (-roundedDamage).ToString(); //Negative, so positive damage has a '-' and healing doesn't.
+
             //Yellow = normal damage
             //Red = crit damage
             //Green = normal healing
             //Magenta = crit healing
-            tmp.color = damage == 0 ? Color.gray : damage > 0 ? critical ? Color.red : Color.yellow : critical ? Color.magenta : Color.green;
+            tmp.color = damage == 0 ? Color.gray :
+                damage > 0 ? critical ? Color.red : Color.yellow :
+                critical ? Color.magenta : Color.green;
 
             PopupObjectPool.Enqueue(go);
         }
-        
+
         public static void SpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
         {
             var prefab = ObjectFinder.GetPrefab(prefabName);
-            
+
             var go = Instantiate(prefab, pos, Quaternion.identity);
 
             var coll = go.AddComponent<BoxCollider2D>();
@@ -70,12 +84,12 @@ namespace TonyDev.Game.Global
             coll.isTrigger = true;
 
             NetworkServer.Spawn(go, NetworkServer.localConnection);
-            
+
             var tower = go.GetComponent<Tower>();
-            
+
             tower.CmdSetParentIdentity(parent);
             tower.prefab = prefab;
-            
+
             var interact = go.AddComponent<InteractableButton>();
             interact.SetLabel("Pickup");
             interact.onInteract.AddListener(() =>
@@ -83,10 +97,12 @@ namespace TonyDev.Game.Global
                 if (tower != null) tower.Pickup();
             });
         }
-        
+
         public static void SpawnTextPopup(Vector2 position, string text, Color color, float speedMultiplier = 1f)
         {
-            var go = PopupObjectPool.Count >= _instance.objectPoolSize ? PopupObjectPool.Dequeue() : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
+            var go = PopupObjectPool.Count >= _instance.objectPoolSize
+                ? PopupObjectPool.Dequeue()
+                : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
 
             go.transform.position = position;
 
@@ -102,21 +118,24 @@ namespace TonyDev.Game.Global
             PopupObjectPool.Enqueue(go);
         }
 
-        public static void SpawnMoney(int amount, Vector2 originPos, NetworkIdentity parentRoom)
+        public static void SpawnMoney(int amount, Vector2 originPos, NetworkIdentity parentRoom,
+            bool ignoreModifiers = false)
         {
-            for (var i = 0; i < amount; i+=0)
+            var modifier = ignoreModifiers ? 1.0f : 1 + GameManager.MoneyDropBonusFactor;
+
+            for (var i = 0; i < amount * modifier; i += 0)
             {
                 var angle = Random.Range(0, 360);
 
                 var radAngle = angle * Mathf.Deg2Rad;
                 var dir = new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle));
-                
+
                 var moneyObject = Instantiate(_instance.moneyPrefab, originPos, Quaternion.identity);
                 var money = moneyObject.GetComponent<MoneyObject>();
 
                 var remMoney = amount - i;
                 var addAmount = remMoney / 5f > 1 ? remMoney / 25f > 1 ? remMoney / 100f > 1 ? 100 : 25 : 5 : 1;
-                
+
                 money.amount = addAmount;
                 i += addAmount;
 
@@ -128,7 +147,7 @@ namespace TonyDev.Game.Global
                     100 => Vector3.one * 1.6f,
                     _ => throw new ArgumentOutOfRangeException()
                 };
-                
+
                 if (parentRoom != null)
                 {
                     var room = parentRoom.GetComponent<Room>();
@@ -145,22 +164,22 @@ namespace TonyDev.Game.Global
                 rb2d.velocity = dir * _instance.moneyOutwardForce;
             }
         }
-        
+
         //All enemies should be spawned using this method.
         [Server]
         public static void SpawnEnemy(EnemyData enemyData, Vector2 position, NetworkIdentity parent)
         {
             if (enemyData == null) return;
-            
+
             var enemy = Instantiate(enemyData.prefab == null ? _instance.enemyPrefab : enemyData.prefab, position,
                 Quaternion.identity).GetComponent<Enemy>();
 
             NetworkServer.Spawn(enemy.gameObject);
 
             enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
-            
+
             enemy.CmdSetEnemyData(enemyData);
-            
+
             enemy.CmdSetParentIdentity(parent);
         }
 
@@ -170,11 +189,13 @@ namespace TonyDev.Game.Global
             for (var i = 0; i < amount; i++)
                 if (Camera.main is not null)
                     GameManager.Instance.CmdSpawnEnemy(enemyName,
-                        Camera.main.ScreenToWorldPoint(Input.mousePosition), Player.LocalInstance.CurrentParentIdentity);
+                        Camera.main.ScreenToWorldPoint(Input.mousePosition),
+                        Player.LocalInstance.CurrentParentIdentity);
         }
 
         [Server]
-        public static GroundItem SpawnGroundItem(Item item, float costMultiplier, Vector2 position, NetworkIdentity parent)
+        public static GroundItem SpawnGroundItem(Item item, float costMultiplier, Vector2 position,
+            NetworkIdentity parent)
         {
             var groundItemObject = Instantiate(_instance.groundItemPrefab, position, Quaternion.identity);
             var gi = groundItemObject.GetComponent<GroundItem>();
@@ -188,7 +209,7 @@ namespace TonyDev.Game.Global
             if (parent != null)
             {
                 var room = parent.GetComponent<Room>();
-                
+
                 if (room != null)
                 {
                     room.roomChildObjects.Add(groundItemObject);
@@ -204,9 +225,12 @@ namespace TonyDev.Game.Global
             return gi;
         }
 
-        public static Chest SpawnChest(int rarityBoost, Vector2 position, NetworkIdentity parent) => SpawnChest(rarityBoost, null, position, parent);
-        public static Chest SpawnChest(Item presetItem, Vector2 position, NetworkIdentity parent) => SpawnChest(0, presetItem, position, parent);
-        
+        public static Chest SpawnChest(int rarityBoost, Vector2 position, NetworkIdentity parent) =>
+            SpawnChest(rarityBoost, null, position, parent);
+
+        public static Chest SpawnChest(Item presetItem, Vector2 position, NetworkIdentity parent) =>
+            SpawnChest(0, presetItem, position, parent);
+
         [Server]
         private static Chest SpawnChest(int rarityBoost, Item presetItem, Vector2 position, NetworkIdentity parent)
         {
@@ -225,9 +249,9 @@ namespace TonyDev.Game.Global
 
             chest.CurrentParentIdentity = parent;
             chest.rarityBoost = rarityBoost;
-            
-            if(presetItem != null) chest.SetItem(presetItem);
-            
+
+            if (presetItem != null) chest.SetItem(presetItem);
+
             NetworkServer.Spawn(chestObject);
 
             return chest;

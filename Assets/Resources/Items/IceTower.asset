@@ -20,6 +20,9 @@ MonoBehaviour:
     itemType: 3
     itemRarity: 2
     statBonuses: []
-    itemEffectIds: []
+    itemEffects: []
     projectiles: []
     spawnablePrefabName: ice
+  references:
+    version: 2
+    RefIds: []

@@ -171,7 +171,7 @@ namespace TonyDev.Game.Core.Attacks
             var damageable = other.GetComponent<IDamageable>();
 
             //
-            if (damageable == null || damageable.Team == team || damageable.IsInvulnerable ||
+            if (damageable == null || damageable.Team == team ||
                 _hitCooldowns.ContainsKey(other.gameObject) ||
                 !other.isTrigger) return; //Check if valid thing to hit
 
@@ -206,7 +206,7 @@ namespace TonyDev.Game.Core.Attacks
                 damageDealt =
                     damageable.ApplyDamage(modifiedDamage); //Apply the damage. Critical hits deal double.
                 if (damageDealt > 0)
-                    ObjectSpawner.SpawnDmgPopup(other.transform.position, (int) damageDealt,
+                    ObjectSpawner.SpawnDmgPopup(other.transform.position, damageDealt,
                         crit); //Spawn a popup for the damage text if the damage is greater than zero.
             }
 

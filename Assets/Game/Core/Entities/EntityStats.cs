@@ -228,6 +228,15 @@ namespace TonyDev.Game.Core.Entities
                 RemoveStatBonuses(bid);
             }
         }
+        
+        public void RemoveBuffsOfSource(string source)
+        {
+            if (ReadOnly) return;
+            
+            var keys = _buffTimers.Where(kv => kv.Key.StartsWith(source + "_BUFF")).Select(kv => kv.Key);
+
+            RemoveBuffs(keys);
+        }
 
         #endregion
     }

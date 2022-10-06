@@ -34,9 +34,10 @@ MonoBehaviour:
     - rid: 4292349781139259392
       type: {class: ElementalGloveEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
+        effectDescription: 
         ActivateButton: 113
-        Cooldown: 0
-        Duration: 0
+        Cooldown: 1
+        Duration: 1
         abilitySprite: {fileID: 21300000, guid: fc0e20655c99aec43b6733b8061e5e43, type: 3}
         SlowAmount: 0.5
         BurnDamagePerSecondMultiplier: 0.25

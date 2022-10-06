@@ -19,6 +19,9 @@ MonoBehaviour:
     itemType: 3
     itemRarity: 3
     statBonuses: []
-    itemEffectIds: []
+    itemEffects: []
     projectiles: []
     spawnablePrefabName: tesla
+  references:
+    version: 2
+    RefIds: []

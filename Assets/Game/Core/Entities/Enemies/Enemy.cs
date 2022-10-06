@@ -99,7 +99,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 {
                     foreach (var direction in Targets.Select(
                         t => (t.transform.position - transform.position).normalized))
-                        GameManager.Instance.CmdSpawnProjectile(netIdentity, transform.position, direction, data, AttackComponent.GetUniqueIdentifier(this));
+                        ObjectSpawner.SpawnProjectile(this, transform.position, direction, data);
                 };
             }
         }

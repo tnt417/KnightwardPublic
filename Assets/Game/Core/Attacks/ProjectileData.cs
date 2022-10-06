@@ -5,8 +5,10 @@ using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Global;
+using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
+using Tools = TonyDev.Game.Global.Tools;
 
 namespace TonyDev.Game.Core.Attacks
 {
@@ -32,16 +34,20 @@ namespace TonyDev.Game.Core.Attacks
         [Header("General Projectile Data")] public Sprite projectileSprite;
         public AttackData attackData;
 
-        [Header("Projectile Movement Data")] public float travelSpeed;
+        [Header("Projectile Movement Data")] public bool disableMovement;
+        public float travelSpeed;
         public float offsetDegrees;
         public float waveAmplitude;
         public float waveFrequency;
         public float waveDistance;
+        public bool childOfOwner;
 
-        [Header("Effects")] [SerializeReference] [SerializeField] public List<GameEffect> effects;
+        [Header("Effects")] [SerializeReference] [SerializeField]
+        public List<GameEffect> effects;
 
         //The only place that projectiles should be spawned from. Creates a projectile using this instance of the class.
-        public GameObject SpawnSelf(Vector2 position, Vector2 direction, GameEntity owner, float sizeMultiplier, string identifier)
+        public GameObject SpawnSelf(Vector2 position, Vector2 direction, GameEntity owner, float sizeMultiplier,
+            string identifier)
         {
             var rotatedDirection =
                 Tools.Rotate(direction, offsetDegrees * Mathf.Deg2Rad); //Rotates direction vector by our offset
@@ -59,16 +65,20 @@ namespace TonyDev.Game.Core.Attacks
             if (col == null)
                 col = projectileObject.AddComponent<CircleCollider2D>(); //Add collider if one doesn't already exist
             var attack = projectileObject.GetComponent<AttackComponent>();
-            if(attack == null) 
+            if (attack == null)
                 attack = projectileObject.AddComponent<AttackComponent>(); //Don't override existing attack components.
             var sprite = projectileObject.GetComponentInChildren<SpriteRenderer>();
             if (sprite == null)
                 sprite = projectileObject
                     .AddComponent<SpriteRenderer>(); //Add SpriteRenderer if one doesn't already exist
             var destroy = projectileObject.AddComponent<DestroyAfterSeconds>();
-            var move = projectileObject.AddComponent<ProjectileMovement>();
+            
+            if (!disableMovement)
+            {
+                var move = projectileObject.AddComponent<ProjectileMovement>();
 
-            move.Set(this); //Send our projectile data to the movement class so things like sin wave movement works.
+                move.Set(this); //Send our projectile data to the movement class so things like sin wave movement works.
+            }
 
             //Populate component variables...
             destroy.seconds = attackData.lifetime;
@@ -96,6 +106,8 @@ namespace TonyDev.Game.Core.Attacks
             projectileObject.transform.up = rotatedDirection; //Set the projectile's direction
             projectileObject.transform.localScale *= sizeMultiplier;
             projectileObject.layer = LayerMask.NameToLayer("Attacks");
+
+            if (childOfOwner) projectileObject.transform.parent = owner.transform;
 
             //Set Rigidbody configuration...
             rb.gravityScale = 0;

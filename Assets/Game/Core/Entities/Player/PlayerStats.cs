@@ -10,7 +10,6 @@ using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
-
     [Serializable]
     public struct StatBonus //Holds stat type, strength, and source.
     {
@@ -37,9 +36,10 @@ namespace TonyDev.Game.Core.Entities.Player
 
     public static class PlayerStats
     {
-        public static EntityStats Stats = new ();
+        public static EntityStats Stats = new();
 
         #region Item Stats
+
         public static void AddStatBonusesFromItem(Item item) //Adds a stat bonus to the list, taking data from an item.
         {
             foreach (var sb in item.statBonuses)
@@ -47,7 +47,7 @@ namespace TonyDev.Game.Core.Entities.Player
                 Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, item.itemName);
             }
         }
-        
+
         public static Stat
             GetValidStatForItem(
                 ItemType type) //Returns a random stat, based on valid stat types for different item types
@@ -59,9 +59,11 @@ namespace TonyDev.Game.Core.Entities.Player
                 _ => Stat.AttackSpeed //Returns attack speed by default.
             };
         }
+
         #endregion
-        
+
         #region Stat Text
+
         public static string
             GetStatsText(Stat[] stats,
                 bool includeLabels,
@@ -81,7 +83,9 @@ namespace TonyDev.Game.Core.Entities.Player
         public static string
             GetStatsTextFromBonuses(IEnumerable<StatBonus> statBonuses,
                 bool includeLabels,
-                bool separateTypes) //Returns a text description of stats, based on the stat bonuses specified.
+                bool separateTypes,
+                bool includeColorTags =
+                    false) //Returns a text description of stats, based on the stat bonuses specified.
         {
             var statBonusList = statBonuses.ToList();
 
@@ -93,14 +97,42 @@ namespace TonyDev.Game.Core.Entities.Player
 
                 foreach (var (key, value) in mergedStatBonuses)
                 {
-                    stringBuilder.AppendLine(StatToText(key, StatType.Override, value, includeLabels));
+                    stringBuilder.AppendLine(StatToText(key, StatType.Override, value, includeLabels,
+                        includeColorTags));
                 }
             }
             else
             {
-                foreach (var sb in statBonusList)
+                foreach (var stat in Enum.GetValues(typeof(Stat)).Cast<Stat>()) //Loop every stat
                 {
-                    stringBuilder.AppendLine(StatToText(sb.stat, sb.statType, sb.strength, includeLabels));
+                    if (statBonusList.All(sb => sb.stat != stat)) continue; //Skip if no stats of stat type
+
+                    if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.Flat)) //If there are flat stat types...
+                    {
+                        var flatStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.Flat).Select(sb => sb.strength)
+                            .Sum(); //...Sum them up...
+
+                        stringBuilder.AppendLine(StatToText(stat, StatType.Flat, flatStrength, includeLabels,
+                            includeColorTags)); //...And append the text.
+                    }
+
+                    if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.AdditivePercent)) //If there are additive stat types...
+                    {
+                        var additiveStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.AdditivePercent).Select(sb => sb.strength)
+                            .Sum(); //...Sum them up...
+                        
+                        stringBuilder.AppendLine(StatToText(stat, StatType.AdditivePercent, additiveStrength, includeLabels,
+                            includeColorTags)); //...And append the text.
+                    }
+
+                    if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.Multiplicative)) //If there are multiplicative stat types...
+                    {
+                        var multStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.Multiplicative)
+                            .Select(sb => sb.strength).Aggregate((total, next) => total * next); //...Product them...
+                        
+                        stringBuilder.AppendLine(StatToText(stat, StatType.Multiplicative, multStrength, includeLabels,
+                            includeColorTags)); //...And append the text.
+                    }
                 }
             }
 
@@ -120,23 +152,59 @@ namespace TonyDev.Game.Core.Entities.Player
             {Stat.MoveSpeed, "F1,/s"},
             {Stat.CooldownReduce, "P0,"}
         };
-
-        private static string StatToText(Stat stat, StatType type, float strength, bool includeLabels)
+        
+        private static readonly Dictionary<Stat, string> StatLabelKey = new Dictionary<Stat, string>()
         {
+            {Stat.Armor, "Armor"},
+            {Stat.Damage, "Damage"},
+            {Stat.Dodge, "Dodge Chance"},
+            {Stat.Health, "Health"},
+            {Stat.AoeSize, "Area of Effect"},
+            {Stat.AttackSpeed, "Attack Speed"},
+            {Stat.CritChance, "Critical Chance"},
+            {Stat.HpRegen, "Health Regen"},
+            {Stat.MoveSpeed, "Move Speed"},
+            {Stat.CooldownReduce, "Cooldown Reduction"}
+        };
+
+        private static string StatToText(Stat stat, StatType type, float strength, bool includeLabels,
+            bool includeColorTags)
+        {
+            var sb = new StringBuilder();
             var formatting = StatFormattingKey[stat].Split(',');
-            
-            return type switch
+
+            var colorTag = type switch
             {
-                StatType.Override or StatType.Flat => (includeLabels ? Enum.GetName(typeof(Stat), stat) + ": " : "") +
-                                                                    Tools.RemoveWhitespace(
-                                                                        strength.ToString(formatting[0])) + formatting[1],
-                StatType.AdditivePercent => (includeLabels ? Enum.GetName(typeof(Stat), stat) + ": " : "") + "+" +
-                                                   Tools.RemoveWhitespace(strength.ToString("P0")) + formatting[1],
-                StatType.Multiplicative => (includeLabels ? Enum.GetName(typeof(Stat), stat) + ": " : "") + "x" + 
-                                                  Tools.RemoveWhitespace(strength.ToString("F2")) + formatting[1],
-                _ => ""
+                StatType.Flat => strength > 0 ? "green" : "red",
+                StatType.Multiplicative => strength > 1 ? "green" : "red",
+                StatType.AdditivePercent => strength > 0 ? "green" : "red",
+                _ => "white"
             };
+
+            sb.Append(includeLabels ? StatLabelKey[stat] + ": " : "");
+
+            sb.Append("<color=" + colorTag + ">");
+
+            switch (type)
+            {
+                case StatType.Override or StatType.Flat:
+                    sb.Append(Tools.RemoveWhitespace(strength.ToString(formatting[0])) + formatting[1]);
+                    break;
+                case StatType.AdditivePercent:
+                    sb.Append((strength > 0 ? "+" : "") + Tools.RemoveWhitespace(strength.ToString("P0")) + " total"/*+ formatting[1]*/);
+                    break;
+                case StatType.Multiplicative:
+                    sb.Append("x" + Tools.RemoveWhitespace(strength.ToString("F2")) /*+ formatting[1]*/);
+                    break;
+                default:
+                    break;
+            }
+
+            sb.Append("</color>");
+
+            return sb.ToString();
         }
+
         #endregion
     }
 }

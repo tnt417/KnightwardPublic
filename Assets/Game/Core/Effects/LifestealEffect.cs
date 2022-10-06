@@ -17,15 +17,11 @@ namespace TonyDev.Game.Core.Effects
             Entity.OnDamageOther -= Lifesteal;
         }
 
-        public override void OnUpdateOwner()
-        {
-        }
-
         private void Lifesteal(float dmg, GameEntity other, bool isCrit)
         {
             var leech = -dmg * LeechPercent;
 
-            ObjectSpawner.SpawnDmgPopup(Entity.transform.position, (int) leech, isCrit);
+            ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
 
             Entity.ApplyDamage(leech);
         }

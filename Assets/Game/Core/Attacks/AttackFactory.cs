@@ -11,7 +11,7 @@ namespace TonyDev.Game.Core.Attacks
         
         //TODO can probably combine these two at some point
         //Responsible for creation of all projectile attacks.
-        public static void CreateProjectileAttack(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
+        public static GameObject CreateProjectileAttack(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
         {
             var go = projectileData.SpawnSelf(pos, direction, owner, owner.Stats.GetStat(Stat.AoeSize), identifier);
             var attacks = go.GetComponentsInChildren<AttackComponent>();
@@ -20,6 +20,8 @@ namespace TonyDev.Game.Core.Attacks
             {
                 att.OnDamageDealt += (f, ge, b) => owner.OnDamageOther?.Invoke(f, ge, b);
             }
+
+            return go;
         }
 
         //Responsible for creation of all non-projectile attacks.

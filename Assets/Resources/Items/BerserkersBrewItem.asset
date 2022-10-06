@@ -29,6 +29,7 @@ MonoBehaviour:
     - rid: 4292349928119730176
       type: {class: BerserkersBrewEffect, ns: TonyDev.Game.Core.Items.Relics.BerserkersBrew, asm: TonyDev}
       data:
+        effectDescription: 
         ActivateButton: 101
         Cooldown: 10
         Duration: 5

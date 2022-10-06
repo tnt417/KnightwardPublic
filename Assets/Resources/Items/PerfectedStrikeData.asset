@@ -34,4 +34,5 @@ MonoBehaviour:
     - rid: 4292349917669621762
       type: {class: PerfectedStrikeEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
+        effectDescription: 
         remainingCooldownReduce: 0.2

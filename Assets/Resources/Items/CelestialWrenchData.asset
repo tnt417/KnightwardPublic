@@ -16,26 +16,24 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: f632064391e136d448fb20b20d6bc46d, type: 3}
     itemName: Celestial Wrench
     itemDescription: '<color=green>You can now place towers in the dungeon. Nearby
-      towers deal are significantly buffed.</color>
+      towers are significantly buffed.</color>
 
-      <color=grey>Towers in
-      the dungeon are automatically picked up when switching rooms.</color>'
+      <color=grey>Towers in the dungeon
+      are automatically picked up when switching rooms.</color>'
     itemType: 2
     itemRarity: 3
     statBonuses: []
     itemEffects:
-    - rid: 4292349832393654272
     - rid: 4292349832393654273
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 4292349832393654272
-      type: {class: CelestialWrenchEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
     - rid: 4292349832393654273
       type: {class: TowerBuffEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
+        effectDescription: 
         AttackSpeedBonus: 0.5
         DamageBonus: 0.5
         Radius: 5

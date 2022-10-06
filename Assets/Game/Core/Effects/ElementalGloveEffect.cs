@@ -71,7 +71,7 @@ namespace TonyDev.Game.Core.Effects
                     _trailEffect.SetColor(Color.red);
                     _burnEffect = new PoisonEffect
                     {
-                        Damage = BurnDamagePerSecondMultiplier * Entity.DamageMultiplier * Frequency,
+                        Damage = BurnDamagePerSecondMultiplier * Entity.Stats.GetStat(Stat.Damage) * Frequency,
                         Frequency = Frequency,
                         Ticks = Ticks
                     };
@@ -100,7 +100,7 @@ namespace TonyDev.Game.Core.Effects
             {
                 var leech = -dmg * LeechPercent;
                 
-                ObjectSpawner.SpawnDmgPopup(Entity.transform.position, (int)leech, isCrit);
+                ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
                 
                 Entity.ApplyDamage(leech);
             }

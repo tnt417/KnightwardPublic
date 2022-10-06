@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Mirror;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
@@ -8,6 +9,7 @@ using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using UnityEngine;
 using UnityEngine.U2D;
+using Object = System.Object;
 
 namespace TonyDev.Game.Global.Network
 {
@@ -107,7 +109,7 @@ namespace TonyDev.Game.Global.Network
             writer.WriteString(typeName);
 
             foreach (var field in value.GetType().GetFields().Where(f => f.IsPublic && !f.IsNotSerialized))
-            {                
+            {
                 if (field.FieldType.IsEnum)
                 {
                     writer.WriteInt((int) field.GetValue(value));
@@ -138,6 +140,12 @@ namespace TonyDev.Game.Global.Network
                 if (field.FieldType == typeof(Sprite))
                 {
                     writer.WriteSprite((Sprite) field.GetValue(value));
+                    continue;
+                }
+
+                if (field.FieldType == typeof(ProjectileData))
+                {
+                    writer.Write((ProjectileData)field.GetValue(value));
                     continue;
                 }
             }
@@ -206,6 +214,12 @@ namespace TonyDev.Game.Global.Network
                 if (field.FieldType == typeof(Sprite))
                 {
                     field.SetValue(gameEffect, reader.ReadSprite());
+                    continue;
+                }
+                
+                if (field.FieldType == typeof(ProjectileData))
+                {
+                    field.SetValue(gameEffect, reader.Read<ProjectileData>());
                     continue;
                 }
             }

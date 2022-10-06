@@ -102,6 +102,7 @@ SpriteAtlas:
   - {fileID: -1014627746, guid: 6d30f23141189cb46be0a97f508be36d, type: 3}
   - {fileID: -1868397905, guid: 6d30f23141189cb46be0a97f508be36d, type: 3}
   - {fileID: 346897509, guid: 6d30f23141189cb46be0a97f508be36d, type: 3}
+  - {fileID: 21300000, guid: b20d8451005ea46439928f2c9551ae85, type: 3}
   - {fileID: 21300000, guid: bd0cce517a87dea4c910885a120b3135, type: 3}
   - {fileID: 1092918605, guid: fe7ea4a16440de7488d81249105a6d6d, type: 3}
   - {fileID: -1165686597, guid: fe7ea4a16440de7488d81249105a6d6d, type: 3}
@@ -136,11 +137,14 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 2e050dc258bd692439e375b6d80cd224, type: 3}
   - {fileID: 21300000, guid: 2bf852e279ff4d24798c17b681247643, type: 3}
   - {fileID: 21300000, guid: f632064391e136d448fb20b20d6bc46d, type: 3}
+  - {fileID: 21300000, guid: da9d106380415f84f95ebf8753b7a2b7, type: 3}
   - {fileID: 21300000, guid: 04f51c836ffea514bbe1abf9ed8c5825, type: 3}
   - {fileID: 21300000, guid: acf12fa3c673a17488dc5e6c832805cb, type: 3}
   - {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
   - {fileID: 21300000, guid: f9e681b4bc031084483313a199201e08, type: 3}
   - {fileID: 21300000, guid: 233656d44bf79d9499bf1f8689011878, type: 3}
+  - {fileID: 21300000, guid: 404596f4020bc464487e6ad24fc54324, type: 3}
+  - {fileID: 21300000, guid: e1a7c5255d1c9be4493b98b375606523, type: 3}
   - {fileID: -432303052, guid: 886977255ff7b2b42b9b3aeb74d30a4e, type: 3}
   - {fileID: -2093004734, guid: 886977255ff7b2b42b9b3aeb74d30a4e, type: 3}
   - {fileID: 21300000, guid: 48ceef257e82909489b5c795e4e069da, type: 3}
@@ -254,6 +258,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: aa6d0bbd1484b3747892f7b3b5e0c1c4, type: 3}
   - {fileID: 21300000, guid: 9214ccdded46bf7438729b5624c73122, type: 3}
   - {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
+  - {fileID: 21300000, guid: 59f5bafd69561cd4f9f3b7f501f9a502, type: 3}
   - {fileID: 21300000, guid: a282611e13de0ee45add7db9b912f837, type: 3}
   - {fileID: 21300000, guid: 1bc7506e8ef39f3438f7bdcb171e19ff, type: 3}
   - {fileID: 21300000, guid: b8cf5e6e4483c834ca3cc04fd6a606b4, type: 3}
@@ -295,10 +300,21 @@ SpriteAtlas:
   - {fileID: 7519933191670736559, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: 1654864542332646423, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: -366055929809456832, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
+  - {fileID: -1758354645, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: -88458111, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: 1593396120, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: -1361237739, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: -191928819, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: -547339000, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: 1525221899, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: -1313937574, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: -566690285, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
+  - {fileID: -436339118, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
   - {fileID: 21300000, guid: f7ea999f4861dd54faf9ff19a7da764c, type: 3}
   - {fileID: 21300000, guid: ad60ecdfbd9093a4b939032260dd8ae6, type: 3}
   - {fileID: 21300000, guid: 1c67ffdf70fda5f40bfbab9bc0242bcd, type: 3}
   - {fileID: 21300000, guid: 26f422efd2bf8b842a5d2e57832b5401, type: 3}
+  - {fileID: 21300000, guid: 9e2001ffb510a9c489a439229a4c4331, type: 3}
   - {fileID: 21300000, guid: 496f3affe307f9448b80a3b80fc68c4b, type: 3}
   m_PackedSpriteNamesToIndex:
   - CelestialTower_3
@@ -353,6 +369,7 @@ SpriteAtlas:
   - blessing_0
   - blessing_3
   - blessing_2
+  - poisonnecklace
   - marble
   - castleWallLUp
   - castleWallVerticalEndcapBottom
@@ -387,11 +404,14 @@ SpriteAtlas:
   - controlIndicatorE
   - goldTile
   - celestialwrench
+  - YellowBelt
   - daggerShot
   - UIBackground1
   - wi_hammer
   - pot
   - CelestialTowerUI
+  - shinycoin
+  - Headband
   - spinTower_1
   - spinTower_0
   - RegeneratorTowerUI
@@ -505,6 +525,7 @@ SpriteAtlas:
   - shadow
   - empoweringtoxin
   - necklace
+  - teardropjewel
   - perfectedstrike
   - mossyMarble
   - ballistaTurretBolt
@@ -546,10 +567,21 @@ SpriteAtlas:
   - rugTile_14
   - rugTile_17
   - rugTile_16
+  - smash_8
+  - smash_9
+  - smash_0
+  - smash_1
+  - smash_2
+  - smash_3
+  - smash_4
+  - smash_5
+  - smash_6
+  - smash_7
   - whiteBox
   - ai_verdantArmor
   - OmniJewel
   - anvil
+  - goodfortune
   - spectralStep
   m_RenderDataMap: {}
   m_Tag: Sprite Atlas

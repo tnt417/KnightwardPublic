@@ -37,7 +37,7 @@ MonoBehaviour:
       strength: 0.25
       source: Weapon
     itemEffects:
-    - rid: 4292349809548066825
+    - rid: 8269505059713712128
     projectiles:
     - prefabKey: 
       projectileSprite: {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
@@ -49,20 +49,36 @@ MonoBehaviour:
         destroyOnApply: 0
         lifetime: 0.2
         spawnOnDestroyKey: 
+      disableMovement: 0
       travelSpeed: 12
       offsetDegrees: 0
       waveAmplitude: 0
       waveFrequency: 0
       waveDistance: 0
-      effects: []
+      childOfOwner: 0
+      effects:
+      - rid: 8269505043193921541
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 4292349809548066825
-      type: {class: BroadswordEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
+    - rid: 8269505043193921541
+      type: {class: PoisonEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
+        effectDescription: 
+        Ticks: 10
+        Frequency: 1
+        Damage: 3.3441677
+    - rid: 8269505059713712128
+      type: {class: BroadswordEffect, ns: TonyDev.Game.Core.Items.Weapon.Broadsword, asm: TonyDev}
+      data:
+        effectDescription: 
         ActivateButton: 113
         Cooldown: 5
-        Duration: 2
+        Duration: 1
         abilitySprite: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
+        RefundCooldownAmount: 1
+        BonusExpirationTime: 5
+        AttackSpeedBonusMultiplier: 0.2
+        MoveSpeedBonusMultiplier: 0.2
+        MaxSuccession: 5

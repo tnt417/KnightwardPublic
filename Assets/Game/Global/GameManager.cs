@@ -16,6 +16,7 @@ using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
@@ -36,6 +37,7 @@ namespace TonyDev.Game.Global
         [SerializeField] private Vector2 arenaSpawnPos;
         public static List<Item> AllItems = new();
         public static int Money = 0;
+        public static float MoneyDropBonusFactor;
 
         [SyncVar] public int timeSeconds;
 
@@ -103,10 +105,10 @@ namespace TonyDev.Game.Global
         #region Input
 
         public static bool GameControlsActive => !GameConsole.IsTyping;
-        private static Camera _mainCamera;
+        public static Camera MainCamera;
 
         public static Vector2 MouseDirection =>
-            (_mainCamera.ScreenToWorldPoint(Input.mousePosition) - Player.LocalInstance.transform.position).normalized;
+            (MainCamera.ScreenToWorldPoint(Input.mousePosition) - Player.LocalInstance.transform.position).normalized;
 
         [Command(requiresAuthority = false)]
         public void CmdWriteChatMessage(string message, NetworkConnectionToClient sender = null)
@@ -185,7 +187,7 @@ namespace TonyDev.Game.Global
         {
             if (NetworkClient.localPlayer == exclude) return;
             
-            ObjectSpawner.SpawnDmgPopup(position, (int) value, isCrit);
+            ObjectSpawner.SpawnDmgPopup(position, value, isCrit);
         }
 
         [Command(requiresAuthority = false)]
@@ -196,8 +198,16 @@ namespace TonyDev.Game.Global
             ObjectSpawner.SpawnEnemy(enemyData, position, parentRoom);
         }
 
+        public GameObject SpawnProjectile(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, bool localOnly = false)
+        {
+            var identifier = AttackComponent.GetUniqueIdentifier(owner);
+            var go = AttackFactory.CreateProjectileAttack(owner, pos, direction, projectileData, identifier);
+            if(!localOnly) Instance.CmdSpawnProjectile(owner.netIdentity, pos, direction, projectileData, identifier);
+            return go;
+        }
+        
         [Command(requiresAuthority = false)]
-        public void CmdSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
+        private void CmdSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
         {
             RpcSpawnProjectile(owner, pos, direction, projectileData, identifier);
         }
@@ -225,7 +235,7 @@ namespace TonyDev.Game.Global
             if (Instance == null) Instance = this;
             else Destroy(this);
 
-            AllItems = Resources.LoadAll<ItemData>("Items").Select(id => id.item).ToList();
+            AllItems = Resources.LoadAll<ItemData>("Items").Select(id => Instantiate(id).item).ToList();
             
             Debug.Log("COUNT: " + AllItems.Count);
             
@@ -238,7 +248,7 @@ namespace TonyDev.Game.Global
                 netIdentity.AssignClientAuthority(NetworkServer.localConnection);
             }
 
-            _mainCamera = Camera.main;
+            MainCamera = Camera.main;
 
             // foreach (var id in itemData.Select(Instantiate))
             // {

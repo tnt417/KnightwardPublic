@@ -19,12 +19,9 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 2
     statBonuses: []
-    itemEffects:
-    - rid: 4292349809548066819
+    itemEffects: []
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
-    RefIds:
-    - rid: 4292349809548066819
-      type: {class: CrystalNecklaceEffect, ns: TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace, asm: TonyDev}
+    RefIds: []

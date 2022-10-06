@@ -15,10 +15,10 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: 1c67ffdf70fda5f40bfbab9bc0242bcd, type: 3}
     itemName: Omni Jewel
-    itemDescription: <color=green>Grants a 10% bonus to damage, attack speed, health,
+    itemDescription: <color=green>Grants a 25% bonus to damage, attack speed, health,
       and armor.</color>
     itemType: 2
-    itemRarity: 3
+    itemRarity: 2
     statBonuses: []
     itemEffects:
     - rid: 4292349809548066822
@@ -30,4 +30,5 @@ MonoBehaviour:
     - rid: 4292349809548066822
       type: {class: OmniJewelEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
-        additivePercentBonus: 0.1
+        effectDescription: 
+        additivePercentBonus: 0.25

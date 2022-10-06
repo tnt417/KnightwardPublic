@@ -19,6 +19,9 @@ MonoBehaviour:
     itemType: 3
     itemRarity: 1
     statBonuses: []
-    itemEffectIds: []
+    itemEffects: []
     projectiles: []
     spawnablePrefabName: regen
+  references:
+    version: 2
+    RefIds: []

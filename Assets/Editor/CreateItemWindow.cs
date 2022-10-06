@@ -86,10 +86,10 @@ namespace TonyDev
         {
             var id = CreateInstance<ItemData>();
 
-            var parentFolder = "Assets/Game/Core/Items/" + Enum.GetName(typeof(ItemType), itemType);
+            //var parentFolder = "Assets/Game/Core/Items/" + Enum.GetName(typeof(ItemType), itemType);
             
-            if(!AssetDatabase.IsValidFolder(parentFolder + "/" + itemName)) AssetDatabase.CreateFolder(parentFolder, itemName);
-            AssetDatabase.CreateAsset(id, parentFolder + "/" + itemName + "/" + itemName + "Data.asset");
+            //if(!AssetDatabase.IsValidFolder(parentFolder + "/" + itemName)) AssetDatabase.CreateFolder(parentFolder, itemName);
+            AssetDatabase.CreateAsset(id, "Assets/Resources/Items/" + itemName + "Data.asset");
             
             id.item.itemName = itemName;
             id.item.itemType = itemType;

@@ -9,6 +9,7 @@ namespace TonyDev.Game.UI.Healthbar
     {
         //Editor variables
         [SerializeField] private Slider healthSlider;
+        [SerializeField] private Image fillImage;
         //
     
         private IDamageable _attachedDamageable; //The damageable component this health bar is dedicated to
@@ -45,6 +46,9 @@ namespace TonyDev.Game.UI.Healthbar
             {
                 healthSlider.maxValue = gameEntity.NetworkMaxHealth; //Update the slider values.
                 healthSlider.value = gameEntity.NetworkCurrentHealth + gameEntity.ClientHealthDisparity;
+                fillImage.color = gameEntity.IsInvulnerable
+                    ? Color.blue//new Color(0.572549f, 0.909804f, 0.7529413f)
+                    : new Color(0.3882353f, 0.6705883f, 0.2470588f);
             }
             else
             {

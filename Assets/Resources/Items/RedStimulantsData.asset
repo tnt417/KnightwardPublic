@@ -33,4 +33,5 @@ MonoBehaviour:
     - rid: 4292349917669621760
       type: {class: RedStimulantsEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
+        effectDescription: 
         healthRedirectMultiplier: 0.1
