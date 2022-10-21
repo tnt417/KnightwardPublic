@@ -171,7 +171,7 @@ namespace TonyDev.Game.Core.Attacks
             var damageable = other.GetComponent<IDamageable>();
 
             //
-            if (damageable == null || damageable.Team == team ||
+            if (damageable == null || damageable.Team == team || !damageable.IsTangible ||
                 _hitCooldowns.ContainsKey(other.gameObject) ||
                 !other.isTrigger) return; //Check if valid thing to hit
 
@@ -188,9 +188,11 @@ namespace TonyDev.Game.Core.Attacks
             
             if (netId != null)
             {
+                var success = true;
                 damageDealt = netId == NetworkClient.localPlayer
-                    ? entity.ApplyDamage(modifiedDamage)
+                    ? entity.ApplyDamage(modifiedDamage, out success)
                     : modifiedDamage; //Do damage before command if hitting player
+                if (!success) return;
                 if(entity is Enemy && !NetworkServer.active) entity.ClientHealthDisparity -= damageDealt;
                 entity.LocalHurt(damageDealt, crit);
                 entity.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer);
@@ -204,16 +206,21 @@ namespace TonyDev.Game.Core.Attacks
             else
             {
                 damageDealt =
-                    damageable.ApplyDamage(modifiedDamage); //Apply the damage. Critical hits deal double.
-                if (damageDealt > 0)
+                    damageable.ApplyDamage(modifiedDamage, out var success); //Apply the damage. Critical hits deal double.
+                if (damageDealt > 0 && success)
                     ObjectSpawner.SpawnDmgPopup(other.transform.position, damageDealt,
                         crit); //Spawn a popup for the damage text if the damage is greater than zero.
+                if (!success) return;
             }
 
             OnDamageDealt?.Invoke(damageDealt, entity, crit);
 
             var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
 
+            var attSpd = _owner.Stats.GetStat(Stat.AttackSpeed);
+
+            if (attSpd > 0) kb /= attSpd;
+            
             if (kb.x != 0 || kb.y != 0)
             {
                 if(entity != null) entity.ApplyKnockbackGlobal(kb); //Apply the knockback

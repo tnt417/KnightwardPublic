@@ -28,8 +28,8 @@ namespace TonyDev.Game.Core.Items.Relics.VampireCape
         {
             var lifesteal = amount * _lifestealAmount;
             
-            Entity.ApplyDamage(-(lifesteal));
-            ObjectSpawner.SpawnTextPopup(Entity.transform.position, "+" + lifesteal, Color.green);
+            Entity.ApplyDamage(-(lifesteal), out var successful);
+            if(successful) ObjectSpawner.SpawnTextPopup(Entity.transform.position, "+" + lifesteal, Color.green);
         }
 
         private double _nextUpdateTime;

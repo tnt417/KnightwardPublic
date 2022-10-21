@@ -139,8 +139,12 @@ SpriteAtlas:
   - {fileID: 21300000, guid: f632064391e136d448fb20b20d6bc46d, type: 3}
   - {fileID: 21300000, guid: da9d106380415f84f95ebf8753b7a2b7, type: 3}
   - {fileID: 21300000, guid: 04f51c836ffea514bbe1abf9ed8c5825, type: 3}
+  - {fileID: -6018459466178727667, guid: 04f3b5a37522a7f45a1121132b637e41, type: 3}
+  - {fileID: -9032164202199686955, guid: 04f3b5a37522a7f45a1121132b637e41, type: 3}
+  - {fileID: 6205161768357606934, guid: 04f3b5a37522a7f45a1121132b637e41, type: 3}
   - {fileID: 21300000, guid: acf12fa3c673a17488dc5e6c832805cb, type: 3}
   - {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
+  - {fileID: 21300000, guid: e221e7a42d17a594099b06cd24984d1a, type: 3}
   - {fileID: 21300000, guid: f9e681b4bc031084483313a199201e08, type: 3}
   - {fileID: 21300000, guid: 233656d44bf79d9499bf1f8689011878, type: 3}
   - {fileID: 21300000, guid: 404596f4020bc464487e6ad24fc54324, type: 3}
@@ -236,6 +240,9 @@ SpriteAtlas:
   - {fileID: 279722363, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
   - {fileID: -149919584, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
   - {fileID: -1101615764, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
+  - {fileID: 7937891137276321273, guid: 671fe08ca64fbe448a38e208950116da, type: 3}
+  - {fileID: -3435835095044133539, guid: 671fe08ca64fbe448a38e208950116da, type: 3}
+  - {fileID: -3010836853514026202, guid: 671fe08ca64fbe448a38e208950116da, type: 3}
   - {fileID: 1164472910, guid: e6927ddccd7d0b440b2ac743ab5b828b, type: 3}
   - {fileID: -2105938783, guid: e6927ddccd7d0b440b2ac743ab5b828b, type: 3}
   - {fileID: -1471466885, guid: e6927ddccd7d0b440b2ac743ab5b828b, type: 3}
@@ -260,6 +267,9 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
   - {fileID: 21300000, guid: 59f5bafd69561cd4f9f3b7f501f9a502, type: 3}
   - {fileID: 21300000, guid: a282611e13de0ee45add7db9b912f837, type: 3}
+  - {fileID: 3880879985386222931, guid: 85f7a73ead3643844a496e5f1c5a34cc, type: 3}
+  - {fileID: -3579321863884668319, guid: 85f7a73ead3643844a496e5f1c5a34cc, type: 3}
+  - {fileID: 8502794242924164888, guid: 85f7a73ead3643844a496e5f1c5a34cc, type: 3}
   - {fileID: 21300000, guid: 1bc7506e8ef39f3438f7bdcb171e19ff, type: 3}
   - {fileID: 21300000, guid: b8cf5e6e4483c834ca3cc04fd6a606b4, type: 3}
   - {fileID: 21300000, guid: 0f082c7e8868af046ae8089ae655cacc, type: 3}
@@ -406,8 +416,12 @@ SpriteAtlas:
   - celestialwrench
   - YellowBelt
   - daggerShot
+  - book_blue 2
+  - book_blue 1
+  - book_blue 0
   - UIBackground1
   - wi_hammer
+  - essence
   - pot
   - CelestialTowerUI
   - shinycoin
@@ -503,6 +517,9 @@ SpriteAtlas:
   - IceWizard_5
   - IceWizard_6
   - IceWizard_7
+  - book_red 0
+  - book_red 1
+  - book_red 2
   - spikeTrap_4
   - spikeTrap_3
   - spikeTrap_2
@@ -527,6 +544,9 @@ SpriteAtlas:
   - necklace
   - teardropjewel
   - perfectedstrike
+  - book_green 0
+  - book_green 1
+  - book_green 2
   - mossyMarble
   - ballistaTurretBolt
   - TeslaTower

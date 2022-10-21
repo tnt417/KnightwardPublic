@@ -30,6 +30,7 @@ namespace TonyDev.Game.Core.Entities
         [SerializeField] private Team targetTeam;
         [SerializeField] private int maxTargets;
         [SerializeField] protected StatBonus[] baseStats;
+        [SerializeField] private bool targetIntangible;
         // 
 
         //Value is only accurate on the host
@@ -49,9 +50,11 @@ namespace TonyDev.Game.Core.Entities
                 Debug.LogWarning($"Net object {entityObject.gameObject.name} is not an entity!");
                 return;
             }*/
+
+            var successful = true;
             
-            var dmg = this is Player.Player ? damage : ApplyDamage(damage); //Players should have already been damaged on the client
-            GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
+            var dmg = this is Player.Player ? damage : ApplyDamage(damage, out successful); //Players should have already been damaged on the client
+            if(successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
         }
 
         protected bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
@@ -185,7 +188,7 @@ namespace TonyDev.Game.Core.Entities
             if (IsAlive)
             {
                 var hpRegen = Stats.GetStat(Stat.HpRegen) * Time.deltaTime; //Regen 1% of hp per second
-                ApplyDamage(-hpRegen); //Regen health by HpRegen per second
+                ApplyDamage(-hpRegen, out var success, true); //Regen health by HpRegen per second
             }
         }
 
@@ -282,8 +285,9 @@ namespace TonyDev.Game.Core.Entities
                             && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
                             && e.Team == targetTeam //Target things of our target team
                             //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
+                            && (e.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
                             && e != this //Don't target self
-                            && (e is Crystal && Vector2.Distance(e.transform.position, transform.position) < 200f 
+                            && (e is Crystal && this is not Tower && Vector2.Distance(e.transform.position, transform.position) < 200f 
                                 || Vector2.Distance(e.transform.position, transform.position) < range)) //Distance check
                 .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
                 .Select(e => e.netIdentity).Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
@@ -340,12 +344,18 @@ namespace TonyDev.Game.Core.Entities
         [Command(requiresAuthority = false)]
         public void CmdRemoveEffect(GameEffect effect)
         {
+            if (!_effects.Contains(effect)) return;
+            
             _effects.Remove(effect);
             
             if(GameEffect.GameEffectIdentifiers.ContainsKey(effect.EffectIdentifier)) GameEffect.GameEffectIdentifiers.Remove(effect.EffectIdentifier);
             
             effect.OnRemoveServer();
         }
+
+        public bool HasEffect(GameEffect effect) => _effects.Contains(effect);
+
+        public bool HasEffectOfType<T>() => _effects.Any(ge => ge is T);
         
         public void RemoveEffectsOfType<T>() where T : GameEffect
         {
@@ -393,9 +403,12 @@ namespace TonyDev.Game.Core.Entities
         public virtual int MaxHealth => (int)Stats.GetStat(Stat.Health);
         public virtual float CurrentHealth { get; protected set; }
         public virtual bool IsInvulnerable { get; set; }
+        public virtual bool IsTangible { get; set; } = true;
         public bool IsAlive => NetworkCurrentHealth > 0;
-        public virtual float ApplyDamage(float damage)
+        public virtual float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility = false)
         {
+            successful = !IsInvulnerable || ignoreInvincibility || damage < 0;
+            
             if (damage == 0) return 0;
 
             if (damage > 0 && IsInvulnerable)
@@ -426,7 +439,7 @@ namespace TonyDev.Game.Core.Entities
 
             OnHealthChanged?.Invoke(CurrentHealth);
 
-            if (CurrentHealth <= 0) Die();
+            if (CurrentHealth <= 0 && !IsInvulnerable) Die();
 
             return modifiedDamage;
         }
@@ -442,7 +455,7 @@ namespace TonyDev.Game.Core.Entities
         public virtual void Die()
         {
             if (!EntityOwnership) return;
-            
+
             OnDeath?.Invoke(0);
             
             if(this is not Player.Player) NetworkServer.Destroy(gameObject);

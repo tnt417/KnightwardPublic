@@ -28,10 +28,6 @@ MonoBehaviour:
       stat: 0
       strength: 1
       source: Weapon
-    - statType: 1
-      stat: 1
-      strength: -0.2
-      source: Weapon
     itemEffects:
     - rid: 4292349809548066816
     projectiles:

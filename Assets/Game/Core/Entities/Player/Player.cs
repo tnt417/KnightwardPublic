@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Items;
@@ -36,6 +37,29 @@ namespace TonyDev.Game.Core.Entities.Player
         [SyncVar(hook=nameof(UsernameHook))] public string username;
 
         public Action<string> OnUsernameChange;
+
+        private bool _damageOnCooldown;
+        private const float PlayerDamageCooldown = 0.5f;
+        
+        public override float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility)
+        {
+            if (damage > 0 && _damageOnCooldown && !ignoreInvincibility)
+            {
+                successful = false;
+                return 0;
+            }
+
+            if(!ignoreInvincibility) StartCoroutine(PauseDamageForSeconds(PlayerDamageCooldown));
+            
+            return base.ApplyDamage(damage, out successful, ignoreInvincibility);
+        }
+
+        private IEnumerator PauseDamageForSeconds(float seconds)
+        {
+            _damageOnCooldown = true;
+            yield return new WaitForSeconds(seconds);
+            _damageOnCooldown = false;
+        }
         
         public void UsernameHook(string oldUser, string newUser)
         {

@@ -23,7 +23,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         [SyncVar(hook=nameof(EnemyDataHook))] private EnemyData _enemyData;
 
         [SerializeField] private EnemyAnimator enemyAnimator;
-        private EnemyMovementBase _enemyMovementBase;
+        //private EnemyMovementBase _enemyMovementBase;
         private int MoneyReward => _enemyData.baseMoneyReward;
         protected override float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
 
@@ -61,7 +61,11 @@ namespace TonyDev.Game.Core.Entities.Enemies
             if (coll != null) coll.size = _enemyData.hitboxRadius * Vector2.one;
 
             enemyAnimator.Set(enemyData);
-            if(EntityOwnership) CreateMovementComponent(enemyData.movementData);
+            if (EntityOwnership & enemyData.timelineData != null)
+            {
+                CreateBehaviorComponent(enemyData.timelineData);
+                //CreateMovementComponent(enemyData.movementData);
+            }
             SubscribeAnimatorEvents();
             
             InitProjectiles(enemyData.projectileAttackData);
@@ -72,8 +76,14 @@ namespace TonyDev.Game.Core.Entities.Enemies
             CmdAddEffect(GameEffect.CreateEffect<EnemyScalingEffect>(), this);
         }
 
+        private void CreateBehaviorComponent(BehaviorTimelineData btd)
+        {
+            var behaviorComponent = gameObject.AddComponent<BehaviorTimeline>();
+            behaviorComponent.Set(btd);
+        }
+        
         //Add movement components based on movement data
-        private void CreateMovementComponent(EnemyMovementData movementData)
+        /*private void CreateMovementComponent(EnemyMovementData movementData)
         {
             var type = movementData switch
             {
@@ -89,7 +99,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 moveBase.PopulateFromData(movementData);
                 _enemyMovementBase = moveBase;
             }
-        }
+        }*/
 
         private void InitProjectiles(IEnumerable<ProjectileData> projectileData)
         {
@@ -126,8 +136,8 @@ namespace TonyDev.Game.Core.Entities.Enemies
             if (!EntityOwnership) return;
             OnDeath += (float value) => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Die);
             OnAttack += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Attack);
-            _enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Move);
-            _enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Stop);
+            //_enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Move);
+            //_enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Stop);
         }
 
         //Give money reward and destroy self.

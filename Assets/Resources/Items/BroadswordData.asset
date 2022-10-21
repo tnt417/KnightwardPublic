@@ -56,19 +56,11 @@ MonoBehaviour:
       waveFrequency: 0
       waveDistance: 0
       childOfOwner: 0
-      effects:
-      - rid: 8269505043193921541
+      effects: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 8269505043193921541
-      type: {class: PoisonEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
-      data:
-        effectDescription: 
-        Ticks: 10
-        Frequency: 1
-        Damage: 3.3441677
     - rid: 8269505059713712128
       type: {class: BroadswordEffect, ns: TonyDev.Game.Core.Items.Weapon.Broadsword, asm: TonyDev}
       data:

@@ -102,7 +102,7 @@ namespace TonyDev.Game.Core.Effects
                 
                 ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
                 
-                Entity.ApplyDamage(leech);
+                Entity.ApplyDamage(leech, out var success);
             }
         }
         

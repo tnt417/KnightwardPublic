@@ -91,10 +91,9 @@ namespace TonyDev.Game.Global
             tower.prefab = prefab;
 
             var interact = go.AddComponent<InteractableButton>();
-            interact.SetLabel("Pickup");
-            interact.onInteract.AddListener(() =>
+            interact.onInteract.AddListener((type) =>
             {
-                if (tower != null) tower.Pickup();
+                if (tower != null && type == InteractType.Interact) tower.Pickup();
             });
         }
 
@@ -221,6 +220,7 @@ namespace TonyDev.Game.Global
             NetworkServer.Spawn(groundItemObject);
             gi.CmdSetItem(item);
             gi.GenerateCost(costMultiplier);
+            gi.GenerateEssence(Random.Range(0.4f, 0.6f));
 
             return gi;
         }

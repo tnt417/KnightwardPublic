@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Items;
@@ -16,14 +17,14 @@ namespace TonyDev.Game.Global
         public string key;
         public Object value;
     }
+
     public class ObjectFinder : MonoBehaviour
     {
         [SerializeField] private List<DictionaryEntry> dictionaryEntries;
         [SerializeField] private List<DictionaryEntry> prefabEntries;
-        [SerializeField] private List<DictionaryEntry> animatorEntries;
         [SerializeField] private SpriteAtlas mainSpriteAtlas;
-        private static readonly Dictionary<string, EnemyData> Enemies = new ();
-        private static readonly Dictionary<string, GameObject> Prefabs = new ();
+        private static readonly Dictionary<string, EnemyData> Enemies = new();
+        private static readonly Dictionary<string, GameObject> Prefabs = new();
         private static SpriteAtlas _spriteAtlas;
 
         public static bool Initialized;
@@ -32,12 +33,12 @@ namespace TonyDev.Game.Global
         {
             if (Initialized) return;
             Initialized = true;
-            
-            foreach (var de in dictionaryEntries)
+
+            foreach (var ed in Resources.FindObjectsOfTypeAll<EnemyData>())
             {
-                if(de.value is EnemyData ed)
-                    Enemies.Add(de.key.ToLowerInvariant(), ed);
+                Enemies.Add(new string(ed.enemyName.ToLowerInvariant().ToCharArray().Where(c => !char.IsWhiteSpace(c)).ToArray()), ed);
             }
+
             foreach (var pe in prefabEntries)
             {
                 if (pe.value is GameObject go)
@@ -46,7 +47,7 @@ namespace TonyDev.Game.Global
                     {
                         NetworkClient.RegisterPrefab(go);
                     }
-                    
+
                     Prefabs.Add(pe.key, go);
                 }
             }
@@ -55,10 +56,19 @@ namespace TonyDev.Game.Global
             ItemGenerator.InitSprites();
         }
 
-        public static EnemyData GetEnemyData(string name) => Enemies.ContainsKey(name.ToLowerInvariant()) ? Enemies[name.ToLowerInvariant()] : null;
+        public static EnemyData GetEnemyData(string name)
+        {
+            var trimmedName = new string(name.ToLowerInvariant().ToCharArray().Where(c => !char.IsWhiteSpace(c)).ToArray());
+            
+            return Enemies.ContainsKey(trimmedName) ? Enemies[trimmedName] : null;
+        }
 
-        public static GameObject GetPrefab(string name) => string.IsNullOrEmpty(name) ? null : Prefabs.ContainsKey(name) ? Prefabs[name] : null;
-        public static string GetNameOfPrefab(GameObject prefab) => Prefabs.ContainsValue(prefab) ? Prefabs.FirstOrDefault(k => k.Value == prefab).Key : "";
+        public static GameObject GetPrefab(string name) =>
+            string.IsNullOrEmpty(name) ? null : Prefabs.ContainsKey(name) ? Prefabs[name] : null;
+
+        public static string GetNameOfPrefab(GameObject prefab) => Prefabs.ContainsValue(prefab)
+            ? Prefabs.FirstOrDefault(k => k.Value == prefab).Key
+            : "";
 
         public static Sprite GetSprite(string name) => _spriteAtlas.GetSprite(name);
 

@@ -137,7 +137,7 @@ namespace TonyDev.Editor
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         }
 
-        private bool recording = false;
+        private bool _recording = false;
         
         private void DisplayEffectInfo(SerializedProperty sp)
         {
@@ -187,7 +187,7 @@ namespace TonyDev.Editor
                 EditorGUILayout.BeginHorizontal();
 
                 EditorGUILayout.LabelField(
-                    "<size=12><b><color=white>" + ge.ToString().Split('.').LastOrDefault() + "</color></b></size>",
+                    "<size=12><b><color=white>" + ge.ToString().Split('.').LastOrDefault()?.Replace("Entry", "") + "</color></b></size>",
                     style);
 
                 GUILayout.FlexibleSpace();
@@ -215,18 +215,18 @@ namespace TonyDev.Editor
 
                         if (field.FieldType == typeof(KeyCode))
                         {
-                            if (GUILayout.Button(recording ? "..." : "Record", EditorStyles.miniButton))
+                            if (GUILayout.Button(_recording ? "..." : "Record", EditorStyles.miniButton))
                             {
-                                recording = true;
+                                _recording = true;
                             }
 
-                            if (recording)
+                            if (_recording)
                             {
                                 var k = CheckForKey();
                                 if (k != KeyCode.None)
                                 {
                                     field.SetValue(ge, k);
-                                    recording = false;
+                                    _recording = false;
                                 }
                             }
                         }
@@ -315,50 +315,6 @@ namespace TonyDev.Editor
 
             EditorGUILayout.LabelField("<size=15><b><color=white>Spawnable</color></b></size>", richTextStyle);
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.spawnablePrefabName)));
-        }
-        
-        private static void BuildInspectorProperties(SerializedObject obj, VisualElement container)
-        {
-            SerializedProperty iterator = obj.GetIterator();
-            Type targetType = obj.targetObject.GetType();
-            List<MemberInfo> members = new List<MemberInfo>(targetType.GetMembers());
- 
-            if (!iterator.NextVisible(true)) return;
-            do
-            {
-                PropertyField propertyField = new PropertyField(iterator.Copy())
-                {
-                    name = "PropertyField:" + iterator.propertyPath
-                };
- 
-                MemberInfo member = members.Find(x => x.Name == propertyField.bindingPath);
-                if (member != null)
-                {
-                    IEnumerable<Attribute> headers = member.GetCustomAttributes(typeof(HeaderAttribute));
-                    IEnumerable<Attribute> spaces = member.GetCustomAttributes(typeof(SpaceAttribute));
- 
-                    foreach (Attribute x in headers)
-                    {
-                        HeaderAttribute actual = (HeaderAttribute) x;
-                        Label header = new Label { text = actual.header};
-                        header.style.unityFontStyleAndWeight = FontStyle.Bold;
-                        container.Add(new Label { text = " ", name = "Header Spacer"});
-                        container.Add(header);
-                    }
-                    foreach (Attribute unused in spaces)
-                    {
-                        container.Add(new Label { text = " " });
-                    }
-                }
- 
-                if (iterator.propertyPath == "m_Script" && obj.targetObject != null)
-                {
-                    propertyField.SetEnabled(value: false);
-                }
- 
-                container.Add(propertyField);
-            }
-            while (iterator.NextVisible(false));
         }
     }
 }

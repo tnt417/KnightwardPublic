@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefab: {fileID: 0}
   enemyName: Slime
-  enemyBaseSprite: {fileID: 368543389579951487, guid: d60cc33038e33174cb6cf2a89c6bc955, type: 3}
   baseMoneyReward: 1
-  hitboxRadius: 0.3
+  hitboxRadius: 0.5
   baseStats:
   - statType: 0
     stat: 0
@@ -63,9 +62,13 @@ MonoBehaviour:
   movementData: {fileID: 11400000, guid: 021c5f7b0d291d847a0be527ac1fcbf5, type: 2}
   contactAttackData:
     damageMultiplier: 1
+    knockbackMultiplier: 1
     hitboxRadius: 0.3
     team: 0
     destroyOnApply: 0
     lifetime: -1
-    spawnOnDestroy: {fileID: 0}
+    spawnOnDestroyKey: 
   projectileAttackData: []
+  references:
+    version: 2
+    RefIds: []

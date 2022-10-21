@@ -2,6 +2,7 @@ using System.Collections;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations;
@@ -19,27 +20,46 @@ namespace TonyDev.Game.Core.Items
     {
         //Editor variables
         [SerializeField] private int rarityBoost;
+
         [SerializeField] private SpriteRenderer spriteRenderer;
         //
 
-        private Interactable _interactable;
+        private InteractableItem _interactable;
 
         private bool _pickupAble = true;
 
-        [FormerlySerializedAs("onPickup")] public UnityEvent onPickupServer = new(); //TODO: this won't work either. Will need to be removed.
+        [FormerlySerializedAs("onPickup")]
+        public UnityEvent onPickupServer = new(); //TODO: this won't work either. Will need to be removed.
 
         private void Awake()
         {
             spriteRenderer.sharedMaterial =
                 new Material(spriteRenderer
                     .sharedMaterial); //Create a copy of the renderer's material to allow temporary editing.
+
+            _interactable = GetComponent<InteractableItem>();
             
-            _interactable = GetComponent<Interactable>();
+            _interactable.AddInteractKey(KeyCode.F, InteractType.Scrap);
             
-            _interactable.onInteract.AddListener(() =>
+            _interactable.onInteract.AddListener((type) =>
             {
-                CmdRequestPickup(GameManager.Money);
-                StartCoroutine(DisablePickupForSeconds(0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
+                if (cost > GameManager.Money)
+                {
+                    ObjectSpawner.SpawnTextPopup(Player.LocalInstance.transform.position, "You can't afford this!", Color.red, 0.5f);
+                    return;
+                }
+                
+                if (type is InteractType.Purchase or InteractType.Pickup)
+                {
+                    CmdRequestPickup(GameManager.Money);
+                    StartCoroutine(
+                        DisablePickupForSeconds(
+                            0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
+                }
+                else if(type == InteractType.Scrap)
+                {
+                    CmdRequestScrap(GameManager.Money);
+                }
             });
         }
 
@@ -55,8 +75,19 @@ namespace TonyDev.Game.Core.Items
                 Debug.LogWarning("Cannot generate cost for null item!");
                 return;
             }
-            
-            CmdSetCost((int)(ItemGenerator.GenerateCost(Item) * costMultiplier));
+
+            CmdSetCost((int) (ItemGenerator.GenerateCost(Item) * costMultiplier));
+        }
+        
+        public void GenerateEssence(float essenceMultiplier)
+        {
+            if (Item == null)
+            {
+                Debug.LogWarning("Cannot generate essence for null item!");
+                return;
+            }
+
+            CmdSetEssence((int) (ItemGenerator.GenerateCost(Item) * essenceMultiplier));
         }
 
         [field: SyncVar(hook = nameof(OnItemChangeHook))]
@@ -84,15 +115,29 @@ namespace TonyDev.Game.Core.Items
         [SerializeField] [SyncVar(hook = nameof(OnCostChangeHook))]
         private int cost;
 
+        [SerializeField] [SyncVar(hook = nameof(OnEssenceChangeHook))]
+        private int essence;
+
         private void OnCostChangeHook(int oldCost, int newCost)
         {
             _interactable.SetCost(newCost);
+        }
+
+        private void OnEssenceChangeHook(int oldEssence, int newEssence)
+        {
+            _interactable.SetEssence(newEssence);
         }
 
         [Command(requiresAuthority = false)]
         private void CmdSetCost(int newCost)
         {
             cost = newCost;
+        }
+        
+        [Command(requiresAuthority = false)]
+        private void CmdSetEssence(int newEssence)
+        {
+            essence = newEssence;
         }
 
         private void UpdateOutlineColor()
@@ -132,6 +177,31 @@ namespace TonyDev.Game.Core.Items
             onPickupServer.Invoke(); //Invoke the onPickup method
         }
 
+        [Command(requiresAuthority = false)]
+        private void CmdRequestScrap(int senderMoney, NetworkConnectionToClient sender = null)
+        {
+            Debug.Log($"Sender {sender?.connectionId} requested to scrap item {Item.itemName}");
+
+            if (senderMoney < cost || !_pickupAble) return; //If the item is too expensive, don't allow pickup.
+
+            Debug.Log("Confirming scrap.");
+
+            TargetConfirmScrap(sender, essence, cost);
+            
+            onPickupServer.Invoke(); //Invoke the onPickup method
+        }
+
+        [TargetRpc]
+        private void TargetConfirmScrap(NetworkConnection target, int confirmedEssence, int confirmedCost)
+        {
+            GameManager.Essence += confirmedEssence;
+            GameManager.Money -= confirmedCost;
+            
+            ObjectSpawner.SpawnTextPopup(transform.position, "+" + confirmedEssence + " essence", Color.cyan, 0.8f);
+            
+            CmdNotifyReplacementItem(null);
+        }
+
         [TargetRpc]
         private void TargetConfirmPickup(NetworkConnection target, int confirmedCost)
         {
@@ -139,7 +209,7 @@ namespace TonyDev.Game.Core.Items
 
             var returnItem = PlayerInventory.Instance.InsertItem(Item);
 
-            Debug.Log($"Received item pickup confirmation. Inserted item. Return item: {returnItem?.itemName}");
+            ObjectSpawner.SpawnTextPopup(transform.position, "Item inserted", Color.green, 0.8f);
 
             CmdNotifyReplacementItem(returnItem);
         }
@@ -164,6 +234,7 @@ namespace TonyDev.Game.Core.Items
             yield return new WaitForSeconds(seconds);
             _pickupAble = true;
         }
+
         [field: SyncVar] public NetworkIdentity CurrentParentIdentity { get; set; }
     }
 }

@@ -87,8 +87,8 @@ namespace TonyDev.Game.Core.Items
         #region Stat Generation
 
         private static float StatStrengthFactor => 1 + GameManager.DungeonFloor/15f;
-        private static float DamageStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 25f;
-        private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * StatStrengthFactor;
+        private static float DamageStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 12f;
+        private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 2f;
         private static float ArmorStrength => Random.Range(0.6f, 1f) * 25 * StatStrengthFactor;
         private static float HealthStrength => Random.Range(0.6f, 1f) * 40 * StatStrengthFactor;
         private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity)

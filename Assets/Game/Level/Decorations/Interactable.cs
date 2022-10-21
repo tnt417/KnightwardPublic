@@ -1,4 +1,8 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
@@ -10,24 +14,63 @@ using UnityEngine.UI;
 
 namespace TonyDev.Game.Level.Decorations
 {
+    public enum InteractType
+    {
+        Interact,
+        Scrap,
+        Purchase,
+        Pickup
+    }
     public abstract class Interactable : MonoBehaviour
     {
-        [SerializeField] public UnityEvent onInteract = new();
-        [SerializeField] private int cost;
+        [SerializeField] public UnityEvent<InteractType> onInteract = new();
+        [SerializeField] protected int cost;
         [SerializeField] private string label;
 
         protected bool IsInteractable = true;
 
         private GameObject _indicatorObject;
-        private Indicator _indicator;
+        protected Indicator Indicator;
+        protected Dictionary<KeyCode, InteractType> _interactKeys = new ();
 
-        private void Start()
+        public void AddInteractKey(KeyCode keyCode, InteractType type)
+        {
+            if (!(_interactKeys.ContainsKey(keyCode) && _interactKeys[keyCode] == type)) //If key hasn't been added yet for this interact type, add it
+            {
+                _interactKeys[keyCode] = type;
+                RebuildControlLabel();
+            }
+        }
+        
+        public void OverrideInteractKey(KeyCode keyCode, InteractType type)
+        {
+            _interactKeys[keyCode] = type;
+            RebuildControlLabel();
+        }
+
+        private string _controlText = "";
+        
+        private void RebuildControlLabel()
+        {
+            StringBuilder sb = new();
+            foreach (var (key, value) in _interactKeys)
+            {
+                sb.AppendLine("[" + Enum.GetName(typeof(KeyCode), key) + "] " +
+                              Enum.GetName(typeof(InteractType), value));
+            }
+            
+            _controlText = sb.ToString();
+        }
+        
+        protected void Start()
         {
             _indicatorObject = Instantiate(ObjectFinder.GetPrefab("indicator"), transform);
-            _indicator = _indicatorObject.GetComponent<Indicator>();
+            Indicator = _indicatorObject.GetComponent<Indicator>();
+            
+            AddInteractKey(KeyCode.E, InteractType.Interact);
 
-            _indicator.SetCost(cost);
-            _indicator.SetLabel(label);
+            SetCost(cost);
+            SetLabel(label, true);
 
             onInteract.AddListener(OnInteract);
 
@@ -36,41 +79,48 @@ namespace TonyDev.Game.Level.Decorations
 
         private bool _costChanged;
         
-        public void SetCost(int newCost)
+        public virtual void SetCost(int newCost)
         {
+            if (newCost == cost) return;
             cost = newCost;
             _costChanged = true;
         }
 
         private bool _labelChanged;
-        
-        public void SetLabel(string newLabel)
+
+        public void SetLabel(string newLabel, bool controls)
         {
-            label = newLabel;
+            Debug.Log(_controlText);
+            StringBuilder sb = new();
+
+            sb.Append(newLabel + "\n");
+            sb.Append(controls ? _controlText : "");
+
+            label = sb.ToString();
             _labelChanged = true;
         }
 
-        private void Update()
+        protected void Update()
         {
-            if (Active && GameManager.GameControlsActive && Input.GetKeyDown(KeyCode.E) && IsInteractable)
+            foreach (var kc in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Input.GetKeyDown(kv.Key) && IsInteractable))
             {
-                onInteract?.Invoke();
+                onInteract?.Invoke(kc.Value);
             }
 
             if (_costChanged)
             {
-                _indicator.SetCost(cost);
+                Indicator.SetCost(cost);
                 _costChanged = false;
             }
 
             if (_labelChanged)
             {
-                _indicator.SetLabel(label);
+                Indicator.SetLabel(label);
                 _labelChanged = false;
             }
         }
 
-        protected virtual void OnInteract()
+        protected virtual void OnInteract(InteractType type)
         {
         }
 

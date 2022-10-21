@@ -23,9 +23,11 @@ namespace TonyDev.Game
         public int MaxHealth => hitsRemaining;
         public float CurrentHealth => hitsRemaining;
         public bool IsInvulnerable => false;
-        
-        public float ApplyDamage(float damage)
+        public bool IsTangible { get; } = true;
+
+        public float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility = false)
         {
+            successful = true;
             hitsRemaining--;
             animator.Play(hitAnimation);
             if(hitsRemaining <= 0) Die();

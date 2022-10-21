@@ -23,7 +23,7 @@ MonoBehaviour:
     source: 
   - statType: 0
     stat: 0
-    strength: 0.5
+    strength: 0.3
     source: 
   - statType: 0
     stat: 3
@@ -31,11 +31,11 @@ MonoBehaviour:
     source: 
   - statType: 0
     stat: 6
-    strength: 600
+    strength: 450
     source: 
   - statType: 0
     stat: 1
-    strength: 25
+    strength: 15
     source: 
   animatorController: {fileID: 9100000, guid: a9e1451e5eb298b47b6c77a4856a6d98, type: 2}
   animations:
@@ -55,18 +55,20 @@ MonoBehaviour:
     projectileSprite: {fileID: 0}
     attackData:
       damageMultiplier: 1
-      knockbackMultiplier: 1
+      knockbackMultiplier: 0.2
       hitboxRadius: 0.5
       team: 0
       destroyOnApply: 1
       lifetime: 1
       spawnOnDestroyKey: dragonPool
+    disableMovement: 0
     travelSpeed: 15
     offsetDegrees: 0
     waveAmplitude: -0.1
     waveFrequency: 1
     waveDistance: 7
-    effectIDs: []
+    childOfOwner: 0
+    effects: []
   - prefabKey: dragonShot
     projectileSprite: {fileID: 0}
     attackData:
@@ -77,9 +79,14 @@ MonoBehaviour:
       destroyOnApply: 1
       lifetime: 1
       spawnOnDestroyKey: dragonPool
+    disableMovement: 0
     travelSpeed: 15
     offsetDegrees: 0
     waveAmplitude: 0.1
     waveFrequency: 1
     waveDistance: 7
-    effectIDs: []
+    childOfOwner: 0
+    effects: []
+  references:
+    version: 2
+    RefIds: []

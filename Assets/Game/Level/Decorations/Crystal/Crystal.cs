@@ -27,7 +27,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         private new void Update()
         {
             var hpRegen = CrystalRegen.Invoke() * Time.deltaTime;
-            ApplyDamage(-hpRegen);
+            ApplyDamage(-hpRegen, out var successful);
             base.Update();
         }
         

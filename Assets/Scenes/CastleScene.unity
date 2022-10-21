@@ -3164,6 +3164,8 @@ MonoBehaviour:
     value: {fileID: 11400000, guid: cc8fce2e70e343b4fa78d64e34d59cd0, type: 2}
   - key: dragon
     value: {fileID: 11400000, guid: 5fd4f12622a778147a601d010a99b5c8, type: 2}
+  - key: bookblue
+    value: {fileID: 11400000, guid: fc72d8eb2f3ce0247948fff298204e5b, type: 2}
   prefabEntries:
   - key: broadswordEffect
     value: {fileID: 0}
@@ -3221,6 +3223,8 @@ MonoBehaviour:
     value: {fileID: 5103858983301164108, guid: 5163dc7445cba4c43be50946b5c6f48b, type: 3}
   - key: HammerProjectile
     value: {fileID: 5404901476592251585, guid: 7ccb62db75597d84681d28a654f9c291, type: 3}
+  - key: CelestialBuffEffect
+    value: {fileID: 2004727793591240830, guid: 14b6d9f4f00ffa94c8e89e708999174e, type: 3}
   animatorEntries:
   - key: Slime
     value: {fileID: 9100000, guid: 54cdb3cb100dbe94baa6a5254c230175, type: 2}

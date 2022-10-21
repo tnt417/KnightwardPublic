@@ -27,6 +27,7 @@ namespace TonyDev.Game.Core.Entities.Towers
 
         public override Team Team => Team.Player;
         public override bool IsInvulnerable => true;
+        public override bool IsTangible => false;
 
         public void Pickup()
         {

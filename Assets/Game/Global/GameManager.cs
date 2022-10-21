@@ -37,6 +37,7 @@ namespace TonyDev.Game.Global
         [SerializeField] private Vector2 arenaSpawnPos;
         public static List<Item> AllItems = new();
         public static int Money = 0;
+        public static int Essence = 0;
         public static float MoneyDropBonusFactor;
 
         [SyncVar] public int timeSeconds;
@@ -45,6 +46,12 @@ namespace TonyDev.Game.Global
         public void AddMoney(int amount)
         {
             Money += amount;
+        }
+        
+        [GameCommand(Keyword = "essence", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Added essence.")]
+        public void AddEssence(int amount)
+        {
+            Essence += amount;
         }
 
         [GameCommand(Keyword = "insertitem", PermissionLevel = PermissionLevel.Cheat,

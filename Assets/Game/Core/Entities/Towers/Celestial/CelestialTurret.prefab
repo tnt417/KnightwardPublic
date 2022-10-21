@@ -70,10 +70,10 @@ MonoBehaviour:
   targetTeam: 1
   maxTargets: 10
   baseStats: []
-  networkCurrentHealth: 0
-  networkMaxHealth: 0
+  targetIntangible: 1
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 3
+  prefab: {fileID: 0}
   buffs:
   - statType: 1
     stat: 0
@@ -83,6 +83,7 @@ MonoBehaviour:
     stat: 1
     strength: 0.25
     source: 
+  buffEffectPrefab: {fileID: 2004727793591240830, guid: 14b6d9f4f00ffa94c8e89e708999174e, type: 3}
 --- !u!95 &2488910766830145623
 Animator:
   serializedVersion: 4

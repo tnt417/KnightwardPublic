@@ -17,6 +17,7 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private ItemSlot weaponSlot;
         [SerializeField] private ItemSlot armorSlot;
         [SerializeField] private ItemSlot[] relicSlots;
+        [SerializeField] private TMP_Text essenceText;
         [SerializeField] private TMP_Text moneyText;
         [SerializeField] private TMP_Text damageText;
         [SerializeField] private TMP_Text healthText;
@@ -71,6 +72,7 @@ namespace TonyDev.Game.UI.Inventory
             if(relicArray.Length >= 3) relicSlots[2].Item = relicArray[2];
             //
 
+            essenceText.text = GameManager.Essence.ToString();
             moneyText.text = GameManager.Money.ToString();
         }
 

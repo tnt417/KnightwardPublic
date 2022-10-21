@@ -11,8 +11,9 @@ namespace TonyDev.Game.Core.Entities
         float HealMultiplier { get; }
         int MaxHealth { get; }
         float CurrentHealth { get; }
-        float ApplyDamage(float damage);
+        float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility = false);
         bool IsInvulnerable { get; }
+        bool IsTangible { get; }
         void Die();
         delegate void HealthAction(float value);
         event HealthAction OnHealthChanged;

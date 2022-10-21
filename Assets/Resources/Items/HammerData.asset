@@ -61,15 +61,15 @@ MonoBehaviour:
           prefabKey: 
           projectileSprite: {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
           attackData:
-            damageMultiplier: 1
-            knockbackMultiplier: 1
+            damageMultiplier: 2
+            knockbackMultiplier: 0.2
             hitboxRadius: 0.5
             team: 1
-            destroyOnApply: 1
+            destroyOnApply: 0
             lifetime: 1.5
             spawnOnDestroyKey: 
           disableMovement: 0
-          travelSpeed: 6
+          travelSpeed: 12
           offsetDegrees: 0
           waveAmplitude: 0
           waveFrequency: 0
@@ -97,8 +97,8 @@ MonoBehaviour:
           effects: []
         HammerRespawnTime: 3
         MaxHammers: 3
-        SpinSpeed: 1
-        SpinRadius: 3
+        SpinSpeed: 2
+        SpinRadius: 1.5
     - rid: 8269505106771968000
       type: {class: HammerSwingEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:

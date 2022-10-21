@@ -1,6 +1,7 @@
 using System;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
+using TonyDev.Game.Core.Entities.Enemies.Movement;
 using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
 
@@ -23,7 +24,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.ScriptableObjects
         [Header("Additional Data")] 
         public RuntimeAnimatorController animatorController;
         public EnemyAnimationPairs[] animations;
-        public EnemyMovementData movementData;
+        public BehaviorTimelineData timelineData;
         
         [Header("Attack Data")]
         public AttackData contactAttackData;

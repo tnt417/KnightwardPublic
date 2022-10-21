@@ -14,7 +14,7 @@ namespace TonyDev.Game.Level.Decorations.Ladder
     {
         [SerializeField] private bool regen = true;
 
-        protected override void OnInteract()
+        protected override void OnInteract(InteractType type)
         {
             if(!regen) GameManager.Instance.TogglePhase();
             else Regen();

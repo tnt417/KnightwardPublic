@@ -8,7 +8,7 @@ namespace TonyDev.Game.Level.Decorations.BlessingChalice
 {
     public class ChaliceInteractable : Interactable
     {
-        protected override void OnInteract()
+        protected override void OnInteract(InteractType type)
         {
             var boostStat = Enum.Parse<Stat>(Tools.SelectRandom(Enum.GetNames(typeof(Stat))));
             ObjectSpawner.SpawnTextPopup(transform.position, "+10% " + Enum.GetName(typeof(Stat), boostStat), Color.green, 0.5f);
