@@ -8,7 +8,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Attack
         private ProjectileData _data;
         
         private float Amplitude => _data.waveAmplitude;
-        private float Frequency => _data.waveFrequency;
+        private float WaveLength => _data.waveLength;
         private float Distance => _data.waveDistance;
         private float _travelled;
         
@@ -25,7 +25,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Attack
         {
             if(_travelled < Distance)
             {
-                _pathWaveOffset = transform.right * Mathf.Sin(_travelled*Frequency*Mathf.PI) * Amplitude;
+                _pathWaveOffset = transform.right * (Mathf.Sin(_travelled*(2f/WaveLength)*Mathf.PI) * (Amplitude-Amplitude/2));
             }
             
             var deltaDistance = _data.travelSpeed * Time.fixedDeltaTime;

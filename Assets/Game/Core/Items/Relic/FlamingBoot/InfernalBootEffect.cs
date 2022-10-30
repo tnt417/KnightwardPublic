@@ -11,14 +11,15 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
 {
     public class InfernalBootEffect : GameEffect
     {
+        public float DamageMultiplier = 0.1f;
+        
+        private Rigidbody2D _rb2d;
+        
         public override void OnAddOwner()
         {
-            Player.LocalInstance.playerMovement.OnPlayerMove += AddMagnitude;
-        }
-
-        public override void OnRemoveOwner()
-        {
-            Player.LocalInstance.playerMovement.OnPlayerMove -= AddMagnitude;
+            _rb2d = Entity.GetComponent<Rigidbody2D>();
+            _attackData.team = Entity.Team;
+            _attackData.damageMultiplier = DamageMultiplier;
         }
 
         private double _distanceMoved;
@@ -30,7 +31,8 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
             hitboxRadius = 0.75f,
             knockbackMultiplier = 0f,
             lifetime = 3f,
-            team = Team.Player
+            team = Team.Player,
+            ignoreInvincibility = true
         };
 
         private void AddMagnitude(Vector2 v2)
@@ -40,6 +42,7 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
         
         public override void OnUpdateOwner()
         {
+            AddMagnitude(_rb2d.velocity * Time.deltaTime);
             if (_distanceMoved < 0.5f) return;
             _distanceMoved = 0f;
             AttackFactory.CreateStaticAttack(Entity, Entity.transform.position, _attackData, false, ObjectFinder.GetPrefab("firePath"));

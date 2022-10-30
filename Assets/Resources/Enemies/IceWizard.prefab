@@ -1,0 +1,185 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2003399381543288355
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 48320255391279908, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 48320255391279908, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.enemyName
+      value: IceWizard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.size
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.hitboxRadius
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.baseMoneyReward
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[0].stat
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[1].stat
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[2].stat
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].stat
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[0].strength
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[1].strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[2].strength
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[0].animation
+      value: 
+      objectReference: {fileID: 7400000, guid: 3a8d52df16a269a418664f7818df96db, type: 2}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[0].enemyAnimationState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754642, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 26a116d514eebea4e9bfa67680046583, type: 2}
+    - target: {fileID: 7080094185981754643, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754643, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -300970518, guid: 03ff1f1cd9c647b48a734b76336440bf, type: 3}
+    - target: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_Name
+      value: IceWizard
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AssetId
+      value: 19c363ba53de8b649b6bcc6629e46fbc
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c4673581ac60785459b6805764360ee4, type: 3}
+--- !u!1 &8758389917884597047 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+  m_PrefabInstance: {fileID: 2003399381543288355}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2913228945482631758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8758389917884597047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 684736bdc93a664429f636e6fd5d9009, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  strafeDistance: 7
+  strafeRadius: 7
+  strafeSpeed: 1
+  shootProjectiles:
+  - prefabKey: iceWizardShot
+    projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+    attackData:
+      damageMultiplier: 1
+      knockbackMultiplier: 0.5
+      hitboxRadius: 0.3
+      team: 0
+      destroyOnApply: 0
+      lifetime: 2
+      spawnOnDestroyKey: iceWizardShotDeath
+    disableMovement: 0
+    travelSpeed: 12
+    offsetDegrees: 0
+    waveAmplitude: 0.5
+    waveLength: 5
+    waveDistance: 24
+    childOfOwner: 0
+    effects: []
+  references:
+    version: 2
+    RefIds: []

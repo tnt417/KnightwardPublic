@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 6325678122053794623}
   - component: {fileID: 6080059460909865518}
   - component: {fileID: 7292942157346279171}
-  - component: {fileID: 922445376998541849}
   - component: {fileID: 3622657746569862949}
   - component: {fileID: 8167611084454580651}
   - component: {fileID: 3319039379709736289}
+  - component: {fileID: 7676856395648185354}
   m_Layer: 0
   m_Name: Crystal
   m_TagString: Crystal
@@ -139,32 +139,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!61 &922445376998541849
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1043387988716007450}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: -0.00227803, y: -0.68184733}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 3, y: 2.5}
-    newSize: {x: 1.5, y: 1.25}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 1.7659773, y: 0.15551782}
-  m_EdgeRadius: 0
 --- !u!114 &3622657746569862949
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,9 +157,7 @@ MonoBehaviour:
   targetTeam: 0
   maxTargets: 0
   baseStats: []
-  clientHealthDisparity: 0
-  networkCurrentHealth: 0
-  networkMaxHealth: 0
+  targetIntangible: 0
 --- !u!50 &8167611084454580651
 Rigidbody2D:
   serializedVersion: 4
@@ -224,6 +196,22 @@ MonoBehaviour:
   visible: 2
   m_AssetId: 8d3f408f264fc6b448bfee518430f6d6
   hasSpawned: 0
+--- !u!58 &7676856395648185354
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1043387988716007450}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.75}
+  serializedVersion: 2
+  m_Radius: 0.5
 --- !u!1 &2822787910284825786
 GameObject:
   m_ObjectHideFlags: 0

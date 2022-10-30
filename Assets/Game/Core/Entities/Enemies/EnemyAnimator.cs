@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Mirror;
-using TonyDev.Game.Core.Entities.Enemies.Movement;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
 using UnityEngine;
@@ -62,12 +61,10 @@ namespace TonyDev.Game.Core.Entities.Enemies
 
         public void Set(EnemyData enemyData)
         {
-            animator.runtimeAnimatorController = enemyData.animatorController;
-            
             IEnumerable<EnemyAnimationPairs> animationPairs = enemyData.animations;
             foreach (var ap in animationPairs)
             {
-                _animationPairs.Add(ap.enemyAnimationState, ap.animationName);
+                _animationPairs.Add(ap.enemyAnimationState, ap.AnimationName);
             }
         }
     }

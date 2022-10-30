@@ -7,6 +7,7 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.U2D;
 using Object = System.Object;
@@ -35,25 +36,6 @@ namespace TonyDev.Game.Global.Network
             return sprite;
         }
 
-        public static void WriteEnemyData(this NetworkWriter writer, EnemyData value)
-        {
-            var isNull = value == null;
-            writer.WriteBool(isNull);
-            if (isNull) return;
-
-            writer.WriteString(value.enemyName);
-        }
-
-        public static EnemyData ReadEnemyData(this NetworkReader reader)
-        {
-            var isNull = reader.ReadBool();
-            if (isNull) return null;
-
-            var name = reader.ReadString();
-
-            return ObjectFinder.GetEnemyData(name);
-        }
-
         #region GameEffect
 
         private static int _identifierIndex;
@@ -73,8 +55,38 @@ namespace TonyDev.Game.Global.Network
             }
         }
 
+        public static string SerializeGameEffect(GameEffect gameEffect)
+        {
+            return JsonConvert.SerializeObject(gameEffect, new JsonSerializerSettings()
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+        }
+
+        public static GameEffect DeserializeGameEffect(string gameEffect)
+        {
+            var obj = JsonConvert.DeserializeObject(gameEffect);
+
+            if (obj == null) return null;
+            
+            var ge = (GameEffect) Activator.CreateInstance(GameEffect.GameEffectTypes.FirstOrDefault(t => t.Name == obj.GetType().Name) ?? typeof(GameEffect));
+            
+            JsonConvert.PopulateObject(gameEffect, ge);
+
+            return ge;
+        }
+
+        public static GameEffect CloneGameEffect(GameEffect gameEffect)
+        {
+            return DeserializeGameEffect(SerializeGameEffect(gameEffect));
+        }
+        
         public static void WriteGameEffect(this NetworkWriter writer, GameEffect value)
         {
+            // writer.WriteString(SerializeGameEffect(value));
+            //
+            // return;
+            
             var isNull = value == null;
             writer.WriteBool(isNull);
             if (isNull) return;
@@ -89,8 +101,6 @@ namespace TonyDev.Game.Global.Network
                 value.EffectIdentifier = id;
                 GameEffect.GameEffectIdentifiers[id] = value;
             }
-            
-            Debug.Log("WRITE Is new: " + isNew + " id: " + value.EffectIdentifier);
 
             writer.WriteString(value.EffectIdentifier);
 
@@ -153,6 +163,8 @@ namespace TonyDev.Game.Global.Network
 
         public static GameEffect ReadGameEffect(this NetworkReader reader)
         {
+            // return DeserializeGameEffect(reader.ReadString());
+            
             var isNull = reader.ReadBool();
             if (isNull) return null;
 
@@ -161,8 +173,6 @@ namespace TonyDev.Game.Global.Network
             var id = reader.ReadString();
             
             var isNew = !GameEffect.GameEffectIdentifiers.ContainsKey(id);
-
-            Debug.Log("READ Is new: " + isNew + " id: " + id);
 
             var isSourceNull = reader.ReadBool();
 

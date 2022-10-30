@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using Mirror;
+using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Items;
 using UnityEngine;
@@ -20,10 +21,8 @@ namespace TonyDev.Game.Global
 
     public class ObjectFinder : MonoBehaviour
     {
-        [SerializeField] private List<DictionaryEntry> dictionaryEntries;
         [SerializeField] private List<DictionaryEntry> prefabEntries;
         [SerializeField] private SpriteAtlas mainSpriteAtlas;
-        private static readonly Dictionary<string, EnemyData> Enemies = new();
         private static readonly Dictionary<string, GameObject> Prefabs = new();
         private static SpriteAtlas _spriteAtlas;
 
@@ -33,11 +32,6 @@ namespace TonyDev.Game.Global
         {
             if (Initialized) return;
             Initialized = true;
-
-            foreach (var ed in Resources.FindObjectsOfTypeAll<EnemyData>())
-            {
-                Enemies.Add(new string(ed.enemyName.ToLowerInvariant().ToCharArray().Where(c => !char.IsWhiteSpace(c)).ToArray()), ed);
-            }
 
             foreach (var pe in prefabEntries)
             {
@@ -52,19 +46,21 @@ namespace TonyDev.Game.Global
                 }
             }
 
+            foreach (var enemyObject in Resources.LoadAll<GameObject>("Enemies").Where(go => go.CompareTag("Enemy")))
+            {
+                var enemyNameInvariant = enemyObject.GetComponent<Enemy>().EnemyName.ToLowerInvariant();
+
+                Prefabs.Add(enemyNameInvariant, enemyObject);
+            }
+
             _spriteAtlas = mainSpriteAtlas;
             ItemGenerator.InitSprites();
         }
 
-        public static EnemyData GetEnemyData(string name)
+        public static GameObject GetPrefab(string name)
         {
-            var trimmedName = new string(name.ToLowerInvariant().ToCharArray().Where(c => !char.IsWhiteSpace(c)).ToArray());
-            
-            return Enemies.ContainsKey(trimmedName) ? Enemies[trimmedName] : null;
+            return string.IsNullOrEmpty(name) ? null : Prefabs.ContainsKey(name) ? Prefabs[name] : null;
         }
-
-        public static GameObject GetPrefab(string name) =>
-            string.IsNullOrEmpty(name) ? null : Prefabs.ContainsKey(name) ? Prefabs[name] : null;
 
         public static string GetNameOfPrefab(GameObject prefab) => Prefabs.ContainsValue(prefab)
             ? Prefabs.FirstOrDefault(k => k.Value == prefab).Key

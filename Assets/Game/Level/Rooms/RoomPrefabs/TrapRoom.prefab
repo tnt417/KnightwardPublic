@@ -4280,6 +4280,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
+      propertyPath: enemyPrefab
+      value: 
+      objectReference: {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
+    - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
       propertyPath: destroyAfterSpawns
       value: 7
       objectReference: {fileID: 0}

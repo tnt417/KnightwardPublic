@@ -17,7 +17,7 @@ namespace TonyDev.Game.Core.Entities
     public abstract class GameEntity : NetworkBehaviour, IDamageable, IHideable
     {
         public event Action OnTargetChangeOwner;
-        [NonSerialized] public SyncList<NetworkIdentity> Targets = new ();
+        public SyncList<GameEntity> Targets = new ();
         
         protected const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
@@ -41,7 +41,7 @@ namespace TonyDev.Game.Core.Entities
         #region Network
 
         [Command(requiresAuthority = false)]
-        public void CmdDamageEntity(float damage, bool isCrit, NetworkIdentity exclude)
+        public void CmdDamageEntity(float damage, bool isCrit, NetworkIdentity exclude, bool ignoreInvincibility)
         {
             /*var entity = entityObject.GetComponent<GameEntity>();
 
@@ -53,7 +53,7 @@ namespace TonyDev.Game.Core.Entities
 
             var successful = true;
             
-            var dmg = this is Player.Player ? damage : ApplyDamage(damage, out successful); //Players should have already been damaged on the client
+            var dmg = this is Player.Player ? damage : ApplyDamage(damage, out successful, ignoreInvincibility); //Players should have already been damaged on the client
             if(successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
         }
 
@@ -174,7 +174,6 @@ namespace TonyDev.Game.Core.Entities
 
             if (_attackTimer > AttackTimerMax)
             {
-                if(this is Tower) Debug.Log("Attack");
                 Attack();
             }
 
@@ -279,7 +278,7 @@ namespace TonyDev.Game.Core.Entities
             var range = 10f;
             if (this is Tower t) range = t.targetRadius;
             
-            var transforms = GameManager.EntitiesReadonly
+            var entities = GameManager.EntitiesReadonly
                 .Where(e => e != null 
                             && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
                             && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
@@ -290,19 +289,19 @@ namespace TonyDev.Game.Core.Entities
                             && (e is Crystal && this is not Tower && Vector2.Distance(e.transform.position, transform.position) < 200f 
                                 || Vector2.Distance(e.transform.position, transform.position) < range)) //Distance check
                 .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
-                .Select(e => e.netIdentity).Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
+                .Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
             
-            CmdSetTargets(transforms.ToArray());
+            CmdSetTargets(entities.ToArray());
             OnTargetChangeOwner?.Invoke(); //Invoke the target changed method
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdSetTargets(NetworkIdentity[] networkIdentities)
+        private void CmdSetTargets(GameEntity[] gameEntities)
         {
             Targets.Clear();
-            foreach (var identity in networkIdentities)
+            foreach (var ge in gameEntities)
             {
-                Targets.Add(identity);
+                Targets.Add(ge);
             }
         }
 
@@ -313,14 +312,11 @@ namespace TonyDev.Game.Core.Entities
         private void OnEffectsUpdated(SyncList<GameEffect>.Operation op, int index, GameEffect oldEffect,
             GameEffect newEffect)
         {
-            Debug.Log("HOOK: " + Enum.GetName(typeof(SyncList<>.Operation), op));
-            
             if (!EntityOwnership) return;
             
             switch (op)
             {
                 case SyncList<GameEffect>.Operation.OP_ADD:
-                    Debug.Log("Add owner");
                     newEffect.Entity = this;
                     newEffect.OnAddOwner();
                     break;
@@ -336,7 +332,6 @@ namespace TonyDev.Game.Core.Entities
             effect.Entity = this;
             effect.Source = this;
             
-            Debug.Log("Add server");
             _effects.Add(effect);
             effect.OnAddServer();
         }
@@ -413,7 +408,6 @@ namespace TonyDev.Game.Core.Entities
 
             if (damage > 0 && IsInvulnerable)
             {
-                Debug.Log("Invulnerable!");
                 OnTryHurtInvulnerable?.Invoke(damage);
                 return 0;
             }

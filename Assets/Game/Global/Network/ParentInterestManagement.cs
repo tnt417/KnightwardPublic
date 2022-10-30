@@ -79,7 +79,6 @@ namespace TonyDev.Game.Global.Network
                 // if not authenticated or not joined the world, don't rebuild
                 if (conn == null || !conn.isAuthenticated || conn.identity == null)
                 {
-                    Debug.Log("Connection not ready for rebuild: " + conn?.connectionId);
                     continue;
                 }
 

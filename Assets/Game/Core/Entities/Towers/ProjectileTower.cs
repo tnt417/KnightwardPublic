@@ -28,7 +28,6 @@ namespace TonyDev.Game.Core.Entities.Towers
         [Command(requiresAuthority = false)]
         private void CmdFire()
         {
-            Debug.Log("Fire!");
             var rpcSent = false;
             
             foreach (var direction in Targets.Where(t => t != null).Select(t =>

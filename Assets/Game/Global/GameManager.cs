@@ -200,11 +200,19 @@ namespace TonyDev.Game.Global
         [Command(requiresAuthority = false)]
         public void CmdSpawnEnemy(string enemyName, Vector2 position, NetworkIdentity parentRoom)
         {
-            var enemyData = ObjectFinder.GetEnemyData(enemyName);
-
-            ObjectSpawner.SpawnEnemy(enemyData, position, parentRoom);
+            ObjectSpawner.SpawnEnemy(ObjectFinder.GetPrefab(enemyName), position, parentRoom);
         }
 
+        [ClientRpc]
+        private void RpcSpawnStaticAttack(NetworkIdentity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
+        {
+            if (owner == null || owner == NetworkClient.localPlayer) return; //Projectiles should be spawned locally for the owner player of the projectile.
+            
+            var entity = owner.GetComponent<GameEntity>();
+            if (!entity.VisibleToHost && isClient && isServer) return; //If we are the host and the entity is not visible to the host, return.
+            AttackFactory.CreateProjectileAttack(entity, pos, direction, projectileData, identifier);
+        }
+        
         public GameObject SpawnProjectile(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, bool localOnly = false)
         {
             var identifier = AttackComponent.GetUniqueIdentifier(owner);
@@ -233,19 +241,13 @@ namespace TonyDev.Game.Global
 
         #region Initialization
 
-        public static event Action OnInitializeGameServer;
-        public static event Action OnInitializeGameClientOnly;
-        public static event Action OnInitializeGame;
-
         private void Awake()
         {
             if (Instance == null) Instance = this;
             else Destroy(this);
 
             AllItems = Resources.LoadAll<ItemData>("Items").Select(id => Instantiate(id).item).ToList();
-            
-            Debug.Log("COUNT: " + AllItems.Count);
-            
+
             Random.InitState((int) DateTime.Now.Ticks);
 
             Player.OnLocalPlayerCreated += Init;
@@ -256,19 +258,10 @@ namespace TonyDev.Game.Global
             }
 
             MainCamera = Camera.main;
-
-            // foreach (var id in itemData.Select(Instantiate))
-            // {
-            //     AllItems.Add(id.item);
-            // }
         }
 
         private void Init()
         {
-            OnInitializeGame?.Invoke();
-            if (isServer) OnInitializeGameServer?.Invoke();
-            if (isClientOnly) OnInitializeGameClientOnly?.Invoke();
-
             Crystal.Instance.OnDeath += value => GameOver();
             EnterArenaPhase();
         }

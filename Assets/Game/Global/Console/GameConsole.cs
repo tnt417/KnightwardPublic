@@ -92,7 +92,10 @@ namespace TonyDev.Game.Global.Console
             if (input.StartsWith("/"))
             {
                 var rawInput = input.Trim('/').ToLower();
-                OnSendCommand(rawInput);
+                foreach (var subCommand in rawInput.Split(","))
+                {
+                    OnSendCommand(subCommand);
+                }
                 return;
             }
 
@@ -164,9 +167,7 @@ namespace TonyDev.Game.Global.Console
         public static void Log(string text)
         {
             if (string.IsNullOrEmpty(text)) return;
-            Debug.Log(text);
 
-            
             _instance._sleepTimer = 0;
             _instance.consoleUIObject.SetActive(true);
             

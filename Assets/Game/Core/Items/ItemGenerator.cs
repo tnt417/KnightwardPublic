@@ -36,8 +36,7 @@ namespace TonyDev.Game.Core.Items
         //Returns a randomly generated item based on input parameters
         public static Item GenerateItemOfType(ItemType type, ItemRarity rarity)
         {
-            Debug.Log($"Trying to generate item of type {type} and rarity {rarity}");
-            
+
             //Instantiate local variables that will end up at the parameters for the generated item.
             Item item = null;
             var itemName = string.Empty;

@@ -184,8 +184,6 @@ namespace TonyDev.Game.Level.Rooms
             if (_smoothCameraFollow != null) _smoothCameraFollow.SetCameraBounds(Rect.zero);
 
             Player.LocalInstance.CmdSetParentIdentity(null);
-            
-            Debug.Log("Deactivated");
 
             currentActiveRoom = null;
         }
@@ -235,7 +233,6 @@ namespace TonyDev.Game.Level.Rooms
                     {
                         if (go != null)
                         {
-                            Debug.Log(go.name);
                             var networkIdentity = go.GetComponent<NetworkIdentity>();
                             if(networkIdentity == null) Destroy(go);
                             else NetworkServer.Destroy(go);
@@ -269,7 +266,6 @@ namespace TonyDev.Game.Level.Rooms
         {
             Player.LocalInstance.transform.position = map.StartingRoom.transform.position;
             SetActiveRoom(map.StartingRoomPos.x, map.StartingRoomPos.y);
-            Debug.Log("Teleporting to start!");
         }
     }
 }

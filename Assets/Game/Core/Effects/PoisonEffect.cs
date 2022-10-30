@@ -30,7 +30,7 @@ namespace TonyDev.Game.Core.Effects
 
             if (_timer > Frequency)
             {
-                Entity.CmdDamageEntity(Damage, false, null);
+                Entity.CmdDamageEntity(Damage, false, null, true);
                 _timer = 0f;
                 
                 Ticks--;

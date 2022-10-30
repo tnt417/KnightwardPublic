@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
@@ -15,7 +16,7 @@ namespace TonyDev.Game.Level
     [Serializable]
     public struct EnemySpawn
     {
-        public EnemyData[] enemyDatas;
+        public GameObject[] enemyPrefabs;
         public float difficultyRating;
     }
 
@@ -26,6 +27,12 @@ namespace TonyDev.Game.Level
         [SerializeField] private float spawnRadius;
 
         [SerializeField] private EnemySpawn[] enemySpawns;
+
+        public float breakLength;
+        public float breakFrequency;
+        public int regularLength;
+        [Range(0f,1f)]
+        public float percentageActiveSpawning;
         //
 
         private float _waveCooldown;
@@ -40,9 +47,9 @@ namespace TonyDev.Game.Level
         private void Update()
         {
             _waveCooldown =
-                wavesSpawned % 5 == 0
-                    ? 120
-                    : 30; //Every 5 waves, have a 2 minute break. Otherwise 30 seconds in between waves.
+                wavesSpawned % breakFrequency == 0
+                    ? breakLength
+                    : regularLength;
 
             _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier; //Tick the wave timer
             
@@ -50,7 +57,7 @@ namespace TonyDev.Game.Level
             {
                 _waveTimer = 0;
                 wavesSpawned++;
-                SpawnWave(); //Spawn a wave if cooldown is over
+                SpawnWave().Forget(); //Spawn a wave if cooldown is over
             }
         }
 
@@ -58,7 +65,7 @@ namespace TonyDev.Game.Level
         [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Spawning next wave.")]
         [ServerCallback]
-        public void SpawnWave()
+        public async UniTask SpawnWave()
         {
             /* DESCRIPTION:
              * Chooses random spawns of enemies to spawn in random locations until it runs out of difficulty allowance.
@@ -66,30 +73,43 @@ namespace TonyDev.Game.Level
 
             float difficultyTotal = 0;
 
+            List<EnemySpawn> spawns = new();
+            
             while (difficultyTotal <= DifficultyThreshold)
             {
                 var enemySpawn = enemySpawns[Random.Range(0, enemySpawns.Length)];
                 if (enemySpawn.difficultyRating > DifficultyThreshold - difficultyTotal) continue;
+                spawns.Add(enemySpawn);
                 difficultyTotal += enemySpawn.difficultyRating;
-                SpawnEnemies(enemySpawn.enemyDatas);
                 if (!enemySpawns.Contains(
                     enemySpawns //If enemySpawns doesn't have any spawns that could use up the remaining difficulty allowance, we're done spawning.
                         .FirstOrDefault(es => es.difficultyRating <= DifficultyThreshold - difficultyTotal))) break;
             }
 
+            var spawnCount = spawns.Count;
+            var spawningPeriod = percentageActiveSpawning * regularLength;
+            
+            while (spawns.Count > 0)
+            {
+                var spawn = spawns[0];
+                SpawnEnemies(spawn.enemyPrefabs);
+                spawns.Remove(spawn);
+                await UniTask.Delay(TimeSpan.FromSeconds(spawningPeriod/spawnCount));
+            }
+            
             if (wavesSpawned % 5 == 0)
             {
-                Crystal.Instance.CmdDamageEntity(-(Crystal.Instance.MaxHealth * 0.33f), false, null);
+                Crystal.Instance.CmdDamageEntity(-(Crystal.Instance.MaxHealth * 0.33f), false, null, true);
             }
         }
 
         //Instantiates enemies from a group of prefabs
         [ServerCallback]
-        private void SpawnEnemies(IEnumerable<EnemyData> enemyData)
+        private void SpawnEnemies(IEnumerable<GameObject> enemyPrefabs)
         {
-            foreach (var e in enemyData)
+            foreach (var e in enemyPrefabs)
             {
-                GameManager.Instance.CmdSpawnEnemy(e.enemyName,
+                GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(e),
                     spawnPoints[Random.Range(0, spawnPoints.Length)].position
                     + (Vector3) new Vector2(Random.Range(-spawnRadius, spawnRadius),
                         Random.Range(-spawnRadius, spawnRadius)), null);

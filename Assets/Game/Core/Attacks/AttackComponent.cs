@@ -61,6 +61,9 @@ namespace TonyDev.Game.Core.Attacks
         [Tooltip("Should the object destroy when its collider collides?")] [SerializeField]
         public bool destroyOnAnyCollide;
 
+        [Tooltip("Does the attack damage invincible entities?")] [SerializeField]
+        public bool ignoreInvincibility = false;
+
         [Tooltip("Buffs inflicted to GameEntities upon applying damage")] [SerializeField]
         private List<StatBonus> inflictBuffs = new();
 
@@ -98,7 +101,7 @@ namespace TonyDev.Game.Core.Attacks
             rb2d.isKinematic = true; //Add a RigidBody if there isn't one
 
             if (_owner == null)
-                _owner = GetComponent<GameEntity>(); //Owner is our own GameEntity if it hasn't been set yet.
+                _owner = transform.root.GetComponent<GameEntity>(); //Owner is our own GameEntity if it hasn't been set yet.
         }
 
         private void Update()
@@ -190,12 +193,12 @@ namespace TonyDev.Game.Core.Attacks
             {
                 var success = true;
                 damageDealt = netId == NetworkClient.localPlayer
-                    ? entity.ApplyDamage(modifiedDamage, out success)
+                    ? entity.ApplyDamage(modifiedDamage, out success, ignoreInvincibility)
                     : modifiedDamage; //Do damage before command if hitting player
                 if (!success) return;
                 if(entity is Enemy && !NetworkServer.active) entity.ClientHealthDisparity -= damageDealt;
                 entity.LocalHurt(damageDealt, crit);
-                entity.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer);
+                entity.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer, ignoreInvincibility);
                 
                 if (inflictEffects != null) //Inflict effects...
                     foreach (var e in inflictEffects)
@@ -206,7 +209,7 @@ namespace TonyDev.Game.Core.Attacks
             else
             {
                 damageDealt =
-                    damageable.ApplyDamage(modifiedDamage, out var success); //Apply the damage. Critical hits deal double.
+                    damageable.ApplyDamage(modifiedDamage, out var success, ignoreInvincibility); //Apply the damage. Critical hits deal double.
                 if (damageDealt > 0 && success)
                     ObjectSpawner.SpawnDmgPopup(other.transform.position, damageDealt,
                         crit); //Spawn a popup for the damage text if the damage is greater than zero.
@@ -217,7 +220,7 @@ namespace TonyDev.Game.Core.Attacks
 
             var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
 
-            var attSpd = _owner.Stats.GetStat(Stat.AttackSpeed);
+            var attSpd = _owner != null ? _owner.Stats.GetStat(Stat.AttackSpeed) : 0;
 
             if (attSpd > 0) kb /= attSpd;
             
@@ -289,6 +292,7 @@ namespace TonyDev.Game.Core.Attacks
             damageMultiplier = attackData?.damageMultiplier ?? damageMultiplier;
             knockbackMultiplier = attackData?.knockbackMultiplier ?? knockbackMultiplier;
             team = attackData?.team ?? team;
+            ignoreInvincibility = attackData?.ignoreInvincibility ?? ignoreInvincibility;
 
             if (team == owner.Team) //If the attack's team is the same as the owner's team...
             {

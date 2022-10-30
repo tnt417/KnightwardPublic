@@ -1,16 +1,7 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Mirror;
 using TonyDev.Game.Core.Attacks;
-using TonyDev.Game.Core.Effects;
-using TonyDev.Game.Core.Entities.Enemies.Attack;
-using TonyDev.Game.Core.Entities.Enemies.Movement;
+using TonyDev.Game.Core.Entities.Enemies.Modifiers;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
-using TonyDev.Game.Level.Decorations.Crystal;
-using TonyDev.Game.Level.Rooms;
-using UnityEditor;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies
@@ -20,98 +11,35 @@ namespace TonyDev.Game.Core.Entities.Enemies
     {
         #region Variables
 
-        [SyncVar(hook=nameof(EnemyDataHook))] private EnemyData _enemyData;
-
-        [SerializeField] private EnemyAnimator enemyAnimator;
-        //private EnemyMovementBase _enemyMovementBase;
-        private int MoneyReward => _enemyData.baseMoneyReward;
+        [SerializeField] private EnemyData enemyData;
+        [SerializeField] public EnemyAnimator enemyAnimator;
         protected override float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
-
-        public string EnemyName => _enemyData == null ? "" : _enemyData.enemyName;
+        public string EnemyName => enemyData == null ? "" : enemyData.enemyName;
 
         #endregion
 
-        private void EnemyDataHook(EnemyData oldData, EnemyData newData)
-        {
-            if (oldData == null && newData != null)
-            {
-                SetEnemyData(newData);
-            }
-        }
-        
-        [Command(requiresAuthority = false)]
-        public void CmdSetEnemyData(EnemyData enemyData)
-        {
-            _enemyData = enemyData;
-        }
-
         //Set enemy data, called on every client on spawn
-        private void SetEnemyData(EnemyData enemyData)
+        private void SetEnemyData(EnemyData data)
         {
-            _enemyData = enemyData;
+            enemyData = data;
 
             Team = Team.Enemy;
-            
-            baseStats = enemyData.baseStats;
 
             var hitbox = GetComponent<CircleCollider2D>();
             var coll = GetComponent<BoxCollider2D>();
 
-            if (hitbox != null) hitbox.radius = _enemyData.hitboxRadius;
-            if (coll != null) coll.size = _enemyData.hitboxRadius * Vector2.one;
+            if (hitbox != null) hitbox.radius = enemyData.hitboxRadius;
+            if (coll != null) coll.size = enemyData.hitboxRadius * Vector2.one;
 
             enemyAnimator.Set(enemyData);
-            if (EntityOwnership & enemyData.timelineData != null)
-            {
-                CreateBehaviorComponent(enemyData.timelineData);
-                //CreateMovementComponent(enemyData.movementData);
-            }
             SubscribeAnimatorEvents();
             
-            InitProjectiles(enemyData.projectileAttackData);
             InitContactDamage(enemyData.contactAttackData);
-
+            
             Init();
             
-            CmdAddEffect(GameEffect.CreateEffect<EnemyScalingEffect>(), this);
-        }
-
-        private void CreateBehaviorComponent(BehaviorTimelineData btd)
-        {
-            var behaviorComponent = gameObject.AddComponent<BehaviorTimeline>();
-            behaviorComponent.Set(btd);
-        }
-        
-        //Add movement components based on movement data
-        /*private void CreateMovementComponent(EnemyMovementData movementData)
-        {
-            var type = movementData switch
-            {
-                EnemyMovementChaseData => typeof(EnemyMovementChase),
-                EnemyMovementStrafeData => typeof(EnemyMovementPeriodicalStrafe),
-                _ => typeof(EnemyMovementBase)
-            };
-
-            var c = gameObject.AddComponent(type);
-
-            if (c is EnemyMovementBase moveBase)
-            {
-                moveBase.PopulateFromData(movementData);
-                _enemyMovementBase = moveBase;
-            }
-        }*/
-
-        private void InitProjectiles(IEnumerable<ProjectileData> projectileData)
-        {
-            foreach (var data in projectileData)
-            {
-                OnAttack += () =>
-                {
-                    foreach (var direction in Targets.Select(
-                        t => (t.transform.position - transform.position).normalized))
-                        ObjectSpawner.SpawnProjectile(this, transform.position, direction, data);
-                };
-            }
+            CmdAddEffect(new EnemyScalingEffect(), this);
+            EnemyModifiers.ModifyEnemy(this);
         }
 
         private void InitContactDamage(AttackData contactAttackData)
@@ -122,9 +50,9 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //Initialize variables and events
         private void Start()
         {
-            //Initialize variables
+            SetEnemyData(enemyData);
+            
             enemyAnimator = GetComponent<EnemyAnimator>();
-            //
 
             if(isServer) OnDeath += (value) => EnemyDie();
         }
@@ -143,7 +71,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //Give money reward and destroy self.
         private void EnemyDie()
         {
-            GameManager.Instance.CmdSpawnMoney(MoneyReward, transform.position, CurrentParentIdentity);
+            GameManager.Instance.CmdSpawnMoney(enemyData.baseMoneyReward, transform.position, CurrentParentIdentity);
         }
     }
 }

@@ -10,7 +10,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
     public class EnemySpawner : MonoBehaviour
     {
         //Editor variables
-        [SerializeField] private EnemyData enemyData;
+        [SerializeField] private GameObject enemyPrefab;
         [SerializeField] private float range;
         [SerializeField] private float frequency = 0.5f;
         [SerializeField] public int destroyAfterSpawns;
@@ -30,7 +30,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
     
         private void Start()
         {
-            if(autoSpawn) SpawnEnemy(GetSpawnpoint(), enemyData); //Spawn 1 copy of our enemy on start
+            if(autoSpawn) SpawnEnemy(GetSpawnpoint(), enemyPrefab); //Spawn 1 copy of our enemy on start
         }
 
         private void Update()
@@ -41,14 +41,16 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         
             if (_timer > frequency)
             {
-                SpawnEnemy(GetSpawnpoint(), enemyData); //Spawn an enemy after enough time has elapsed
+                SpawnEnemy(GetSpawnpoint(), enemyPrefab); //Spawn an enemy after enough time has elapsed
                 _timer = 0; //And reset the timer
             }
         }
         
         [ServerCallback]
-        private void SpawnEnemy(Vector3 position, EnemyData data) //Spawns an enemy at specific position
+        private void SpawnEnemy(Vector3 position, GameObject prefab) //Spawns an enemy at specific position
         {
+            if (prefab == null) return;
+            
             if (_parentRoom != null && !_parentRoom.isServer) return;
             
             if (destroyAfterSpawns == 0)
@@ -58,7 +60,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                 return;
             }
 
-            GameManager.Instance.CmdSpawnEnemy(data.enemyName, position, _parentRoom.netIdentity);
+            GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(prefab), position, _parentRoom.netIdentity);
             //var enemy = ObjectSpawner.SpawnEnemy(enemyData, position, _parentRoom.netIdentity); //Instantiate the enemy
             
             if (_parentRoom != null)

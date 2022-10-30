@@ -57,7 +57,6 @@ namespace TonyDev.Game.Global.Network
 
             foreach (var (key, value) in _playerTiles)
             {
-                Debug.Log(key + ":" + value.username);
                 UsernameDict[key] = value.username;
             }
 
@@ -70,7 +69,6 @@ namespace TonyDev.Game.Global.Network
         private void CmdFinishLobby(int[] keys, string[] values)
         {
             RpcSetUsernames(keys, values);
-            Debug.Log("Cmd!");
             NetworkServer.Destroy(gameObject);
         }
 
@@ -80,11 +78,8 @@ namespace TonyDev.Game.Global.Network
             var newDict = new Dictionary<int, string>();
             for (var i = 0; i < keys.Length; i++)
             {
-                Debug.Log(keys[i] + ":" + values[i]);
                 newDict[keys[i]] = values[i];
             }
-
-            Debug.Log("Rpc!");
             UsernameDict = newDict;
         }
 

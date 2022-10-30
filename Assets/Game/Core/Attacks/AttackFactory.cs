@@ -25,7 +25,7 @@ namespace TonyDev.Game.Core.Attacks
         }
 
         //Responsible for creation of all non-projectile attacks.
-        public static void CreateStaticAttack(GameEntity owner, Vector2 pos, AttackData attackData, bool childOfOwner, [CanBeNull] GameObject prefab)
+        public static GameObject CreateStaticAttack(GameEntity owner, Vector2 pos, AttackData attackData, bool childOfOwner, [CanBeNull] GameObject prefab)
         {
             var attackObject = prefab == null ? new GameObject("Attack Object") : Object.Instantiate(prefab);
 
@@ -44,6 +44,8 @@ namespace TonyDev.Game.Core.Attacks
             var attack = attackObject.AddComponent<AttackComponent>();
             attack.SetData(attackData, owner);
             attack.OnDamageDealt += (f, ge, b) => owner.OnDamageOther?.Invoke(f, ge, b);
+
+            return attackObject;
         }
     }
 }

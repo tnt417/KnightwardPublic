@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using JetBrains.Annotations;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Attacks;
@@ -166,18 +167,16 @@ namespace TonyDev.Game.Global
 
         //All enemies should be spawned using this method.
         [Server]
-        public static void SpawnEnemy(EnemyData enemyData, Vector2 position, NetworkIdentity parent)
+        public static void SpawnEnemy(GameObject prefab, Vector2 position, NetworkIdentity parent)
         {
-            if (enemyData == null) return;
+            if (prefab == null) return;
 
-            var enemy = Instantiate(enemyData.prefab == null ? _instance.enemyPrefab : enemyData.prefab, position,
+            var enemy = Instantiate(prefab, position,
                 Quaternion.identity).GetComponent<Enemy>();
 
             NetworkServer.Spawn(enemy.gameObject);
 
             enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
-
-            enemy.CmdSetEnemyData(enemyData);
 
             enemy.CmdSetParentIdentity(parent);
         }

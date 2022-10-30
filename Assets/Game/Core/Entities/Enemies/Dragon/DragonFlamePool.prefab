@@ -68,12 +68,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   identifier: 
   damage: 10
-  damageMultiplier: 0.5
+  damageMultiplier: 0.2
   knockbackMultiplier: 0
-  damageCooldown: 0.2
+  damageCooldown: 0.5
   team: 0
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  ignoreInvincibility: 1
   inflictBuffs: []
   inflictEffects: []
   rb2d: {fileID: 0}

@@ -163,11 +163,7 @@ namespace TonyDev.Game.Core.Items
         [Command(requiresAuthority = false)]
         private void CmdRequestPickup(int senderMoney, NetworkConnectionToClient sender = null)
         {
-            Debug.Log($"Sender {sender?.connectionId} requested to pickup item {Item.itemName}");
-
             if (senderMoney < cost || !_pickupAble) return; //If the item is too expensive, don't allow pickup.
-
-            Debug.Log("Confirming pickup.");
 
             TargetConfirmPickup(sender, cost);
 
@@ -180,11 +176,8 @@ namespace TonyDev.Game.Core.Items
         [Command(requiresAuthority = false)]
         private void CmdRequestScrap(int senderMoney, NetworkConnectionToClient sender = null)
         {
-            Debug.Log($"Sender {sender?.connectionId} requested to scrap item {Item.itemName}");
 
             if (senderMoney < cost || !_pickupAble) return; //If the item is too expensive, don't allow pickup.
-
-            Debug.Log("Confirming scrap.");
 
             TargetConfirmScrap(sender, essence, cost);
             
@@ -217,7 +210,6 @@ namespace TonyDev.Game.Core.Items
         [Command(requiresAuthority = false)]
         private void CmdNotifyReplacementItem(Item newItem)
         {
-            Debug.Log($"Received notification of replacement item: {newItem?.itemName}");
 
             if (newItem == null)
                 NetworkServer.Destroy(gameObject); //If no item was replaced, just destroy this GroundItem

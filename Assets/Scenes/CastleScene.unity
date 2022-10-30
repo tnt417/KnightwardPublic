@@ -3153,19 +3153,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14e88d55862c6b748a9c87e733193e17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dictionaryEntries:
-  - key: slime
-    value: {fileID: 11400000, guid: 1882a091d8902104aa3924d73e0bc6c6, type: 2}
-  - key: bat
-    value: {fileID: 11400000, guid: 120a3a7563a202e4d9dc406ae358f2fb, type: 2}
-  - key: darkarcher
-    value: {fileID: 11400000, guid: 886e265884395d64baefda37f64cddfd, type: 2}
-  - key: icewizard
-    value: {fileID: 11400000, guid: cc8fce2e70e343b4fa78d64e34d59cd0, type: 2}
-  - key: dragon
-    value: {fileID: 11400000, guid: 5fd4f12622a778147a601d010a99b5c8, type: 2}
-  - key: bookblue
-    value: {fileID: 11400000, guid: fc72d8eb2f3ce0247948fff298204e5b, type: 2}
   prefabEntries:
   - key: broadswordEffect
     value: {fileID: 0}
@@ -3225,9 +3212,10 @@ MonoBehaviour:
     value: {fileID: 5404901476592251585, guid: 7ccb62db75597d84681d28a654f9c291, type: 3}
   - key: CelestialBuffEffect
     value: {fileID: 2004727793591240830, guid: 14b6d9f4f00ffa94c8e89e708999174e, type: 3}
-  animatorEntries:
-  - key: Slime
-    value: {fileID: 9100000, guid: 54cdb3cb100dbe94baa6a5254c230175, type: 2}
+  - key: GolemChain
+    value: {fileID: 6392207524536597030, guid: 606e0c0cc0b19724db978f126147dfe1, type: 3}
+  - key: ExplosiveDeath
+    value: {fileID: 2506707523895749022, guid: 6a9e7f6ca686a2a439c53065a162ae63, type: 3}
   mainSpriteAtlas: {fileID: 4343727234628468602, guid: f72388a137dbf724ea8fdd908e8f3ce8, type: 2}
 --- !u!4 &861375079
 Transform:
@@ -3581,23 +3569,35 @@ MonoBehaviour:
   - {fileID: 18489537}
   spawnRadius: 2
   enemySpawns:
-  - enemyDatas:
-    - {fileID: 11400000, guid: cc8fce2e70e343b4fa78d64e34d59cd0, type: 2}
+  - enemyPrefabs:
+    - {fileID: 8758389917884597047, guid: 19c363ba53de8b649b6bcc6629e46fbc, type: 3}
     difficultyRating: 2000
-  - enemyDatas:
-    - {fileID: 11400000, guid: 1882a091d8902104aa3924d73e0bc6c6, type: 2}
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
     difficultyRating: 500
-  - enemyDatas:
-    - {fileID: 11400000, guid: 886e265884395d64baefda37f64cddfd, type: 2}
+  - enemyPrefabs:
+    - {fileID: 8527089446520657152, guid: 14983a18b011814489321b49e3460803, type: 3}
     difficultyRating: 1000
-  - enemyDatas:
-    - {fileID: 11400000, guid: 120a3a7563a202e4d9dc406ae358f2fb, type: 2}
-    - {fileID: 11400000, guid: 120a3a7563a202e4d9dc406ae358f2fb, type: 2}
-    - {fileID: 11400000, guid: 120a3a7563a202e4d9dc406ae358f2fb, type: 2}
+  - enemyPrefabs:
+    - {fileID: 5390747538436612196, guid: 96f95ca97a146694f85952de52da3e3f, type: 3}
+    - {fileID: 5390747538436612196, guid: 96f95ca97a146694f85952de52da3e3f, type: 3}
+    - {fileID: 5390747538436612196, guid: 96f95ca97a146694f85952de52da3e3f, type: 3}
     difficultyRating: 500
-  - enemyDatas:
-    - {fileID: 11400000, guid: 5fd4f12622a778147a601d010a99b5c8, type: 2}
+  - enemyPrefabs:
+    - {fileID: 2454372739658903358, guid: 488733a3e5fb5b243871d8e60b448a31, type: 3}
     difficultyRating: 5000
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
+    - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+    difficultyRating: 1500
+  - enemyPrefabs:
+    - {fileID: 7880154579311171581, guid: e88e4c048269cd94d92c8e7e2a384562, type: 3}
+    difficultyRating: 3500
+  breakLength: 150
+  breakFrequency: 5
+  regularLength: 15
+  percentageActiveSpawning: 0.5
   wavesSpawned: 0
 --- !u!4 &1223629565
 Transform:
@@ -3664,6 +3664,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: RoomManager
       objectReference: {fileID: 0}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: generateRoomPrefabs.Array.size
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: generateRoomPrefabs.Array.data[5]
+      value: 
+      objectReference: {fileID: 9018416951601929709, guid: 6a8916900ba70b143906f8b8078edf29, type: 3}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: generateRoomPrefabs.Array.data[6]
+      value: 
+      objectReference: {fileID: 1158627630686436465, guid: d1329fb3c8fcda54c92531ae2c8e3177, type: 3}
     - target: {fileID: 8245161763792584620, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
       propertyPath: m_RootOrder
       value: 0

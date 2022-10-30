@@ -90,7 +90,6 @@ namespace TonyDev.Game.Level.Decorations
 
         public void SetLabel(string newLabel, bool controls)
         {
-            Debug.Log(_controlText);
             StringBuilder sb = new();
 
             sb.Append(newLabel + "\n");

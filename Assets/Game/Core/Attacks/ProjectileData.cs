@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using TonyDev.Game.Core.Behavior;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
@@ -22,6 +23,7 @@ namespace TonyDev.Game.Core.Attacks
         public bool destroyOnApply;
         [Tooltip("-1 for infinite")] public float lifetime;
         public string spawnOnDestroyKey;
+        public bool ignoreInvincibility = false;
     }
 
     [Serializable]
@@ -38,7 +40,7 @@ namespace TonyDev.Game.Core.Attacks
         public float travelSpeed;
         public float offsetDegrees;
         public float waveAmplitude;
-        public float waveFrequency;
+        public float waveLength;
         public float waveDistance;
         public bool childOfOwner;
 
@@ -72,6 +74,12 @@ namespace TonyDev.Game.Core.Attacks
                 sprite = projectileObject
                     .AddComponent<SpriteRenderer>(); //Add SpriteRenderer if one doesn't already exist
             var destroy = projectileObject.AddComponent<DestroyAfterSeconds>();
+
+            var projectileBehaviors = projectileObject.GetComponents<ProjectileBehavior>();
+            foreach (var pb in projectileBehaviors)
+            {
+                pb.owner = owner;
+            }
             
             if (!disableMovement)
             {
