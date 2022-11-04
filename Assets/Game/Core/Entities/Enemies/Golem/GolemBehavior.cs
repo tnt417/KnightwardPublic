@@ -38,7 +38,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Golem
                     PlayAnimation(EnemyAnimationState.Move);
                     await FollowForSeconds(Enemy.Targets[0].transform, followSpeed, followTime);
                     PlayAnimation(EnemyAnimationState.Stop);
-                    await UniTask.Delay(1);
+                    await UniTask.Delay(TimeSpan.FromSeconds(0.5));
                     PlayAnimation(EnemyAnimationState.Attack);
                     await ShootAnimation().First();
                     ShootProjectile(throwProjectile, transform.position, GetDirectionToFirstTarget());

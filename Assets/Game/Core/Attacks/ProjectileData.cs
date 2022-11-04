@@ -47,6 +47,8 @@ namespace TonyDev.Game.Core.Attacks
         [Header("Effects")] [SerializeReference] [SerializeField]
         public List<GameEffect> effects;
 
+        [NonSerialized] public Action<float, GameEntity, bool> OnHitOther;
+
         //The only place that projectiles should be spawned from. Creates a projectile using this instance of the class.
         public GameObject SpawnSelf(Vector2 position, Vector2 direction, GameEntity owner, float sizeMultiplier,
             string identifier)
@@ -69,6 +71,7 @@ namespace TonyDev.Game.Core.Attacks
             var attack = projectileObject.GetComponent<AttackComponent>();
             if (attack == null)
                 attack = projectileObject.AddComponent<AttackComponent>(); //Don't override existing attack components.
+
             var sprite = projectileObject.GetComponentInChildren<SpriteRenderer>();
             if (sprite == null)
                 sprite = projectileObject
@@ -96,6 +99,7 @@ namespace TonyDev.Game.Core.Attacks
             //Set the AttackComponent's data and owner.
             attack.SetData(attackData, owner);
             attack.identifier = identifier;
+            attack.OnDamageDealt += OnHitOther;
 
             //Populate the AttackComponent's inflict effects
             foreach (var e in effects)

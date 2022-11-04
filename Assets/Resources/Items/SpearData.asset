@@ -29,25 +29,7 @@ MonoBehaviour:
       source: Weapon
     itemEffects:
     - rid: 4292349781711257600
-    projectiles:
-    - prefabKey: 
-      projectileSprite: {fileID: 21300000, guid: 919dc578ee3403c4cb9d68eecd493a98, type: 3}
-      attackData:
-        damageMultiplier: 1
-        knockbackMultiplier: 1
-        hitboxRadius: 0.4
-        team: 1
-        destroyOnApply: 0
-        lifetime: 2
-        spawnOnDestroyKey: 
-      disableMovement: 0
-      travelSpeed: 20
-      offsetDegrees: 0
-      waveAmplitude: 0
-      waveFrequency: 0
-      waveDistance: 0
-      childOfOwner: 0
-      effects: []
+    projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
@@ -57,9 +39,50 @@ MonoBehaviour:
       data:
         effectDescription: 
         ActivateButton: 113
-        Cooldown: 10
-        Duration: 5
+        Cooldown: 9
+        Duration: 3
         abilitySprite: {fileID: 21300000, guid: 919dc578ee3403c4cb9d68eecd493a98, type: 3}
-        MoveSpeedMultiplier: 1.4
-        AttackSpeedMultiplier: 1.4
+        MoveSpeedMultiplier: 1.5
+        AttackSpeedMultiplier: 1.5
+        AoeMultiplier: 1.2
         PoisonDPSMultiplier: 0.1
+        regularProjectile:
+          prefabKey: 
+          projectileSprite: {fileID: 21300000, guid: 919dc578ee3403c4cb9d68eecd493a98, type: 3}
+          attackData:
+            damageMultiplier: 1
+            knockbackMultiplier: 1
+            hitboxRadius: 0.4
+            team: 1
+            destroyOnApply: 0
+            lifetime: 2
+            spawnOnDestroyKey: 
+            ignoreInvincibility: 0
+          disableMovement: 0
+          travelSpeed: 20
+          offsetDegrees: 0
+          waveAmplitude: 0
+          waveLength: 0
+          waveDistance: 0
+          childOfOwner: 0
+          effects: []
+        empoweredProjectile:
+          prefabKey: SpearShot
+          projectileSprite: {fileID: 21300000, guid: 919dc578ee3403c4cb9d68eecd493a98, type: 3}
+          attackData:
+            damageMultiplier: 1
+            knockbackMultiplier: 1
+            hitboxRadius: 0.4
+            team: 1
+            destroyOnApply: 0
+            lifetime: 2
+            spawnOnDestroyKey: 
+            ignoreInvincibility: 0
+          disableMovement: 0
+          travelSpeed: 30
+          offsetDegrees: 0
+          waveAmplitude: 0
+          waveLength: 0
+          waveDistance: 0
+          childOfOwner: 0
+          effects: []

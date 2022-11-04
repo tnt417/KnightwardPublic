@@ -262,7 +262,7 @@ namespace TonyDev.Game.Global
 
         private void Init()
         {
-            Crystal.Instance.OnDeath += value => GameOver();
+            Crystal.Instance.OnDeathOwner += value => GameOver();
             EnterArenaPhase();
         }
 

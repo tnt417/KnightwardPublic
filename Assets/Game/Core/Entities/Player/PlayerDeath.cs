@@ -27,7 +27,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public override void OnStartLocalPlayer()
         {
-            Player.LocalInstance.OnDeath += (float f) => DieLocal();
+            Player.LocalInstance.OnDeathOwner += (float f) => DieLocal();
         }
 
         private void Update()

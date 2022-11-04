@@ -10,6 +10,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
+using UnityEditor;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities
@@ -130,7 +131,7 @@ namespace TonyDev.Game.Core.Entities
         #region Attack
         protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
         private float _attackTimer;
-        protected Action OnAttack;
+        public Action OnAttack;
         
         //Invokes the attack event
         public void Attack() //Called in animator events on some entities
@@ -207,15 +208,15 @@ namespace TonyDev.Game.Core.Entities
             Stats.OnStatsChanged += UpdateStats;
             
             CurrentHealth = MaxHealth;
-            OnHealthChanged += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
-            OnHealthChanged?.Invoke(CurrentHealth);
+            OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
+            OnHealthChangedOwner?.Invoke(CurrentHealth);
 
             UpdateStats();
             
             UpdateTarget();
         }
 
-        public Action<float, GameEntity, bool> OnDamageOther;
+        public Action<float, GameEntity, bool> OnDamageOther; //TODO: Damage types: Contact, Projectile, DoT, AoE, etc. (Use to better control PoisonInflictEffect)
 
         private void UpdateStats()
         {
@@ -408,7 +409,7 @@ namespace TonyDev.Game.Core.Entities
 
             if (damage > 0 && IsInvulnerable)
             {
-                OnTryHurtInvulnerable?.Invoke(damage);
+                OnTryHurtInvulnerableOwner?.Invoke(damage);
                 return 0;
             }
 
@@ -417,7 +418,7 @@ namespace TonyDev.Game.Core.Entities
                 ? Mathf.Clamp(Stats.ModifyIncomingDamage(damage), 0, Mathf.Infinity)
                 : damage;
 
-            (modifiedDamage > 0 ? OnHurt : OnHeal)?.Invoke(modifiedDamage);
+            (modifiedDamage > 0 ? OnHurtOwner : OnHealOwner)?.Invoke(modifiedDamage);
 
             switch (modifiedDamage)
             {
@@ -431,7 +432,7 @@ namespace TonyDev.Game.Core.Entities
 
             CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth); //Clamp health
 
-            OnHealthChanged?.Invoke(CurrentHealth);
+            OnHealthChangedOwner?.Invoke(CurrentHealth);
 
             if (CurrentHealth <= 0 && !IsInvulnerable) Die();
 
@@ -443,24 +444,38 @@ namespace TonyDev.Game.Core.Entities
             if (!EntityOwnership) return;
             
             CurrentHealth = newHealth;
-            OnHealthChanged?.Invoke(newHealth);
+            OnHealthChangedOwner?.Invoke(newHealth);
         }
 
         public virtual void Die()
         {
             if (!EntityOwnership) return;
-
-            OnDeath?.Invoke(0);
+         
+            OnDeathOwner?.Invoke(0);
             
             if(this is not Player.Player) NetworkServer.Destroy(gameObject);
         }
 
-        public event IDamageable.HealthAction OnTryHurtInvulnerable;
-        public event IDamageable.HealthAction OnHealthChanged;
-        public event IDamageable.HealthAction OnHeal;
-        public event IDamageable.HealthAction OnHurt;
-        public event IDamageable.HealthAction OnDeath;
+        public event IDamageable.HealthAction OnTryHurtInvulnerableOwner;
+        public event IDamageable.HealthAction OnHealthChangedOwner;
+        public event IDamageable.HealthAction OnHealOwner;
+        public event IDamageable.HealthAction OnHurtOwner;
+        public event IDamageable.HealthAction OnDeathOwner;
 
         #endregion
+
+        public Action OnDeathBroadcast;
+
+        [Command(requiresAuthority = false)]
+        private void CmdBroadcastDeath()
+        {
+            RpcBroadcastDeath();
+        }
+
+        [ClientRpc]
+        private void RpcBroadcastDeath()
+        {
+            OnDeathBroadcast?.Invoke();
+        }
     }
 }

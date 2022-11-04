@@ -19,6 +19,7 @@ namespace TonyDev.Editor
         private SerializedProperty _itemData;
         private SerializedProperty _costMultiplier;
         private SerializedProperty _onItemInteractServer;
+        private SerializedProperty _onItemInteractGlobal;
         private SerializedProperty _spawned;
         
         private void OnEnable()
@@ -34,6 +35,7 @@ namespace TonyDev.Editor
             _itemData = serializedObject.FindProperty(nameof(LevelItemSpawner.itemData));
             _costMultiplier = serializedObject.FindProperty(nameof(LevelItemSpawner.costMultiplier));
             _onItemInteractServer = serializedObject.FindProperty(nameof(LevelItemSpawner.onItemInteractServer));
+            _onItemInteractGlobal = serializedObject.FindProperty(nameof(LevelItemSpawner.onItemInteractGlobal));
             _spawned = serializedObject.FindProperty(nameof(LevelItemSpawner.spawned));
         }
 
@@ -69,6 +71,7 @@ namespace TonyDev.Editor
                 }
 
                 EditorGUILayout.PropertyField(_onItemInteractServer);
+                EditorGUILayout.PropertyField(_onItemInteractGlobal);
             }
 
             serializedObject.ApplyModifiedProperties();

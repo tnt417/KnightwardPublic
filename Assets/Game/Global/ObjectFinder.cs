@@ -51,6 +51,7 @@ namespace TonyDev.Game.Global
                 var enemyNameInvariant = enemyObject.GetComponent<Enemy>().EnemyName.ToLowerInvariant();
 
                 Prefabs.Add(enemyNameInvariant, enemyObject);
+                NetworkClient.RegisterPrefab(enemyObject);
             }
 
             _spriteAtlas = mainSpriteAtlas;

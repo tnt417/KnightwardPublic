@@ -1,7 +1,9 @@
 using System;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
+using TonyDev.Game.Global;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects.ItemEffects
@@ -11,26 +13,73 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
     {
         public float MoveSpeedMultiplier;
         public float AttackSpeedMultiplier;
+        public float AoeMultiplier;
         public float PoisonDPSMultiplier;
 
-        private PoisonEffect _poisonEffect;
-        
-        protected override void OnAbilityActivate()
+        public ProjectileData regularProjectile;
+        public ProjectileData empoweredProjectile;
+
+        private bool _empowered;
+
+        public override void OnAddOwner()
         {
-            _poisonEffect = new PoisonEffect()
+            empoweredProjectile.OnHitOther += InflictPoison;
+
+            base.OnAddOwner();
+
+            Entity.OnAttack += () =>
+                {
+                    var spawnPos = Entity.transform.position;
+                    var direction = GameManager.MouseDirection;
+
+                    if (_empowered)
+                    {
+                        var direction1 = Tools.Rotate(direction, -10 * Mathf.Deg2Rad);
+                        var direction2 = Tools.Rotate(direction, 10 * Mathf.Deg2Rad);
+                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction, empoweredProjectile);
+                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction1, empoweredProjectile);
+                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction2, empoweredProjectile);
+                    }
+                    else
+                    {
+                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction, regularProjectile);
+                    }
+                }
+                ;
+        }
+
+        public override void OnRemoveOwner()
+        {
+            base.OnRemoveOwner();
+            empoweredProjectile.OnHitOther -= InflictPoison;
+        }
+
+        public void InflictPoison(float dmg, GameEntity entity, bool crit)
+        {
+            entity.CmdAddEffect(new PoisonEffect()
             {
                 Damage = PoisonDPSMultiplier * Entity.Stats.GetStat(Stat.Damage),
                 Ticks = 10,
                 Frequency = 1f
-            };
-            PlayerInventory.Instance.WeaponItem.projectiles[0].effects.Add(_poisonEffect);
-            Entity.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.MoveSpeed, MoveSpeedMultiplier, "spearEffect"), Duration);
-            Entity.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.AttackSpeed, AttackSpeedMultiplier, "spearEffect"), Duration);
+            }, Entity);
+        }
+
+        protected override void OnAbilityActivate()
+        {
+            _empowered = true;
+
+            Entity.Stats.AddBuff(
+                new StatBonus(StatType.Multiplicative, Stat.MoveSpeed, MoveSpeedMultiplier, "spearEffect"), Duration);
+            Entity.Stats.AddBuff(
+                new StatBonus(StatType.Multiplicative, Stat.AttackSpeed, AttackSpeedMultiplier, "spearEffect"),
+                Duration);
+            Entity.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.AoeSize, AoeMultiplier, "spearEffect"),
+                Duration);
         }
 
         protected override void OnAbilityDeactivate()
         {
-            PlayerInventory.Instance.WeaponItem.projectiles[0].effects.Remove(_poisonEffect);
+            _empowered = false;
         }
     }
 }

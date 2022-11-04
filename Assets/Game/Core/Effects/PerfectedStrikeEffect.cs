@@ -27,6 +27,7 @@ namespace TonyDev.Game.Core.Effects
             
             if (Entity is Player)
             {
+                ObjectSpawner.SpawnTextPopup(other.transform.position, "Cooldown discounted!", Color.cyan);
                 foreach (var ability in PlayerInventory.Instance.WeaponItem.itemEffects.OfType<AbilityEffect>())
                 {
                     ability.DiscountCooldown(remainingCooldownReduce, false);

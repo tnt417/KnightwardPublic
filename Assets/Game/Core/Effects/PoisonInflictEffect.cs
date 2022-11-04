@@ -12,21 +12,24 @@ namespace TonyDev.Game.Core.Effects
         public float TickFrequency;
         public int TickAmount;
         
-        private PoisonEffect _poisonEffect;
         public override void OnAddOwner()
         {
-            _poisonEffect = new PoisonEffect()
+            Entity.OnDamageOther += InflictPoison;
+        }
+
+        public void InflictPoison(float dmg, GameEntity entity, bool crit)
+        {
+            entity.CmdAddEffect(new PoisonEffect()
             {
                 Damage = TotalDamageMultiplier * Entity.Stats.GetStat(Stat.Damage) / TickAmount,
                 Ticks = TickAmount,
                 Frequency = TickFrequency
-            };
-            PlayerInventory.Instance.WeaponItem.projectiles[0].effects.Add(_poisonEffect);
+            }, Entity);
         }
 
         public override void OnRemoveOwner()
         {
-            PlayerInventory.Instance.WeaponItem.projectiles[0].effects.Remove(_poisonEffect);
+            Entity.OnDamageOther -= InflictPoison;
         }
     }
 }

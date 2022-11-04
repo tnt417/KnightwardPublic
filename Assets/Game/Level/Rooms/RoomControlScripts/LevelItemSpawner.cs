@@ -62,18 +62,19 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         public float costMultiplier = 1;
 
         [Tooltip("Called on the server when a ground item is picked up or a chest is opened.")]
-        public UnityEvent onItemInteractServer;
+        public UnityEvent onItemInteractServer = new();
+
+        [Tooltip("Called on all clients when a ground item is picked up or a chest is opened.")]
+        public UnityEvent onItemInteractGlobal = new();
         //
 
         public bool spawned;
 
+        private GameObject _spawnedItemObject;
+
         private void Start()
         {
-            if (!NetworkServer.active)
-            {
-                Destroy(gameObject);
-                return;
-            }
+            if (!NetworkServer.active) return;
 
             if (autoSpawn)
             {
@@ -81,7 +82,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             }
         }
 
-        [Server]
+        [ServerCallback]
         public void SpawnItem()
         {
             if (spawned) return; //Don't spawn twice.
@@ -93,10 +94,12 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             switch (generateSetting)
             {
                 case ItemGenerateSetting.FromGenerated:
-                    
+
                     item = ItemGenerator.GenerateItemOfType(randomItemType ? Item.RandomItemType : generateItemType,
-                        randomRarity ? Item.RandomRarity(rarityBoost) : generateRarity); //Generate a random item of proper specifications
-                    
+                        randomRarity
+                            ? Item.RandomRarity(rarityBoost)
+                            : generateRarity); //Generate a random item of proper specifications
+
                     break;
                 case ItemGenerateSetting.FromItemData:
                     if (itemData == null)
@@ -121,16 +124,41 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                     var chest = ObjectSpawner.SpawnChest(item, transform.position, parent); //Spawn a chest
                     chest.onOpenServer.AddListener(() =>
                         onItemInteractServer.Invoke()); //Invoke interact event when the chest is opened
+                    chest.onOpenGlobal.AddListener(() =>
+                        onItemInteractGlobal.Invoke()); //Invoke interact event when the chest is opened
+                    _spawnedItemObject = chest.gameObject;
                     break;
                 case ItemSpawnType.Item: //If spawn an item...
                     var groundItem =
-                        ObjectSpawner.SpawnGroundItem(item, costMultiplier, transform.position, parent); //Spawn a ground item
+                        ObjectSpawner.SpawnGroundItem(item, costMultiplier, transform.position,
+                            parent); //Spawn a ground item
                     groundItem.onPickupServer.AddListener(() =>
                         onItemInteractServer.Invoke()); //Invoke interact event when the item is picked up
+                    groundItem.onPickupGlobal.AddListener(() =>
+                        onItemInteractGlobal.Invoke()); //Invoke interact event when the item is picked up
+                    _spawnedItemObject = groundItem.gameObject;
                     break;
             }
 
             spawned = true;
+        }
+
+        [ServerCallback]
+        public void RegenItemServer()
+        {
+            DestroySpawnedItemServer();
+
+            spawned = false;
+            SpawnItem();
+        }
+
+        [ServerCallback]
+        public void DestroySpawnedItemServer()
+        {
+            if (_spawnedItemObject != null)
+            {
+                NetworkServer.Destroy(_spawnedItemObject);
+            }
         }
     }
 }

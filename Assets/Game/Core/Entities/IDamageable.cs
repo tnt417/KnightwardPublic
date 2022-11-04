@@ -16,9 +16,9 @@ namespace TonyDev.Game.Core.Entities
         bool IsTangible { get; }
         void Die();
         delegate void HealthAction(float value);
-        event HealthAction OnHealthChanged;
-        event HealthAction OnHeal;
-        event HealthAction OnHurt;
-        event HealthAction OnDeath;
+        event HealthAction OnHealthChangedOwner;
+        event HealthAction OnHealOwner;
+        event HealthAction OnHurtOwner;
+        event HealthAction OnDeathOwner;
     }
 }

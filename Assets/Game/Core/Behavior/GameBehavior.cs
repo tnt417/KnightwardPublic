@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Mirror;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Behavior
@@ -9,6 +10,7 @@ namespace TonyDev.Game.Core.Behavior
     {
         protected CancellationTokenSource DestroyToken;
         
+        [ServerCallback]
         protected void Start()
         {
             DestroyToken = new CancellationTokenSource();
@@ -16,6 +18,7 @@ namespace TonyDev.Game.Core.Behavior
             ExecuteBehavior().AttachExternalCancellation(DestroyToken.Token);
         }
 
+        [ServerCallback]
         private void OnDestroy()
         {
             DestroyToken.Cancel();

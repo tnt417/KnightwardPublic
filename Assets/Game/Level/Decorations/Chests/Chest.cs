@@ -18,6 +18,7 @@ namespace TonyDev.Game.Level.Decorations.Chests
         [SerializeField] private Animator chestAnimator;
 
         public UnityEvent onOpenServer;
+        public UnityEvent onOpenGlobal;
 
         [SyncVar] public bool opened;
 
@@ -53,6 +54,7 @@ namespace TonyDev.Game.Level.Decorations.Chests
         [ClientRpc]
         private void RpcSetOpen()
         {
+            onOpenGlobal?.Invoke();
             chestAnimator.Play("ChestOpen");
         }
 

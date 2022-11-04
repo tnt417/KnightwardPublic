@@ -11,12 +11,12 @@ namespace TonyDev.Game.Core.Items.Relics.Stopwatch
         public override void OnAddServer()
         {
             Timer.TickSpeedMultiplier = 0.75f;
-            Entity.OnHurt += OnPlayerHit;
+            Entity.OnHurtOwner += OnPlayerHit;
         }
         public override void OnRemoveServer()
         {
             Timer.TickSpeedMultiplier = 1f;
-            Entity.OnHurt -= OnPlayerHit;
+            Entity.OnHurtOwner -= OnPlayerHit;
         }
         private void OnPlayerHit(float value)
         {

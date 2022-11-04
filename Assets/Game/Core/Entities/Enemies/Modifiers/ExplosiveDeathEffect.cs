@@ -11,12 +11,12 @@ namespace TonyDev.Game.Core.Entities.Enemies.Modifiers
         public float explodeRadius;
         public float explodeHealthProportion;
 
-        public override void OnAddServer()
+        public override void OnAddClient()
         {
-            Entity.OnDeath += Die;
+            Entity.OnDeathBroadcast += Die;
         }
 
-        private void Die(float value)
+        private void Die()
         {
             if (Entity == null) return;
             
@@ -24,7 +24,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Modifiers
 
             var go = Object.Instantiate(prefab, Entity.transform.position, Quaternion.identity);
 
-            NetworkServer.Spawn(go);
+            go.GetComponent<AttackComponent>().damage = Entity.Stats.GetStat(Stat.Damage);
         }
     }
 }

@@ -169,14 +169,16 @@ namespace TonyDev.Game.Core.Items
         }
         #endregion
 
+        public static float DungeonInteractMultiplier => (1 + GameManager.DungeonFloor / 5f);
+        
         public static int GenerateCost(Item item)
         {
             return (int) (item.itemRarity switch
             {
-                ItemRarity.Common => 10f * (1 + GameManager.DungeonFloor / 5f),
-                ItemRarity.Uncommon => 15f * (1 + GameManager.DungeonFloor / 5f),
-                ItemRarity.Rare => 20f * (1 + GameManager.DungeonFloor / 5f),
-                ItemRarity.Unique => 25f * (1 + GameManager.DungeonFloor / 5f),
+                ItemRarity.Common => 10f * DungeonInteractMultiplier,
+                ItemRarity.Uncommon => 15f * DungeonInteractMultiplier,
+                ItemRarity.Rare => 20f * DungeonInteractMultiplier,
+                ItemRarity.Unique => 25f * DungeonInteractMultiplier,
                 _ => 0
             });
         }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using Mirror;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.UI;
@@ -25,6 +26,7 @@ namespace TonyDev.Game.Level.Decorations
     {
         [SerializeField] public UnityEvent<InteractType> onInteract = new();
         [SerializeField] protected int cost;
+        [SerializeField] protected bool scaleCost;
         [SerializeField] private string label;
 
         protected bool IsInteractable = true;
@@ -69,7 +71,7 @@ namespace TonyDev.Game.Level.Decorations
             
             AddInteractKey(KeyCode.E, InteractType.Interact);
 
-            SetCost(cost);
+            SetCost((int)(scaleCost ? cost*ItemGenerator.DungeonInteractMultiplier : cost));
             SetLabel(label, true);
 
             onInteract.AddListener(OnInteract);
@@ -103,6 +105,20 @@ namespace TonyDev.Game.Level.Decorations
         {
             foreach (var kc in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Input.GetKeyDown(kv.Key) && IsInteractable))
             {
+                if (kc.Value == InteractType.Interact && cost != 0)
+                {
+                    if(GameManager.Money < cost)
+                    {
+                        ObjectSpawner.SpawnTextPopup(transform.position, "You can't afford this!", Color.red, 0.8f);
+                        continue;
+                    }
+                    else
+                    {
+                        ObjectSpawner.SpawnTextPopup(transform.position, "Purchased!", Color.green, 0.8f);
+                        GameManager.Money -= cost;
+                    }
+                }
+
                 onInteract?.Invoke(kc.Value);
             }
 

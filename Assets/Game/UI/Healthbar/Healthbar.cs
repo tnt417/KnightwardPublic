@@ -32,7 +32,7 @@ namespace TonyDev.Game.UI.Healthbar
             healthSlider.maxValue = _attachedDamageable.MaxHealth;
             healthSlider.value = _attachedDamageable.CurrentHealth;
 
-            _attachedDamageable.OnHealthChanged += (float value) => UpdateUI(); //Set the UI to be updated whenever the health is changed
+            _attachedDamageable.OnHealthChangedOwner += (float value) => UpdateUI(); //Set the UI to be updated whenever the health is changed
         }
 
         private void Update()

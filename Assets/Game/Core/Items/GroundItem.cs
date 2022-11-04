@@ -29,7 +29,8 @@ namespace TonyDev.Game.Core.Items
         private bool _pickupAble = true;
 
         [FormerlySerializedAs("onPickup")]
-        public UnityEvent onPickupServer = new(); //TODO: this won't work either. Will need to be removed.
+        public UnityEvent onPickupServer = new();
+        public UnityEvent onPickupGlobal = new();
 
         private void Awake()
         {
@@ -165,6 +166,7 @@ namespace TonyDev.Game.Core.Items
         {
             if (senderMoney < cost || !_pickupAble) return; //If the item is too expensive, don't allow pickup.
 
+            RpcNotifyPickup();
             TargetConfirmPickup(sender, cost);
 
             StartCoroutine(
@@ -176,12 +178,18 @@ namespace TonyDev.Game.Core.Items
         [Command(requiresAuthority = false)]
         private void CmdRequestScrap(int senderMoney, NetworkConnectionToClient sender = null)
         {
-
             if (senderMoney < cost || !_pickupAble) return; //If the item is too expensive, don't allow pickup.
 
+            RpcNotifyPickup();
             TargetConfirmScrap(sender, essence, cost);
-            
+
             onPickupServer.Invoke(); //Invoke the onPickup method
+        }
+
+        [ClientRpc]
+        private void RpcNotifyPickup()
+        {
+            onPickupGlobal.Invoke();
         }
 
         [TargetRpc]

@@ -18,8 +18,8 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
         public override void OnAddOwner()
         {
             base.OnAddOwner();
-            Entity.OnTryHurtInvulnerable += TryDeflect;
-            Entity.OnHurt += ResetDeflects;
+            Entity.OnTryHurtInvulnerableOwner += TryDeflect;
+            Entity.OnHurtOwner += ResetDeflects;
 
             _broadswordParticleEffect = new ParticleTrailEffect
             {
@@ -82,8 +82,8 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
         public override void OnRemoveOwner()
         {
             base.OnRemoveOwner();
-            Entity.OnTryHurtInvulnerable -= TryDeflect;
-            Entity.OnHurt -= ResetDeflects;
+            Entity.OnTryHurtInvulnerableOwner -= TryDeflect;
+            Entity.OnHurtOwner -= ResetDeflects;
             Entity.CmdRemoveEffect(_broadswordParticleEffect);
         }
 

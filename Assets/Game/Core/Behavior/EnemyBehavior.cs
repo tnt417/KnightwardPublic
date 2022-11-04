@@ -31,6 +31,16 @@ namespace TonyDev.Game.Core.Behavior
                 await UniTask.WaitForFixedUpdate();
             }
         }
+
+        protected async UniTask FollowUntil(Transform followTransform, float speed, Func<bool> predicate)
+        {
+            while (!predicate.Invoke())
+            {
+                await UniTask.WaitUntil(() => Enemy.Targets.Count > 0);
+                Rb2d.velocity = (followTransform.transform.position - transform.position).normalized * speed;
+                await UniTask.WaitForFixedUpdate();
+            }
+        }
         
         protected async UniTask GotoOverSeconds(Vector2 position, float seconds)
         {

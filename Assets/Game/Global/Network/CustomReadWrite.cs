@@ -4,13 +4,8 @@ using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Entities.Player;
-using TonyDev.Game.Core.Items;
-using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.U2D;
-using Object = System.Object;
 
 namespace TonyDev.Game.Global.Network
 {
@@ -55,38 +50,9 @@ namespace TonyDev.Game.Global.Network
             }
         }
 
-        public static string SerializeGameEffect(GameEffect gameEffect)
-        {
-            return JsonConvert.SerializeObject(gameEffect, new JsonSerializerSettings()
-            {
-                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
-            });
-        }
-
-        public static GameEffect DeserializeGameEffect(string gameEffect)
-        {
-            var obj = JsonConvert.DeserializeObject(gameEffect);
-
-            if (obj == null) return null;
-            
-            var ge = (GameEffect) Activator.CreateInstance(GameEffect.GameEffectTypes.FirstOrDefault(t => t.Name == obj.GetType().Name) ?? typeof(GameEffect));
-            
-            JsonConvert.PopulateObject(gameEffect, ge);
-
-            return ge;
-        }
-
-        public static GameEffect CloneGameEffect(GameEffect gameEffect)
-        {
-            return DeserializeGameEffect(SerializeGameEffect(gameEffect));
-        }
-        
         public static void WriteGameEffect(this NetworkWriter writer, GameEffect value)
         {
-            // writer.WriteString(SerializeGameEffect(value));
-            //
-            // return;
-            
+
             var isNull = value == null;
             writer.WriteBool(isNull);
             if (isNull) return;

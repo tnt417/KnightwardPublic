@@ -26,6 +26,10 @@ namespace TonyDev.Game.Core.Effects
         [NonSerialized] public GameEntity Entity; //The entity affected by the effect
         [NonSerialized] public GameEntity Source; //The entity that inflicted the effect
 
+        public virtual void OnAddClient() {} //Called on all clients when the effect is added to an entity
+        public virtual void OnRemoveClient() {} //Called on all clients when the effect is removed from an entity
+        public virtual void OnUpdateClient() {} //Called on all clients when the effect updates on an entity
+        
         public virtual void OnAddServer() {} //Called on the server when the effect is added to an entity
         public virtual void OnRemoveServer() {} //Called on the server when the effect is removed from an entity
         public virtual void OnUpdateServer() {} //Called on the server when the effect updates on an entity

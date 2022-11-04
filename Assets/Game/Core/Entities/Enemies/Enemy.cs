@@ -54,7 +54,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             
             enemyAnimator = GetComponent<EnemyAnimator>();
 
-            if(isServer) OnDeath += (value) => EnemyDie();
+            if(isServer) OnDeathOwner += (value) => EnemyDie();
         }
 
         //Sets up the animator to play certain animations on certain events
@@ -62,7 +62,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             OnLocalHurt += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Hurt);
             if (!EntityOwnership) return;
-            OnDeath += (float value) => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Die);
+            OnDeathOwner += (float value) => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Die);
             OnAttack += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Attack);
             //_enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Move);
             //_enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Stop);

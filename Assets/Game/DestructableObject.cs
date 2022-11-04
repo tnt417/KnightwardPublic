@@ -41,9 +41,9 @@ namespace TonyDev.Game
             Destroy(gameObject);
         }
 
-        public event IDamageable.HealthAction OnHealthChanged;
-        public event IDamageable.HealthAction OnHeal;
-        public event IDamageable.HealthAction OnHurt;
-        public event IDamageable.HealthAction OnDeath;
+        public event IDamageable.HealthAction OnHealthChangedOwner;
+        public event IDamageable.HealthAction OnHealOwner;
+        public event IDamageable.HealthAction OnHurtOwner;
+        public event IDamageable.HealthAction OnDeathOwner;
     }
 }
