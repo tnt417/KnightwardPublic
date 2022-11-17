@@ -9,6 +9,8 @@ namespace TonyDev.Game.UI.Healthbar
     {
         //Editor variables
         [SerializeField] private Slider healthSlider;
+        [SerializeField] private Slider lagBehindSlider;
+        [SerializeField] private Slider shieldSlider;
         [SerializeField] private Image fillImage;
         //
     
@@ -17,8 +19,7 @@ namespace TonyDev.Game.UI.Healthbar
         private void Start()
         {
             _attachedDamageable = GetComponentInParent<IDamageable>(); //Initialize the IDamageable component
-        
-        
+            
             //Destroy the health bar if there is no IDamageable component attached and print a warning.
             if (_attachedDamageable == null)
             {
@@ -32,11 +33,12 @@ namespace TonyDev.Game.UI.Healthbar
             healthSlider.maxValue = _attachedDamageable.MaxHealth;
             healthSlider.value = _attachedDamageable.CurrentHealth;
 
-            _attachedDamageable.OnHealthChangedOwner += (float value) => UpdateUI(); //Set the UI to be updated whenever the health is changed
+            //_attachedDamageable.OnHealthChangedOwner += (float value) => UpdateUI(); //Set the UI to be updated whenever the health is changed
         }
 
         private void Update()
         {
+            lagBehindSlider.value = Mathf.MoveTowards(lagBehindSlider.value, healthSlider.value/healthSlider.maxValue, 0.5f * Time.deltaTime);
             UpdateUI();
         }
 

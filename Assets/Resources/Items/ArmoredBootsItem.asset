@@ -15,8 +15,7 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: c9a9bb5bd4a6aee42acbbf62d7eeee18, type: 3}
     itemName: Armored Boots
-    itemDescription: <color=green>Grants 20 armor and increases player armor by 50%
-      </color> <color=red>BUT... lose 20% of movement speed.</color>
+    itemDescription: 
     itemType: 2
     itemRarity: 1
     statBonuses: []
@@ -31,6 +30,6 @@ MonoBehaviour:
       type: {class: ArmoredBootEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
         effectDescription: 
-        armorBonusFlat: 20
-        armorBonusMultiplier: 0.5
+        armorBonusFlat: 15
+        armorBonusMultiplier: 0.4
         moveSpeedPenalty: 0.2

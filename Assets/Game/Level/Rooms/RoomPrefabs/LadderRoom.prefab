@@ -136,6 +136,7 @@ MonoBehaviour:
   entryPointDown: {fileID: 2078018787358616586}
   entryPointLeft: {fileID: 5508399660430555135}
   entryPointRight: {fileID: 4253072794927550987}
+  timeMultiplier: 0.4
   onRoomClearServer:
     m_PersistentCalls:
       m_Calls: []

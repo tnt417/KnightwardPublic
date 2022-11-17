@@ -24,38 +24,42 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         public override void OnAddOwner()
         {
             empoweredProjectile.OnHitOther += InflictPoison;
-
+            Entity.OnAttack += Shoot;
             base.OnAddOwner();
+        }
 
-            Entity.OnAttack += () =>
-                {
-                    var spawnPos = Entity.transform.position;
-                    var direction = GameManager.MouseDirection;
+        public void Shoot()
+        {
+            var spawnPos = Entity.transform.position;
+            var direction = GameManager.MouseDirection;
 
-                    if (_empowered)
-                    {
-                        var direction1 = Tools.Rotate(direction, -10 * Mathf.Deg2Rad);
-                        var direction2 = Tools.Rotate(direction, 10 * Mathf.Deg2Rad);
-                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction, empoweredProjectile);
-                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction1, empoweredProjectile);
-                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction2, empoweredProjectile);
-                    }
-                    else
-                    {
-                        ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction, regularProjectile);
-                    }
-                }
-                ;
+            SoundManager.PlaySoundPitchVariant("spear", spawnPos, 0.8f, 1.2f);
+
+            if (_empowered)
+            {
+                var direction1 = Tools.Rotate(direction, -10 * Mathf.Deg2Rad);
+                var direction2 = Tools.Rotate(direction, 10 * Mathf.Deg2Rad);
+                ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction, empoweredProjectile);
+                ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction1, empoweredProjectile);
+                ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction2, empoweredProjectile);
+            }
+            else
+            {
+                ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction, regularProjectile);
+            }
         }
 
         public override void OnRemoveOwner()
         {
-            base.OnRemoveOwner();
             empoweredProjectile.OnHitOther -= InflictPoison;
+            Entity.OnAttack -= Shoot;
+            base.OnRemoveOwner();
         }
 
         public void InflictPoison(float dmg, GameEntity entity, bool crit)
         {
+            if (entity == null) return;
+            
             entity.CmdAddEffect(new PoisonEffect()
             {
                 Damage = PoisonDPSMultiplier * Entity.Stats.GetStat(Stat.Damage),

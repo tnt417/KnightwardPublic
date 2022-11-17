@@ -174,10 +174,12 @@ namespace TonyDev.Game.Global
             var enemy = Instantiate(prefab, position,
                 Quaternion.identity).GetComponent<Enemy>();
 
+            enemy.CurrentParentIdentity = parent;
+            
             NetworkServer.Spawn(enemy.gameObject);
 
             enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
-
+            
             enemy.CmdSetParentIdentity(parent);
         }
 

@@ -2,11 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
@@ -14,9 +16,11 @@ using TonyDev.Game.Level;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
+using TonyDev.Game.UI.GameInfo;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
@@ -35,7 +39,7 @@ namespace TonyDev.Game.Global
 
         [SerializeField] private List<ItemData> itemData;
         [SerializeField] private Vector2 arenaSpawnPos;
-        public static List<Item> AllItems = new();
+        public static List<ItemData> AllItems = new();
         public static int Money = 0;
         public static int Essence = 0;
         public static float MoneyDropBonusFactor;
@@ -47,7 +51,7 @@ namespace TonyDev.Game.Global
         {
             Money += amount;
         }
-        
+
         [GameCommand(Keyword = "essence", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Added essence.")]
         public void AddEssence(int amount)
         {
@@ -60,10 +64,10 @@ namespace TonyDev.Game.Global
         {
             var it = Enum.Parse<ItemType>(itemType, true);
             var ir = Enum.Parse<ItemRarity>(itemRarity, true);
-            
+
             PlayerInventory.Instance.InsertItem(ItemGenerator.GenerateItemOfType(it, ir));
         }
-        
+
         #endregion
 
         #region Entity
@@ -82,11 +86,11 @@ namespace TonyDev.Game.Global
             Entities.Remove(entity);
             OnEnemyRemove?.Invoke(entity);
         }
-        
+
         public static Action<GameEntity> OnEnemyAdd;
         public static Action<GameEntity> OnEnemyRemove;
         public static readonly List<EnemySpawner> EnemySpawners = new();
-        
+
         [Command(requiresAuthority = false)]
         public void CmdReTargetEnemies()
         {
@@ -106,6 +110,26 @@ namespace TonyDev.Game.Global
         [SyncVar] [HideInInspector] public int dungeonFloor = 1;
         public static int DungeonFloor => Instance.dungeonFloor;
         public static GamePhase GamePhase;
+
+        [SyncVar] public float waveProgress;
+
+        [Command(requiresAuthority = false)]
+        public void CmdSetWaveProgress(float value)
+        {
+            waveProgress = value;
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdSetBreakMultiplier(float value)
+        {
+            RpcSetBreakMultiplier(value);
+        }
+
+        [ClientRpc]
+        private void RpcSetBreakMultiplier(float value)
+        {
+            WaveManager.BreakPassingMultiplier = value;
+        }
 
         #endregion
 
@@ -137,7 +161,7 @@ namespace TonyDev.Game.Global
         public List<GameObject> projectiles = new();
 
         #endregion
-        
+
         #region Mirror
 
         [Command(requiresAuthority = false)]
@@ -167,14 +191,33 @@ namespace TonyDev.Game.Global
 
             projectiles = projectiles.Where(go => go != null).ToList();
         }
-        
-        public SyncList<Vector2Int> OccupiedTowerSpots = new ();
-        
+
+        public SyncList<Vector2Int> OccupiedTowerSpots = new();
+
+        public int maxArenaTowers = 5;
+
+        public bool SpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
+        {
+            if (parent == null &&
+                Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= maxArenaTowers)
+            {
+                ObjectSpawner.SpawnTextPopup(pos, "Tower limit reached!", Color.red, 0.7f);
+                return false;
+            }
+
+            CmdSpawnTower(prefabName, pos, parent);
+
+            return true;
+        }
+
         [Command(requiresAuthority = false)]
         public void CmdSpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
         {
+            if (parent == null &&
+                Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= maxArenaTowers) return;
+
             ObjectSpawner.SpawnTower(prefabName, pos, parent);
-            OccupiedTowerSpots.Add(new Vector2Int((int)pos.x, (int)pos.y));
+            OccupiedTowerSpots.Add(new Vector2Int((int) pos.x, (int) pos.y));
         }
 
         [Command(requiresAuthority = false)]
@@ -193,7 +236,7 @@ namespace TonyDev.Game.Global
         public void RpcSpawnDmgPopup(Vector2 position, float value, bool isCrit, NetworkIdentity exclude)
         {
             if (NetworkClient.localPlayer == exclude) return;
-            
+
             ObjectSpawner.SpawnDmgPopup(position, value, isCrit);
         }
 
@@ -204,36 +247,44 @@ namespace TonyDev.Game.Global
         }
 
         [ClientRpc]
-        private void RpcSpawnStaticAttack(NetworkIdentity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
+        private void RpcSpawnStaticAttack(NetworkIdentity owner, Vector2 pos, Vector2 direction,
+            ProjectileData projectileData, string identifier)
         {
-            if (owner == null || owner == NetworkClient.localPlayer) return; //Projectiles should be spawned locally for the owner player of the projectile.
-            
+            if (owner == null || owner == NetworkClient.localPlayer)
+                return; //Projectiles should be spawned locally for the owner player of the projectile.
+
             var entity = owner.GetComponent<GameEntity>();
-            if (!entity.VisibleToHost && isClient && isServer) return; //If we are the host and the entity is not visible to the host, return.
+            if (!entity.VisibleToHost && isClient && isServer)
+                return; //If we are the host and the entity is not visible to the host, return.
             AttackFactory.CreateProjectileAttack(entity, pos, direction, projectileData, identifier);
         }
-        
-        public GameObject SpawnProjectile(GameEntity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, bool localOnly = false)
+
+        public GameObject SpawnProjectile(GameEntity owner, Vector2 pos, Vector2 direction,
+            ProjectileData projectileData, bool localOnly = false)
         {
             var identifier = AttackComponent.GetUniqueIdentifier(owner);
             var go = AttackFactory.CreateProjectileAttack(owner, pos, direction, projectileData, identifier);
-            if(!localOnly) Instance.CmdSpawnProjectile(owner.netIdentity, pos, direction, projectileData, identifier);
+            if (!localOnly) Instance.CmdSpawnProjectile(owner.netIdentity, pos, direction, projectileData, identifier);
             return go;
         }
-        
+
         [Command(requiresAuthority = false)]
-        private void CmdSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
+        private void CmdSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction,
+            ProjectileData projectileData, string identifier)
         {
             RpcSpawnProjectile(owner, pos, direction, projectileData, identifier);
         }
 
         [ClientRpc]
-        private void RpcSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction, ProjectileData projectileData, string identifier)
+        private void RpcSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction,
+            ProjectileData projectileData, string identifier)
         {
-            if (owner == null || owner == NetworkClient.localPlayer) return; //Projectiles should be spawned locally for the owner player of the projectile.
-            
+            if (owner == null || owner == NetworkClient.localPlayer)
+                return; //Projectiles should be spawned locally for the owner player of the projectile.
+
             var entity = owner.GetComponent<GameEntity>();
-            if (!entity.VisibleToHost && isClient && isServer) return; //If we are the host and the entity is not visible to the host, return.
+            if (!entity.VisibleToHost && isClient && isServer)
+                return; //If we are the host and the entity is not visible to the host, return.
             AttackFactory.CreateProjectileAttack(entity, pos, direction, projectileData, identifier);
         }
 
@@ -246,7 +297,7 @@ namespace TonyDev.Game.Global
             if (Instance == null) Instance = this;
             else Destroy(this);
 
-            AllItems = Resources.LoadAll<ItemData>("Items").Select(id => Instantiate(id).item).ToList();
+            AllItems = Resources.LoadAll<ItemData>("Items").Select(id => Instantiate(id)).ToList();
 
             Random.InitState((int) DateTime.Now.Ticks);
 
@@ -269,6 +320,7 @@ namespace TonyDev.Game.Global
         #endregion
 
         #region Gamestate Control
+
         private static void ResetGame()
         {
             Crystal.Instance.SetHealth(5000f);
@@ -297,7 +349,7 @@ namespace TonyDev.Game.Global
                     TransitionController.Instance.OutTransitionDone); //Wait until the transition is over
 
             FindObjectOfType<SmoothCameraFollow>().FixateOnPlayer();
-            
+
             switch (targetPhase)
             {
                 case GamePhase.Arena:
@@ -339,10 +391,37 @@ namespace TonyDev.Game.Global
         [Command(requiresAuthority = false)]
         public void CmdProgressNextDungeonFloor()
         {
+            NextDungeonFloor().Forget();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdRegenMap()
+        {
             dungeonFloor += 1;
             RoomManager.Instance.RpcResetRooms();
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.GenerateRooms();
+        }
+
+        private async UniTask NextDungeonFloor()
+        {
+            CmdFadeOut();
+
+            await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds));
+
+            CmdRegenMap();
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdFadeOut()
+        {
+            RpcFadeOut();
+        }
+
+        [ClientRpc]
+        private void RpcFadeOut()
+        {
+            if (GamePhase == GamePhase.Dungeon) TransitionController.Instance.FadeOut();
         }
 
         #endregion

@@ -101,6 +101,8 @@ namespace TonyDev.Game.Core.Entities.Player
                 }
             };
             
+            //OnDamageOther += (_, _, _) => SoundManager.PlaySoundPitchVariant("hit", transform.position, 0.7f, 1f);
+            
             Init();
             
             PlayerInventory.Instance.InsertStarterItems();

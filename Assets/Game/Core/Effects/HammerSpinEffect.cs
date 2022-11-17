@@ -10,11 +10,11 @@ namespace TonyDev.Game.Core.Effects
     {
         public ProjectileData DetachProjectile;
         public ProjectileData AttachedProjectile;
-        public float HammerRespawnTime;
         public float MaxHammers;
         public float SpinSpeed; //In cycles per second
         public float SpinRadius;
-
+        
+        private float HammerRespawnTime => ModifiedCooldown / MaxHammers;
 
         private double _hammerRespawnTimer;
 
@@ -27,6 +27,7 @@ namespace TonyDev.Game.Core.Effects
         public override void OnUpdateOwner()
         {
             base.OnUpdateOwner();
+            
             if (Time.time > _hammerRespawnTimer && _hammers.Count < MaxHammers)
             {
                 _hammerRespawnTimer = Time.time + HammerRespawnTime;
@@ -82,9 +83,18 @@ namespace TonyDev.Game.Core.Effects
 
         private void SpawnHammer()
         {
+            if (_hammers.Count >= MaxHammers) return;
+            
             var hammer = ObjectSpawner.SpawnProjectile(Entity, (Vector2) Entity.transform.position + new Vector2(2, 0),
-                Vector2.zero, AttachedProjectile);
+                Vector2.zero, AttachedProjectile, true);
             _hammers.Add(hammer);
+            
+            var att = hammer.GetComponent<AttackComponent>();
+                
+            att.OnDamageDealt += (dmg, _, _) =>
+            {
+                if(dmg > 0) SpawnHammer();
+            };
         }
     }
 }

@@ -94,7 +94,7 @@ namespace TonyDev.Game.UI.Tower
             _indicatorSprite =
                 towerPlacementIndicator.GetComponent<SpriteRenderer>(); //Get the indicator's SpriteRenderer
             _indicatorCollider = towerPlacementIndicator.GetComponent<Collider2D>();
-
+            
             _indicatorSprite.sprite = item.uiSprite; //Update the indicator's sprite to be the tower's ui sprite
         }
 
@@ -112,8 +112,10 @@ namespace TonyDev.Game.UI.Tower
             if (!floorAtSpot) return false;
 
             //Can't place if stuck in crystal or other non-trigger collider
-            if (_indicatorCollider.GetContacts(FindObjectsOfType<Collider2D>().Where(c2d => !c2d.isTrigger).ToArray()) >
-                0) return false;
+             var contacts = new Collider2D[100];
+            _indicatorCollider.GetContacts(contacts);
+            
+            if (contacts.Any(c => c != null && !c.isTrigger)) return false;
 
             return true;
         }
@@ -125,8 +127,13 @@ namespace TonyDev.Game.UI.Tower
 
             if (!ValidSpot(pos)) return;
 
-            GameManager.Instance.CmdSpawnTower(ObjectFinder.GetNameOfPrefab(_selectedTowerPrefab),
+            SoundManager.PlaySound("interact", pos);
+            
+            var success = GameManager.Instance.SpawnTower(ObjectFinder.GetNameOfPrefab(_selectedTowerPrefab),
                 towerPlacementIndicator.transform.position, Player.LocalInstance.CurrentParentIdentity);
+
+            if (!success) return;
+
             TowerUIController.Instance.ConfirmPlace();
             towerPlacementIndicator.SetActive(false);
         }

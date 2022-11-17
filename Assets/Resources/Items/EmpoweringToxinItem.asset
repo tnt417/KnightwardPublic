@@ -31,7 +31,7 @@ MonoBehaviour:
       type: {class: EmpoweringToxinEffect, ns: TonyDev.Game.Core.Items.Relics.EmpoweringToxin, asm: TonyDev}
       data:
         effectDescription: 
-        ActivateButton: 101
+        ActivateButton: 116
         Cooldown: 10
         Duration: 5
         abilitySprite: {fileID: 21300000, guid: 9214ccdded46bf7438729b5624c73122, type: 3}

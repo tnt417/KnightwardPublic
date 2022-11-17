@@ -2592,7 +2592,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 4087
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -2615,7 +2615,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 1666249020}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3218,6 +3219,8 @@ MonoBehaviour:
     value: {fileID: 2506707523895749022, guid: 6a9e7f6ca686a2a439c53065a162ae63, type: 3}
   - key: SpearShot
     value: {fileID: 5520317220571029984, guid: 75b2f3210b1b8ba4bba372ac41ee2b11, type: 3}
+  - key: slot
+    value: {fileID: 5665303421295874671, guid: 6f6cbd0c26f6359488129f1541dffeb9, type: 3}
   mainSpriteAtlas: {fileID: 4343727234628468602, guid: f72388a137dbf724ea8fdd908e8f3ce8, type: 2}
 --- !u!4 &861375079
 Transform:
@@ -3684,7 +3687,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
       propertyPath: roomEntries.Array.size
-      value: 11
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
       propertyPath: generateRoomPrefabs.Array.size
@@ -3721,6 +3724,18 @@ PrefabInstance:
     - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
       propertyPath: roomEntries.Array.data[10].tier
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: roomEntries.Array.data[12].tier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: roomEntries.Array.data[13].tier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: roomEntries.Array.data[14].tier
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
       propertyPath: generateRoomPrefabs.Array.data[5]
@@ -3774,6 +3789,22 @@ PrefabInstance:
       propertyPath: roomEntries.Array.data[10].roomPrefab
       value: 
       objectReference: {fileID: 4178251165929004475, guid: 791930a0a51a3e745a6834cdc33b6a70, type: 3}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: roomEntries.Array.data[11].roomPrefab
+      value: 
+      objectReference: {fileID: 4178251165929004475, guid: 84a0af39e9c909941a6b1dbbfa650776, type: 3}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: roomEntries.Array.data[12].roomPrefab
+      value: 
+      objectReference: {fileID: 4178251165929004475, guid: 45c16b161e455444e90ed32c04e8b43a, type: 3}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: roomEntries.Array.data[13].roomPrefab
+      value: 
+      objectReference: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+    - target: {fileID: 8245161763792584618, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: roomEntries.Array.data[14].roomPrefab
+      value: 
+      objectReference: {fileID: 4178251165929004475, guid: f6ea2f5f325eb4847b5be701e44503e6, type: 3}
     - target: {fileID: 8245161763792584620, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -4021,6 +4052,115 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2787348605893511017, guid: b7c5f14d62a6fc044a25c5702ad5ff73, type: 3}
   m_PrefabInstance: {fileID: 1610960445}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1666249019
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1666249020}
+  - component: {fileID: 1666249022}
+  - component: {fileID: 1666249021}
+  m_Layer: 0
+  m_Name: InFrontOfUICam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1666249020
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666249019}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 180833592}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1666249021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666249019}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 1
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 4096
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+--- !u!20 &1666249022
+Camera:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1666249019}
+  m_Enabled: 1
+  serializedVersion: 2
+  m_ClearFlags: 1
+  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_projectionMatrixMode: 1
+  m_GateFitMode: 2
+  m_FOVAxisMode: 0
+  m_SensorSize: {x: 36, y: 24}
+  m_LensShift: {x: 0, y: 0}
+  m_FocalLength: 50
+  m_NormalizedViewPortRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1
+  near clip plane: 0.3
+  far clip plane: 1000
+  field of view: 60
+  orthographic: 0
+  orthographic size: 5
+  m_Depth: 0
+  m_CullingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_RenderingPath: -1
+  m_TargetTexture: {fileID: 0}
+  m_TargetDisplay: 0
+  m_TargetEye: 3
+  m_HDR: 1
+  m_AllowMSAA: 1
+  m_AllowDynamicResolution: 0
+  m_ForceIntoRT: 0
+  m_OcclusionCulling: 1
+  m_StereoConvergence: 10
+  m_StereoSeparation: 0.022
 --- !u!1001 &1682578793
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -16042,6 +16182,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 666975043421468004, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 666975043421468004, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1000692734484128106, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
       propertyPath: m_SizeDelta.y
       value: 0
@@ -16186,6 +16334,66 @@ PrefabInstance:
       propertyPath: m_Name
       value: Global
       objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[1].name
+      value: anvil
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[2].name
+      value: button
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[3].name
+      value: dagger
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[4].name
+      value: die
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[5].name
+      value: hit
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[6].name
+      value: interact
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[7].name
+      value: spear
+      objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[1].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: c7be87970628f0b48b573093d51bd44f, type: 3}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[2].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 092a99dd51bfd4c41977f3d2f2abb4da, type: 3}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[3].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: dba4209b444306341ab3896cd3390bc4, type: 3}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[4].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: e00da5fb117c5c74aa65f91441781c81, type: 3}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[5].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 0564a7238c13fde4682cff031f0824eb, type: 3}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[6].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 12777e3cad839cd45afb9fceba39f70f, type: 3}
+    - target: {fileID: 8211467678594754331, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: gameSounds.Array.data[7].audioClip
+      value: 
+      objectReference: {fileID: 8300000, guid: 144d444efbd04bf4b8edd5bca4e15c67, type: 3}
     - target: {fileID: 8211467678594754332, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
       propertyPath: sceneId
       value: 1522514560

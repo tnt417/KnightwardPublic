@@ -45,5 +45,12 @@ namespace TonyDev.Game.Global
 
             return assembly.GetTypes().Where(t => !t.IsAbstract && t.IsSubclassOf(typeof(T))).ToList();
         }
+
+        public static string WrapColor(string input, Color color)
+        {
+            var colorTag = "#"+ColorUtility.ToHtmlStringRGBA(color);
+
+            return "<color=" + colorTag + ">" + input + "</color>";
+        }
     }
 }

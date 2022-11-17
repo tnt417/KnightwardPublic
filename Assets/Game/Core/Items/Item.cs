@@ -118,10 +118,16 @@ namespace TonyDev.Game.Core.Items
             if (IsEquippable)
             {
                 if (itemEffects is {Count: > 0})
-                    foreach (var ge in itemEffects.Where(ge => ge != null && !string.IsNullOrEmpty(ge.effectDescription)))
+                {
+                    foreach (var ge in itemEffects.Where(ge => ge != null))
                     {
-                        stringBuilder.AppendLine(ge.effectDescription);
+                        var desc = ge.GetEffectDescription();
+
+                        if (string.IsNullOrEmpty(desc)) continue;
+
+                        stringBuilder.AppendLine(desc);
                     }
+                }
 
                 stringBuilder.Append(PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true, true));
             }

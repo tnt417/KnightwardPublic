@@ -52,12 +52,9 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 0
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
-    m_PersistentCalls:
-      m_Calls: []
-  onItemInteractGlobal:
     m_PersistentCalls:
       m_Calls: []
   spawned: 0
@@ -108,8 +105,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
-  range: 8
-  frequency: 8
+  range: 3.5
+  frequency: 0
   destroyAfterSpawns: 5
   autoSpawn: 1
 --- !u!114 &5123669624324386144
@@ -125,8 +122,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
-  range: 8
-  frequency: 9
+  range: 3.5
+  frequency: 0
   destroyAfterSpawns: 5
   autoSpawn: 1
 --- !u!114 &1086885552151391856
@@ -142,8 +139,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPrefab: {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
-  range: 8
-  frequency: 10
+  range: 3.5
+  frequency: 0
   destroyAfterSpawns: 5
   autoSpawn: 1
 --- !u!1001 &20873116368869407
@@ -4008,19 +4005,35 @@ PrefabInstance:
       value: 
       objectReference: {fileID: -3435835095044133539, guid: 671fe08ca64fbe448a38e208950116da, type: 3}
     - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
-      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.size
+      propertyPath: timeMultiplier
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.size
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
       propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
       propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 6925959634818488927}
     - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 1887774160520282471}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
       propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
@@ -4028,11 +4041,27 @@ PrefabInstance:
       value: SpawnItem
       objectReference: {fileID: 0}
     - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: SetTimeMultiplier
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
       propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: TonyDev.Game.Level.Rooms.RoomControlScripts.LevelItemSpawner, TonyDev
       objectReference: {fileID: 0}
     - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: TonyDev.Game.Level.Rooms.Room, TonyDev
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_FloatArgument
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
       propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+      propertyPath: onRoomClearServer.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 4178251165929004472, guid: 661bae754a249194491f420422b05e59, type: 3}
@@ -22623,6 +22652,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4178251166612281913, guid: 661bae754a249194491f420422b05e59, type: 3}
   m_PrefabInstance: {fileID: 3019774589242384842}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &1887774160520282471 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3736541169630453933, guid: 661bae754a249194491f420422b05e59, type: 3}
+  m_PrefabInstance: {fileID: 3019774589242384842}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &3032349721036907980
 PrefabInstance:
   m_ObjectHideFlags: 0

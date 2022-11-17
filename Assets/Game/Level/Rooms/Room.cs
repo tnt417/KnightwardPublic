@@ -6,9 +6,7 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
-using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
@@ -23,7 +21,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             var isNull = value == null;
             writer.WriteBool(isNull);
-            
+
             if (isNull) return;
 
             var dimension0 = value.GetLength(0);
@@ -41,12 +39,13 @@ namespace TonyDev.Game.Level.Rooms
                 }
             }
         }
+
         public static Room[,] ReadRoomArray(this NetworkReader reader)
         {
             var isNull = reader.ReadBool();
 
             if (isNull) return null;
-            
+
             var dimension0 = reader.ReadInt();
             var dimension1 = reader.ReadInt();
 
@@ -70,6 +69,7 @@ namespace TonyDev.Game.Level.Rooms
             writer.WriteRoomArray(value.Rooms);
             writer.WriteVector2Int(value.StartingRoomPos);
         }
+
         public static Map ReadMap(this NetworkReader reader, Map value)
         {
             var rooms = reader.ReadRoomArray();
@@ -88,17 +88,26 @@ namespace TonyDev.Game.Level.Rooms
         [SerializeField] private Transform entryPointLeft;
         [SerializeField] private Transform entryPointRight;
 
+        [SerializeField] public float timeMultiplier = 1f;
+
         public UnityEvent onRoomClearServer;
+        public UnityEvent onRoomClearGlobal;
 
         public Sprite minimapIcon;
+
+        [NonSerialized] public int PlayerCountServer;
+
         //
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
 
-        private readonly SyncDictionary<Direction, bool> _openDoorsDictionary = new ();
-        
+        private readonly SyncDictionary<Direction, bool> _openDoorsDictionary = new();
+
         //The child GameObjects of this room, as dictated by IHideable
-        public List<GameObject> roomChildObjects = new ();
+        public List<GameObject> roomChildObjects = new();
+
+        public IEnumerable<GameEntity> ContainedEntities =>
+            GameManager.EntitiesReadonly.Where(e => e.CurrentParentIdentity == netIdentity);
 
         private void OnOpenDoorsDictionaryChange(SyncDictionary<Direction, bool>.Operation op, Direction key, bool open)
         {
@@ -130,6 +139,12 @@ namespace TonyDev.Game.Level.Rooms
                 roomDoor.SetHostVisibility(visible);
         }
 
+        public void SetTimeMultiplier(float mult)
+        {
+            timeMultiplier = mult;
+            WaveManager.Instance.UpdateRoomTimeMultipliers();
+        }
+
         private void Awake()
         {
             Player.LocalInstance.OnParentIdentityChange += CheckRoomVisibility;
@@ -144,7 +159,7 @@ namespace TonyDev.Game.Level.Rooms
         }
 
         private bool _destroyed;
-        
+
         private void OnDestroy()
         {
             _destroyed = true;
@@ -187,7 +202,9 @@ namespace TonyDev.Game.Level.Rooms
         }
 
         [ServerCallback]
-        public void SetOpenDirections(List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
+        public void
+            SetOpenDirections(
+                List<Direction> directions) //Opens doors based on the provided list and updates this class' open directions list.
         {
             if (this == null) return;
             _openDirections = directions;
@@ -208,9 +225,13 @@ namespace TonyDev.Game.Level.Rooms
 
             var enemySpawner = GetComponentInChildren<EnemySpawner>();
 
-            var shouldLock = GameManager.EntitiesReadonly.Any(entity =>
-                                 entity is Enemy {IsAlive: true} && entity.CurrentParentIdentity == netIdentity)
-                             || enemySpawner != null && enemySpawner.CurrentlySpawning; //Check if there are any alive enemies in our room or if our spawner is spawning.
+            var enemies = GameManager.EntitiesReadonly.Where(entity =>
+                entity is Enemy && entity.CurrentParentIdentity == netIdentity);
+
+            var shouldLock = enemies.Any()
+                             || enemySpawner != null &&
+                             enemySpawner
+                                 .CurrentlySpawning; //Check if there are any alive enemies in our room or if our spawner is spawning.
 
             if (shouldLock)
             {
@@ -218,7 +239,7 @@ namespace TonyDev.Game.Level.Rooms
             }
             else
             {
-                OnClear();
+                CmdOnClear();
             }
         }
 
@@ -230,15 +251,24 @@ namespace TonyDev.Game.Level.Rooms
         private void OnEntityChange(GameEntity entity)
         {
             if (this == null || !enabled) return;
+            
             CheckShouldLockDoors();
         }
 
-        [ServerCallback]
-        private void OnClear()
+        [Command(requiresAuthority = false)]
+        private void CmdOnClear()
         {
             if (this == null || !enabled) return;
+            
             onRoomClearServer?.Invoke();
+            RpcBroadcastClear();
             OpenAllDoors(); //Otherwise, open/close the doors as normal.
+        }
+
+        [ClientRpc]
+        private void RpcBroadcastClear()
+        {
+            onRoomClearGlobal?.Invoke();
         }
 
         [ServerCallback]

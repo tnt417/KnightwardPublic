@@ -1,3 +1,4 @@
+using System;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
@@ -27,10 +28,11 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             GameManager.EnemySpawners.Add(this); //Add this spawner to the GameManager's list
             _parentRoom = GetComponentInParent<Room>();
         }
-    
-        private void Start()
+
+        private void OnDrawGizmos()
         {
-            if(autoSpawn) SpawnEnemy(GetSpawnpoint(), enemyPrefab); //Spawn 1 copy of our enemy on start
+            Gizmos.color = new Color(1.0f, 0.647f, 0, 0.5f);
+            Gizmos.DrawSphere(transform.position, 0.5f);
         }
 
         private void Update()

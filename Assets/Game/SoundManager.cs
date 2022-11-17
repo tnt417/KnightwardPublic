@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TonyDev.Game.Global;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game
 {
@@ -30,7 +31,7 @@ namespace TonyDev.Game
             }
         }
         
-        public static void PlaySound(string name, Vector2 position)
+        public static void PlaySound(string name, Vector2 position, float pitch = 1)
         {
             var soundClip = AudioClips[name];
             
@@ -50,8 +51,14 @@ namespace TonyDev.Game
             audio.clip = soundClip;
             audio.playOnAwake = false;
             audio.loop = false;
+            audio.pitch = pitch;
             
             audio.Play();
+        }
+
+        public static void PlaySoundPitchVariant(string name, Vector2 position, float minPitch, float maxPitch)
+        {
+            PlaySound(name, position, Random.Range(minPitch, maxPitch));
         }
 
         private void Update()

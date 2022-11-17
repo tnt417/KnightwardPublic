@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
@@ -15,8 +16,9 @@ namespace TonyDev.Game.Level.Rooms
     {
         public static RoomManager Instance; //Singleton instance
 
+        public Room currentActiveRoom;
+
         //Editor variables
-        [SerializeField] private Room currentActiveRoom;
         [SerializeField] private RoomGenerator roomGenerator;
 
         [SerializeField] private GameObject minimapObject;
@@ -47,32 +49,55 @@ namespace TonyDev.Game.Level.Rooms
                     roomGenerator.roomOffset);
         }
 
+        [Command(requiresAuthority = false)]
+        public void CmdChangePlayerCount(Room room, int delta)
+        {
+            if (room == null) return;
+            
+            room.PlayerCountServer += delta;
+            CmdUpdatePlayerCount(room, room.PlayerCountServer);
+        }
+        
+        [Command(requiresAuthority = false)]
+        public void CmdUpdatePlayerCount(Room room, int count)
+        {
+            for (int i = 0; i < map.Rooms.GetLength(0); i++)
+            {
+                for (int j = 0; j < map.Rooms.GetLength(1); j++)
+                {
+                    if (map.Rooms[i, j] == room)
+                    {
+                        RpcUpdatePlayerCount(new Vector2Int(i, j), count);
+                    }   
+                }
+            }
+        }
+
+        [ClientRpc]
+        private void RpcUpdatePlayerCount(Vector2Int pos, int count)
+        {
+            MinimapManager.Instance.UpdatePlayerCount(pos, count);
+        }
+
         private void MapHook(Map oldMap, Map newMap)
         {
             OnRoomsChanged?.Invoke();
             
             if (GameManager.GamePhase == GamePhase.Dungeon)
             {
-                StartCoroutine(RegenerateTransition());
-            }
-        }
-        
-        private IEnumerator RegenerateTransition()
-        {
-            TransitionController.Instance.FadeInOut(); //Transition to make it less jarring.
-            yield return
-                new WaitUntil(() =>
-                    TransitionController.Instance.OutTransitionDone); //Wait until the transition is over
-
-            TeleportPlayerToStart();
+                TeleportPlayerToStart();
             
-            FindObjectOfType<SmoothCameraFollow>().FixateOnPlayer();
+                FindObjectOfType<SmoothCameraFollow>().FixateOnPlayer();
+                
+                TransitionController.Instance.FadeIn();
+            }
         }
 
         private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public event Action OnRoomsChanged;
         public static event Action OnActiveRoomChanged;
+        public static Action<Player, Room> OnActiveRoomChangedGlobal;
         
         private void Awake()
         {
@@ -90,7 +115,33 @@ namespace TonyDev.Game.Level.Rooms
             OnRoomsChanged += DoDoorClosing;
             OnRoomsChanged?.Invoke();
 
+            OnActiveRoomChanged += () => CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom); 
+
             if (isServer) StartCoroutine(GenerateWhenReady());
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdBroadcastRoomChange(Player sender, Room room)
+        {
+            RpcBroadcastRoomChange(sender, room);
+        }
+
+        [ClientRpc]
+        private void RpcBroadcastRoomChange(Player sender, Room room)
+        {
+            OnActiveRoomChangedGlobal.Invoke(sender, room);
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdUncoverRoom(Vector2Int pos)
+        {
+            RpcUncoverRoom(pos);
+        }
+
+        [ClientRpc]
+        private void RpcUncoverRoom(Vector2Int pos)
+        {
+            MinimapManager.Instance.UncoverRoom(pos);
         }
 
         private IEnumerator GenerateWhenReady()
@@ -159,6 +210,8 @@ namespace TonyDev.Game.Level.Rooms
 
         public void SetActiveRoom(int x, int y)
         {
+            if(currentActiveRoom != null) CmdChangePlayerCount(currentActiveRoom, -1);
+            
             var newRoom = map.Rooms[x, y]; //Get the new room from the array
             if (newRoom == null)
             {
@@ -168,7 +221,10 @@ namespace TonyDev.Game.Level.Rooms
 
             currentActiveRoom = newRoom; //Update currentActiveRoom variable
             currentActiveRoom.gameObject.SetActive(true); //Activate the new room
-            MinimapManager.Instance.UncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
+            
+            if(currentActiveRoom != null) CmdChangePlayerCount(currentActiveRoom, 1);
+            
+            CmdUncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
             _smoothCameraFollow.SetCameraBounds(currentActiveRoom.RoomRect); //Update the camera bounds
             _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
 

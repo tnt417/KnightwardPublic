@@ -6,6 +6,22 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 {
     public class DaggerEffect : AbilityEffect
     {
+        public override void OnAddOwner()
+        {
+            base.OnAddOwner();
+            Entity.OnAttack += PlaySound;
+        }
+
+        public override void OnRemoveOwner()
+        {
+            base.OnRemoveOwner();
+            Entity.OnAttack -= PlaySound;
+        }
+
+        private void PlaySound()
+        {
+            SoundManager.PlaySoundPitchVariant("dagger", Entity.transform.position, 0.8f, 1.2f);
+        }
 
         protected override void OnAbilityActivate()
         {

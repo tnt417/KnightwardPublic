@@ -1,4 +1,5 @@
 using TMPro;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.UI.Tower;
 using UnityEngine;
@@ -39,6 +40,7 @@ namespace TonyDev.Game.UI.Inventory
         
         public void OnClick()
         {
+            SoundManager.PlaySound("button", Player.LocalInstance.transform.position);
             if(Item.itemType is ItemType.Tower) TowerUIController.Instance.StartPlacingTower(this, Item);
         }
     }

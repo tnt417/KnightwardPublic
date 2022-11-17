@@ -19,7 +19,7 @@ namespace TonyDev.Editor
         private SerializedProperty _itemData;
         private SerializedProperty _costMultiplier;
         private SerializedProperty _onItemInteractServer;
-        private SerializedProperty _onItemInteractGlobal;
+        //private SerializedProperty _onItemInteractGlobal;
         private SerializedProperty _spawned;
         
         private void OnEnable()
@@ -32,10 +32,10 @@ namespace TonyDev.Editor
             _randomRarity = serializedObject.FindProperty(nameof(LevelItemSpawner.randomRarity));
             _generateRarity = serializedObject.FindProperty(nameof(LevelItemSpawner.generateRarity));
             _rarityBoost = serializedObject.FindProperty(nameof(LevelItemSpawner.rarityBoost));
-            _itemData = serializedObject.FindProperty(nameof(LevelItemSpawner.itemData));
+            _itemData = serializedObject.FindProperty(nameof(LevelItemSpawner.itemDataPool));
             _costMultiplier = serializedObject.FindProperty(nameof(LevelItemSpawner.costMultiplier));
             _onItemInteractServer = serializedObject.FindProperty(nameof(LevelItemSpawner.onItemInteractServer));
-            _onItemInteractGlobal = serializedObject.FindProperty(nameof(LevelItemSpawner.onItemInteractGlobal));
+            //_onItemInteractGlobal = serializedObject.FindProperty(nameof(LevelItemSpawner.onItemInteractGlobal));
             _spawned = serializedObject.FindProperty(nameof(LevelItemSpawner.spawned));
         }
 
@@ -71,7 +71,7 @@ namespace TonyDev.Editor
                 }
 
                 EditorGUILayout.PropertyField(_onItemInteractServer);
-                EditorGUILayout.PropertyField(_onItemInteractGlobal);
+                //EditorGUILayout.PropertyField(_onItemInteractGlobal);
             }
 
             serializedObject.ApplyModifiedProperties();

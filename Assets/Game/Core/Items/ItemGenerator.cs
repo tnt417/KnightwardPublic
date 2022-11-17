@@ -6,6 +6,7 @@ using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
 using UnityEngine;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 //Provides functionality for randomly generating items
@@ -23,7 +24,7 @@ namespace TonyDev.Game.Core.Items
 
         private static Item GetTowerItem(ItemRarity itemRarity)
         {
-            return Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Tower && i.itemRarity == itemRarity).ToArray());
+            return Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Tower && i.itemRarity == itemRarity).ToArray());
         }
         
         public static Item GenerateItem(int rarityBoost)
@@ -45,7 +46,7 @@ namespace TonyDev.Game.Core.Items
 
             if (type == ItemType.Weapon)
             {
-                item = Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Weapon));
+                item = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Weapon));
             }
 
             //Set sprites and item names based on the item type
@@ -65,7 +66,7 @@ namespace TonyDev.Game.Core.Items
                     itemName = "Armor";
                     break;
                 case ItemType.Relic:
-                    return Tools.SelectRandom(GameManager.AllItems.Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
+                    return Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
                 case ItemType.Tower:
                     return GetTowerItem(rarity);
             }
@@ -85,9 +86,9 @@ namespace TonyDev.Game.Core.Items
 
         #region Stat Generation
 
-        private static float StatStrengthFactor => 1 + GameManager.DungeonFloor/15f;
-        private static float DamageStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 12f;
-        private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * StatStrengthFactor * 2f;
+        public static float StatStrengthFactor => 1 + GameManager.DungeonFloor/15f;
+        private static float DamageStrength => Random.Range(0.6f, 1f) * Mathf.Pow(StatStrengthFactor, 1.5f) * 14f;
+        private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * Mathf.Sqrt(StatStrengthFactor);
         private static float ArmorStrength => Random.Range(0.6f, 1f) * 25 * StatStrengthFactor;
         private static float HealthStrength => Random.Range(0.6f, 1f) * 40 * StatStrengthFactor;
         private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity)
@@ -149,8 +150,8 @@ namespace TonyDev.Game.Core.Items
         {
             return stat switch
             {
-                Stat.Damage => DamageStrength*1.2f,
-                Stat.AttackSpeed => AttackSpeedStrength*0.2f,
+                Stat.Damage => DamageStrength*0.6f,
+                Stat.AttackSpeed => AttackSpeedStrength*0.3f,
                 Stat.Armor => ArmorStrength * 0.2f,
                 Stat.Health => HealthStrength * 0.2f,
                 Stat.CritChance => Random.Range(0.2f, 0.4f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
@@ -159,10 +160,10 @@ namespace TonyDev.Game.Core.Items
                 //Stat.Knockback => Random.Range(0.1f, 0.5f),
                 //Stat.Stun => 0,
                 Stat.AoeSize => Random.Range(0.2f, 0.75f),
-                Stat.MoveSpeed => Random.Range(0.1f, 0.5f),
-                Stat.CooldownReduce => Random.Range(0.2f, 0.4f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
+                Stat.MoveSpeed => Random.Range(1f, 3f),
+                Stat.CooldownReduce => Random.Range(0.1f, 0.3f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
                 //Stat.Tenacity => 0, //Random.Range(0.2f, 0.5f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
-                Stat.HpRegen => HealthStrength / 100f,
+                Stat.HpRegen => HealthStrength / 10f,
                 //Stat.DamageReduction => Random.Range(0.1f, 0.3f) + Mathf.Clamp01(1000 / (-1 * Mathf.Pow((StatStrengthFactor-1)*5, 2)) + 0.5f),
                 _ => throw new ArgumentOutOfRangeException(nameof(stat), stat, null)
             };

@@ -6,6 +6,9 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Global.Console;
 using System.Reflection;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Items;
+using TonyDev.Game.Global;
+using TonyDev.Game.Global.Network;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Tools = TonyDev.Game.Global.Tools;
@@ -26,6 +29,8 @@ namespace TonyDev.Game.Core.Effects
         [NonSerialized] public GameEntity Entity; //The entity affected by the effect
         [NonSerialized] public GameEntity Source; //The entity that inflicted the effect
 
+        [NonSerialized] protected float PlayerStrengthFactorUponCreation;
+        
         public virtual void OnAddClient() {} //Called on all clients when the effect is added to an entity
         public virtual void OnRemoveClient() {} //Called on all clients when the effect is removed from an entity
         public virtual void OnUpdateClient() {} //Called on all clients when the effect updates on an entity
@@ -37,6 +42,11 @@ namespace TonyDev.Game.Core.Effects
         public virtual void OnAddOwner() {} //Called on the entity's owner client when the effect is added to an entity
         public virtual void OnRemoveOwner() {} //Called on the entity's owner client when the effect is removed from an entity
         public virtual void OnUpdateOwner() {} //Called on the entity's owner client when the effect updates on an entity
+
+        public virtual string GetEffectDescription()
+        {
+            return effectDescription;
+        }
         
         #region Static
         public static List<Type> GameEffectTypes;
@@ -67,6 +77,16 @@ namespace TonyDev.Game.Core.Effects
         public static Type GetType(string typeName)
         {
             return GameEffectTypes.FirstOrDefault(t => t.Name == typeName);
+        }
+
+        public static void RegisterEffect(GameEffect gameEffect)
+        {
+            if (!string.IsNullOrEmpty(gameEffect.EffectIdentifier)) return;
+
+            gameEffect.PlayerStrengthFactorUponCreation = ItemGenerator.StatStrengthFactor;
+            
+            gameEffect.EffectIdentifier = CustomReadWrite.GenerateUniqueEffectIdentifier(gameEffect);
+            GameEffectIdentifiers[gameEffect.EffectIdentifier] = gameEffect;
         }
         #endregion
     }

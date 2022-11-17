@@ -14,6 +14,7 @@ namespace TonyDev.Game.Level.Decorations.BlessingChalice
             ObjectSpawner.SpawnTextPopup(transform.position, "+10% " + Enum.GetName(typeof(Stat), boostStat), Color.green, 0.5f);
             Player.LocalInstance.Stats.AddStatBonus(StatType.AdditivePercent, boostStat, 0.1f, "Chalice");
             IsInteractable = false;
+            PlayInteractSound();
         }
     }
 }

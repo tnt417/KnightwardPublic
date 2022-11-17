@@ -12,6 +12,8 @@ namespace TonyDev.Game.Level
         private static string _queuedScene;
         [NonSerialized] public bool OutTransitionDone;
 
+        public const float FadeOutTimeSeconds = 0.5f;
+
         private void Awake()
         {
             //Singleton code
@@ -27,7 +29,20 @@ namespace TonyDev.Game.Level
         public void FadeInOut() //Plays a fade out and fade in animation while transitioning to a new scene if valid
         {
             OutTransitionDone = false;
+            _transitionAnimator.SetBool("ready", true);
             _transitionAnimator.Play("SceneFadeOut"); //Play the animation
+        }
+
+        public void FadeOut()
+        {
+            OutTransitionDone = false;
+            _transitionAnimator.SetBool("ready", false);
+            _transitionAnimator.Play("SceneFadeOut");
+        }
+        
+        public void FadeIn()
+        {
+            _transitionAnimator.SetBool("ready", true);
         }
 
         public void FadeOutDone()

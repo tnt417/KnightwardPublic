@@ -8,14 +8,21 @@ namespace TonyDev.Game.Core.Effects
     {
         public float Factor;
         
+        private float FactorFinal => Factor + 0.1f * PlayerStrengthFactorUponCreation;
+        
         public override void OnAddOwner()
         {
-            Entity.HealMultiplier += Factor;
+            Entity.HealMultiplier += FactorFinal;
         }
 
         public override void OnRemoveOwner()
         {
-            Entity.HealMultiplier -= Factor;
+            Entity.HealMultiplier -= FactorFinal;
+        }
+
+        public override string GetEffectDescription()
+        {
+            return $"<color=green>{Tools.WrapColor($"+{FactorFinal:P0}", Color.yellow)} to all incoming healing.</color>";
         }
     }
 }

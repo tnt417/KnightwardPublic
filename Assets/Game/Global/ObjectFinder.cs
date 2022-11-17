@@ -24,6 +24,7 @@ namespace TonyDev.Game.Global
         [SerializeField] private List<DictionaryEntry> prefabEntries;
         [SerializeField] private SpriteAtlas mainSpriteAtlas;
         private static readonly Dictionary<string, GameObject> Prefabs = new();
+        public static readonly List<GameObject> EnemyPrefabs = new();
         private static SpriteAtlas _spriteAtlas;
 
         public static bool Initialized;
@@ -51,9 +52,10 @@ namespace TonyDev.Game.Global
                 var enemyNameInvariant = enemyObject.GetComponent<Enemy>().EnemyName.ToLowerInvariant();
 
                 Prefabs.Add(enemyNameInvariant, enemyObject);
+                EnemyPrefabs.Add(enemyObject);
                 NetworkClient.RegisterPrefab(enemyObject);
             }
-
+            
             _spriteAtlas = mainSpriteAtlas;
             ItemGenerator.InitSprites();
         }

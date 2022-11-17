@@ -63,6 +63,11 @@ namespace TonyDev.Game.Level.Decorations
             
             _controlText = sb.ToString();
         }
+
+        protected void PlayInteractSound()
+        {
+            SoundManager.PlaySound("interact", transform.position);
+        }
         
         protected void Start()
         {
@@ -137,6 +142,7 @@ namespace TonyDev.Game.Level.Decorations
 
         protected virtual void OnInteract(InteractType type)
         {
+            PlayInteractSound();
         }
 
         private bool _active = true;

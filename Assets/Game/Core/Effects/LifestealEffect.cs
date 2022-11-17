@@ -1,5 +1,6 @@
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Global;
+using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects
 {
@@ -24,6 +25,11 @@ namespace TonyDev.Game.Core.Effects
             ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
 
             Entity.ApplyDamage(leech, out var success);
+        }
+        
+        public override string GetEffectDescription()
+        {
+            return $"<color=green>Gain {Tools.WrapColor($"{LeechPercent:P1}", Color.yellow)} lifesteal.</color>";
         }
     }
 }

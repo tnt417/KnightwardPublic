@@ -20,6 +20,10 @@ PrefabInstance:
       value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.baseMoneyReward
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[0].stat
       value: 1
       objectReference: {fileID: 0}
@@ -164,11 +168,12 @@ MonoBehaviour:
       destroyOnApply: 1
       lifetime: 2
       spawnOnDestroyKey: 
+      ignoreInvincibility: 0
     disableMovement: 0
     travelSpeed: 15
     offsetDegrees: 0
     waveAmplitude: 0
-    waveFrequency: 0
+    waveLength: 0
     waveDistance: 0
     childOfOwner: 0
     effects: []

@@ -55,6 +55,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             enemyAnimator = GetComponent<EnemyAnimator>();
 
             if(isServer) OnDeathOwner += (value) => EnemyDie();
+            if (isServer && CurrentParentIdentity == null) StartCoroutine(IntangibleForSeconds(2f)); //Fresh enemies invincible for 2 seconds
         }
 
         //Sets up the animator to play certain animations on certain events
@@ -71,7 +72,9 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //Give money reward and destroy self.
         private void EnemyDie()
         {
-            GameManager.Instance.CmdSpawnMoney(enemyData.baseMoneyReward, transform.position, CurrentParentIdentity);
+            var deathPos = transform.position;
+            GameManager.Instance.CmdSpawnMoney(enemyData.baseMoneyReward, deathPos, CurrentParentIdentity);
+            SoundManager.PlaySound("die", deathPos);
         }
     }
 }

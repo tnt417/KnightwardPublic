@@ -3,6 +3,7 @@ using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Network;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Items.Weapon.Broadsword
@@ -23,10 +24,19 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
 
             _broadswordParticleEffect = new ParticleTrailEffect
             {
-                OverridePrefab = "broadswordParticles"
+                OverridePrefab = "broadswordParticles",
             };
 
+            Entity.OnAttack += PlaySound;
+            
+            //GameEffect.RegisterEffect(_broadswordParticleEffect);
+            
             Entity.CmdAddEffect(_broadswordParticleEffect, Entity);
+        }
+
+        private void PlaySound()
+        {
+            SoundManager.PlaySoundPitchVariant("dagger", Entity.transform.position, 0.6f, 0.8f);
         }
 
         [NonSerialized] private int _successiveDeflects = 0;
@@ -36,13 +46,17 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
 
         private void TryDeflect(float damage)
         {
-            ObjectSpawner.SpawnTextPopup(Entity.transform.position, "Deflected!", Color.blue, 0.5f);
+            var pos = Entity.transform.position;
+            
+            ObjectSpawner.SpawnTextPopup(pos, "Deflected!", Color.blue, 0.5f);
             DiscountCooldown(RefundCooldownAmount, true); //Refund cooldown upon blocking
 
+            SoundManager.PlaySound("anvil", pos);
+            
             _successiveDeflects++;
 
             _broadswordParticleEffect.SetVisible(true);
-            
+
             var main = _broadswordParticleEffect.ParticleSystem.main;
             main.simulationSpeed = 1 + _successiveDeflects * 0.2f;
 
@@ -84,6 +98,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
             base.OnRemoveOwner();
             Entity.OnTryHurtInvulnerableOwner -= TryDeflect;
             Entity.OnHurtOwner -= ResetDeflects;
+            Entity.OnAttack -= PlaySound;
             Entity.CmdRemoveEffect(_broadswordParticleEffect);
         }
 

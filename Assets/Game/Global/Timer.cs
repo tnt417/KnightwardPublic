@@ -26,7 +26,7 @@ namespace TonyDev.Game.Global
     
         private void Update()
         {
-            if(!_paused) GameTimer += Time.deltaTime * TickSpeedMultiplier; //Tick timer if not paused
+            if(!_paused) GameTimer += Time.deltaTime; //Tick timer if not paused
             gameTimerText.text = FormatTimeFromSeconds(GameTimer); //Update timer text
         }
 

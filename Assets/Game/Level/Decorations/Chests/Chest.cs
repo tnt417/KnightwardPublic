@@ -26,7 +26,7 @@ namespace TonyDev.Game.Level.Decorations.Chests
         {
             if (opened)
             {
-                chestAnimator.Play("ChestOpen");
+                chestAnimator.Play("ChestOpenIdle");
             }
         }
 

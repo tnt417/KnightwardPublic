@@ -15,7 +15,7 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: fabc999deea937a4faf81de61dd9c7e2, type: 3}
     itemName: Berserker's Brew
-    itemDescription: Press 'e' to gain health regen and damage for a short time period.
+    itemDescription: 
     itemType: 2
     itemRarity: 1
     statBonuses: []
@@ -30,7 +30,7 @@ MonoBehaviour:
       type: {class: BerserkersBrewEffect, ns: TonyDev.Game.Core.Items.Relics.BerserkersBrew, asm: TonyDev}
       data:
         effectDescription: 
-        ActivateButton: 101
+        ActivateButton: 98
         Cooldown: 10
         Duration: 5
         abilitySprite: {fileID: 21300000, guid: fabc999deea937a4faf81de61dd9c7e2, type: 3}

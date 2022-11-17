@@ -13,6 +13,7 @@ TagManager:
   - Crystal
   - Floor
   - Enemy
+  - MinimapAlly
   layers:
   - Default
   - TransparentFX
@@ -26,7 +27,7 @@ TagManager:
   - Crystal
   - Barrier
   - CombineParticles
-  - 
+  - InFrontOfUI
   - 
   - 
   - 

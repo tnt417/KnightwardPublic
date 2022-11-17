@@ -25,11 +25,16 @@ MonoBehaviour:
     statBonuses: []
     itemEffects:
     - rid: 4292349832393654273
+    - rid: 4023140663594319872
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
+    - rid: 4023140663594319872
+      type: {class: CelestialWrenchEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
     - rid: 4292349832393654273
       type: {class: TowerBuffEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:

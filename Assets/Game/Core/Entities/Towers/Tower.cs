@@ -33,7 +33,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         {
             GameManager.Instance.OccupiedTowerSpots.Remove(new Vector2Int((int)transform.position.x, (int)transform.position.y));
             NetworkServer.Destroy(gameObject);
-            PlayerInventory.Instance.InsertItem(GameManager.AllItems.FirstOrDefault(i => i.spawnablePrefab == prefab));
+            PlayerInventory.Instance.InsertItem(GameManager.AllItems.Select(id => Instantiate(id).item).FirstOrDefault(i => i.spawnablePrefab == prefab));
         }
     }
 }

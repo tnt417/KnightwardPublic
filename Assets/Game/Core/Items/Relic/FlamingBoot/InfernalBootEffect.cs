@@ -15,7 +15,7 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
         
         private Rigidbody2D _rb2d;
         
-        public override void OnAddOwner()
+        public override void OnAddClient()
         {
             _rb2d = Entity.GetComponent<Rigidbody2D>();
             _attackData.team = Entity.Team;
@@ -23,6 +23,7 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
         }
 
         private double _distanceMoved;
+        private Vector2 _lastPos;
 
         private AttackData _attackData = new AttackData()
         {
@@ -35,17 +36,14 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
             ignoreInvincibility = true
         };
 
-        private void AddMagnitude(Vector2 v2)
-        {
-            _distanceMoved += v2.magnitude;
-        }
-        
         public override void OnUpdateOwner()
         {
-            AddMagnitude(_rb2d.velocity * Time.deltaTime);
+            Vector2 newPos = Entity.transform.position;
+            _distanceMoved += (_lastPos - newPos).magnitude;
+            _lastPos = newPos;
             if (_distanceMoved < 0.5f) return;
             _distanceMoved = 0f;
-            AttackFactory.CreateStaticAttack(Entity, Entity.transform.position, _attackData, false, ObjectFinder.GetPrefab("firePath"));
+            AttackFactory.CreateStaticAttack(Entity, (Vector2)Entity.transform.position - new Vector2(0, 0.5f), _attackData, false, ObjectFinder.GetPrefab("firePath"));
         }
     }
 }

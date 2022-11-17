@@ -32,12 +32,31 @@ namespace TonyDev.Game.Level.Decorations.Button
         public void CmdBroadcastInteract(InteractType type)
         {
             onInteractServer?.Invoke(type);
+            RpcBroadcastInteract(type);
         }
 
         [ClientRpc]
         public void RpcBroadcastInteract(InteractType type)
         {
             onInteractGlobal?.Invoke(type);
+        }
+
+        public void DestroyInteractableObjectAll()
+        {
+            CmdDestroyInteractable();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdDestroyInteractable()
+        {
+            RpcDestroyInteractable();
+        }
+
+        [ClientRpc]
+        private void RpcDestroyInteractable()
+        {
+            if (interactable != null && interactable.gameObject != null) Destroy(interactable.gameObject);
+            else this.enabled = false;
         }
     }
 }

@@ -9,12 +9,15 @@ namespace TonyDev.Game.Core.Behavior
     public abstract class GameBehavior : MonoBehaviour
     {
         protected CancellationTokenSource DestroyToken;
-        
+
+        private void OnEnable()
+        {
+            DestroyToken = new CancellationTokenSource();
+        }
+
         [ServerCallback]
         protected void Start()
         {
-            DestroyToken = new CancellationTokenSource();
-
             ExecuteBehavior().AttachExternalCancellation(DestroyToken.Token);
         }
 

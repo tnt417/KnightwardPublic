@@ -35,7 +35,7 @@ namespace TonyDev.Game.Global.Network
 
         private static int _identifierIndex;
 
-        private static string GenerateUniqueEffectIdentifier(GameEffect effect)
+        public static string GenerateUniqueEffectIdentifier(GameEffect effect)
         {
             if (!string.IsNullOrEmpty(effect
                 .EffectIdentifier)) //If supplied identifier is null or empty, need to generate a unique one.
@@ -52,25 +52,19 @@ namespace TonyDev.Game.Global.Network
 
         public static void WriteGameEffect(this NetworkWriter writer, GameEffect value)
         {
-
             var isNull = value == null;
             writer.WriteBool(isNull);
             if (isNull) return;
 
             //GameEffect is new if it doesn't have a generated identifier or if GameEffectIdentifiers doesn't contain the identifier
             var isNew = string.IsNullOrEmpty(value.EffectIdentifier) || !GameEffect.GameEffectIdentifiers.ContainsKey(value.EffectIdentifier);
-            //writer.WriteBool(isNew);
-            
+
             if(isNew) //If GameEffect is new, generate an identifier
             {
-                var id = GenerateUniqueEffectIdentifier(value);
-                value.EffectIdentifier = id;
-                GameEffect.GameEffectIdentifiers[id] = value;
+                GameEffect.RegisterEffect(value);
             }
 
             writer.WriteString(value.EffectIdentifier);
-
-            //if (!isNew) return; //If GameEffect already exists, can just send the identifier
 
             var isSourceNull = value.Source == null;
             writer.WriteBool(isSourceNull);
@@ -137,8 +131,6 @@ namespace TonyDev.Game.Global.Network
             //var isNew = reader.ReadBool();
 
             var id = reader.ReadString();
-            
-            var isNew = !GameEffect.GameEffectIdentifiers.ContainsKey(id);
 
             var isSourceNull = reader.ReadBool();
 
@@ -156,6 +148,8 @@ namespace TonyDev.Game.Global.Network
                 (GameEffect) Activator.CreateInstance(
                     GameEffect.GameEffectTypes.FirstOrDefault(t => t.Name == typeName) ?? typeof(GameEffect)); //Otherwise, create a new instance
 
+            gameEffect.EffectIdentifier = id;
+            
             gameEffect.Source = source;
 
             foreach (var field in gameEffect.GetType().GetFields().Where(f => f.IsPublic && !f.IsNotSerialized))

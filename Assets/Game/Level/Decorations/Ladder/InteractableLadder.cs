@@ -18,6 +18,7 @@ namespace TonyDev.Game.Level.Decorations.Ladder
         {
             if(!regen) GameManager.Instance.TogglePhase();
             else Regen();
+            PlayInteractSound();
         }
 
         [GameCommand(Keyword = "regen", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Success!")]

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
@@ -13,11 +14,12 @@ namespace TonyDev.Game.UI.Minimap
         //Editor variables
         [SerializeField] private GridLayoutGroup uiRoomGridLayout;
         [SerializeField] private GameObject minimapRoomPrefab;
+
         [SerializeField] private Sprite unknownRoomSprite;
         //
-    
+
         public static MinimapManager Instance;
-    
+
         private RoomManager _roomManager;
         private Room[,] _rooms;
         private GameObject[,] _uiRoomObjects;
@@ -39,12 +41,12 @@ namespace TonyDev.Game.UI.Minimap
                 Destroy(go);
             }
         }
-    
+
         public void UpdateMinimap()
         {
             _roomManager = FindObjectOfType<RoomManager>();
             _rooms = _roomManager.map.Rooms;
-            
+
             if (_rooms == null) return;
 
             Reset();
@@ -53,19 +55,38 @@ namespace TonyDev.Game.UI.Minimap
             _uiRoomObjects = new GameObject[_roomManager.MapSize, _roomManager.MapSize];
 
             uiRoomGridLayout.constraintCount = _roomManager.MapSize;
-        
+
             for (var i = 0; i < _roomManager.MapSize; i++)
             {
                 for (var j = 0; j < _roomManager.MapSize; j++)
                 {
                     var go = Instantiate(minimapRoomPrefab, uiRoomGridLayout.transform);
                     _uiRoomObjects[i, j] = go;
-                    var symbolImage = go.GetComponentsInChildren<Image>().FirstOrDefault(img => img.CompareTag("MinimapIcon"));
+                    var symbolImage = go.GetComponentsInChildren<Image>()
+                        .FirstOrDefault(img => img.CompareTag("MinimapIcon"));
 
                     if (_rooms[i, j] != null) continue;
-                
+
                     go.GetComponent<Image>().enabled = false;
                     if (symbolImage != null) symbolImage.enabled = false;
+                }
+            }
+        }
+
+        public void UpdatePlayerCount(Vector2Int pos, int playerCount)
+        {
+            var playerImages = _uiRoomObjects[pos.x, pos.y].GetComponentsInChildren<Image>()
+                .Where(img => img.CompareTag("MinimapAlly")).ToArray();
+
+            for (var k = 0; k < playerImages.Length; k++)
+            {
+                if (RoomManager.Instance.currentActiveRoom == _rooms[pos.x, pos.y])
+                {
+                    playerImages[k].enabled = false;
+                }
+                else
+                {
+                    playerImages[k].enabled = playerCount > k;
                 }
             }
         }
@@ -94,18 +115,21 @@ namespace TonyDev.Game.UI.Minimap
             {
                 for (var j = 0; j < _roomManager.MapSize; j++)
                 {
-                    var symbolImage = _uiRoomObjects[i,j].GetComponentsInChildren<Image>().FirstOrDefault(img => img.CompareTag("MinimapIcon")); //Get the symbol image
-                
+                    var symbolImage = _uiRoomObjects[i, j].GetComponentsInChildren<Image>()
+                        .FirstOrDefault(img => img.CompareTag("MinimapIcon")); //Get the symbol image
+
                     if (symbolImage == null) continue; //Check for null
-                
+
                     if (_discoveredRooms[i, j] == 0) //If room is undiscovered...
                     {
                         symbolImage.sprite = unknownRoomSprite; //...set symbol to unknown symbol
                         continue;
                     }
-                
+
                     if (_rooms[i, j] == null) symbolImage.enabled = false; //If the room is null, turn off the UI image
-                    else symbolImage.sprite = _rooms[i, j].minimapIcon; //If the room exists and is turned on, set its map icon.
+                    else
+                        symbolImage.sprite =
+                            _rooms[i, j].minimapIcon; //If the room exists and is turned on, set its map icon.
                 }
             }
         }

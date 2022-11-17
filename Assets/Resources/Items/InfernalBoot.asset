@@ -38,3 +38,4 @@ MonoBehaviour:
       type: {class: InfernalBootEffect, ns: TonyDev.Game.Core.Items.Relics.FlamingBoot, asm: TonyDev}
       data:
         effectDescription: <color=orange>Leave a trail of fire behind you.</color>
+        DamageMultiplier: 0.1

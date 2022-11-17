@@ -13,7 +13,7 @@ namespace TonyDev.Game.Core.Effects
         public float Cooldown;
         public float Duration;
         public Sprite abilitySprite;
-        private float ModifiedCooldown => Cooldown * (1 - Entity.Stats.GetStat(Stat.CooldownReduce));
+        protected float ModifiedCooldown => Cooldown * (1 - Entity.Stats.GetStat(Stat.CooldownReduce));
 
         protected bool Active { get; private set; }
 
@@ -41,10 +41,8 @@ namespace TonyDev.Game.Core.Effects
             CooldownUIController.RemoveCooldown(_cooldownID);
         }
 
-        public override void OnUpdateOwner()
+        protected void ProcessActivateKeys()
         {
-            _cooldownTimer += Time.deltaTime;
-
             if (_cooldownTimer > ModifiedCooldown && Input.GetKeyDown(ActivateButton))
             {
                 Active = true;
@@ -52,6 +50,13 @@ namespace TonyDev.Game.Core.Effects
                 _activeTimer = 0;
                 _cooldownTimer = 0;
             }
+        }
+        
+        public override void OnUpdateOwner()
+        {
+            _cooldownTimer += Time.deltaTime;
+
+            ProcessActivateKeys();
 
             if (Active)
             {

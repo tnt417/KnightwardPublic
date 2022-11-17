@@ -5,9 +5,11 @@ using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Decorations.Crystal;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -22,6 +24,8 @@ namespace TonyDev.Game.Level
 
     public class WaveManager : MonoBehaviour
     {
+        public static WaveManager Instance;
+        
         //Editor variables
         [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private float spawnRadius;
@@ -44,26 +48,89 @@ namespace TonyDev.Game.Level
         public int wavesSpawned = 0;
         public int TimeUntilNextWaveSeconds => (int) (_waveCooldown - _waveTimer);
 
+        private bool OnBreak => wavesSpawned % breakFrequency == 0;
+
+        private void Awake()
+        {
+            Instance = this;
+        }
+
+        private void Start()
+        {
+            WaitToUpdateRoomMultipliers().Forget();
+            _waveCooldown = breakLength;
+        }
+
+        private async UniTask WaitToUpdateRoomMultipliers()
+        {
+            await UniTask.WaitUntil(() => Player.LocalInstance != null);
+            UpdateRoomTimeMultipliers();
+            RoomManager.OnActiveRoomChangedGlobal += (_, _) => UpdateRoomTimeMultipliers();
+        }
+
         private void Update()
         {
+            _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier * BreakPassingMultiplier; //Tick the wave timer
+            
+            if (NetworkServer.active) GameManager.Instance.CmdSetWaveProgress(_waveTimer / _waveCooldown);
+            
+            if (_waveTimer >= _waveCooldown)
+            {
+                NextWave(); //Spawn a wave if cooldown is over
+            }
+
+            if (!OnBreak && !GameManager.EntitiesReadonly.Any(e => e.CurrentParentIdentity == null && e is Enemy))
+            {
+                NextWave(); //When we clear a wave spawn the next one to prevent boredom
+            }
+        }
+
+        public void StallTime(float seconds)
+        {
+            _waveCooldown += seconds;
+        }
+
+        public static float BreakPassingMultiplier;
+
+        [ServerCallback]
+        public void UpdateRoomTimeMultipliers()
+        {
+            var total = 0f;
+
+            var players = FindObjectsOfType<Player>();
+            
+            foreach (var p in players)
+            {
+                if (p.CurrentParentIdentity == null)
+                {
+                    total += 0.3f; //If the player is in the arena on a break, slow time
+                }
+                else
+                {
+                    var newRoom = p.CurrentParentIdentity.GetComponent<Room>();
+
+                    total += newRoom.timeMultiplier;
+                }
+            }
+            
+            GameManager.Instance.CmdSetBreakMultiplier(total/players.Length);
+        }
+        
+        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawning next wave.")]
+        public void NextWave()
+        {
+            _waveTimer = 0;
+            wavesSpawned++;
+            
             _waveCooldown =
                 wavesSpawned % breakFrequency == 0
                     ? breakLength
                     : regularLength;
-
-            _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier; //Tick the wave timer
             
-            if (_waveTimer >= _waveCooldown)
-            {
-                _waveTimer = 0;
-                wavesSpawned++;
-                SpawnWave().Forget(); //Spawn a wave if cooldown is over
-            }
+            SpawnWave().Forget();
         }
 
         //Spawns a wave of enemies
-        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat,
-            SuccessMessage = "Spawning next wave.")]
         [ServerCallback]
         public async UniTask SpawnWave()
         {

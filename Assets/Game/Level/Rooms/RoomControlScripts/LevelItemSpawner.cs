@@ -56,7 +56,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         public int rarityBoost;
 
         [Tooltip("Item data to be spawned. Can be null.")] [CanBeNull]
-        public ItemData itemData;
+        public ItemData[] itemDataPool;
 
         [Tooltip("Multiplies the cost of the item.")]
         public float costMultiplier = 1;
@@ -64,8 +64,8 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         [Tooltip("Called on the server when a ground item is picked up or a chest is opened.")]
         public UnityEvent onItemInteractServer = new();
 
-        [Tooltip("Called on all clients when a ground item is picked up or a chest is opened.")]
-        public UnityEvent onItemInteractGlobal = new();
+        //[Tooltip("Called on all clients when a ground item is picked up or a chest is opened.")]
+        //public UnityEvent onItemInteractGlobal = new();
         //
 
         public bool spawned;
@@ -102,13 +102,13 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 
                     break;
                 case ItemGenerateSetting.FromItemData:
-                    if (itemData == null)
+                    if (itemDataPool == null || itemDataPool.Length == 0)
                     {
                         Debug.LogWarning("Can't spawn null item!");
                         return;
                     }
 
-                    item = itemData.item;
+                    item = Tools.SelectRandom(itemDataPool).item;
                     break;
             }
 
@@ -124,8 +124,8 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                     var chest = ObjectSpawner.SpawnChest(item, transform.position, parent); //Spawn a chest
                     chest.onOpenServer.AddListener(() =>
                         onItemInteractServer.Invoke()); //Invoke interact event when the chest is opened
-                    chest.onOpenGlobal.AddListener(() =>
-                        onItemInteractGlobal.Invoke()); //Invoke interact event when the chest is opened
+                    // chest.onOpenGlobal.AddListener(() =>
+                    //     onItemInteractGlobal.Invoke()); //Invoke interact event when the chest is opened
                     _spawnedItemObject = chest.gameObject;
                     break;
                 case ItemSpawnType.Item: //If spawn an item...
@@ -134,8 +134,8 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                             parent); //Spawn a ground item
                     groundItem.onPickupServer.AddListener(() =>
                         onItemInteractServer.Invoke()); //Invoke interact event when the item is picked up
-                    groundItem.onPickupGlobal.AddListener(() =>
-                        onItemInteractGlobal.Invoke()); //Invoke interact event when the item is picked up
+                    // groundItem.onPickupGlobal.AddListener(() =>
+                    //     onItemInteractGlobal.Invoke()); //Invoke interact event when the item is picked up
                     _spawnedItemObject = groundItem.gameObject;
                     break;
             }

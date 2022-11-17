@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
@@ -18,26 +19,26 @@ namespace TonyDev.Game.Core.Entities
     public abstract class GameEntity : NetworkBehaviour, IDamageable, IHideable
     {
         public event Action OnTargetChangeOwner;
-        public SyncList<GameEntity> Targets = new ();
-        
+        public SyncList<GameEntity> Targets = new();
+
         protected const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
 
         protected virtual bool CanAttack => IsAlive || this is Tower;
 
         //Editor fields
-        [Header("Targeting")]
-        [SerializeField] private string targetTag;
+        [Header("Targeting")] [SerializeField] private string targetTag;
         [SerializeField] private Team targetTeam;
         [SerializeField] private int maxTargets;
         [SerializeField] protected StatBonus[] baseStats;
+
         [SerializeField] private bool targetIntangible;
         // 
 
         //Value is only accurate on the host
         [NonSerialized] public bool VisibleToHost = true;
 
-        public readonly EntityStats Stats = new ();
+        public readonly EntityStats Stats = new();
 
         #region Network
 
@@ -53,13 +54,16 @@ namespace TonyDev.Game.Core.Entities
             }*/
 
             var successful = true;
-            
-            var dmg = this is Player.Player ? damage : ApplyDamage(damage, out successful, ignoreInvincibility); //Players should have already been damaged on the client
-            if(successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
+
+            var dmg = this is Player.Player
+                ? damage
+                : ApplyDamage(damage, out successful,
+                    ignoreInvincibility); //Players should have already been damaged on the client
+            if (successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
         }
 
         protected bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
-        
+
         [Command(requiresAuthority = false)]
         public void CmdSetHealth(float currentHealth, float maxHealth)
         {
@@ -73,7 +77,7 @@ namespace TonyDev.Game.Core.Entities
             GetComponent<Rigidbody2D>()?.AddForce(force);
             CmdApplyKnockback(force);
         }
-        
+
         [Command(requiresAuthority = false)]
         private void CmdApplyKnockback(Vector2 force)
         {
@@ -81,92 +85,120 @@ namespace TonyDev.Game.Core.Entities
         }
 
         [NonSerialized] public float ClientHealthDisparity;
-        
-        [SyncVar(hook = nameof(CurrentHealthHook))] [NonSerialized] public float NetworkCurrentHealth;
+
+        [SyncVar(hook = nameof(CurrentHealthHook))] [NonSerialized]
+        public float NetworkCurrentHealth;
+
         [SyncVar] [NonSerialized] public float NetworkMaxHealth;
-        
+
         private void CurrentHealthHook(float oldHealth, float newHealth)
         {
             if (ClientHealthDisparity == 0 || isServer || this is Player.Player) return;
-            
+
             if (oldHealth == 0) ClientHealthDisparity = 0;
             else
             {
-                ClientHealthDisparity -= newHealth-oldHealth;   
+                ClientHealthDisparity -= newHealth - oldHealth;
             }
         }
-        
+
         #endregion
 
-        [SyncVar(hook = nameof(ParentIdentityHook))] private NetworkIdentity _currentParentIdentity;
-        public NetworkIdentity CurrentParentIdentity { get => _currentParentIdentity; set => CmdSetParentIdentity(value); }
+        [SyncVar(hook = nameof(ParentIdentityHook))]
+        private NetworkIdentity _currentParentIdentity;
+
+        public NetworkIdentity CurrentParentIdentity
+        {
+            get => _currentParentIdentity;
+            set
+            {
+                _currentParentIdentity = CurrentParentIdentity;
+                CmdSetParentIdentity(value);
+            }
+        }
 
         public Action<NetworkIdentity> OnParentIdentityChange;
-        
+
         private void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
         {
             OnParentIdentityChange?.Invoke(newIdentity);
         }
-        
+
         [Command(requiresAuthority = false)]
         public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
         {
             if (_currentParentIdentity != null)
             {
                 var oldRoom = _currentParentIdentity.GetComponent<Room>();
-                if(oldRoom != null) oldRoom.roomChildObjects.Remove(gameObject);
+                if (oldRoom != null)
+                {
+                    oldRoom.roomChildObjects.Remove(gameObject);
+                }
             }
-            
+
             _currentParentIdentity = roomIdentity;
 
             if (roomIdentity != null)
             {
                 var room = roomIdentity.GetComponent<Room>();
-                if(room != null) room.roomChildObjects.Add(gameObject);
+                if (room != null)
+                {
+                    room.roomChildObjects.Add(gameObject);
+                }
             }
-            
+
             FindObjectOfType<ParentInterestManagement>().ForceRebuild();
         }
 
         #region Attack
+
         protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
         private float _attackTimer;
         public Action OnAttack;
-        
+
         //Invokes the attack event
         public void Attack() //Called in animator events on some entities
         {
             if (!EntityOwnership) return;
-            
+
             if (CanAttack)
             {
                 OnAttack.Invoke();
             }
         }
+
         #endregion
+
+        protected IEnumerator IntangibleForSeconds(float seconds)
+        {
+            IsInvulnerable = true;
+            IsTangible = false;
+            yield return new WaitForSeconds(seconds);
+            IsInvulnerable = false;
+            IsTangible = true;
+        }
+
         protected void Awake()
         {
             GameManager.AddEntity(this);
-            
+
             OnAttack += () => _attackTimer = 0;
             _effects.Callback += OnEffectsUpdated;
         }
 
         protected void Update()
         {
-            if (isServer)
+            foreach (var effect in _effects.ToArray())
             {
-                foreach (var effect in _effects.ToArray())
-                {
-                    effect.OnUpdateServer();
-                }
+                if (isServer) effect.OnUpdateServer();
+                if (isClient) effect.OnUpdateClient();
             }
-            
+
             if (!EntityOwnership) return;
-            
+
             _targetUpdateTimer += Time.deltaTime;
             _attackTimer += Time.deltaTime;
-            
+
             if (_targetUpdateTimer > EntityTargetUpdatingRate)
             {
                 UpdateTarget();
@@ -179,12 +211,12 @@ namespace TonyDev.Game.Core.Entities
             }
 
             _effects.RemoveAll(e => e == null);
-            
+
             foreach (var effect in _effects.ToArray())
             {
                 effect.OnUpdateOwner();
             }
-            
+
             if (IsAlive)
             {
                 var hpRegen = Stats.GetStat(Stat.HpRegen) * Time.deltaTime; //Regen 1% of hp per second
@@ -199,24 +231,25 @@ namespace TonyDev.Game.Core.Entities
             CustomNetworkManager.OnAllPlayersSpawned += UpdateStats;
 
             Stats.ReadOnly = false;
-            
+
             foreach (var sb in baseStats)
             {
                 Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, "GameEntity");
             }
-            
+
             Stats.OnStatsChanged += UpdateStats;
-            
+
             CurrentHealth = MaxHealth;
             OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
             OnHealthChangedOwner?.Invoke(CurrentHealth);
 
             UpdateStats();
-            
+
             UpdateTarget();
         }
 
-        public Action<float, GameEntity, bool> OnDamageOther; //TODO: Damage types: Contact, Projectile, DoT, AoE, etc. (Use to better control PoisonInflictEffect)
+        public Action<float, GameEntity, bool>
+            OnDamageOther; //TODO: Damage types: Contact, Projectile, DoT, AoE, etc. (Use to better control PoisonInflictEffect)
 
         private void UpdateStats()
         {
@@ -235,11 +268,11 @@ namespace TonyDev.Game.Core.Entities
         {
             TargetUpdateStats(sender, Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
         }
-        
+
         [TargetRpc]
         private void TargetUpdateStats(NetworkConnection target, Stat[] keys, float[] values)
         {
-            if(Stats.ReadOnly) Stats.ReplaceStatValueDictionary(keys, values);
+            if (Stats.ReadOnly) Stats.ReplaceStatValueDictionary(keys, values);
         }
 
         [Command(requiresAuthority = false)]
@@ -251,7 +284,7 @@ namespace TonyDev.Game.Core.Entities
         [ClientRpc]
         private void RpcUpdateStats(Stat[] keys, float[] values)
         {
-            if(Stats.ReadOnly) Stats.ReplaceStatValueDictionary(keys, values);
+            if (Stats.ReadOnly) Stats.ReplaceStatValueDictionary(keys, values);
         }
 
         private void OnDestroy()
@@ -260,10 +293,11 @@ namespace TonyDev.Game.Core.Entities
         }
 
         public Action OnLocalHurt;
-        
+
         public void LocalHurt(float damage, bool isCrit)
         {
-            if(!IsInvulnerable) ObjectSpawner.SpawnDmgPopup(transform.position, Stats.ModifyIncomingDamage(damage), isCrit);
+            if (!IsInvulnerable)
+                ObjectSpawner.SpawnDmgPopup(transform.position, Stats.ModifyIncomingDamage(damage), isCrit);
             OnLocalHurt?.Invoke();
         }
 
@@ -278,20 +312,22 @@ namespace TonyDev.Game.Core.Entities
 
             var range = 10f;
             if (this is Tower t) range = t.targetRadius;
-            
+
             var entities = GameManager.EntitiesReadonly
-                .Where(e => e != null 
+                .Where(e => e != null
                             && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
-                            && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
+                            && (string.IsNullOrEmpty(targetTag) ||
+                                e.CompareTag(targetTag)) //Target things with our target tag if it is set
                             && e.Team == targetTeam //Target things of our target team
                             //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
                             && (e.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
                             && e != this //Don't target self
-                            && (e is Crystal && this is not Tower && Vector2.Distance(e.transform.position, transform.position) < 200f 
+                            && (e is Crystal && this is not Tower &&
+                                Vector2.Distance(e.transform.position, transform.position) < 200f
                                 || Vector2.Distance(e.transform.position, transform.position) < range)) //Distance check
                 .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
                 .Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
-            
+
             CmdSetTargets(entities.ToArray());
             OnTargetChangeOwner?.Invoke(); //Invoke the target changed method
         }
@@ -313,26 +349,26 @@ namespace TonyDev.Game.Core.Entities
         private void OnEffectsUpdated(SyncList<GameEffect>.Operation op, int index, GameEffect oldEffect,
             GameEffect newEffect)
         {
-            if (!EntityOwnership) return;
-            
             switch (op)
             {
                 case SyncList<GameEffect>.Operation.OP_ADD:
                     newEffect.Entity = this;
-                    newEffect.OnAddOwner();
+                    if (EntityOwnership) newEffect.OnAddOwner();
+                    newEffect.OnAddClient();
                     break;
                 case SyncList<GameEffect>.Operation.OP_REMOVEAT:
-                    oldEffect.OnRemoveOwner();
+                    if (EntityOwnership) oldEffect.OnRemoveOwner();
+                    oldEffect.OnRemoveClient();
                     break;
             }
         }
-        
+
         [Command(requiresAuthority = false)]
         public void CmdAddEffect(GameEffect effect, GameEntity source)
         {
             effect.Entity = this;
             effect.Source = this;
-            
+
             _effects.Add(effect);
             effect.OnAddServer();
         }
@@ -341,18 +377,19 @@ namespace TonyDev.Game.Core.Entities
         public void CmdRemoveEffect(GameEffect effect)
         {
             if (!_effects.Contains(effect)) return;
-            
+
             _effects.Remove(effect);
-            
-            if(GameEffect.GameEffectIdentifiers.ContainsKey(effect.EffectIdentifier)) GameEffect.GameEffectIdentifiers.Remove(effect.EffectIdentifier);
-            
+
+            if (GameEffect.GameEffectIdentifiers.ContainsKey(effect.EffectIdentifier))
+                GameEffect.GameEffectIdentifiers.Remove(effect.EffectIdentifier);
+
             effect.OnRemoveServer();
         }
 
         public bool HasEffect(GameEffect effect) => _effects.Contains(effect);
 
         public bool HasEffectOfType<T>() => _effects.Any(ge => ge is T);
-        
+
         public void RemoveEffectsOfType<T>() where T : GameEffect
         {
             if (!EntityOwnership) return;
@@ -364,7 +401,7 @@ namespace TonyDev.Game.Core.Entities
                 CmdRemoveEffect(ge);
             }
         }
-        
+
         public void RemoveEffectsOfType(string type)
         {
             if (!EntityOwnership) return;
@@ -378,33 +415,37 @@ namespace TonyDev.Game.Core.Entities
         }
 
         #endregion
-        
+
         #region IDamageable
+
         public virtual Team Team { get; protected set; } = default;
 
         public Action<Team> OnTeamChange;
-        
-        public void SetTeam(Team newTeam, Team newTargetTeam) //Changes our team, invoking an event. WILL ONLY CONVERT ATTACKS' TEAMS THAT ARE ON THE SAME TEAM
+
+        public void
+            SetTeam(Team newTeam,
+                Team newTargetTeam) //Changes our team, invoking an event. WILL ONLY CONVERT ATTACKS' TEAMS THAT ARE ON THE SAME TEAM
         {
             if (newTeam == Team) return;
 
             OnTeamChange?.Invoke(newTeam);
-            
+
             targetTeam = newTargetTeam;
             Team = newTeam;
         }
-        
+
         public virtual float DamageMultiplier { get; protected set; } = 1f;
         public virtual float HealMultiplier { get; set; } = 1f;
-        public virtual int MaxHealth => (int)Stats.GetStat(Stat.Health);
+        public virtual int MaxHealth => (int) Stats.GetStat(Stat.Health);
         public virtual float CurrentHealth { get; protected set; }
         public virtual bool IsInvulnerable { get; set; }
         public virtual bool IsTangible { get; set; } = true;
         public bool IsAlive => NetworkCurrentHealth > 0;
+
         public virtual float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility = false)
         {
             successful = !IsInvulnerable || ignoreInvincibility || damage < 0;
-            
+
             if (damage == 0) return 0;
 
             if (damage > 0 && IsInvulnerable)
@@ -438,11 +479,11 @@ namespace TonyDev.Game.Core.Entities
 
             return modifiedDamage;
         }
-        
+
         public void SetHealth(float newHealth)
         {
             if (!EntityOwnership) return;
-            
+
             CurrentHealth = newHealth;
             OnHealthChangedOwner?.Invoke(newHealth);
         }
@@ -450,10 +491,10 @@ namespace TonyDev.Game.Core.Entities
         public virtual void Die()
         {
             if (!EntityOwnership) return;
-         
+
             OnDeathOwner?.Invoke(0);
-            
-            if(this is not Player.Player) NetworkServer.Destroy(gameObject);
+
+            if (this is not Player.Player) NetworkServer.Destroy(gameObject);
         }
 
         public event IDamageable.HealthAction OnTryHurtInvulnerableOwner;
