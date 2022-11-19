@@ -104,6 +104,13 @@ namespace TonyDev.Editor
 
             if (itemType is ItemType.Tower) DisplaySpawnableInfo(sp); //Show spawnable-specific fields
 
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+
+            DisplayEffectInfo(sp);
+
+            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
+            
             if (serializedObject.targetObject is ItemData id) id.item.itemEffects = itemEffects;
             serializedObject.ApplyModifiedProperties();
         }
@@ -114,6 +121,7 @@ namespace TonyDev.Editor
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemRarity)));
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.uiSprite)));
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemDescription)));
+            EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.bypassStatGeneration)));
         }
 
         private void DisplayEquippableInfo(SerializedProperty sp)
@@ -128,13 +136,6 @@ namespace TonyDev.Editor
                 EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.projectiles)));
 
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.statBonuses)));
-
-            EditorGUILayout.Space();
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-
-            DisplayEffectInfo(sp);
-
-            EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
         }
 
         private bool _recording = false;
@@ -201,7 +202,7 @@ namespace TonyDev.Editor
 
                 var effectProp = itemEffectsProp.GetArrayElementAtIndex(i);
                 
-                foreach (var field in ge.GetType().GetFields().Where(f => !f.IsNotSerialized && f.IsPublic))
+                foreach (var field in ge.GetType().GetFields().Where(f => !f.IsNotSerialized && f.IsPublic && !f.GetCustomAttributes(typeof(HideInInspector)).Any()))
                 { //Any changes here should be reflected in CustomReadWrite as well
                     if (field.FieldType.IsEnum)
                     {

@@ -21,7 +21,7 @@ namespace TonyDev.Game.Core.Entities
         public event Action OnTargetChangeOwner;
         public SyncList<GameEntity> Targets = new();
 
-        protected const float EntityTargetUpdatingRate = 0.1f;
+        public const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
 
         protected virtual bool CanAttack => IsAlive || this is Tower;
@@ -505,18 +505,18 @@ namespace TonyDev.Game.Core.Entities
 
         #endregion
 
-        public Action OnDeathBroadcast;
-
-        [Command(requiresAuthority = false)]
-        private void CmdBroadcastDeath()
-        {
-            RpcBroadcastDeath();
-        }
-
-        [ClientRpc]
-        private void RpcBroadcastDeath()
-        {
-            OnDeathBroadcast?.Invoke();
-        }
+        // public Action OnDeathBroadcast;
+        //
+        // [Command(requiresAuthority = false)]
+        // private void CmdBroadcastDeath()
+        // {
+        //     RpcBroadcastDeath();
+        // }
+        //
+        // [ClientRpc]
+        // private void RpcBroadcastDeath()
+        // {
+        //     OnDeathBroadcast?.Invoke();
+        // }
     }
 }

@@ -7,6 +7,7 @@ namespace TonyDev.Game.Core.Effects
     public class LifestealEffect : GameEffect
     {
         public float LeechPercent;
+        private float LeechPercentFinal => LeechPercent * playerStrengthFactorUponCreation;
 
         public override void OnAddOwner()
         {
@@ -20,7 +21,7 @@ namespace TonyDev.Game.Core.Effects
 
         private void Lifesteal(float dmg, GameEntity other, bool isCrit)
         {
-            var leech = -dmg * LeechPercent;
+            var leech = -dmg * LeechPercentFinal;
 
             ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
 
@@ -29,7 +30,7 @@ namespace TonyDev.Game.Core.Effects
         
         public override string GetEffectDescription()
         {
-            return $"<color=green>Gain {Tools.WrapColor($"{LeechPercent:P1}", Color.yellow)} lifesteal.</color>";
+            return $"<color=green>Gain {Tools.WrapColor($"{LeechPercentFinal:P1}", Color.yellow)} lifesteal.</color>";
         }
     }
 }

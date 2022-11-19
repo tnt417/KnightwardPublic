@@ -83,10 +83,11 @@ namespace TonyDev.Game.Core.Entities.Player
         public static string
             GetStatsTextFromBonuses(IEnumerable<StatBonus> statBonuses,
                 bool includeLabels,
-                bool separateTypes,
-                bool includeColorTags =
-                    false) //Returns a text description of stats, based on the stat bonuses specified.
+                bool separateTypes, 
+                bool tower = false) //Returns a text description of stats, based on the stat bonuses specified.
         {
+            if (statBonuses == null) return "";
+            
             var statBonusList = statBonuses.ToList();
 
             var stringBuilder = new StringBuilder();
@@ -97,8 +98,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
                 foreach (var (key, value) in mergedStatBonuses)
                 {
-                    stringBuilder.AppendLine(StatToText(key, StatType.Override, value, includeLabels,
-                        includeColorTags));
+                    stringBuilder.AppendLine(StatToText(key, StatType.Override, value, includeLabels, tower));
                 }
             }
             else
@@ -112,8 +112,7 @@ namespace TonyDev.Game.Core.Entities.Player
                         var flatStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.Flat).Select(sb => sb.strength)
                             .Sum(); //...Sum them up...
 
-                        stringBuilder.AppendLine(StatToText(stat, StatType.Flat, flatStrength, includeLabels,
-                            includeColorTags)); //...And append the text.
+                        stringBuilder.AppendLine(StatToText(stat, StatType.Flat, flatStrength, includeLabels, tower)); //...And append the text.
                     }
 
                     if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.AdditivePercent)) //If there are additive stat types...
@@ -121,8 +120,7 @@ namespace TonyDev.Game.Core.Entities.Player
                         var additiveStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.AdditivePercent).Select(sb => sb.strength)
                             .Sum(); //...Sum them up...
                         
-                        stringBuilder.AppendLine(StatToText(stat, StatType.AdditivePercent, additiveStrength, includeLabels,
-                            includeColorTags)); //...And append the text.
+                        stringBuilder.AppendLine(StatToText(stat, StatType.AdditivePercent, additiveStrength, includeLabels, tower)); //...And append the text.
                     }
 
                     if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.Multiplicative)) //If there are multiplicative stat types...
@@ -130,8 +128,7 @@ namespace TonyDev.Game.Core.Entities.Player
                         var multStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.Multiplicative)
                             .Select(sb => sb.strength).Aggregate((total, next) => total * next); //...Product them...
                         
-                        stringBuilder.AppendLine(StatToText(stat, StatType.Multiplicative, multStrength, includeLabels,
-                            includeColorTags)); //...And append the text.
+                        stringBuilder.AppendLine(StatToText(stat, StatType.Multiplicative, multStrength, includeLabels, tower)); //...And append the text.
                     }
                 }
             }
@@ -166,9 +163,22 @@ namespace TonyDev.Game.Core.Entities.Player
             {Stat.MoveSpeed, "Move Speed"},
             {Stat.CooldownReduce, "Cooldown Reduction"}
         };
+        
+        private static readonly Dictionary<Stat, string> TowerStatLabelKey = new Dictionary<Stat, string>()
+        {
+            {Stat.Armor, "Armor"},
+            {Stat.Damage, "Strength"},
+            {Stat.Dodge, "Dodge Chance"},
+            {Stat.Health, "Durability"},
+            {Stat.AoeSize, "Area of Effect"},
+            {Stat.AttackSpeed, "Frequency"},
+            {Stat.CritChance, "Critical Chance"},
+            {Stat.HpRegen, "Regen"},
+            {Stat.MoveSpeed, "Speed"},
+            {Stat.CooldownReduce, "Cooldown Reduction"}
+        };
 
-        private static string StatToText(Stat stat, StatType type, float strength, bool includeLabels,
-            bool includeColorTags)
+        private static string StatToText(Stat stat, StatType type, float strength, bool includeLabels, bool isTower)
         {
             var sb = new StringBuilder();
             var formatting = StatFormattingKey[stat].Split(',');
@@ -181,7 +191,7 @@ namespace TonyDev.Game.Core.Entities.Player
                 _ => "white"
             };
 
-            sb.Append(includeLabels ? StatLabelKey[stat] + ": " : "");
+            sb.Append(includeLabels ? (isTower ? TowerStatLabelKey[stat] : StatLabelKey[stat]) + ": " : "");
 
             sb.Append("<color=" + colorTag + ">");
 

@@ -5,6 +5,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
@@ -65,7 +66,14 @@ namespace TonyDev.Game.Global
             var it = Enum.Parse<ItemType>(itemType, true);
             var ir = Enum.Parse<ItemRarity>(itemRarity, true);
 
-            PlayerInventory.Instance.InsertItem(ItemGenerator.GenerateItemOfType(it, ir));
+            var item = ItemGenerator.GenerateItemOfType(it, ir);
+
+            foreach (var ge in item.itemEffects)
+            {
+                GameEffect.RegisterEffect(ge);
+            }
+            
+            PlayerInventory.Instance.InsertItem(item);
         }
 
         #endregion
@@ -196,7 +204,7 @@ namespace TonyDev.Game.Global
 
         public int maxArenaTowers = 5;
 
-        public bool SpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
+        public bool SpawnTower(Item towerItem, Vector2 pos, NetworkIdentity parent)
         {
             if (parent == null &&
                 Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= maxArenaTowers)
@@ -205,18 +213,18 @@ namespace TonyDev.Game.Global
                 return false;
             }
 
-            CmdSpawnTower(prefabName, pos, parent);
+            CmdSpawnTower(towerItem, pos, parent);
 
             return true;
         }
 
         [Command(requiresAuthority = false)]
-        public void CmdSpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
+        public void CmdSpawnTower(Item towerItem, Vector2 pos, NetworkIdentity parent)
         {
             if (parent == null &&
                 Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= maxArenaTowers) return;
 
-            ObjectSpawner.SpawnTower(prefabName, pos, parent);
+            ObjectSpawner.SpawnTower(towerItem, pos, parent);
             OccupiedTowerSpots.Add(new Vector2Int((int) pos.x, (int) pos.y));
         }
 

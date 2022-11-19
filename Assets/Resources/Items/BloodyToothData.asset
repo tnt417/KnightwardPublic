@@ -34,4 +34,5 @@ MonoBehaviour:
       type: {class: LifestealEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
+        playerStrengthFactorUponCreation: 0
         LeechPercent: 0.2

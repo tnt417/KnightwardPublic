@@ -18,11 +18,11 @@ namespace TonyDev.Game.Core.Entities.Towers
 
         private void Start()
         {
+            base.Start();
+            
             if (!EntityOwnership) return;
 
             OnAttack += CmdFire;
-            
-            Init();
         }
 
         [Command(requiresAuthority = false)]
@@ -45,6 +45,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         [ClientRpc]
         private void RpcFire(Vector2 direction)
         {
+            SoundManager.PlaySound("dagger", transform.position);
             towerAnimator.PlayAnimation(TowerAnimationState.Fire);
             if (rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
         }

@@ -8,9 +8,9 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
     public class ArmoredBootEffect : GameEffect
     {
         public float armorBonusFlat = 20f;
-        private float ArmorBonusFlatFinal => armorBonusFlat + 10f * PlayerStrengthFactorUponCreation;
+        private float ArmorBonusFlatFinal => armorBonusFlat + 10f * playerStrengthFactorUponCreation;
         public float armorBonusMultiplier = 0.5f;
-        private float ArmorBonusMultFinal => armorBonusMultiplier + 0.1f * PlayerStrengthFactorUponCreation;
+        private float ArmorBonusMultFinal => armorBonusMultiplier + 0.1f * playerStrengthFactorUponCreation;
         public float moveSpeedPenalty = 0.2f;
 
         public override void OnAddOwner()

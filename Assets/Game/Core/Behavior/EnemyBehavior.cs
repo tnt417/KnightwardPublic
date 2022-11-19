@@ -13,6 +13,8 @@ namespace TonyDev.Game.Core.Behavior
         protected Enemy Enemy;
         protected Rigidbody2D Rb2d;
 
+        protected Transform FirstEnemyTarget => Enemy.Targets.Count > 0 ? Enemy.Targets[0] != null ? Enemy.Targets[0].transform : null : null;
+
         protected Vector2 GetDirectionToFirstTarget()
         {
             if (Enemy.Targets.Count == 0) return Vector2.zero;
@@ -20,25 +22,24 @@ namespace TonyDev.Game.Core.Behavior
             return (Enemy.Targets[0].transform.position - transform.position).normalized;
         }
         
-        protected async UniTask FollowForSeconds(Transform followTransform, float speed, float seconds)
+        protected async UniTask FollowForSeconds(Func<Transform> followTransform, float speed, float seconds)
         {
             var doneTime = Time.time + seconds;
 
-            while (Time.time < doneTime)
-            {
-                await UniTask.WaitUntil(() => Enemy.Targets.Count > 0);
-                Rb2d.velocity = (followTransform.transform.position - transform.position).normalized * speed;
-                await UniTask.WaitForFixedUpdate();
-            }
+            await FollowUntil(followTransform, speed, () => Time.time > doneTime);
         }
 
-        protected async UniTask FollowUntil(Transform followTransform, float speed, Func<bool> predicate)
+        protected async UniTask FollowUntil(Func<Transform> followTransform, float speed, Func<bool> predicate)
         {
             while (!predicate.Invoke())
             {
-                await UniTask.WaitUntil(() => Enemy.Targets.Count > 0);
-                Rb2d.velocity = (followTransform.transform.position - transform.position).normalized * speed;
                 await UniTask.WaitForFixedUpdate();
+                
+                var t = followTransform.Invoke();
+                
+                if (t == null) continue;
+
+                Rb2d.velocity = t != null ? (followTransform.Invoke().position - transform.position).normalized * speed : Vector2.zero;
             }
         }
         
@@ -106,11 +107,11 @@ namespace TonyDev.Game.Core.Behavior
         {
             var sr = GetComponent<SpriteRenderer>();
             
-            while (true)
+            while (Enemy != null)
             {
                 await UniTask.WaitForFixedUpdate();
                 if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
-                sr.flipX = Enemy.Targets[0].transform.position.x > transform.position.x;
+                sr.flipX = Enemy.Targets[0]?.transform.position.x > transform.position.x;
             }
         }
 

@@ -74,9 +74,9 @@ namespace TonyDev.Game.Global
             PopupObjectPool.Enqueue(go);
         }
 
-        public static void SpawnTower(string prefabName, Vector2 pos, NetworkIdentity parent)
+        public static void SpawnTower(Item towerItem, Vector2 pos, NetworkIdentity parent)
         {
-            var prefab = ObjectFinder.GetPrefab(prefabName);
+            var prefab = towerItem.SpawnablePrefab;
 
             var go = Instantiate(prefab, pos, Quaternion.identity);
 
@@ -89,7 +89,7 @@ namespace TonyDev.Game.Global
             var tower = go.GetComponent<Tower>();
 
             tower.CmdSetParentIdentity(parent);
-            tower.prefab = prefab;
+            tower.CmdSetTowerItem(towerItem);
 
             var interact = go.AddComponent<InteractableButton>();
             interact.onInteract.AddListener((type) =>

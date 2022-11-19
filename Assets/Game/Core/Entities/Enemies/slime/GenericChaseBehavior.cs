@@ -17,12 +17,12 @@ namespace TonyDev
 
         protected override async UniTask ExecuteBehavior()
         {
-            while (true)
+            while (Enemy != null)
             {
                 await UniTask.WaitForFixedUpdate();
                 if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
                 
-                await FollowForSeconds(Enemy.Targets[0].transform, Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier, Mathf.Infinity);
+                await FollowForSeconds(() => FirstEnemyTarget, Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier, Mathf.Infinity);
             }
         }
     }

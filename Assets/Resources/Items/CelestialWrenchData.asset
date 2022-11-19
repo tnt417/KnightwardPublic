@@ -35,10 +35,12 @@ MonoBehaviour:
       type: {class: CelestialWrenchEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
+        playerStrengthFactorUponCreation: 0
     - rid: 4292349832393654273
       type: {class: TowerBuffEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
+        playerStrengthFactorUponCreation: 0
         AttackSpeedBonus: 0.5
         DamageBonus: 0.5
         Radius: 5

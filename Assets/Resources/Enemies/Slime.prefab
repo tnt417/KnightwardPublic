@@ -15,6 +15,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3803095840298935939, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_Size.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3803095840298935939, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_Size.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3803095840298935939, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_Offset.y
+      value: -0.25
+      objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.enemyName
       value: Slime
@@ -60,6 +72,10 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.contactAttackData.hitboxRadius
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[0].animation
       value: 
       objectReference: {fileID: 7400000, guid: c21e0a1c5eb91ce4d852ecb15094f337, type: 2}
@@ -67,6 +83,10 @@ PrefabInstance:
       propertyPath: enemyData.animations.Array.data[1].animation
       value: 
       objectReference: {fileID: 7400000, guid: 7e8c65db98427554bbdc2606209b8d5d, type: 2}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.contactAttackData.damageMultiplier
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[1].enemyAnimationState
       value: 1

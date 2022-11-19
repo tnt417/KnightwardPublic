@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
@@ -226,7 +227,7 @@ namespace TonyDev.Game.Level.Rooms
             var enemySpawner = GetComponentInChildren<EnemySpawner>();
 
             var enemies = GameManager.EntitiesReadonly.Where(entity =>
-                entity is Enemy && entity.CurrentParentIdentity == netIdentity);
+                entity is Enemy && entity.CurrentParentIdentity == netIdentity && entity.Team != Team.Player);
 
             var shouldLock = enemies.Any()
                              || enemySpawner != null &&

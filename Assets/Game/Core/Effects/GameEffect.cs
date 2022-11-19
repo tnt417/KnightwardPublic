@@ -29,7 +29,7 @@ namespace TonyDev.Game.Core.Effects
         [NonSerialized] public GameEntity Entity; //The entity affected by the effect
         [NonSerialized] public GameEntity Source; //The entity that inflicted the effect
 
-        [NonSerialized] protected float PlayerStrengthFactorUponCreation;
+        [HideInInspector] public float playerStrengthFactorUponCreation;
         
         public virtual void OnAddClient() {} //Called on all clients when the effect is added to an entity
         public virtual void OnRemoveClient() {} //Called on all clients when the effect is removed from an entity
@@ -43,6 +43,11 @@ namespace TonyDev.Game.Core.Effects
         public virtual void OnRemoveOwner() {} //Called on the entity's owner client when the effect is removed from an entity
         public virtual void OnUpdateOwner() {} //Called on the entity's owner client when the effect updates on an entity
 
+        public virtual void OnRegister()
+        {
+            playerStrengthFactorUponCreation = ItemGenerator.StatStrengthFactor;
+        }
+        
         public virtual string GetEffectDescription()
         {
             return effectDescription;
@@ -83,10 +88,10 @@ namespace TonyDev.Game.Core.Effects
         {
             if (!string.IsNullOrEmpty(gameEffect.EffectIdentifier)) return;
 
-            gameEffect.PlayerStrengthFactorUponCreation = ItemGenerator.StatStrengthFactor;
-            
             gameEffect.EffectIdentifier = CustomReadWrite.GenerateUniqueEffectIdentifier(gameEffect);
             GameEffectIdentifiers[gameEffect.EffectIdentifier] = gameEffect;
+
+            gameEffect.OnRegister();
         }
         #endregion
     }

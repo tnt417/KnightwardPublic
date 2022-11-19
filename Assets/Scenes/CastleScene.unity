@@ -13508,6 +13508,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 144096327393916006, guid: 8d3f408f264fc6b448bfee518430f6d6, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 144096327393916006, guid: 8d3f408f264fc6b448bfee518430f6d6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1043387988716007450, guid: 8d3f408f264fc6b448bfee518430f6d6, type: 3}
       propertyPath: m_Name
       value: Crystal

@@ -15,8 +15,7 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: 9214ccdded46bf7438729b5624c73122, type: 3}
     itemName: Empowering Toxin
-    itemDescription: Press 'e' to get a temporary boost to critical strike chance,
-      move speed, and attack speed.
+    itemDescription: 
     itemType: 2
     itemRarity: 1
     statBonuses: []

@@ -24,7 +24,7 @@ namespace TonyDev.Game.UI.Tower
         //
         private bool Placing => towerPlacementIndicator.activeSelf;
         private Camera _mainCamera;
-        private GameObject _selectedTowerPrefab;
+        private Item _selectedTowerItem;
         private SpriteRenderer _indicatorSprite;
         private Collider2D _indicatorCollider;
 
@@ -80,16 +80,13 @@ namespace TonyDev.Game.UI.Tower
         {
             towerPlacementIndicator.SetActive(!Placing); //Toggle the placement indicator activeness
 
-            _selectedTowerPrefab = item.spawnablePrefab; //Update selected prefab
-            var tower = _selectedTowerPrefab
+            _selectedTowerItem = item; //Update selected prefab
+            var tower = _selectedTowerItem.SpawnablePrefab
                 .GetComponent<Core.Entities.Towers.Tower>(); //Get a reference to the tower of the prefab...
 
             rangeIndicator.transform.localScale =
                 new Vector3(tower.targetRadius * 2, tower.targetRadius * 2,
                     1); //...and update the rangeIndicator based on the tower's range.
-
-            var prefabSprite =
-                _selectedTowerPrefab.GetComponentInChildren<SpriteRenderer>(); //Get the prefab's SpriteRenderer
 
             _indicatorSprite =
                 towerPlacementIndicator.GetComponent<SpriteRenderer>(); //Get the indicator's SpriteRenderer
@@ -129,7 +126,7 @@ namespace TonyDev.Game.UI.Tower
 
             SoundManager.PlaySound("interact", pos);
             
-            var success = GameManager.Instance.SpawnTower(ObjectFinder.GetNameOfPrefab(_selectedTowerPrefab),
+            var success = GameManager.Instance.SpawnTower(_selectedTowerItem,
                 towerPlacementIndicator.transform.position, Player.LocalInstance.CurrentParentIdentity);
 
             if (!success) return;

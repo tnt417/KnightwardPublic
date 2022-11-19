@@ -93,17 +93,10 @@ MonoBehaviour:
   maxTargets: 1
   baseStats:
   - statType: 0
-    stat: 0
-    strength: 1
-    source: 
-  - statType: 0
     stat: 3
     strength: 1
     source: 
-  - statType: 0
-    stat: 1
-    strength: 25
-    source: 
+  targetIntangible: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
   prefab: {fileID: 0}
@@ -119,11 +112,14 @@ MonoBehaviour:
       destroyOnApply: 1
       lifetime: 0.6666667
       spawnOnDestroyKey: 
+      ignoreInvincibility: 0
+    disableMovement: 0
     travelSpeed: 30
     offsetDegrees: 0
     waveAmplitude: 0
-    waveFrequency: 0
+    waveLength: 0
     waveDistance: 0
+    childOfOwner: 0
     effects: []
   references:
     version: 2

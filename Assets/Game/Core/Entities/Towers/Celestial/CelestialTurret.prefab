@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1805698660107505831}
   - component: {fileID: 6938340393128323355}
-  - component: {fileID: 2000108650387228033}
   - component: {fileID: 2488910766830145623}
   - component: {fileID: 8727881914897405902}
   - component: {fileID: 330042881028611830}
+  - component: {fileID: 8637326900115478612}
   m_Layer: 0
   m_Name: CelestialTurret
   m_TagString: Untagged
@@ -52,38 +52,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 2488910766830145623}
   animations: []
---- !u!114 &2000108650387228033
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150477889065159250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 98e8d8e84a2a59847b94298c19a503c6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  targetTag: 
-  targetTeam: 1
-  maxTargets: 10
-  baseStats: []
-  targetIntangible: 1
-  towerAnimator: {fileID: 6938340393128323355}
-  targetRadius: 3
-  prefab: {fileID: 0}
-  buffs:
-  - statType: 1
-    stat: 0
-    strength: 0.25
-    source: 
-  - statType: 1
-    stat: 1
-    strength: 0.25
-    source: 
-  buffEffectPrefab: {fileID: 2004727793591240830, guid: 14b6d9f4f00ffa94c8e89e708999174e, type: 3}
 --- !u!95 &2488910766830145623
 Animator:
   serializedVersion: 4
@@ -142,6 +110,40 @@ MonoBehaviour:
   visible: 0
   m_AssetId: 9b89ea099a5a20c479a22d80c0e63779
   hasSpawned: 0
+--- !u!114 &8637326900115478612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150477889065159250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ff4f85a28fd05947baf5b6067bec941, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  targetTag: 
+  targetTeam: 1
+  maxTargets: 20
+  baseStats: []
+  targetIntangible: 1
+  towerAnimator: {fileID: 6938340393128323355}
+  targetRadius: 3
+  myItem:
+    uiSprite: {fileID: 0}
+    itemName: 
+    itemDescription: 
+    itemType: 0
+    itemRarity: 0
+    statBonuses: []
+    itemEffects: []
+    projectiles: []
+    spawnablePrefabName: 
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &4032208556319356246
 GameObject:
   m_ObjectHideFlags: 0

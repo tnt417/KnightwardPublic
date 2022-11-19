@@ -35,6 +35,7 @@ MonoBehaviour:
       type: {class: ElementalGloveEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
+        playerStrengthFactorUponCreation: 0
         ActivateButton: 113
         Cooldown: 1
         Duration: 1

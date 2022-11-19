@@ -55,22 +55,31 @@ MonoBehaviour:
   targetTeam: 1
   maxTargets: 5
   baseStats:
-  - statType: 0
+  - statType: 2
     stat: 0
-    strength: 10
-    source: 
-  - statType: 0
-    stat: 1
     strength: 10
     source: 
   - statType: 0
     stat: 3
     strength: 1
     source: 
+  - statType: 2
+    stat: 1
+    strength: 0.5
+    source: 
   targetIntangible: 1
   towerAnimator: {fileID: 3454711787081810835}
   targetRadius: 5
-  prefab: {fileID: 0}
+  myItem:
+    uiSprite: {fileID: 0}
+    itemName: 
+    itemDescription: 
+    itemType: 0
+    itemRarity: 0
+    statBonuses: []
+    itemEffects: []
+    projectiles: []
+    spawnablePrefabName: 
   rotateToFaceTargetObject: {fileID: 0}
   projectileData:
   - prefabKey: teslaShot
@@ -83,11 +92,12 @@ MonoBehaviour:
       destroyOnApply: 0
       lifetime: 5
       spawnOnDestroyKey: 
+      ignoreInvincibility: 0
     disableMovement: 0
     travelSpeed: 10
     offsetDegrees: 0
     waveAmplitude: 0
-    waveFrequency: 0
+    waveLength: 0
     waveDistance: 0
     childOfOwner: 0
     effects: []

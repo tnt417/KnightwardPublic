@@ -24,14 +24,14 @@ namespace TonyDev.Game.Core.Items
             ArmorItem = null;
             RelicItems.Clear();
         }
-        
+
         public static readonly PlayerInventory Instance;
 
         //5 item variables, 1 for each inventory slot. A bit inefficient but works for now.
         public Item WeaponItem { get; private set; }
         public Item ArmorItem { get; private set; }
 
-        public Queue<Item> RelicItems { get; private set; } = new ();
+        public Queue<Item> RelicItems { get; private set; } = new();
 
         public static Action<Item> OnItemInsertLocal;
 
@@ -71,7 +71,9 @@ namespace TonyDev.Game.Core.Items
                     {
                         foreach (var effect in replacedItem.itemEffects) Player.LocalInstance.CmdRemoveEffect(effect);
                     }
-                    PlayerStats.Stats.RemoveStatBonuses(replacedItem.itemName); //Remove stat bonuses of the now removed item
+
+                    PlayerStats.Stats.RemoveStatBonuses(replacedItem
+                        .itemName); //Remove stat bonuses of the now removed item
                 }
 
                 if (item.itemEffects != null)
@@ -102,9 +104,20 @@ namespace TonyDev.Game.Core.Items
                     ArmorItem = item;
                     break;
                 case ItemType.Relic: //If it's a relic, it goes in the relic slot.
-                    
-                    if (RelicItems.Any(i => i.itemName == item.itemName)) return item; //Can only have one of each relic
-                    
+                    if (RelicItems.Any(i => i.itemName == item.itemName))
+                    {
+                        while (true)
+                        {
+                            replacedItem = RelicItems.Dequeue();
+
+                            if (replacedItem.itemName == item.itemName)
+                            {
+                                break;
+                            }
+                            RelicItems.Enqueue(replacedItem);
+                        }
+                    }
+
                     RelicItems.Enqueue(item);
                     if (RelicItems.Count > 3) replacedItem = RelicItems.Dequeue();
                     break;

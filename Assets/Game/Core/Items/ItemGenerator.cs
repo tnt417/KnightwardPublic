@@ -42,6 +42,7 @@ namespace TonyDev.Game.Core.Items
             Item item = null;
             var itemName = string.Empty;
             Sprite sprite = null;
+            var bypassStatGen = false;
             //
 
             if (type == ItemType.Weapon)
@@ -66,9 +67,14 @@ namespace TonyDev.Game.Core.Items
                     itemName = "Armor";
                     break;
                 case ItemType.Relic:
-                    return Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
+                    var selectedRelic = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
+                    bypassStatGen = selectedRelic.bypassStatGeneration;
+                    return ScaleRelicStats(selectedRelic);
                 case ItemType.Tower:
-                    return GetTowerItem(rarity);
+                    item = GetTowerItem(rarity);
+                    bypassStatGen = item.bypassStatGeneration;
+                    item.statBonuses = GenerateItemStats(item.itemType, item.itemRarity, bypassStatGen);
+                    return item;
             }
 
             //Return a new item using all the variables this function has generated and/or been provided with
@@ -77,7 +83,7 @@ namespace TonyDev.Game.Core.Items
                 itemType = type,
                 itemRarity = rarity,
                 itemName = itemName,
-                statBonuses = item == null ? GenerateItemStats(type, rarity) : StatBonus.Combine(GenerateItemStats(type, rarity), item.statBonuses).ToArray(),
+                statBonuses = item == null ? GenerateItemStats(type, rarity, bypassStatGen) : StatBonus.Combine(GenerateItemStats(type, rarity, bypassStatGen), item.statBonuses).ToArray(),
                 uiSprite = sprite,
                 itemEffects = item?.itemEffects.AsReadOnly().ToList(),
                 projectiles = item?.projectiles
@@ -86,14 +92,29 @@ namespace TonyDev.Game.Core.Items
 
         #region Stat Generation
 
-        public static float StatStrengthFactor => 1 + GameManager.DungeonFloor/15f;
+        public static float StatStrengthFactor => 1f + GameManager.DungeonFloor/15f;
         private static float DamageStrength => Random.Range(0.6f, 1f) * Mathf.Pow(StatStrengthFactor, 1.5f) * 14f;
         private static float AttackSpeedStrength => Random.Range(0.6f, 1f) * Mathf.Sqrt(StatStrengthFactor);
         private static float ArmorStrength => Random.Range(0.6f, 1f) * 25 * StatStrengthFactor;
         private static float HealthStrength => Random.Range(0.6f, 1f) * 40 * StatStrengthFactor;
-        private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity)
+
+        private static Item ScaleRelicStats(Item original)
         {
-            if (itemType is not (ItemType.Armor or ItemType.Weapon)) return null;
+            for (var i = 0; i < original.statBonuses.Length; i++)
+            {
+                var bonus = original.statBonuses[i];
+
+                bonus.strength *= Mathf.Pow(0.8f + Mathf.Log(StatStrengthFactor), 2);
+
+                original.statBonuses[i] = bonus;
+            }
+            
+            return original;
+        }
+        
+        private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity, bool bypassStatGen)
+        {
+            if (itemType is not (ItemType.Armor or ItemType.Weapon or ItemType.Tower) || bypassStatGen) return null;
 
             /*Weapons:
             Common = base dmg, base attack spd
@@ -127,6 +148,12 @@ namespace TonyDev.Game.Core.Items
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Armor, ArmorStrength * multiplier, source));
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Health, HealthStrength * multiplier, source));
                     break;
+                case ItemType.Tower:
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier, source));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(itemType), itemType, null);
             }
 
             switch (itemRarity)

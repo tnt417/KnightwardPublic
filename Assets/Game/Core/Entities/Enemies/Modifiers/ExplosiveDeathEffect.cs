@@ -13,7 +13,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Modifiers
 
         public override void OnAddClient()
         {
-            Entity.OnDeathBroadcast += Die;
+            //Entity.OnDeathBroadcast += Die;
         }
 
         private void Die()

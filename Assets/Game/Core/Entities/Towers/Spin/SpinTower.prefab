@@ -109,6 +109,7 @@ MonoBehaviour:
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  ignoreInvincibility: 0
   inflictBuffs: []
   inflictEffects: []
   rb2d: {fileID: 0}
@@ -131,16 +132,25 @@ MonoBehaviour:
   maxTargets: 1
   baseStats:
   - statType: 0
-    stat: 1
-    strength: 10
-    source: 
-  - statType: 0
     stat: 3
     strength: 1
     source: 
+  targetIntangible: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 0.5
-  prefab: {fileID: 0}
+  myItem:
+    uiSprite: {fileID: 0}
+    itemName: 
+    itemDescription: 
+    itemType: 0
+    itemRarity: 0
+    statBonuses: []
+    itemEffects: []
+    projectiles: []
+    spawnablePrefabName: 
+  references:
+    version: 2
+    RefIds: []
 --- !u!114 &330042881028611830
 MonoBehaviour:
   m_ObjectHideFlags: 0

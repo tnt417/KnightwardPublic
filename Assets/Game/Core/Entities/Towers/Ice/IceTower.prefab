@@ -94,22 +94,31 @@ MonoBehaviour:
   targetTeam: 0
   maxTargets: 1
   baseStats:
-  - statType: 0
+  - statType: 2
     stat: 1
-    strength: 25
+    strength: 1.5
     source: 
-  - statType: 0
+  - statType: 2
     stat: 0
-    strength: 0.2
+    strength: 0.4
     source: 
   - statType: 0
     stat: 3
     strength: 1
     source: 
-  networkCurrentHealth: 0
-  networkMaxHealth: 0
+  targetIntangible: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
+  myItem:
+    uiSprite: {fileID: 0}
+    itemName: 
+    itemDescription: 
+    itemType: 0
+    itemRarity: 0
+    statBonuses: []
+    itemEffects: []
+    projectiles: []
+    spawnablePrefabName: 
   rotateToFaceTargetObject: {fileID: 0}
   projectileData:
   - prefabKey: iceShot
@@ -122,12 +131,18 @@ MonoBehaviour:
       destroyOnApply: 1
       lifetime: 1
       spawnOnDestroyKey: icePool
+      ignoreInvincibility: 0
+    disableMovement: 0
     travelSpeed: 10
     offsetDegrees: 0
     waveAmplitude: 0
-    waveFrequency: 0
+    waveLength: 0
     waveDistance: 0
-    effectIDs: []
+    childOfOwner: 0
+    effects: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!212 &3280092096816610737
 SpriteRenderer:
   m_ObjectHideFlags: 0

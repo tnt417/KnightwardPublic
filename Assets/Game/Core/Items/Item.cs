@@ -7,6 +7,7 @@ using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
 using UnityEditor;
 using UnityEngine;
@@ -60,12 +61,13 @@ namespace TonyDev.Game.Core.Items
         public ItemType itemType;
         public ItemRarity itemRarity;
         public StatBonus[] statBonuses;
+        public bool bypassStatGeneration;
         [SerializeReference] [SerializeField] public List<GameEffect> itemEffects;
 
         public ProjectileData[] projectiles;
         //
 
-        public GameObject spawnablePrefab => ObjectFinder.GetPrefab(spawnablePrefabName);
+        public GameObject SpawnablePrefab => ObjectFinder.GetPrefab(spawnablePrefabName);
         public string spawnablePrefabName;
 
         public void AddInflictEffect(GameEffect effect, bool allProjectiles)
@@ -115,22 +117,19 @@ namespace TonyDev.Game.Core.Items
 
             if (!string.IsNullOrEmpty(itemDescription)) stringBuilder.AppendLine(itemDescription);
 
-            if (IsEquippable)
+            if (itemEffects is {Count: > 0})
             {
-                if (itemEffects is {Count: > 0})
+                foreach (var ge in itemEffects.Where(ge => ge != null))
                 {
-                    foreach (var ge in itemEffects.Where(ge => ge != null))
-                    {
-                        var desc = ge.GetEffectDescription();
+                    var desc = ge.GetEffectDescription();
 
-                        if (string.IsNullOrEmpty(desc)) continue;
+                    if (string.IsNullOrEmpty(desc)) continue;
 
-                        stringBuilder.AppendLine(desc);
-                    }
+                    stringBuilder.AppendLine(desc);
                 }
-
-                stringBuilder.Append(PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true, true));
             }
+
+            stringBuilder.Append(PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true,  itemType == ItemType.Tower));
 
             return stringBuilder.ToString(); //Return the string
         }

@@ -8,7 +8,7 @@ namespace TonyDev.Game.Core.Effects
     {
         public float Factor;
         
-        private float FactorFinal => Factor + 0.1f * PlayerStrengthFactorUponCreation;
+        private float FactorFinal => Factor + 0.1f * playerStrengthFactorUponCreation;
         
         public override void OnAddOwner()
         {

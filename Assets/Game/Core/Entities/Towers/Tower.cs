@@ -7,6 +7,7 @@ using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
+using UnityEditor;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Towers
@@ -18,11 +19,32 @@ namespace TonyDev.Game.Core.Entities.Towers
         [SerializeField] public float targetRadius;
         //
 
-        public GameObject prefab;
+        [HideInInspector] [SyncVar] public Item myItem;
 
-        private void Start()
+        [Command(requiresAuthority = false)]
+        public void CmdSetTowerItem(Item newItem)
+        {
+            myItem = newItem;
+        }
+
+        protected void Start()
         {
             Init();
+
+            if (!EntityOwnership) return;
+
+            if (myItem.statBonuses != null)
+            {
+                foreach (var sb in myItem.statBonuses)
+                {
+                    Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, myItem.itemName);
+                }
+            }
+
+            foreach (var ge in myItem.itemEffects)
+            {
+                CmdAddEffect(ge, this);
+            }
         }
 
         public override Team Team => Team.Player;
@@ -31,9 +53,10 @@ namespace TonyDev.Game.Core.Entities.Towers
 
         public void Pickup()
         {
+            Die();
             GameManager.Instance.OccupiedTowerSpots.Remove(new Vector2Int((int)transform.position.x, (int)transform.position.y));
             NetworkServer.Destroy(gameObject);
-            PlayerInventory.Instance.InsertItem(GameManager.AllItems.Select(id => Instantiate(id).item).FirstOrDefault(i => i.spawnablePrefab == prefab));
+            PlayerInventory.Instance.InsertItem(myItem);
         }
     }
 }

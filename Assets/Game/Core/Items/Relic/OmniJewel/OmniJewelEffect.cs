@@ -1,5 +1,7 @@
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global;
+using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects.ItemEffects
 {
@@ -21,6 +23,12 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         public override void OnUpdateOwner()
         {
+        }
+
+        public override string GetEffectDescription()
+        {
+            return
+                $"<color=green>Grants a {Tools.WrapColor($"{additivePercentBonus:P0}", Color.yellow)} bonus to damage, attack speed, health, and armor.</color>";
         }
     }
 }

@@ -20,7 +20,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Potion
                 if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
 
                 PlayAnimation(EnemyAnimationState.Move);
-                await FollowUntil(Enemy.Targets[0].transform, followSpeed, () => Vector2.Distance(transform.position, Enemy.Targets[0].transform.position) <= detonateDistance);
+                await FollowUntil(() => FirstEnemyTarget, followSpeed, () => Vector2.Distance(transform.position, Enemy.Targets[0].transform.position) <= detonateDistance);
                 PlayAnimation(EnemyAnimationState.Stop);
                 await UniTask.Delay(TimeSpan.FromSeconds(1));
                 NetworkServer.Destroy(gameObject);

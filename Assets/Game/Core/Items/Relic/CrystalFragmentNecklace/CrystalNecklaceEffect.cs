@@ -12,7 +12,7 @@ namespace TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace
         private CrystalNecklaceEffect _crystalNecklaceEffect;
 
         public float ArmorBonusFlat;
-        private float ArmorBonusFlatFinal => ArmorBonusFlat * PlayerStrengthFactorUponCreation;
+        private float ArmorBonusFlatFinal => ArmorBonusFlat * playerStrengthFactorUponCreation;
         
         public override void OnAddOwner() //Runs when an item is equipped
         {

@@ -12,25 +12,6 @@ namespace TonyDev.Game.Core.Items.Relics.VampireCape
     public class VampireCapeEffect : GameEffect
     {
         private float _batRange = 5f;
-        private float _lifestealAmount = 0.1f;
-        
-        public override void OnAddOwner()
-        {
-            //Entity.OnDamageOther += LifeSteal;
-        }
-
-        public override void OnRemoveOwner()
-        {
-            //Entity.OnDamageOther -= LifeSteal;
-        }
-
-        private void LifeSteal(float amount, GameEntity other)
-        {
-            var lifesteal = amount * _lifestealAmount;
-            
-            Entity.ApplyDamage(-(lifesteal), out var successful);
-            if(successful) ObjectSpawner.SpawnTextPopup(Entity.transform.position, "+" + lifesteal, Color.green);
-        }
 
         private double _nextUpdateTime;
 
@@ -40,7 +21,7 @@ namespace TonyDev.Game.Core.Items.Relics.VampireCape
 
             _nextUpdateTime = Time.time + 0.1f;
 
-            foreach (var ge in GameManager.EntitiesReadonly.Where(ge => ge is Enemy {EnemyName: "Bat"}))
+            foreach (var ge in GameManager.EntitiesReadonly.Where(ge => ge is Enemy {EnemyName: "Bat"} && ge.Team != Entity.Team))
             {
                 if (Vector2.Distance(ge.transform.position, Entity.transform.position) < _batRange)
                 {
