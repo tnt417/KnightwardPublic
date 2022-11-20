@@ -6,9 +6,9 @@ namespace TonyDev.Game.Core.Effects
 {
     public class HealingBonusEffect : GameEffect
     {
-        public float Factor;
+        public Vector2 BonusScale;
         
-        private float FactorFinal => Factor + 0.1f * playerStrengthFactorUponCreation;
+        private float FactorFinal => LinearScale(BonusScale.x, BonusScale.y, 50);
         
         public override void OnAddOwner()
         {

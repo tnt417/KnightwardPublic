@@ -23,6 +23,7 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 3
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349832393654273
     - rid: 4023140663594319872
@@ -35,12 +36,12 @@ MonoBehaviour:
       type: {class: CelestialWrenchEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
-        playerStrengthFactorUponCreation: 0
+        DungeonFloorUponCreation: 0
     - rid: 4292349832393654273
       type: {class: TowerBuffEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
-        playerStrengthFactorUponCreation: 0
-        AttackSpeedBonus: 0.5
-        DamageBonus: 0.5
+        DungeonFloorUponCreation: 0
+        AttackSpeedScale: {x: 0.4, y: 0.75}
+        DamageScale: {x: 0.4, y: 0.75}
         Radius: 5

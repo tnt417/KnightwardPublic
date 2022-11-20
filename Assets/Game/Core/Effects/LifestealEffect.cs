@@ -6,8 +6,8 @@ namespace TonyDev.Game.Core.Effects
 {
     public class LifestealEffect : GameEffect
     {
-        public float LeechPercent;
-        private float LeechPercentFinal => LeechPercent * playerStrengthFactorUponCreation;
+        public Vector2 LeechPercentScale;
+        private float LeechPercentFinal => LinearScale(LeechPercentScale.x, LeechPercentScale.y, 50);
 
         public override void OnAddOwner()
         {

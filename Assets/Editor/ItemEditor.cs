@@ -58,7 +58,7 @@ namespace TonyDev.Editor
         public override void OnInspectorGUI()
         {
             EditorUtility.SetDirty(serializedObject.targetObject);
-            
+
             GUILayout.Label("<color=white><size=15><b>Item Manager</b></size></color>", richTextStyle);
 
             EditorGUILayout.BeginHorizontal();
@@ -110,7 +110,7 @@ namespace TonyDev.Editor
             DisplayEffectInfo(sp);
 
             EditorGUILayout.LabelField("", GUI.skin.horizontalSlider);
-            
+
             if (serializedObject.targetObject is ItemData id) id.item.itemEffects = itemEffects;
             serializedObject.ApplyModifiedProperties();
         }
@@ -139,11 +139,11 @@ namespace TonyDev.Editor
         }
 
         private bool _recording = false;
-        
+
         private void DisplayEffectInfo(SerializedProperty sp)
         {
             itemEffects.RemoveAll(ie => ie == null);
-            
+
             EditorGUILayout.BeginHorizontal();
 
             EditorGUILayout.LabelField("<color=white><size=15><b>Effects</b></size></color>", richTextStyle);
@@ -173,7 +173,7 @@ namespace TonyDev.Editor
             EditorGUILayout.Space();
 
             var itemEffectsProp = sp.FindPropertyRelative(nameof(Item.itemEffects));
-            
+
             for (var i = 0; i < itemEffects.Count; i++)
             {
                 var screenRect = GUILayoutUtility.GetRect(1, 1);
@@ -188,7 +188,8 @@ namespace TonyDev.Editor
                 EditorGUILayout.BeginHorizontal();
 
                 EditorGUILayout.LabelField(
-                    "<size=12><b><color=white>" + ge.ToString().Split('.').LastOrDefault()?.Replace("Entry", "") + "</color></b></size>",
+                    "<size=12><b><color=white>" + ge.ToString().Split('.').LastOrDefault()?.Replace("Entry", "") +
+                    "</color></b></size>",
                     style);
 
                 GUILayout.FlexibleSpace();
@@ -201,41 +202,40 @@ namespace TonyDev.Editor
                 EditorGUILayout.EndHorizontal();
 
                 var effectProp = itemEffectsProp.GetArrayElementAtIndex(i);
-                
-                foreach (var field in ge.GetType().GetFields().Where(f => !f.IsNotSerialized && f.IsPublic && !f.GetCustomAttributes(typeof(HideInInspector)).Any()))
-                { //Any changes here should be reflected in CustomReadWrite as well
-                    if (field.FieldType.IsEnum)
+
+                foreach (var field in ge.GetType().GetFields().Where(f =>
+                    !f.IsNotSerialized && f.IsPublic && !f.GetCustomAttributes(typeof(HideInInspector)).Any()))
+                {
+                    //Any changes here should be reflected in CustomReadWrite as well
+                    if (field.FieldType == typeof(KeyCode))
                     {
                         EditorGUILayout.BeginHorizontal();
 
                         var index = (int) field.GetValue(ge);
-                        
+
                         var e = (Enum) Enum.ToObject(field.FieldType, index);
-                        
-                        field.SetValue(ge,Enum.ToObject(field.FieldType, EditorGUILayout.EnumPopup(field.Name, e)));
 
-                        if (field.FieldType == typeof(KeyCode))
+                        field.SetValue(ge, Enum.ToObject(field.FieldType, EditorGUILayout.EnumPopup(field.Name, e)));
+
+                        if (GUILayout.Button(_recording ? "..." : "Record", EditorStyles.miniButton))
                         {
-                            if (GUILayout.Button(_recording ? "..." : "Record", EditorStyles.miniButton))
-                            {
-                                _recording = true;
-                            }
+                            _recording = true;
+                        }
 
-                            if (_recording)
+                        if (_recording)
+                        {
+                            var k = CheckForKey();
+                            if (k != KeyCode.None)
                             {
-                                var k = CheckForKey();
-                                if (k != KeyCode.None)
-                                {
-                                    field.SetValue(ge, k);
-                                    _recording = false;
-                                }
+                                field.SetValue(ge, k);
+                                _recording = false;
                             }
                         }
 
                         EditorGUILayout.EndHorizontal();
                         continue;
                     }
-                    
+
                     /*switch (Type.GetTypeCode(field.FieldType))
                     {
                         case TypeCode.Int32:
@@ -259,7 +259,7 @@ namespace TonyDev.Editor
 
                     var prop = effectProp.FindPropertyRelative(field.Name);
                     EditorGUILayout.PropertyField(prop, new GUIContent(field.Name), true);
-                    
+
                     /*if (field.FieldType == typeof(Sprite))
                     {
                         field.SetValue(ge, EditorGUILayout.ObjectField(field.Name, (Sprite) field.GetValue(ge), typeof(Sprite), false));
@@ -287,7 +287,7 @@ namespace TonyDev.Editor
         private KeyCode CheckForKey()
         {
             var current = Event.current;
-            
+
             return current.type switch
             {
                 EventType.KeyDown => Event.current.keyCode,
@@ -300,7 +300,7 @@ namespace TonyDev.Editor
             if (serializedObject.targetObject is ItemData id)
             {
                 var ge = (GameEffect) Activator.CreateInstance(t);
-                
+
                 itemEffects.Add(ge);
 
                 if (ge is AbilityEffect ae)

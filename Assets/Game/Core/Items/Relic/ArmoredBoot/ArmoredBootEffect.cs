@@ -7,10 +7,10 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 {
     public class ArmoredBootEffect : GameEffect
     {
-        public float armorBonusFlat = 20f;
-        private float ArmorBonusFlatFinal => armorBonusFlat + 10f * playerStrengthFactorUponCreation;
-        public float armorBonusMultiplier = 0.5f;
-        private float ArmorBonusMultFinal => armorBonusMultiplier + 0.1f * playerStrengthFactorUponCreation;
+        public int armorFlatBase = 20;
+        private float ArmorBonusFlatFinal => armorFlatBase + DungeonFloorUponCreation;
+        public Vector2 armorMultScale;
+        private float ArmorBonusMultFinal => DiminishingScale(armorMultScale.x, armorMultScale.y, 50);
         public float moveSpeedPenalty = 0.2f;
 
         public override void OnAddOwner()

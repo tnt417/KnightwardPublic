@@ -108,7 +108,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                         return;
                     }
 
-                    item = Tools.SelectRandom(itemDataPool).item;
+                    item = ItemGenerator.GenerateItemFromData(Tools.SelectRandom(itemDataPool));
                     break;
             }
 

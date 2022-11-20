@@ -175,11 +175,11 @@ namespace TonyDev.Game.Global
                 Quaternion.identity).GetComponent<Enemy>();
 
             enemy.CurrentParentIdentity = parent;
-            
+
             NetworkServer.Spawn(enemy.gameObject);
 
             enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
-            
+
             enemy.CmdSetParentIdentity(parent);
         }
 
@@ -191,6 +191,25 @@ namespace TonyDev.Game.Global
                     GameManager.Instance.CmdSpawnEnemy(enemyName,
                         Camera.main.ScreenToWorldPoint(Input.mousePosition),
                         Player.LocalInstance.CurrentParentIdentity);
+        }
+
+        [GameCommand(Keyword = "spawnallitems", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawned.")]
+        public static void SpawnAllItems()
+        {
+            var items = GameManager.AllItems.ToArray();
+            
+            var sqrLength = (int)Mathf.Sqrt(items.Length);
+            
+            for (var i = 0; i < items.Length; i++)
+            {
+                var x = i / sqrLength;
+                var y = i % sqrLength;
+
+                var item = ItemGenerator.GenerateItemFromData(items[i]);
+                
+                GameManager.Instance.CmdSpawnItem(item, 0, (Vector2)Player.LocalInstance.transform.position + new Vector2((x-sqrLength/2)*2, (y-sqrLength/2)*2),
+                    Player.LocalInstance.CurrentParentIdentity);
+            }
         }
 
         [Server]
@@ -220,8 +239,8 @@ namespace TonyDev.Game.Global
 
             NetworkServer.Spawn(groundItemObject);
             gi.CmdSetItem(item);
-            gi.GenerateCost(costMultiplier);
-            gi.GenerateEssence(Random.Range(0.4f, 0.6f));
+            gi.CmdSetCost((int) (ItemGenerator.GenerateCost(item, GameManager.DungeonFloor) * costMultiplier));
+            gi.CmdSetEssence(ItemGenerator.GenerateEssence(item));
 
             return gi;
         }

@@ -11,15 +11,16 @@ namespace TonyDev.Game.UI.Inventory
 {
     public class ItemInfoPanel : MonoBehaviour
     {
+        [SerializeField] private RectTransform containerTransform;
+        [SerializeField] private HorizontalLayoutGroup horizontalLayoutGroup;
         [SerializeField] private GameObject toggleObject;
+        [SerializeField] private GameObject compareToggleObject;
         [SerializeField] private TMP_Text descriptionText;
-        [SerializeField] private Image backgroundImage;
-        private RectTransform _rectTransform;
+        [SerializeField] private TMP_Text compareDescriptionText;
         private Camera _mainCamera;
 
         private void Start()
         {
-            _rectTransform = (RectTransform) toggleObject.transform;
             _mainCamera = Camera.main;
         }
 
@@ -35,27 +36,41 @@ namespace TonyDev.Game.UI.Inventory
             var raycastResults = new List<RaycastResult>();
             EventSystem.current.RaycastAll(eventData, raycastResults);
 
-            _rectTransform.position = Input.mousePosition;
+            containerTransform.position = Input.mousePosition;
 
-            foreach (var itemSlot in raycastResults.Select(curRaycastResult =>
+            foreach (var slot in raycastResults.Select(curRaycastResult =>
                 curRaycastResult.gameObject.GetComponent<ItemSlot>()))
             {
-                if (itemSlot == null) continue;
-                Set(itemSlot.Item);
+                if (slot == null) continue;
+                Set(slot.Item);
                 return;
             }
 
             var mousePos = _mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            var rHit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, LayerMask.GetMask("UI"));
-            var t = rHit.transform;
-            GroundItem gi = null;
+            var rHit = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity, LayerMask.GetMask("UI")).transform;
 
-            if (t != null) gi = t.gameObject.GetComponent<GroundItem>();
-
-            if (gi != null)
+            if (rHit != null)
             {
-                Set(gi.Item);
-                return;
+                var gi = rHit.gameObject.GetComponent<GroundItem>();
+                
+                if (gi != null)
+                {
+                    Set(gi.Item);
+                    return;
+                }
+            }
+            
+            var rHit2 = Physics2D.Raycast(mousePos, Vector2.zero, Mathf.Infinity).transform;
+
+            if (rHit2 != null)
+            {
+                var tower = rHit2.gameObject.GetComponent<Core.Entities.Towers.Tower>();
+
+                if (tower != null)
+                {
+                    Set(tower.myItem);
+                    return;
+                }
             }
 
             Deactivate();
@@ -63,39 +78,43 @@ namespace TonyDev.Game.UI.Inventory
 
         public void Set(Item item)
         {
-            if (!toggleObject.activeSelf)
+            if (item == null) return;
+            
+            var replacement = PlayerInventory.Instance.GetSwap(item);
+            
+            compareToggleObject.SetActive(replacement != null);
+
+            if (!containerTransform.gameObject.activeSelf)
             {
                 var pivotX = 0;
                 var pivotY = 0;
+                
+                horizontalLayoutGroup.reverseArrangement = false;
 
-                _rectTransform.pivot = new Vector2(0, 0);
-
-                if (_rectTransform.rect.xMax > _mainCamera.rect.xMax)
+                if (containerTransform.position.x + containerTransform.rect.width > _mainCamera.pixelRect.xMax)
                 {
                     pivotX = 1;
+                    horizontalLayoutGroup.reverseArrangement = true;
                 }
-
-                if (_rectTransform.rect.xMax < _mainCamera.rect.xMax)
+                else
                 {
                     pivotX = 0;
                 }
 
-                if (_rectTransform.rect.yMax > _mainCamera.rect.yMax)
-                {
-                    pivotY = 1;
-                }
+                pivotY = containerTransform.position.y + containerTransform.rect.height < _mainCamera.pixelRect.yMin ? 1 : 0;
 
-                if (_rectTransform.rect.xMax > _mainCamera.rect.xMax)
-                {
-                    pivotY = 0;
-                }
-
-                _rectTransform.pivot = new Vector2(pivotX, pivotY);
+                containerTransform.pivot = new Vector2(pivotX, pivotY);
             }
 
-            if (item == null) return;
-            toggleObject.SetActive(true);
+            containerTransform.gameObject.SetActive(true);
 
+            descriptionText.text = GetItemDescriptionText(item);
+
+            if(replacement != null) compareDescriptionText.text = GetItemDescriptionText(replacement);
+        }
+
+        private string GetItemDescriptionText(Item item)
+        {
             var rarityColor = item.itemRarity switch
             {
                 ItemRarity.Common => "grey",
@@ -104,27 +123,16 @@ namespace TonyDev.Game.UI.Inventory
                 ItemRarity.Unique => "red",
                 _ => throw new ArgumentOutOfRangeException()
             };
-
-            descriptionText.text = "<color=white><size=24>" + item.itemName + "</size></color>"
-                                   + "  <color=" + rarityColor + ">" +
-                                   Enum.GetName(typeof(ItemRarity), item.itemRarity) + "</color>"
-                                   + "\n<color=#c0c0c0ff>" + item.GetItemDescription() + "</color>";
-
-            // var backColor = item.itemRarity switch
-            // {
-            //     ItemRarity.Common => new Color(0.8f, 0.8f, 0.8f, 0.5f),
-            //     ItemRarity.Uncommon => new Color(0.13f, 0.8f, 0f, 0.5f),
-            //     ItemRarity.Rare => new Color(0.8f, 0.6f, 0f, 0.5f),
-            //     ItemRarity.Unique => new Color(0.8f, 0.018f, 0f, 0.5f),
-            //     _ => throw new ArgumentOutOfRangeException()
-            // };
-
-            //backgroundImage.color = backColor;
+            
+            return "<color=white><size=24>" + item.itemName + "</size></color>"
+                   + "  <color=" + rarityColor + ">" +
+                   Enum.GetName(typeof(ItemRarity), item.itemRarity) + "</color>"
+                   + "\n<color=#c0c0c0ff>" + item.GetItemDescription() + "</color>";
         }
 
         public void Deactivate()
         {
-            toggleObject.SetActive(false);
+            containerTransform.gameObject.SetActive(false);
             descriptionText.text = string.Empty;
         }
     }

@@ -58,6 +58,7 @@ MonoBehaviour:
   team: 0
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  ignoreInvincibility: 0
   inflictBuffs: []
   inflictEffects: []
   rb2d: {fileID: 0}

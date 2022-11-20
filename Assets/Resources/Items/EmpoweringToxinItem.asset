@@ -19,6 +19,7 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 1
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349809548066820
     projectiles: []
@@ -30,6 +31,7 @@ MonoBehaviour:
       type: {class: EmpoweringToxinEffect, ns: TonyDev.Game.Core.Items.Relics.EmpoweringToxin, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         ActivateButton: 116
         Cooldown: 10
         Duration: 5

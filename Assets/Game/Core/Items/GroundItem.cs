@@ -69,28 +69,6 @@ namespace TonyDev.Game.Core.Items
             if (Item == null) CmdSetItem(ItemGenerator.GenerateItem(rarityBoost));
         }
 
-        public void GenerateCost(float costMultiplier)
-        {
-            if (Item == null)
-            {
-                Debug.LogWarning("Cannot generate cost for null item!");
-                return;
-            }
-
-            CmdSetCost((int) (ItemGenerator.GenerateCost(Item) * costMultiplier));
-        }
-        
-        public void GenerateEssence(float essenceMultiplier)
-        {
-            if (Item == null)
-            {
-                Debug.LogWarning("Cannot generate essence for null item!");
-                return;
-            }
-
-            CmdSetEssence((int) (ItemGenerator.GenerateCost(Item) * essenceMultiplier));
-        }
-
         [field: SyncVar(hook = nameof(OnItemChangeHook))]
         public Item Item { get; private set; }
 
@@ -130,13 +108,13 @@ namespace TonyDev.Game.Core.Items
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdSetCost(int newCost)
+        public void CmdSetCost(int newCost)
         {
             cost = newCost;
         }
         
         [Command(requiresAuthority = false)]
-        private void CmdSetEssence(int newEssence)
+        public void CmdSetEssence(int newEssence)
         {
             essence = newEssence;
         }

@@ -49,6 +49,29 @@ namespace TonyDev.Game.Core.Items
             TowerUIController.Instance.AddTower(item);
         }
 
+        public Item GetSwap(Item item)
+        {
+            Item replacement = null; //Holds the replaced item to be returned at the end.
+            switch (item.itemType)
+            {
+                case ItemType.Weapon: //If it's a weapon, it goes in the weapon slot.
+                    replacement = WeaponItem;
+                    break;
+                case ItemType.Armor: //If it's an armor, it goes in the armor slot.
+                    replacement = ArmorItem;
+                    break;
+                case ItemType.Relic: //If it's a relic, it goes in the relic slot.
+                    replacement = RelicItems.FirstOrDefault(i => i.itemName == item.itemName);
+                    break;
+                case ItemType.Tower:
+                    return null;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
+            return replacement == item ? null : replacement;
+        }
+        
         //Replaces/inserts items into inventory and returns the item that was replaced, if any.
         public Item InsertItem(Item item)
         {

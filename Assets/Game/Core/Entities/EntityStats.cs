@@ -49,7 +49,7 @@ namespace TonyDev.Game.Core.Entities
         #region Stat Properties
 
         //Dodge
-        public bool DodgeSuccessful => Random.Range(0f, 1f) < GetStat(Stat.Dodge);
+        public bool DodgeSuccessful => Random.Range(0f, 1f) < Mathf.Clamp(GetStat(Stat.Dodge), 0, 0.75f);
 
         //Crit chance
         public bool CritSuccessful => Random.Range(0f, 1f) < GetStat(Stat.CritChance);

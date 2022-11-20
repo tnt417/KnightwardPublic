@@ -94,22 +94,32 @@ MonoBehaviour:
   targetTeam: 1
   maxTargets: 1
   baseStats:
-  - statType: 0
+  - statType: 2
     stat: 0
     strength: 0.25
-    source: 
-  - statType: 0
-    stat: 1
-    strength: -10
     source: 
   - statType: 0
     stat: 3
     strength: 1
     source: 
+  - statType: 2
+    stat: 1
+    strength: -1
+    source: 
   targetIntangible: 1
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 3
-  prefab: {fileID: 0}
+  myItem:
+    uiSprite: {fileID: 0}
+    itemName: 
+    itemDescription: 
+    itemType: 0
+    itemRarity: 0
+    statBonuses: []
+    bypassStatGeneration: 0
+    itemEffects: []
+    projectiles: []
+    spawnablePrefabName: 
   rotateToFaceTargetObject: {fileID: 0}
   projectileData:
   - prefabKey: regenShot
@@ -122,11 +132,12 @@ MonoBehaviour:
       destroyOnApply: 1
       lifetime: 5
       spawnOnDestroyKey: regenPool
+      ignoreInvincibility: 0
     disableMovement: 0
     travelSpeed: 5
     offsetDegrees: 0
     waveAmplitude: 0
-    waveFrequency: 0
+    waveLength: 0
     waveDistance: 0
     childOfOwner: 0
     effects: []

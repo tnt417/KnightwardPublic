@@ -7,9 +7,9 @@ namespace TonyDev.Game.Core.Effects
 {
     public class MoneyDropBonusEffect : GameEffect
     {
-        public float moneyDropFactorBonus;
+        public Vector2 MoneyDropBonusScale;
         
-        private float MoneyBonusFinal => moneyDropFactorBonus * 0.8f * playerStrengthFactorUponCreation;
+        private float MoneyBonusFinal => LinearScale(MoneyDropBonusScale.x, MoneyDropBonusScale.y, 50);
         
         public override void OnAddOwner()
         {

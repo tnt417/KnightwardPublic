@@ -19,6 +19,7 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 1
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349809548066817
     projectiles: []
@@ -30,6 +31,7 @@ MonoBehaviour:
       type: {class: ArmoredBootEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
         effectDescription: 
-        armorBonusFlat: 15
-        armorBonusMultiplier: 0.4
+        DungeonFloorUponCreation: 0
+        armorFlatBase: 20
+        armorMultScale: {x: 0.2, y: 0.5}
         moveSpeedPenalty: 0.2

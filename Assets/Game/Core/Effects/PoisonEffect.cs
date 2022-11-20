@@ -13,6 +13,8 @@ namespace TonyDev.Game.Core.Effects
         public float Damage = 1f;
 
         private float _timer;
+
+        public bool Expired => Ticks <= 0;
         
         public override void OnAddOwner()
         {

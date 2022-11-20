@@ -9,14 +9,14 @@ namespace TonyDev.Game.Core.Items.Relics.EmpoweringToxin
 {
     public class EmpoweringToxinEffect : AbilityEffect
     {
-        private float MoveSpeedStrength => 0.7f * playerStrengthFactorUponCreation;
-        private float CritChanceStrength => 0.4f * playerStrengthFactorUponCreation;
-        private float AttackSpeedStrength => 0.7f * playerStrengthFactorUponCreation;
+        private float MoveSpeedStrength => LinearScale(2, 5, 50);
+        private float CritChanceStrength => DiminishingScale(0.3f, 0.5f, 50);
+        private float AttackSpeedStrength => DiminishingScale(0.4f, 0.75f, 50);
 
         protected override void OnAbilityActivate()
         {
             PlayerStats.Stats.AddBuff(
-                new StatBonus(StatType.AdditivePercent, Stat.MoveSpeed, MoveSpeedStrength, "EmpoweringToxin"),
+                new StatBonus(StatType.Flat, Stat.MoveSpeed, MoveSpeedStrength, "EmpoweringToxin"),
                 Duration);
             PlayerStats.Stats.AddBuff(
                 new StatBonus(StatType.Flat, Stat.CritChance, CritChanceStrength, "EmpoweringToxin"), Duration);

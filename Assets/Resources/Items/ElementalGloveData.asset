@@ -24,6 +24,7 @@ MonoBehaviour:
       stat: 0
       strength: 0.3
       source: 
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349781139259392
     projectiles: []
@@ -35,7 +36,7 @@ MonoBehaviour:
       type: {class: ElementalGloveEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
-        playerStrengthFactorUponCreation: 0
+        DungeonFloorUponCreation: 0
         ActivateButton: 113
         Cooldown: 1
         Duration: 1

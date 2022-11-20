@@ -19,6 +19,7 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 2
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4023140872783659009
     - rid: 4023140941057228800
@@ -31,10 +32,10 @@ MonoBehaviour:
       type: {class: VampireCapeEffect, ns: TonyDev.Game.Core.Items.Relics.VampireCape, asm: TonyDev}
       data:
         effectDescription: Nearby bats are converted to allies.
-        playerStrengthFactorUponCreation: 0
+        DungeonFloorUponCreation: 0
     - rid: 4023140941057228800
       type: {class: LifestealEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
-        playerStrengthFactorUponCreation: 0
-        LeechPercent: 0.1
+        DungeonFloorUponCreation: 0
+        LeechPercentScale: {x: 0.1, y: 0.25}

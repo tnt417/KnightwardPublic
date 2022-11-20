@@ -28,6 +28,9 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public static List<StatBonus> Combine(IEnumerable<StatBonus> bonus1, IEnumerable<StatBonus> bonus2)
         {
+            if (bonus1 == null) return bonus2.ToList();
+            if (bonus2 == null) return bonus1.ToList();
+            
             var statBonuses = bonus1.ToList();
             statBonuses.AddRange(bonus2);
             return statBonuses;

@@ -18,18 +18,28 @@ MonoBehaviour:
     itemDescription: 
     itemType: 2
     itemRarity: 0
-    statBonuses:
-    - statType: 2
-      stat: 0
-      strength: 2
-      source: 
-    - statType: 2
-      stat: 1
-      strength: 0.6
-      source: 
-    itemEffects: []
+    statBonuses: []
+    bypassStatGeneration: 0
+    itemEffects:
+    - rid: 4023140989058678791
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 4023140989058678791
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ScalingStatBonuses:
+        - type: 2
+          stat: 0
+          scalingType: 1
+          valueRange: {x: 1.5, y: 2}
+          byFloor: 50
+        - type: 2
+          stat: 1
+          scalingType: 0
+          valueRange: {x: 0.6, y: 0.9}
+          byFloor: 50

@@ -15,23 +15,33 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: dbf98a321e4d9db4785d7e73de909ee1, type: 3}
     itemName: Red Stimulants
-    itemDescription: <color=green>Gain a damage bonus equal to 10% of max health</color>
+    itemDescription: 
     itemType: 2
     itemRarity: 1
-    statBonuses:
-    - statType: 1
-      stat: 6
-      strength: 0.2
-      source: 
+    statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349917669621760
+    - rid: 4023140989058678792
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
+    - rid: 4023140989058678792
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ScalingStatBonuses:
+        - type: 0
+          stat: 6
+          scalingType: 0
+          valueRange: {x: 50, y: 300}
+          byFloor: 50
     - rid: 4292349917669621760
       type: {class: RedStimulantsEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
-        healthRedirectMultiplier: 0.1
+        DungeonFloorUponCreation: 0
+        healthRedirectScale: {x: 0.05, y: 0.1}

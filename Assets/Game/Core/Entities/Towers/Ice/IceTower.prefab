@@ -116,6 +116,7 @@ MonoBehaviour:
     itemType: 0
     itemRarity: 0
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 
@@ -125,15 +126,15 @@ MonoBehaviour:
     projectileSprite: {fileID: 0}
     attackData:
       damageMultiplier: 1
-      knockbackMultiplier: 1
+      knockbackMultiplier: 0
       hitboxRadius: 0.5
       team: 1
       destroyOnApply: 1
-      lifetime: 1
+      lifetime: 0.5
       spawnOnDestroyKey: icePool
       ignoreInvincibility: 0
     disableMovement: 0
-    travelSpeed: 10
+    travelSpeed: 20
     offsetDegrees: 0
     waveAmplitude: 0
     waveLength: 0

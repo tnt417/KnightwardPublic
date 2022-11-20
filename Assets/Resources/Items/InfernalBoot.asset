@@ -18,24 +18,35 @@ MonoBehaviour:
     itemDescription: 
     itemType: 2
     itemRarity: 2
-    statBonuses:
-    - statType: 1
-      stat: 1
-      strength: 0.4
-      source: 
-    - statType: 1
-      stat: 5
-      strength: 0.2
-      source: 
+    statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 8269505155275948032
+    - rid: 4023140989058678787
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
+    - rid: 4023140989058678787
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ScalingStatBonuses:
+        - type: 0
+          stat: 1
+          scalingType: 0
+          valueRange: {x: 15, y: 80}
+          byFloor: 50
+        - type: 0
+          stat: 5
+          scalingType: 0
+          valueRange: {x: 1, y: 3}
+          byFloor: 50
     - rid: 8269505155275948032
       type: {class: InfernalBootEffect, ns: TonyDev.Game.Core.Items.Relics.FlamingBoot, asm: TonyDev}
       data:
         effectDescription: <color=orange>Leave a trail of fire behind you.</color>
+        DungeonFloorUponCreation: 0
         DamageMultiplier: 0.1

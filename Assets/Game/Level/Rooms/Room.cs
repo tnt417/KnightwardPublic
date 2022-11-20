@@ -155,8 +155,16 @@ namespace TonyDev.Game.Level.Rooms
         private void Start()
         {
             GameManager.OnEnemyAdd += OnEntityChange;
+            GameManager.OnEnemyAdd += RegisterEntityTeamListener;
             GameManager.OnEnemyRemove += OnEntityChange;
             CheckShouldLockDoors();
+        }
+
+        private void RegisterEntityTeamListener(GameEntity ge)
+        {
+            if (ge.CurrentParentIdentity != netIdentity) return;
+            
+            ge.OnTeamChange += (_) => OnEntityChange(ge);
         }
 
         private bool _destroyed;
@@ -165,6 +173,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             _destroyed = true;
             GameManager.OnEnemyAdd -= OnEntityChange;
+            GameManager.OnEnemyAdd -= RegisterEntityTeamListener;
             GameManager.OnEnemyRemove -= OnEntityChange;
         }
 
@@ -252,7 +261,7 @@ namespace TonyDev.Game.Level.Rooms
         private void OnEntityChange(GameEntity entity)
         {
             if (this == null || !enabled) return;
-            
+
             CheckShouldLockDoors();
         }
 

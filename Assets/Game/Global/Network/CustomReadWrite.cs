@@ -5,6 +5,7 @@ using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 namespace TonyDev.Game.Global.Network
@@ -57,9 +58,10 @@ namespace TonyDev.Game.Global.Network
             if (isNull) return;
 
             //GameEffect is new if it doesn't have a generated identifier or if GameEffectIdentifiers doesn't contain the identifier
-            var isNew = string.IsNullOrEmpty(value.EffectIdentifier) || !GameEffect.GameEffectIdentifiers.ContainsKey(value.EffectIdentifier);
+            var isNew = string.IsNullOrEmpty(value.EffectIdentifier) ||
+                        !GameEffect.GameEffectIdentifiers.ContainsKey(value.EffectIdentifier);
 
-            if(isNew) //If GameEffect is new, generate an identifier
+            if (isNew) //If GameEffect is new, generate an identifier
             {
                 GameEffect.RegisterEffect(value);
             }
@@ -78,6 +80,15 @@ namespace TonyDev.Game.Global.Network
 
             writer.WriteString(typeName);
 
+            writer.WriteString(JsonConvert.SerializeObject(value, Formatting.None,
+                new JsonSerializerSettings
+                {
+                    ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
+                    TypeNameHandling = TypeNameHandling.All
+                }));
+
+            return;
+
             foreach (var field in value.GetType().GetFields().Where(f => f.IsPublic && !f.IsNotSerialized))
             {
                 if (field.FieldType.IsEnum)
@@ -85,7 +96,7 @@ namespace TonyDev.Game.Global.Network
                     writer.WriteInt((int) field.GetValue(value));
                     continue;
                 }
-                
+
                 switch (Type.GetTypeCode(field.FieldType))
                 {
                     case TypeCode.Int32:
@@ -115,16 +126,23 @@ namespace TonyDev.Game.Global.Network
 
                 if (field.FieldType == typeof(ProjectileData))
                 {
-                    writer.Write((ProjectileData)field.GetValue(value));
+                    writer.Write((ProjectileData) field.GetValue(value));
                     continue;
                 }
+
+                writer.WriteString(field.FieldType.Name);
+                writer.Write(JsonConvert.SerializeObject(field.GetValue(value), Formatting.None,
+                    new JsonSerializerSettings
+                    {
+                        ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+                    }));
             }
         }
 
         public static GameEffect ReadGameEffect(this NetworkReader reader)
         {
             // return DeserializeGameEffect(reader.ReadString());
-            
+
             var isNull = reader.ReadBool();
             if (isNull) return null;
 
@@ -143,13 +161,26 @@ namespace TonyDev.Game.Global.Network
 
             var typeName = reader.ReadString();
 
-            var gameEffect = GameEffect.GameEffectIdentifiers.ContainsKey(id) ?
-                GameEffect.GameEffectIdentifiers[id] : //If key already exists in the dictionary, don't create new effect.
+            var gameEffect = GameEffect.GameEffectIdentifiers.ContainsKey(id)
+                ? GameEffect.GameEffectIdentifiers[id]
+                : //If key already exists in the dictionary, don't create new effect.
                 (GameEffect) Activator.CreateInstance(
-                    GameEffect.GameEffectTypes.FirstOrDefault(t => t.Name == typeName) ?? typeof(GameEffect)); //Otherwise, create a new instance
+                    GameEffect.GameEffectTypes.FirstOrDefault(t => t.Name == typeName) ??
+                    typeof(GameEffect)); //Otherwise, create a new instance
 
+            JsonConvert.PopulateObject(reader.ReadString(), gameEffect, new JsonSerializerSettings()
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Formatting = Formatting.None,
+                TypeNameHandling = TypeNameHandling.All
+            });
+            
             gameEffect.EffectIdentifier = id;
             
+            GameEffect.RegisterEffect(gameEffect);
+
+            return gameEffect;
+
             gameEffect.Source = source;
 
             foreach (var field in gameEffect.GetType().GetFields().Where(f => f.IsPublic && !f.IsNotSerialized))
@@ -159,7 +190,7 @@ namespace TonyDev.Game.Global.Network
                     field.SetValue(gameEffect, reader.ReadInt());
                     continue;
                 }
-                
+
                 switch (Type.GetTypeCode(field.FieldType))
                 {
                     case TypeCode.Int32:
@@ -186,16 +217,18 @@ namespace TonyDev.Game.Global.Network
                     field.SetValue(gameEffect, reader.ReadSprite());
                     continue;
                 }
-                
+
                 if (field.FieldType == typeof(ProjectileData))
                 {
                     field.SetValue(gameEffect, reader.Read<ProjectileData>());
                     continue;
                 }
+
+                field.SetValue(gameEffect, JsonConvert.DeserializeObject(reader.ReadString()));
             }
 
             GameEffect.GameEffectIdentifiers[id] = gameEffect;
-            
+
             return gameEffect;
         }
 

@@ -27,6 +27,7 @@ MonoBehaviour:
       stat: 5
       strength: 0.2
       source: Weapon
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349781711257600
     projectiles: []
@@ -38,6 +39,7 @@ MonoBehaviour:
       type: {class: SpearEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         ActivateButton: 113
         Cooldown: 9
         Duration: 3

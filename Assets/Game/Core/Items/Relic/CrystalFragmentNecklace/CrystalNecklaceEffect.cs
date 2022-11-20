@@ -9,43 +9,42 @@ namespace TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace
 {
     public class CrystalNecklaceEffect : GameEffect
     {
-        private CrystalNecklaceEffect _crystalNecklaceEffect;
 
         public float ArmorBonusFlat;
-        private float ArmorBonusFlatFinal => ArmorBonusFlat * playerStrengthFactorUponCreation;
+        private float ArmorBonusFlatFinal => ArmorBonusFlat + DungeonFloorUponCreation;
         
-        public override void OnAddOwner() //Runs when an item is equipped
+        public override void OnAddServer()
         {
-            if (Entity is not Crystal)
-            {
-                Entity.Stats.AddStatBonus(StatType.Flat, Stat.Armor, ArmorBonusFlatFinal, "CrystalNecklace"); //Give the player 50 armor
-                
-                _crystalNecklaceEffect = new CrystalNecklaceEffect();
-                Crystal.Instance.CmdAddEffect(_crystalNecklaceEffect, Entity);
-            }
+            Entity.Stats.OnStatsChanged += UpdateArmorBonus;
+            UpdateArmorBonus();
         }
 
+        public override void OnAddOwner()
+        {
+            Entity.Stats.AddStatBonus(StatType.Flat, Stat.Armor, ArmorBonusFlatFinal, EffectIdentifier); //Give the player the armor bonus
+        }
+
+        private void UpdateArmorBonus()
+        {
+            Crystal.Instance.Stats.RemoveStatBonuses(EffectIdentifier);
+            Crystal.Instance.Stats.AddStatBonus(StatType.Flat, Stat.Armor, Entity.Stats.GetStat(Stat.Armor), EffectIdentifier);
+        }
+
+        public override void OnRemoveServer() //Runs when an item is unequipped
+        {
+            Crystal.Instance.Stats.RemoveStatBonuses(EffectIdentifier);
+        }
+        
         public override void OnRemoveOwner() //Runs when an item is unequipped
         {
-            Entity.Stats.RemoveStatBonuses("CrystalNecklace");
-            if(Entity is not Crystal) Crystal.Instance.CmdRemoveEffect(_crystalNecklaceEffect);
+            Entity.Stats.RemoveStatBonuses(EffectIdentifier);
         }
 
         private double _nextBuffTime;
 
-        public override void OnUpdateOwner()
-        {
-            if (Time.time > _nextBuffTime && Entity is Crystal)
-            {
-                _nextBuffTime = Time.time + 1f;
-                Entity.Stats.AddBuff(new StatBonus(StatType.Flat, Stat.Armor, Source.Stats.GetStat(Stat.Armor), "CrystalNecklace"), 1f); //Give the crystal the player's armor bonus
-            }
-        }
-
         public override string GetEffectDescription()
         {
-            return
-                $"<color=green>Gain {Tools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor. The crystal is affected by your total armor bonus.</color>";
+            return $"<color=green>Gain {Tools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor. The crystal is affected by your total armor bonus.</color>";
         }
     }
 }

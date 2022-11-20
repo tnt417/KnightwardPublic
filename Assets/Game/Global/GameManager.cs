@@ -18,6 +18,7 @@ using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using TonyDev.Game.UI.GameInfo;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -74,6 +75,19 @@ namespace TonyDev.Game.Global
             }
             
             PlayerInventory.Instance.InsertItem(item);
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdDropItem(Item item, GameEntity dropper)
+        {
+            ObjectSpawner.SpawnGroundItem(item, 0, dropper.transform.position, dropper.CurrentParentIdentity);
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdSpawnItem(Item item, int costMultiplier, Vector2 pos, NetworkIdentity id)
+        {
+            ObjectSpawner.SpawnGroundItem(item, costMultiplier, pos,
+                id);
         }
 
         #endregion
@@ -402,6 +416,19 @@ namespace TonyDev.Game.Global
             NextDungeonFloor().Forget();
         }
 
+        [GameCommand(Keyword = "floor", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Set floor.")]
+        public static void SetFloorAndRegen(int floor)
+        {
+            Instance.CmdSetDungeonFloor(floor - 1);
+            Instance.CmdRegenMap();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdSetDungeonFloor(int floor)
+        {
+            dungeonFloor = floor;
+        }
+        
         [Command(requiresAuthority = false)]
         private void CmdRegenMap()
         {

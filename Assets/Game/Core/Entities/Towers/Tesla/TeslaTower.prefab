@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 330042881028611830}
   m_Layer: 0
   m_Name: TeslaTower
-  m_TagString: Tesla
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -77,6 +77,7 @@ MonoBehaviour:
     itemType: 0
     itemRarity: 0
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 

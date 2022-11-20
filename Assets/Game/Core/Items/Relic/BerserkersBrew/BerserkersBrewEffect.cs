@@ -9,8 +9,8 @@ namespace TonyDev.Game.Core.Items.Relics.BerserkersBrew
 {
     public class BerserkersBrewEffect : AbilityEffect
     {
-        private float RegenMultiplier => 5f + playerStrengthFactorUponCreation;
-        private float DamageMultiplier => playerStrengthFactorUponCreation * 0.8f;
+        private float RegenMultiplier => LinearScale(3, 6, 50);
+        private float DamageMultiplier => LinearScale(0.8f, 1.5f, 50);
         protected override void OnAbilityActivate()
         {
             PlayerStats.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.HpRegen, RegenMultiplier, "BerserkersBrew"), Duration);

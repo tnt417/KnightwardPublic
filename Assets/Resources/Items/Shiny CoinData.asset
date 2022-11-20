@@ -19,6 +19,7 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 0
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 8269505043193921538
     projectiles: []
@@ -30,4 +31,5 @@ MonoBehaviour:
       type: {class: MoneyDropBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
-        moneyDropFactorBonus: 0.5
+        DungeonFloorUponCreation: 0
+        MoneyDropBonusScale: {x: 0.5, y: 1}

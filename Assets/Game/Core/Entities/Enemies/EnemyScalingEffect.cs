@@ -1,19 +1,15 @@
-using System.Collections;
-using System.Collections.Generic;
 using TonyDev.Game.Core.Effects;
-using TonyDev.Game.Core.Effects.ItemEffects;
-using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Global;
 using UnityEngine;
 
-namespace TonyDev
+namespace TonyDev.Game.Core.Entities.Enemies
 {
     public class EnemyScalingEffect : GameEffect
     {
         public override void OnAddOwner()
         {
-            Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Damage, 0.05f * GameManager.EnemyDifficultyScale, "EnemyScaling");
-            Entity.Stats.AddStatBonus(StatType.Flat, Stat.Armor, 5f * GameManager.EnemyDifficultyScale, "EnemyScaling");
+            Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Damage, 0.05f * Mathf.Pow(GameManager.EnemyDifficultyScale*2, 1.6f), "EnemyScaling");
+            Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 0.05f * Mathf.Pow(GameManager.EnemyDifficultyScale*2, 1.3f), "EnemyScaling");
         }
 
         public override void OnRemoveOwner()

@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 using TonyDev.Game.Core.Behavior;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Global;
-using UnityEditor;
+using TonyDev.Game.Global.Network;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Tools = TonyDev.Game.Global.Tools;
@@ -33,7 +33,7 @@ namespace TonyDev.Game.Core.Attacks
         [Header("Prefab")]
         public string prefabKey;
 
-        [Header("General Projectile Data")] public Sprite projectileSprite;
+        [Header("General Projectile Data")][JsonConverter(typeof(SpriteConverter))] public Sprite projectileSprite;
         public AttackData attackData;
 
         [Header("Projectile Movement Data")] public bool disableMovement;

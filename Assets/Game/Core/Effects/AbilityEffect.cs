@@ -1,6 +1,8 @@
 using System;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Global.Network;
 using TonyDev.Game.UI.GameInfo;
+using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects
@@ -9,11 +11,10 @@ namespace TonyDev.Game.Core.Effects
     public class AbilityEffect : GameEffect
     {
         public KeyCode ActivateButton;
-
         public float Cooldown;
         public float Duration;
-        public Sprite abilitySprite;
-        protected float ModifiedCooldown => Cooldown * (1 - Entity.Stats.GetStat(Stat.CooldownReduce));
+        [JsonConverter(typeof(SpriteConverter))] public Sprite abilitySprite;
+        protected float ModifiedCooldown => Mathf.Clamp(Cooldown * (1 - Entity.Stats.GetStat(Stat.CooldownReduce)), 0, Mathf.Infinity);
 
         protected bool Active { get; private set; }
 

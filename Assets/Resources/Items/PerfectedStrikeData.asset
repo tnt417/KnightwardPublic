@@ -19,20 +19,35 @@ MonoBehaviour:
       by 20%.</color>
     itemType: 2
     itemRarity: 1
-    statBonuses:
-    - statType: 0
-      stat: 2
-      strength: 0.2
-      source: 
+    statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349917669621762
+    - rid: 4023140989058678790
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
+    - rid: 4023140989058678790
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ScalingStatBonuses:
+        - type: 0
+          stat: 2
+          scalingType: 0
+          valueRange: {x: 0.2, y: 0.4}
+          byFloor: 50
+        - type: 0
+          stat: 1
+          scalingType: 0
+          valueRange: {x: 5, y: 60}
+          byFloor: 50
     - rid: 4292349917669621762
       type: {class: PerfectedStrikeEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         remainingCooldownReduce: 0.2

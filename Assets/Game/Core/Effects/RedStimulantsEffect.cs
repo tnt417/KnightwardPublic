@@ -7,29 +7,34 @@ namespace TonyDev.Game.Core.Effects
 {
     public class RedStimulantsEffect : GameEffect
     {
-        public float healthRedirectMultiplier;
-        
+        public Vector2 healthRedirectScale;
+        private float RedirectMultiplier => LinearScale(healthRedirectScale.x, healthRedirectScale.y, 50);
+
         public override void OnAddOwner()
         {
-            
         }
 
         public override void OnRemoveOwner()
         {
-            
         }
 
         private float _nextBuffTime;
-        
+
         public override void OnUpdateOwner()
         {
             if (_nextBuffTime > Time.time) return;
-            
+
             _nextBuffTime = Time.time + 1f;
 
-            var strength = healthRedirectMultiplier * Entity.Stats.GetStat(Stat.Health);
-            
-            Entity.Stats.AddBuff(new StatBonus(StatType.Flat, Stat.Damage, strength, "RedStimulants"), 1f);
+            var strength = RedirectMultiplier * Entity.Stats.GetStat(Stat.Health);
+
+            Entity.Stats.AddBuff(new StatBonus(StatType.Flat, Stat.Damage, strength, EffectIdentifier), 1f);
+        }
+
+        public override string GetEffectDescription()
+        {
+            return
+                $"{Tools.WrapColor($"{RedirectMultiplier:P1}", Color.yellow)} <color=green>of your health is added to your damage stat.</color>";
         }
     }
 }

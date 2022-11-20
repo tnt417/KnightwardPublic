@@ -48,16 +48,16 @@ namespace TonyDev.Game.Core.Effects
             }
         }
 
-        public override void OnRegister()
+        public override void OnRegisterLocal()
         {
-            base.OnRegister();
+            base.OnRegisterLocal();
 
             Buffs = new StatBonus[StatBonusCount];
 
             for (var i = 0; i < StatBonusCount; i++)
             {
                 Buffs[i] = new StatBonus(StatType.AdditivePercent, Tools.SelectRandom(validStatTypes),
-                    baseBonusMagnitude * playerStrengthFactorUponCreation, EffectIdentifier);
+                    LinearScale(baseBonusMagnitude, baseBonusMagnitude * 2f, 50), EffectIdentifier);
             }
         }
 
