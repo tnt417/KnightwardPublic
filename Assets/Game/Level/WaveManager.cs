@@ -46,7 +46,6 @@ namespace TonyDev.Game.Level
 
         private float _waveTimer = 0;
         public int wavesSpawned = 0;
-        public int TimeUntilNextWaveSeconds => (int) (_waveCooldown - _waveTimer);
 
         private bool OnBreak => wavesSpawned % breakFrequency == 0;
 
@@ -68,11 +67,14 @@ namespace TonyDev.Game.Level
             RoomManager.OnActiveRoomChangedGlobal += (_, _) => UpdateRoomTimeMultipliers();
         }
 
+        [ServerCallback]
         private void Update()
         {
-            _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier * BreakPassingMultiplier; //Tick the wave timer
+            if (GameManager.Instance == null) return;
             
-            if (NetworkServer.active) GameManager.Instance.CmdSetWaveProgress(_waveTimer / _waveCooldown);
+            _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier * BreakPassingMultiplier; //Tick the wave timer
+
+            if (NetworkServer.active) GameManager.Instance.CmdSetWaveProgress(wavesSpawned, _waveTimer / _waveCooldown);
             
             if (_waveTimer >= _waveCooldown)
             {
@@ -85,6 +87,7 @@ namespace TonyDev.Game.Level
             }
         }
 
+        [ServerCallback]
         public void StallTime(float seconds)
         {
             _waveCooldown += seconds;
@@ -116,7 +119,7 @@ namespace TonyDev.Game.Level
             GameManager.Instance.CmdSetBreakMultiplier(total/players.Length);
         }
         
-        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawning next wave.")]
+        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawning next wave.")] [ServerCallback]
         public void NextWave()
         {
             _waveTimer = 0;

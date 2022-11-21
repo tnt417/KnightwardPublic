@@ -22,14 +22,14 @@ namespace TonyDev.Game.Core.Behavior
             return (Enemy.Targets[0].transform.position - transform.position).normalized;
         }
         
-        protected async UniTask FollowForSeconds(Func<Transform> followTransform, float speed, float seconds)
+        protected async UniTask FollowForSeconds(Func<Transform> followTransform, Func<float> speed, float seconds)
         {
             var doneTime = Time.time + seconds;
 
             await FollowUntil(followTransform, speed, () => Time.time > doneTime);
         }
 
-        protected async UniTask FollowUntil(Func<Transform> followTransform, float speed, Func<bool> predicate)
+        protected async UniTask FollowUntil(Func<Transform> followTransform, Func<float> speed, Func<bool> predicate)
         {
             while (!predicate.Invoke())
             {
@@ -39,7 +39,7 @@ namespace TonyDev.Game.Core.Behavior
                 
                 if (t == null) continue;
 
-                Rb2d.velocity = t != null ? (followTransform.Invoke().position - transform.position).normalized * speed : Vector2.zero;
+                Rb2d.velocity = t != null ? (followTransform.Invoke().position - transform.position).normalized * speed.Invoke() : Vector2.zero;
             }
         }
         
@@ -61,13 +61,13 @@ namespace TonyDev.Game.Core.Behavior
             }
         }
 
-        protected async UniTask Goto(Vector2 position, float speed, float maxTime = -1)
+        protected async UniTask Goto(Vector2 position, Func<float> speed, float maxTime = -1)
         {
             var endTime = maxTime < 0 ? Mathf.Infinity : Time.time + maxTime;
             
             while (!((Vector2) transform.position).Equals(position) && Time.time < endTime)
             {
-                transform.position = Vector2.MoveTowards(transform.position, position, speed * Time.fixedDeltaTime);
+                transform.position = Vector2.MoveTowards(transform.position, position, speed.Invoke() * Time.fixedDeltaTime);
                 await UniTask.WaitForFixedUpdate();
             }
         }
@@ -118,6 +118,7 @@ namespace TonyDev.Game.Core.Behavior
         protected new void Start()
         {
             base.Start();
+            DestroyToken.RegisterRaiseCancelOnDestroy(this);
             FlipSpriteToTarget().AttachExternalCancellation(DestroyToken.Token);
         }
         

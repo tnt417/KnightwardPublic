@@ -134,11 +134,13 @@ namespace TonyDev.Game.Global
         public static GamePhase GamePhase;
 
         [SyncVar] public float waveProgress;
+        [SyncVar] public float wave;
 
         [Command(requiresAuthority = false)]
-        public void CmdSetWaveProgress(float value)
+        public void CmdSetWaveProgress(int newWave, float newProgress)
         {
-            waveProgress = value;
+            waveProgress = newProgress;
+            wave = newWave;
         }
 
         [Command(requiresAuthority = false)]

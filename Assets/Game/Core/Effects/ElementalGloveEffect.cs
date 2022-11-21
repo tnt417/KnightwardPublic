@@ -14,10 +14,13 @@ namespace TonyDev.Game.Core.Effects
     {
         private enum Effect
         {
-            Slow, Burn, Leech
+            Slow,
+            Burn,
+            Leech
         }
-        
+
         public float SlowAmount;
+        public float SlowDuration;
         public float BurnDamagePerSecondMultiplier;
         public float Frequency;
         public int Ticks;
@@ -29,63 +32,48 @@ namespace TonyDev.Game.Core.Effects
 
         public override void OnAddOwner()
         {
-            UpdateCooldown(PlayerInventory.Instance.WeaponItem);
-            PlayerInventory.OnItemInsertLocal += UpdateCooldown;
-            
             _trailEffect = new ParticleTrailEffect();
             Entity.CmdAddEffect(_trailEffect, Entity);
             _trailEffect.SetVisible(false);
-            
-            Entity.OnDamageOther += TryLeech;
-            
-            base.OnAddOwner();
-        }
 
-        private void UpdateCooldown(Item item)
-        {
-            if (item.itemType == ItemType.Weapon)
-            {
-                Cooldown = item.itemEffects.Where(ie => ie is AbilityEffect)
-                    .Select(ge => ((AbilityEffect) ge).Cooldown).FirstOrDefault();
-                Duration = Cooldown;
-            }
+            Entity.OnDamageOther += TryLeech;
+
+            base.OnAddOwner();
         }
 
         public override void OnRemoveOwner()
         {
             Entity.CmdRemoveEffect(_trailEffect);
-            PlayerInventory.OnItemInsertLocal -= UpdateCooldown;
             base.OnRemoveOwner();
         }
 
-        private GameEffect _speedEffect;
-        private GameEffect _burnEffect;
-        
+        private SpeedEffect _speedEffect;
+        private PoisonEffect _burnEffect;
+
         protected override void OnAbilityActivate()
         {
-            _activeEffect = (Effect) Random.Range(0, 3);
+            _activeEffect = 
+                _activeEffect switch
+                {
+                    Effect.Burn => Effect.Slow,
+                    Effect.Slow => Effect.Leech,
+                    Effect.Leech => Effect.Burn,
+                    _ => Effect.Slow
+                };
+            
             _trailEffect.SetVisible(true);
+
+            ClearEffects();
+            
             switch (_activeEffect)
             {
                 case Effect.Burn:
+                    Entity.OnDamageOther += InflictBurn;
                     _trailEffect.SetColor(Color.red);
-                    _burnEffect = new PoisonEffect
-                    {
-                        Damage = BurnDamagePerSecondMultiplier * Entity.Stats.GetStat(Stat.Damage) * Frequency,
-                        Frequency = Frequency,
-                        Ticks = Ticks
-                    };
-                    PlayerInventory.Instance.WeaponItem.AddInflictEffect(_burnEffect, false);
                     break;
                 case Effect.Slow:
+                    Entity.OnDamageOther += InflictSlow;
                     _trailEffect.SetColor(Color.cyan);
-                    _speedEffect = new SpeedEffect
-                    {
-                        duration = Duration,
-                        moveSpeedMultiplier = 1 - SlowAmount,
-                        Source = Entity
-                    };
-                    PlayerInventory.Instance.WeaponItem.AddInflictEffect(_speedEffect, false);
                     break;
                 case Effect.Leech:
                     _trailEffect.SetColor(Color.green);
@@ -94,33 +82,55 @@ namespace TonyDev.Game.Core.Effects
             }
         }
 
+        private void ClearEffects()
+        {
+            Entity.OnDamageOther -= InflictBurn;
+            Entity.OnDamageOther -= InflictSlow;
+            Entity.OnDamageOther -= TryLeech;
+        }
+
+        private void InflictBurn(float dmg, GameEntity other, bool crit)
+        {
+            _burnEffect = new PoisonEffect
+            {
+                Damage = BurnDamagePerSecondMultiplier * Entity.Stats.GetStat(Stat.Damage) * Frequency,
+                Frequency = Frequency,
+                Ticks = Ticks
+            };
+
+            other.CmdAddEffect(_burnEffect, Entity);
+        }
+
+        private void InflictSlow(float dmg, GameEntity other, bool crit)
+        {
+            other.CmdRemoveEffect(_speedEffect);
+            
+            _speedEffect = new SpeedEffect
+            {
+                Duration = SlowDuration,
+                MoveSpeedMultiplier = 1 - SlowAmount,
+                Source = Entity
+            };
+
+            other.CmdAddEffect(_speedEffect, Entity);
+        }
+
         protected void TryLeech(float dmg, GameEntity other, bool isCrit)
         {
             if (_activeEffect == Effect.Leech)
             {
                 var leech = -dmg * LeechPercent;
-                
+
                 ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
-                
+
                 Entity.ApplyDamage(leech, out var success);
             }
         }
-        
+
         protected override void OnAbilityDeactivate()
         {
             _trailEffect.SetVisible(false);
-            switch (_activeEffect)
-            {
-                case Effect.Burn:
-                    PlayerInventory.Instance.WeaponItem.RemoveInflictEffect(_burnEffect);
-                    break;
-                case Effect.Slow:
-                    PlayerInventory.Instance.WeaponItem.RemoveInflictEffect(_speedEffect);
-                    break;
-                case Effect.Leech:
-                    Entity.OnDamageOther -= TryLeech;
-                    break;
-            }
+            ClearEffects();
         }
     }
 }

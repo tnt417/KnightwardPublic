@@ -22,7 +22,7 @@ namespace TonyDev
                 await UniTask.WaitForFixedUpdate();
                 if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
                 
-                await FollowForSeconds(() => FirstEnemyTarget, Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier, Mathf.Infinity);
+                await FollowForSeconds(() => FirstEnemyTarget, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier, Mathf.Infinity);
             }
         }
     }

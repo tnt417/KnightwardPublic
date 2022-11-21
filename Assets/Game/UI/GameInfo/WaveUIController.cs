@@ -25,23 +25,16 @@ namespace TonyDev.Game.UI.GameInfo
         [SerializeField] private Animator fillAnimator;
         //
 
-        private WaveManager _waveManager;
-
-        private void Start()
-        {
-            _waveManager = FindObjectOfType<WaveManager>();
-        }
-
         private void Update()
         {
             if (SceneManager.GetActiveScene().name != "CastleScene") return; //Return if the not in the arena scene
 
             fillAnimator.speed = WaveManager.BreakPassingMultiplier;
             
-            currentIcon.sprite = _waveManager.wavesSpawned % 5 == 0 ? breakSprite : waveSprite;
-            nextIcon.sprite = (_waveManager.wavesSpawned+1) % 5 == 0 ? breakSprite : waveSprite;
+            currentIcon.sprite = GameManager.Instance.wave % 5 == 0 ? breakSprite : waveSprite;
+            nextIcon.sprite = (GameManager.Instance.wave+1) % 5 == 0 ? breakSprite : waveSprite;
 
-            waveFill.sprite = _waveManager.wavesSpawned % 5 == 0 ? WaveManager.BreakPassingMultiplier > 0.5f ? hotFill : coldFill : hostileFill;
+            waveFill.sprite = GameManager.Instance.wave % 5 == 0 ? WaveManager.BreakPassingMultiplier > 0.5f ? hotFill : coldFill : hostileFill;
             
             waveSlider.value = GameManager.Instance.waveProgress;
         }

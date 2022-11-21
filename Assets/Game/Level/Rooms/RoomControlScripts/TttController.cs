@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities;
@@ -111,7 +112,11 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             if (!isServer) return;
 
             _room = GetComponent<Room>();
-            ExecuteBehavior().Forget();
+
+            var src = new CancellationTokenSource();
+            src.RegisterRaiseCancelOnDestroy(this);
+
+            ExecuteBehavior().AttachExternalCancellation(src.Token);
         }
 
         private void OnDrawGizmosSelected()

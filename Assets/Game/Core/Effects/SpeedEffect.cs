@@ -7,25 +7,24 @@ namespace TonyDev.Game.Core.Effects
 {
     public class SpeedEffect : GameEffect
     {
-        public float moveSpeedMultiplier;
-        public float duration;
-
-        private float expireTime;
+        public float MoveSpeedMultiplier;
+        public float Duration;
+        private float _expireTime;
         
         public override void OnAddOwner()
         {
-            expireTime = Time.time + duration;
-            Entity.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.MoveSpeed, moveSpeedMultiplier, "SlowEffect"), duration);
+            _expireTime = Time.time + Duration;
+            Entity.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.MoveSpeed, MoveSpeedMultiplier, EffectIdentifier), Duration);
         }
 
         public override void OnRemoveOwner()
         {
-            
+            Entity.Stats.RemoveBuffsOfSource(EffectIdentifier);
         }
 
         public override void OnUpdateOwner()
         {
-            if (Time.time > expireTime)
+            if (Time.time > _expireTime)
             {
                 Entity.CmdRemoveEffect(this);
             }

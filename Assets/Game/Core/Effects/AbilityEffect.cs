@@ -1,8 +1,8 @@
 using System;
+using Newtonsoft.Json;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.UI.GameInfo;
-using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects

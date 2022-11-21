@@ -107,8 +107,8 @@ namespace TonyDev.Game.Global.Network
                 img.enabled = visible;
             foreach (var l2d in identity.GetComponentsInChildren<Light2DBase>())
                 l2d.enabled = visible;
-            foreach (var coll in identity.GetComponentsInChildren<Collider2D>())
-                coll.enabled = visible;
+            //foreach (var coll in identity.GetComponentsInChildren<Collider2D>())
+            //    coll.enabled = visible;
             foreach (var roomDoor in identity.GetComponentsInChildren<RoomDoor>())
                 roomDoor.SetHostVisibility(visible);
         }

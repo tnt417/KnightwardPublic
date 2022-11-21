@@ -15,34 +15,43 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: fc0e20655c99aec43b6733b8061e5e43, type: 3}
     itemName: Elemental Glove
-    itemDescription: <color=green>Using your weapon ability will grant effects based
-      on a random element.</color>
+    itemDescription: 
     itemType: 2
     itemRarity: 2
-    statBonuses:
-    - statType: 1
-      stat: 0
-      strength: 0.3
-      source: 
+    statBonuses: []
     bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349781139259392
+    - rid: 4023141009510105088
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 4292349781139259392
-      type: {class: ElementalGloveEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+    - rid: 4023141009510105088
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        ActivateButton: 113
+        ScalingStatBonuses:
+        - type: 0
+          stat: 0
+          scalingType: 0
+          valueRange: {x: 0.3, y: 0.6}
+          byFloor: 50
+    - rid: 4292349781139259392
+      type: {class: ElementalGloveEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: <color=green>Upon activation, gain one of three elemental
+          effects. Active again to cycle chosen element.</color>
+        DungeonFloorUponCreation: 0
+        ActivateButton: 99
         Cooldown: 1
-        Duration: 1
+        Duration: 60
         abilitySprite: {fileID: 21300000, guid: fc0e20655c99aec43b6733b8061e5e43, type: 3}
         SlowAmount: 0.5
+        SlowDuration: 3
         BurnDamagePerSecondMultiplier: 0.25
-        Frequency: 0.1
-        Ticks: 40
+        Frequency: 0.25
+        Ticks: 20
         LeechPercent: 0.2

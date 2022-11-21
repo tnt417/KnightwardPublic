@@ -6,6 +6,7 @@ using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Decorations;
 using TonyDev.Game.Level.Decorations.Crystal;
 using UnityEditor;
 using UnityEngine;
@@ -31,6 +32,12 @@ namespace TonyDev.Game.Core.Entities.Towers
         {
             Init();
 
+            var interact = gameObject.AddComponent<InteractableButton>();
+            interact.onInteract.AddListener((type) =>
+            {
+                if (this != null && type == InteractType.Interact) CmdRequestPickup();
+            });
+            
             if (!EntityOwnership) return;
 
             if (myItem.statBonuses != null)
@@ -51,12 +58,30 @@ namespace TonyDev.Game.Core.Entities.Towers
         public override bool IsInvulnerable => true;
         public override bool IsTangible => false;
 
-        public void Pickup()
+        [Command(requiresAuthority = false)]
+        public void CmdRequestPickup(NetworkConnectionToClient sender = null)
         {
-            Die();
-            GameManager.Instance.OccupiedTowerSpots.Remove(new Vector2Int((int)transform.position.x, (int)transform.position.y));
-            NetworkServer.Destroy(gameObject);
+            if (_pickupPending || this == null) return;
+            
+            _pickupPending = true;
+            
+            TargetConfirmPickup(sender);
+        }
+
+        private bool _pickupPending = false;
+        
+        [TargetRpc]
+        private void TargetConfirmPickup(NetworkConnection target)
+        {
             PlayerInventory.Instance.InsertItem(myItem);
+            CmdConfirmPickup();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdConfirmPickup()
+        {
+            GameManager.Instance.OccupiedTowerSpots.Remove(new Vector2Int((int)transform.position.x, (int)transform.position.y));
+            Die();
         }
     }
 }

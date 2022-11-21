@@ -29,6 +29,18 @@ namespace TonyDev.Game.Core.Effects
         
         public override void OnAddOwner()
         {
+            CalculateModifiedBonuses();
+
+            if (_modifiedBonuses is {Count: 0} or null) return;
+            
+            foreach (var bonus in _modifiedBonuses)
+            {
+                Entity.Stats.AddStatBonus(bonus.statType, bonus.stat, bonus.strength, bonus.source);
+            }
+        }
+
+        private void CalculateModifiedBonuses()
+        {
             _modifiedBonuses = new List<StatBonus>();
 
             if (ScalingStatBonuses == null) return;
@@ -42,13 +54,8 @@ namespace TonyDev.Game.Core.Effects
                 
                 _modifiedBonuses.Add(newStatBonus);
             }
-            
-            foreach (var bonus in _modifiedBonuses)
-            {
-                Entity.Stats.AddStatBonus(bonus.statType, bonus.stat, bonus.strength, bonus.source);
-            }
         }
-
+        
         public override void OnRemoveOwner()
         {
             Entity.Stats.RemoveStatBonuses(EffectIdentifier);
@@ -58,15 +65,7 @@ namespace TonyDev.Game.Core.Effects
         {
             base.OnRegisterLocal();
             
-            foreach (var ssb in ScalingStatBonuses)
-            {
-                var newStrength = ssb.scalingType == ScalingType.Linear
-                    ? LinearScale(ssb.valueRange.x, ssb.valueRange.y, ssb.byFloor) : DiminishingScale(ssb.valueRange.x, ssb.valueRange.y, ssb.byFloor);
-
-                var newStatBonus = new StatBonus(ssb.type, ssb.stat, newStrength, EffectIdentifier);
-                
-                _modifiedBonuses.Add(newStatBonus);
-            }
+            CalculateModifiedBonuses();
         }
 
         public override string GetEffectDescription()

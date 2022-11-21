@@ -8,8 +8,8 @@ namespace TonyDev.Game.Core.Entities.Enemies
     {
         public override void OnAddOwner()
         {
-            Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Damage, 0.05f * Mathf.Pow(GameManager.EnemyDifficultyScale*2, 1.6f), "EnemyScaling");
-            Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 0.05f * Mathf.Pow(GameManager.EnemyDifficultyScale*2, 1.3f), "EnemyScaling");
+            Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Damage, 0.05f * Mathf.Pow(GameManager.EnemyDifficultyScale*2, 1.3f), "EnemyScaling");
+            Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 0.05f * Mathf.Pow(GameManager.EnemyDifficultyScale*2, 1.6f), "EnemyScaling");
         }
 
         public override void OnRemoveOwner()

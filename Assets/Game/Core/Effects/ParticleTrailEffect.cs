@@ -10,16 +10,33 @@ namespace TonyDev.Game.Core.Effects
     {
         [NonSerialized] private GameObject _particleObject;
         public string OverridePrefab;
+        public bool VisibleGlobal;
 
         public override void OnAddOwner()
+        {
+            if (!VisibleGlobal)
+            {
+                Create();
+            }
+        }
+        
+        public override void OnAddClient()
+        {
+            if (VisibleGlobal)
+            {
+                Create();
+            }
+        }
+
+        private void Create()
         {
             _particleObject = Object.Instantiate(ObjectFinder.GetPrefab(string.IsNullOrEmpty(OverridePrefab) ? "particleTrail" : OverridePrefab), Entity.transform.position, Quaternion.identity, Entity.transform);
             ParticleSystem = _particleObject.GetComponent<ParticleSystem>();
         }
 
-        public override void OnRemoveOwner()
+        public override void OnRemoveClient()
         {
-            Object.Destroy(_particleObject);
+            if(_particleObject != null) Object.Destroy(_particleObject);
         }
 
         [NonSerialized] public ParticleSystem ParticleSystem;

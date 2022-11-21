@@ -6,10 +6,10 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
-using Unity.Plastic.Newtonsoft.Json;
 using UnityEngine;
 using Object = UnityEngine.Object;
 using Tools = TonyDev.Game.Global.Tools;
+using Newtonsoft.Json;
 
 namespace TonyDev.Game.Core.Attacks
 {

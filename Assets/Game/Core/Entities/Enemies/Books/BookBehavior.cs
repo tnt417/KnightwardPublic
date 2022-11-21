@@ -23,7 +23,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Books
                 var directionVector = ((Vector2) Enemy.Targets[0].transform.position - (Vector2) transform.position).normalized;
                 if (!reached)
                 {
-                    await Goto((Vector2)Enemy.Targets[0].transform.position - directionVector * dashRadius, dashSpeed * 2, 20f);
+                    await Goto((Vector2)Enemy.Targets[0].transform.position - directionVector * dashRadius, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * dashSpeed * 2, 20f);
                     reached = true;
                 }
                 await GotoOverSeconds((Vector2)Enemy.Targets[0].transform.position + directionVector*dashRadius, 1/(Enemy.Stats.GetStat(Stat.MoveSpeed)*dashSpeed));

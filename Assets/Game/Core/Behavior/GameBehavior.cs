@@ -18,13 +18,8 @@ namespace TonyDev.Game.Core.Behavior
         [ServerCallback]
         protected void Start()
         {
+            DestroyToken.RegisterRaiseCancelOnDestroy(this);
             ExecuteBehavior().AttachExternalCancellation(DestroyToken.Token);
-        }
-
-        [ServerCallback]
-        private void OnDestroy()
-        {
-            DestroyToken.Cancel();
         }
 
         protected virtual async UniTask ExecuteBehavior()

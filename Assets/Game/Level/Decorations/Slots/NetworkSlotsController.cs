@@ -63,6 +63,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
         [ClientRpc]
         private void RpcRoll(int rollCount)
         {
+            _rolls = 0;
             _maxRolls = rollCount;
             foreach (var s in slots)
             {
@@ -79,9 +80,6 @@ namespace TonyDev.Game.Level.Decorations.Slots
             {
                 outcomes = outcomes.Where(o => o.outcome != SlotOutcome.ExtraSlot).ToArray();
             }
-            
-            _rolls = 0;
-            _maxRolls = Random.Range(3, 7);
 
             var determinedOutcome = Tools.SelectRandom(outcomes);
 

@@ -90,12 +90,6 @@ namespace TonyDev.Game.Global
 
             tower.CmdSetParentIdentity(parent);
             tower.CmdSetTowerItem(towerItem);
-
-            var interact = go.AddComponent<InteractableButton>();
-            interact.onInteract.AddListener((type) =>
-            {
-                if (tower != null && type == InteractType.Interact) tower.Pickup();
-            });
         }
 
         public static void SpawnTextPopup(Vector2 position, string text, Color color, float speedMultiplier = 1f)

@@ -24,5 +24,10 @@ namespace TonyDev.Game.UI.Menu.MainMenu
         {
             SceneManager.LoadScene("LobbyScene"); //Go to main scene when the play button is clicked
         }
+
+        public void QuitGame()
+        {
+            Application.Quit(0);
+        }
     }
 }

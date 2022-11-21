@@ -139,11 +139,15 @@ namespace TonyDev.Game.Core.Items
             }
         }
 
+        private bool _pickupPending = false;
+        
         [Command(requiresAuthority = false)]
         private void CmdRequestPickup(int senderMoney, NetworkConnectionToClient sender = null)
         {
-            if (senderMoney < cost || !_pickupAble) return; //If the item is too expensive, don't allow pickup.
+            if (senderMoney < cost || !_pickupAble || _pickupPending) return; //If the item is too expensive, don't allow pickup.
 
+            _pickupPending = true;
+            
             RpcNotifyPickup();
             TargetConfirmPickup(sender, cost);
 
@@ -196,7 +200,6 @@ namespace TonyDev.Game.Core.Items
         [Command(requiresAuthority = false)]
         private void CmdNotifyReplacementItem(Item newItem)
         {
-
             if (newItem == null)
                 NetworkServer.Destroy(gameObject); //If no item was replaced, just destroy this GroundItem
             else
@@ -204,6 +207,8 @@ namespace TonyDev.Game.Core.Items
                 CmdSetItem(newItem); //Otherwise, replaced the item
                 CmdSetCost(0); //Don't make the player pay for their replaced item
             }
+            
+            _pickupPending = false;
         }
 
         private IEnumerator DisablePickupForSeconds(float seconds) //Disables pickup for a specified number of seconds

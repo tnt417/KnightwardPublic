@@ -2,15 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Codice.CM.SEIDInfo;
-using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Items;
 using UnityEditor;
 using UnityEditor.Experimental.GraphView;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace TonyDev.Editor
 {

@@ -1,22 +1,28 @@
 using System;
-using Unity.Plastic.Newtonsoft.Json;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace TonyDev.Game.Global.Network
 {
-    public class SpriteConverter : JsonConverter<Sprite>
+    public class SpriteConverter : JsonConverter
     {
-        public override void WriteJson(JsonWriter writer, Sprite value, JsonSerializer serializer)
+        public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            writer.WriteValue(value == null ? "" : value.name.Split("(")[0]);
+            var sprite = value as Sprite;
+
+            writer.WriteValue(sprite == null ? "" : sprite.name.Split("(")[0]);
         }
 
-        public override Sprite ReadJson(JsonReader reader, Type objectType, Sprite? existingValue, bool hasExistingValue,
-            JsonSerializer serializer)
+        public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             var name = (string)reader.Value;
 
             return string.IsNullOrEmpty(name) ? null : ObjectFinder.GetSprite(name);
+        }
+
+        public override bool CanConvert(Type objectType)
+        {
+            return objectType == typeof(Sprite);
         }
     }
 }

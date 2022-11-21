@@ -36,7 +36,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Golem
                 if (Enemy.Targets[0] is Player.Player)
                 {
                     PlayAnimation(EnemyAnimationState.Move);
-                    await FollowForSeconds(() => FirstEnemyTarget, followSpeed, followTime);
+                    await FollowForSeconds(() => FirstEnemyTarget, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * followSpeed, followTime);
                     PlayAnimation(EnemyAnimationState.Stop);
                     await UniTask.Delay(TimeSpan.FromSeconds(0.5));
                     PlayAnimation(EnemyAnimationState.Attack);
@@ -48,7 +48,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Golem
                 {
                     await Goto(
                         (Vector2)transform.position + ((Vector2) transform.position - (Vector2) Enemy.Targets[0].transform.position).normalized *
-                        crystalAttackRange, followSpeed);
+                        crystalAttackRange, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * followSpeed);
                     PlayAnimation(EnemyAnimationState.Attack);
                     await ShootAnimation().First();
                     ShootProjectile(throwProjectile, transform.position, GetDirectionToFirstTarget());

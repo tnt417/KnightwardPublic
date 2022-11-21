@@ -10365,7 +10365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.hitboxRadius
@@ -10389,7 +10389,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[3].stat
-      value: 7
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[4].stat
@@ -10409,11 +10409,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[2].strength
-      value: 200
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[3].strength
-      value: 100
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[4].strength
@@ -10585,6 +10585,7 @@ MonoBehaviour:
     waveDistance: 0
     childOfOwner: 0
     effects: []
+  crystalAttackRange: 5
   references:
     version: 2
     RefIds: []

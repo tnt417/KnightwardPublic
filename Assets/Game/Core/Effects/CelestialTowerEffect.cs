@@ -38,7 +38,8 @@ namespace TonyDev.Game.Core.Effects
                     {
                         _trailEffects[t] = new ParticleTrailEffect
                         {
-                            OverridePrefab = ObjectFinder.GetNameOfPrefab(ObjectFinder.GetPrefab(buffEffectPrefabKey))
+                            OverridePrefab = ObjectFinder.GetNameOfPrefab(ObjectFinder.GetPrefab(buffEffectPrefabKey)),
+                            VisibleGlobal = true
                         };
                         t.CmdAddEffect(_trailEffects[t], Entity);
                     }

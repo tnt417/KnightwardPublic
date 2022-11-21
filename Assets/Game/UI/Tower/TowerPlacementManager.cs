@@ -45,7 +45,7 @@ namespace TonyDev.Game.UI.Tower
                 {
                     if (t.CurrentParentIdentity != null && t.CurrentParentIdentity.GetComponent<Room>() != null)
                     {
-                        t.Pickup(); //Pickup all towers that are in the dungeon, whenever rooms are changed
+                        t.CmdRequestPickup(); //Pickup all towers that are in the dungeon, whenever rooms are changed
                     }
                 }
             };
