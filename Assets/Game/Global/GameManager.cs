@@ -69,11 +69,14 @@ namespace TonyDev.Game.Global
 
             var item = ItemGenerator.GenerateItemOfType(it, ir);
 
-            foreach (var ge in item.itemEffects)
+            if (item.itemEffects != null)
             {
-                GameEffect.RegisterEffect(ge);
+                foreach (var ge in item.itemEffects)
+                {
+                    GameEffect.RegisterEffect(ge);
+                }
             }
-            
+
             PlayerInventory.Instance.InsertItem(item);
         }
 
@@ -393,6 +396,7 @@ namespace TonyDev.Game.Global
             GamePhase = GamePhase.Arena;
             Player.LocalInstance.gameObject.transform.position = arenaSpawnPos;
             CmdReTargetEnemies();
+            RoomManager.OnActiveRoomChanged.Invoke();
         }
 
         private void GameOver()
@@ -412,9 +416,15 @@ namespace TonyDev.Game.Global
             CmdReTargetEnemies();
         }
 
+        private bool _busyRegen;
+
+
         [Command(requiresAuthority = false)]
         public void CmdProgressNextDungeonFloor()
         {
+            if (_busyRegen) return;
+            _busyRegen = true;
+
             NextDungeonFloor().Forget();
         }
 
@@ -430,7 +440,7 @@ namespace TonyDev.Game.Global
         {
             dungeonFloor = floor;
         }
-        
+
         [Command(requiresAuthority = false)]
         private void CmdRegenMap()
         {
@@ -438,6 +448,8 @@ namespace TonyDev.Game.Global
             RoomManager.Instance.RpcResetRooms();
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.GenerateRooms();
+
+            _busyRegen = false;
         }
 
         private async UniTask NextDungeonFloor()

@@ -267,6 +267,7 @@ MonoBehaviour:
       m_Calls: []
   minimapIcon: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
   roomChildObjects: []
+  cleared: 0
 --- !u!114 &-1173334797647341656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -345,10 +346,16 @@ MonoBehaviour:
     outcome: 2
   - slotSprite: {fileID: -6834524911116659543, guid: 77232101e9d80754089e3481d34866da, type: 3}
     outcome: 3
-  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
-    outcome: 4
   - slotSprite: {fileID: 21300000, guid: d8b67f9e00774da4f8cacb79dcf22edf, type: 3}
     outcome: 5
+  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
+    outcome: 4
+  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
+    outcome: 4
+  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
+    outcome: 4
+  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
+    outcome: 4
   slotObject: {fileID: 8076060698382201093}
   buttonInteractable: {fileID: 8632290567538872406}
   maxSlots: 7
@@ -2428,10 +2435,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name
       value: RoomDoorL
@@ -2959,10 +2962,6 @@ PrefabInstance:
     - target: {fileID: 222899981039721528, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: wallTileSpots.Array.data[0].y
       value: -5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name
@@ -4873,10 +4872,6 @@ PrefabInstance:
       propertyPath: wallTileSpots.Array.data[0].y
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name
       value: RoomDoorT
@@ -4977,10 +4972,6 @@ PrefabInstance:
     - target: {fileID: 2016926499481903936, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name

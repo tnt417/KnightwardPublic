@@ -27,6 +27,7 @@ MonoBehaviour:
       stat: 0
       strength: 0.25
       source: Weapon
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 8269505085799137282
     - rid: 8269505106771968000
@@ -58,6 +59,7 @@ MonoBehaviour:
       type: {class: HammerSpinEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         ActivateButton: 113
         Cooldown: 4
         Duration: 0.1
@@ -109,6 +111,7 @@ MonoBehaviour:
       type: {class: HammerSwingEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         Projectile:
           prefabKey: 
           projectileSprite: {fileID: 0}

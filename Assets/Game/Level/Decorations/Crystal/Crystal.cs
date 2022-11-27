@@ -22,6 +22,10 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         private void Start()
         {
             Init();
+
+            if (!EntityOwnership) return;
+            
+            CmdAddEffect(new CrystalArmorEffect(), this);
         }
 
         private new void Update()

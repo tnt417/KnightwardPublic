@@ -30,7 +30,8 @@ namespace TonyDev.Game.Level.Rooms
         Common,
         Uncommon,
         Special,
-        Guaranteed
+        Guaranteed,
+        Boss
     }
 
     [Serializable]
@@ -153,6 +154,16 @@ namespace TonyDev.Game.Level.Rooms
             //rooms[_startingRoomPos.x, _startingRoomPos.y].gameObject.SetActive(true);
             _generated = true;
             return new Map(rooms, _startingRoomPos);
+        }
+
+        [Server]
+        public Map GenerateBossMap()
+        {
+            var rooms = new Room[MapSize, MapSize];
+            rooms[mapRadius, mapRadius] = GenerateRoom(new Vector2Int(mapRadius, mapRadius),
+                Tools.SelectRandom(roomEntries.Where(re => re.tier == RoomGenerateTier.Boss)).roomPrefab);
+
+            return new Map(rooms, new Vector2Int(mapRadius, mapRadius));
         }
 
         /*private GameObject GetRandomValidPrefab(Vector2Int index, int[,] shape, RoomGenerateTier tier)

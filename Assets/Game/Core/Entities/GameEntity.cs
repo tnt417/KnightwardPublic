@@ -238,14 +238,15 @@ namespace TonyDev.Game.Core.Entities
             }
 
             Stats.OnStatsChanged += UpdateStats;
-
-            CurrentHealth = MaxHealth;
-            OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
-            OnHealthChangedOwner?.Invoke(CurrentHealth);
+            Stats.OnStatsChanged += () => CmdSetHealth(CurrentHealth, MaxHealth);
 
             UpdateStats();
 
             UpdateTarget();
+            
+            CurrentHealth = MaxHealth;
+            OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
+            OnHealthChangedOwner?.Invoke(CurrentHealth);
         }
 
         public Action<float, GameEntity, bool>
@@ -480,6 +481,14 @@ namespace TonyDev.Game.Core.Entities
             return modifiedDamage;
         }
 
+        public void FullHeal()
+        {
+            if (!EntityOwnership) return;
+
+            CurrentHealth = MaxHealth;
+            OnHealthChangedOwner?.Invoke(CurrentHealth);
+        }
+        
         public void SetHealth(float newHealth)
         {
             if (!EntityOwnership) return;

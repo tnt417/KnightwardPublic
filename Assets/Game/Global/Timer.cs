@@ -1,5 +1,7 @@
 using System.Text;
+using Mirror;
 using TMPro;
+using TonyDev.Game.Global.Console;
 using UnityEngine;
 
 namespace TonyDev.Game.Global
@@ -28,6 +30,12 @@ namespace TonyDev.Game.Global
         {
             if(!_paused) GameTimer += Time.deltaTime; //Tick timer if not paused
             gameTimerText.text = FormatTimeFromSeconds(GameTimer); //Update timer text
+        }
+
+        [GameCommand(Keyword = "time", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Set time.")] [ServerCallback]
+        public static void SetTimeSeconds(int time)
+        {
+            GameTimer = time;
         }
 
         public static void Stop()

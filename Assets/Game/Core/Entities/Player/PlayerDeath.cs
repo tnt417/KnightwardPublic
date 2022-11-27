@@ -3,6 +3,7 @@ using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Player

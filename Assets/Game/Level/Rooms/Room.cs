@@ -152,6 +152,7 @@ namespace TonyDev.Game.Level.Rooms
             _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
         }
 
+        [ServerCallback]
         private void Start()
         {
             GameManager.OnEnemyAdd += OnEntityChange;
@@ -229,6 +230,9 @@ namespace TonyDev.Game.Level.Rooms
             return roomDoors.Select(rd => rd.direction).ToList();
         }
 
+        [SyncVar] public bool cleared = false;
+
+        [ServerCallback]
         private void CheckShouldLockDoors()
         {
             if (this == null) return;
@@ -245,7 +249,8 @@ namespace TonyDev.Game.Level.Rooms
 
             if (shouldLock)
             {
-                LockAllDoors(); //Lock doors while enemies are alive in the room.
+                CmdOnLock(); //Lock doors while enemies are alive in the room.
+                LockAllDoors();
             }
             else
             {
@@ -266,9 +271,19 @@ namespace TonyDev.Game.Level.Rooms
         }
 
         [Command(requiresAuthority = false)]
+        private void CmdOnLock()
+        {
+            if (this == null || !enabled) return;
+            
+            cleared = false;
+        }
+        
+        [Command(requiresAuthority = false)]
         private void CmdOnClear()
         {
             if (this == null || !enabled) return;
+
+            cleared = true;
             
             onRoomClearServer?.Invoke();
             RpcBroadcastClear();

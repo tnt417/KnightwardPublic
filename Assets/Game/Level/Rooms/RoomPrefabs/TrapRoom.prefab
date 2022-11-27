@@ -52,7 +52,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 25
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 0
   onItemInteractServer:
     m_PersistentCalls:
@@ -341,6 +341,9 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  onRoomClearGlobal:
+    m_PersistentCalls:
+      m_Calls: []
   minimapIcon: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
   roomChildObjects: []
 --- !u!114 &-4400890791826256157
@@ -3454,10 +3457,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name
       value: RoomDoorL
@@ -4211,10 +4210,6 @@ PrefabInstance:
       propertyPath: wallTileSpots.Array.data[0].y
       value: -6
       objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name
       value: RoomDoorB
@@ -4723,10 +4718,6 @@ PrefabInstance:
       propertyPath: wallTileSpots.Array.data[0].y
       value: 6
       objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name
       value: RoomDoorT
@@ -5149,10 +5140,6 @@ PrefabInstance:
     - target: {fileID: 2016926499481903936, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name

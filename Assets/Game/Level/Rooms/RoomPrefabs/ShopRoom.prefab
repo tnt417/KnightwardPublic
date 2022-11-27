@@ -2731,6 +2731,9 @@ MonoBehaviour:
   onRoomClearServer:
     m_PersistentCalls:
       m_Calls: []
+  onRoomClearGlobal:
+    m_PersistentCalls:
+      m_Calls: []
   minimapIcon: {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
   roomChildObjects: []
 --- !u!114 &-6149731234572078668
@@ -2802,7 +2805,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 15
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
     m_PersistentCalls:
@@ -2860,7 +2863,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 15
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
     m_PersistentCalls:
@@ -3032,7 +3035,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 15
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
     m_PersistentCalls:
@@ -3198,7 +3201,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 15
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
     m_PersistentCalls:
@@ -3278,10 +3281,6 @@ PrefabInstance:
     - target: {fileID: 222899981039721528, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: wallTileSpots.Array.data[0].y
       value: -6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name
@@ -4486,10 +4485,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name
       value: RoomDoorL
@@ -5374,10 +5369,6 @@ PrefabInstance:
     - target: {fileID: 2016926499481903936, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name
@@ -6313,10 +6304,6 @@ PrefabInstance:
     - target: {fileID: 222899981039721528, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: wallTileSpots.Array.data[0].y
       value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name

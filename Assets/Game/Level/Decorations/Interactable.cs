@@ -170,7 +170,19 @@ namespace TonyDev.Game.Level.Decorations
 
         private void OnTriggerStay2D(Collider2D other)
         {
-            if (!IsInteractable) Active = false;
+            if (!IsInteractable)
+            {
+                Active = false;
+                return;
+            }
+            
+            var id = other.GetComponent<NetworkIdentity>();
+
+            if (id == null || !id.isLocalPlayer) return;
+            
+            if (!other.isTrigger || !other.CompareTag("Player")) return;
+
+            Active = true;
         }
 
         private void OnTriggerExit2D(Collider2D other)

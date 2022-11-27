@@ -96,7 +96,7 @@ namespace TonyDev.Game.Level.Rooms
         private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public event Action OnRoomsChanged;
-        public static event Action OnActiveRoomChanged;
+        public static Action OnActiveRoomChanged;
         public static Action<Player, Room> OnActiveRoomChangedGlobal;
         
         private void Awake()
@@ -148,12 +148,12 @@ namespace TonyDev.Game.Level.Rooms
         {
             yield return new WaitUntil(()=>CustomNetworkManager.ReadyToStart);
             GenerateRooms();
-        } 
+        }
 
         [ServerCallback]
         public void GenerateRooms()
         {
-            CmdSetMap(roomGenerator.Generate()); //Randomly generate rooms
+            CmdSetMap(GameManager.DungeonFloor != 1 && GameManager.DungeonFloor % 10 == 0 ? roomGenerator.GenerateBossMap() : roomGenerator.Generate()); //Randomly generate rooms
         }
 
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.

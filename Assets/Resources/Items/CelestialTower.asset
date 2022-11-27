@@ -31,7 +31,7 @@ MonoBehaviour:
       type: {class: CelestialTowerEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
         effectDescription: 
-        playerStrengthFactorUponCreation: 0
+        DungeonFloorUponCreation: 0
         buffEffectPrefabKey: CelestialBuffEffect
         validStatTypes: 000000000100000003000000
         StatBonusCount: 2

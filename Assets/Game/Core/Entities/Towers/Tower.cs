@@ -32,6 +32,10 @@ namespace TonyDev.Game.Core.Entities.Towers
         {
             Init();
 
+            var coll = gameObject.AddComponent<BoxCollider2D>();
+            coll.size = new Vector2(0.2f, 0.2f);
+            coll.isTrigger = true;
+            
             var interact = gameObject.AddComponent<InteractableButton>();
             interact.onInteract.AddListener((type) =>
             {

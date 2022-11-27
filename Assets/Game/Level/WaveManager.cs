@@ -41,7 +41,7 @@ namespace TonyDev.Game.Level
 
         private float _waveCooldown;
 
-        private static float DifficultyThreshold => 1000f * (1f + GameManager.EnemyDifficultyScale / 1.5f) *
+        private static float DifficultyThreshold => 1000f * (1f + Mathf.Pow(GameManager.EnemyDifficultyScale,1.2f) / 1.5f) *
                                                     (0.55f + 0.45f * NetworkServer.connections.Count);
 
         private float _waveTimer = 0;

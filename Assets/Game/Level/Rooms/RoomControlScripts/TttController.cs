@@ -7,7 +7,6 @@ using Mirror;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
-using TonyDev.Game.Global;
 using UnityEngine;
 
 namespace TonyDev.Game.Level.Rooms.RoomControlScripts
@@ -37,7 +36,11 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 
             foreach (var ge in _tttEnemies)
             {
-                ge.OnDeathOwner += (_) => SetTile(ge.transform.position, true);
+                ge.OnDeathOwner += (_) =>
+                {
+                    if (this == null) return;
+                    SetTile(ge.transform.position, true);
+                };
             }
         }
 
@@ -100,14 +103,36 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             {
                 if (area.SpawnedPrefab == null) continue;
                 
-                Destroy(area.SpawnedPrefab);
                 area.itemSpawner.SpawnItem();
+            }
+
+            CmdOnGrantRewards();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdOnGrantRewards()
+        {
+            RpcOnGrantRewards();
+        }
+
+        [ClientRpc]
+        private void RpcOnGrantRewards()
+        {
+            foreach (var area in tttAreas)
+            {
+                if (area.SpawnedPrefab == null) continue;
+                
+                Destroy(area.SpawnedPrefab);
             }
         }
 
         private void Start()
         {
-            Player.LocalInstance.OnLocalHurt += () => SetTile(Player.LocalInstance.transform.position, false);
+            Player.LocalInstance.OnLocalHurt += () =>
+            {
+                if (this == null) return;
+                SetTile(Player.LocalInstance.transform.position, false);
+            };
 
             if (!isServer) return;
 

@@ -2260,7 +2260,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 0
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 0
   onItemInteractServer:
     m_PersistentCalls:
@@ -2388,7 +2388,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 0
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 0
   onItemInteractServer:
     m_PersistentCalls:
@@ -2617,6 +2617,9 @@ MonoBehaviour:
   onRoomClearServer:
     m_PersistentCalls:
       m_Calls: []
+  onRoomClearGlobal:
+    m_PersistentCalls:
+      m_Calls: []
   minimapIcon: {fileID: -667373352, guid: 365fd0e82ab537d488a329142564922c, type: 3}
   roomChildObjects: []
 --- !u!114 &8378947918859070454
@@ -2731,7 +2734,7 @@ MonoBehaviour:
   randomRarity: 1
   generateRarity: 0
   rarityBoost: 0
-  itemData: {fileID: 0}
+  itemDataPool: []
   costMultiplier: 0
   onItemInteractServer:
     m_PersistentCalls:
@@ -3511,10 +3514,6 @@ PrefabInstance:
       propertyPath: wallTileSpots.Array.data[0].y
       value: -4
       objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name
       value: RoomDoorB
@@ -4264,10 +4263,6 @@ PrefabInstance:
       propertyPath: wallTileSpots.Array.data[0].y
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 3125665566379891712, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
-      propertyPath: m_Size.x
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 8605228016060780256, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: m_Name
       value: RoomDoorT
@@ -4698,10 +4693,6 @@ PrefabInstance:
     - target: {fileID: 2016926499481903936, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name
@@ -5544,10 +5535,6 @@ PrefabInstance:
     - target: {fileID: 2016926499481903936, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3519164739486168951, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
-      propertyPath: m_Size.y
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7844677514765247895, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: m_Name

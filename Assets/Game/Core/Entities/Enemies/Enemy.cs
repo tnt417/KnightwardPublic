@@ -38,8 +38,8 @@ namespace TonyDev.Game.Core.Entities.Enemies
             
             Init();
             
-            CmdAddEffect(new EnemyScalingEffect(), this);
-            EnemyModifiers.ModifyEnemy(this);
+            if(EntityOwnership) CmdAddEffect(new EnemyScalingEffect(), this);
+            //EnemyModifiers.ModifyEnemy(this);
         }
 
         private void InitContactDamage(AttackData contactAttackData)

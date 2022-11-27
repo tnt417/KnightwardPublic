@@ -80,10 +80,6 @@ namespace TonyDev.Game.Global
 
             var go = Instantiate(prefab, pos, Quaternion.identity);
 
-            var coll = go.AddComponent<BoxCollider2D>();
-            coll.size = new Vector2(0.2f, 0.2f);
-            coll.isTrigger = true;
-
             NetworkServer.Spawn(go, NetworkServer.localConnection);
 
             var tower = go.GetComponent<Tower>();
