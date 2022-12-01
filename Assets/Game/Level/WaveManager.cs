@@ -11,6 +11,7 @@ using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
+using UnityEngine.Android;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level
@@ -25,33 +26,49 @@ namespace TonyDev.Game.Level
     public class WaveManager : MonoBehaviour
     {
         public static WaveManager Instance;
-        
+
         //Editor variables
         [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private float spawnRadius;
 
         [SerializeField] private EnemySpawn[] enemySpawns;
 
-        public float breakLength;
+        public float breakLength = 30f;
         public float breakFrequency;
         public int regularLength;
-        [Range(0f,1f)]
-        public float percentageActiveSpawning;
+
+        [Range(0f, 1f)] public float percentageActiveSpawning;
         //
 
         private float _waveCooldown;
 
-        private static float DifficultyThreshold => 1000f * (1f + Mathf.Pow(GameManager.EnemyDifficultyScale,1.2f) / 1.5f) *
-                                                    (0.55f + 0.45f * NetworkServer.connections.Count);
+        private static float DifficultyThreshold =>
+            500f * (1f + Mathf.Pow(GameManager.EnemyDifficultyScale, 1.15f) / 1.5f) *
+            (0.55f + 0.45f * NetworkServer.connections.Count);
 
         private float _waveTimer = 0;
         public int wavesSpawned = 0;
 
         private bool OnBreak => wavesSpawned % breakFrequency == 0;
 
+        private bool _paused;
+
+        [GameCommand(Keyword = "pausewave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled spawning.")]
+        public static void Pause()
+        {
+            Instance._paused = !Instance._paused;
+        }
+        
         private void Awake()
         {
             Instance = this;
+        }
+
+        [ServerCallback]
+        public void MoveEnemyToWave(Enemy enemy)
+        {
+            enemy.CmdSetParentIdentity(null);
+            enemy.transform.position = GetSpawnpoint();
         }
 
         private void Start()
@@ -70,12 +87,12 @@ namespace TonyDev.Game.Level
         [ServerCallback]
         private void Update()
         {
-            if (GameManager.Instance == null) return;
-            
-            _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier * BreakPassingMultiplier; //Tick the wave timer
+            if (GameManager.Instance == null || _paused) return;
+
+            _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier; // * BreakPassingMultiplier; //Tick the wave timer
 
             if (NetworkServer.active) GameManager.Instance.CmdSetWaveProgress(wavesSpawned, _waveTimer / _waveCooldown);
-            
+
             if (_waveTimer >= _waveCooldown)
             {
                 NextWave(); //Spawn a wave if cooldown is over
@@ -101,7 +118,7 @@ namespace TonyDev.Game.Level
             var total = 0f;
 
             var players = FindObjectsOfType<Player>();
-            
+
             foreach (var p in players)
             {
                 if (p.CurrentParentIdentity == null)
@@ -115,21 +132,23 @@ namespace TonyDev.Game.Level
                     total += newRoom.timeMultiplier;
                 }
             }
-            
-            GameManager.Instance.CmdSetBreakMultiplier(total/players.Length);
+
+            GameManager.Instance.CmdSetBreakMultiplier(total / players.Length);
         }
-        
-        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawning next wave.")] [ServerCallback]
+
+        [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat,
+            SuccessMessage = "Spawning next wave.")]
+        [ServerCallback]
         public void NextWave()
         {
             _waveTimer = 0;
             wavesSpawned++;
-            
+
             _waveCooldown =
                 wavesSpawned % breakFrequency == 0
                     ? breakLength
                     : regularLength;
-            
+
             SpawnWave().Forget();
         }
 
@@ -144,7 +163,7 @@ namespace TonyDev.Game.Level
             float difficultyTotal = 0;
 
             List<EnemySpawn> spawns = new();
-            
+
             while (difficultyTotal <= DifficultyThreshold)
             {
                 var enemySpawn = enemySpawns[Random.Range(0, enemySpawns.Length)];
@@ -158,15 +177,15 @@ namespace TonyDev.Game.Level
 
             var spawnCount = spawns.Count;
             var spawningPeriod = percentageActiveSpawning * regularLength;
-            
+
             while (spawns.Count > 0)
             {
                 var spawn = spawns[0];
                 SpawnEnemies(spawn.enemyPrefabs);
                 spawns.Remove(spawn);
-                await UniTask.Delay(TimeSpan.FromSeconds(spawningPeriod/spawnCount));
+                await UniTask.Delay(TimeSpan.FromSeconds(spawningPeriod / spawnCount));
             }
-            
+
             if (wavesSpawned % 5 == 0)
             {
                 Crystal.Instance.CmdDamageEntity(-(Crystal.Instance.MaxHealth * 0.33f), false, null, true);
@@ -179,11 +198,15 @@ namespace TonyDev.Game.Level
         {
             foreach (var e in enemyPrefabs)
             {
-                GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(e),
-                    spawnPoints[Random.Range(0, spawnPoints.Length)].position
-                    + (Vector3) new Vector2(Random.Range(-spawnRadius, spawnRadius),
-                        Random.Range(-spawnRadius, spawnRadius)), null);
+                GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(e), GetSpawnpoint(), null);
             }
+        }
+
+        private Vector2 GetSpawnpoint()
+        {
+            return spawnPoints[Random.Range(0, spawnPoints.Length)].position
+                   + (Vector3) new Vector2(Random.Range(-spawnRadius, spawnRadius),
+                       Random.Range(-spawnRadius, spawnRadius));
         }
     }
 }

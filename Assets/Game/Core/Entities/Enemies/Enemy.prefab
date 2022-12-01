@@ -173,6 +173,7 @@ MonoBehaviour:
       destroyOnApply: 0
       lifetime: 0
       spawnOnDestroyKey: 
+      ignoreInvincibility: 0
   enemyAnimator: {fileID: 7080094185981754640}
 --- !u!95 &7080094185981754642
 Animator:
@@ -214,7 +215,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 7365463a3c7759b459c8461c58407a41, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -245,7 +246,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!50 &4143216695699966044
 Rigidbody2D:
   serializedVersion: 4

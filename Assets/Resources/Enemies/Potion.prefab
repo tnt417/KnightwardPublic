@@ -61,7 +61,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[0].strength
@@ -96,6 +96,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7400000, guid: 687a926c3980483448db140dd6a8fb8a, type: 2}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[2].animation
+      value: 
+      objectReference: {fileID: 7400000, guid: c21e0a1c5eb91ce4d852ecb15094f337, type: 2}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.contactAttackData.damageMultiplier
       value: 1
       objectReference: {fileID: 0}
@@ -110,6 +114,10 @@ PrefabInstance:
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[1].enemyAnimationState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[2].enemyAnimationState
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754642, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Controller

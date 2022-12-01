@@ -14,12 +14,14 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
         public float DamageMultiplier = 0.1f;
         
         private Rigidbody2D _rb2d;
+        //private GameObject _particleObject;
         
         public override void OnAddClient()
         {
             _rb2d = Entity.GetComponent<Rigidbody2D>();
             _attackData.team = Entity.Team;
             _attackData.damageMultiplier = DamageMultiplier;
+            //_particleObject = Object.Instantiate(ObjectFinder.GetPrefab("fireBootTrail"), Entity.transform);
         }
 
         private double _distanceMoved;
@@ -35,6 +37,20 @@ namespace TonyDev.Game.Core.Items.Relics.FlamingBoot
             team = Team.Player,
             ignoreInvincibility = true
         };
+
+        /*public override void OnUpdateClient()
+        {
+            var moveDirection = ((Vector2)Entity.transform.position - _lastPos).normalized;
+
+            if (moveDirection == Vector2.zero) return;
+
+            _particleObject.transform.rotation = Quaternion.LookRotation(moveDirection, new Vector3(0, 0, -1));
+        }
+
+        public override void OnRemoveClient()
+        {
+            Object.Destroy(_particleObject);
+        }*/
 
         public override void OnUpdateOwner()
         {

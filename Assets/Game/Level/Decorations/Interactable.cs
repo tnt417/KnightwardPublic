@@ -66,7 +66,7 @@ namespace TonyDev.Game.Level.Decorations
 
         protected void PlayInteractSound()
         {
-            SoundManager.PlaySound("interact", transform.position);
+            SoundManager.PlaySound("interact",0.5f, transform.position);
         }
         
         protected void Start()

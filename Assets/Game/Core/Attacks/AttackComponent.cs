@@ -96,7 +96,7 @@ namespace TonyDev.Game.Core.Attacks
         
         private void Start()
         {
-            rb2d = GetComponent<Rigidbody2D>();
+            if(rb2d == null) rb2d = GetComponent<Rigidbody2D>();
             if (rb2d == null) rb2d = gameObject.AddComponent<Rigidbody2D>();
             rb2d.isKinematic = true; //Add a RigidBody if there isn't one
 

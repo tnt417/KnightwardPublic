@@ -32,7 +32,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
             var spawnPos = Entity.transform.position;
             var direction = GameManager.MouseDirection;
 
-            SoundManager.PlaySoundPitchVariant("spear", spawnPos, 0.8f, 1.2f);
+            SoundManager.PlaySoundPitchVariant("spear", 0.5f,spawnPos, 0.8f, 1.2f);
 
             if (_empowered)
             {

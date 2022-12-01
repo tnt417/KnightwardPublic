@@ -78,7 +78,7 @@ namespace TonyDev.Game.UI.Inventory
 
         public void SwitchToGearPanel()
         {
-            SoundManager.PlaySound("button", Player.LocalInstance.transform.position);
+            SoundManager.PlaySound("button",0.5f, Player.LocalInstance.transform.position);
             towerInventoryObject.SetActive(false);
             gearInventoryObject.SetActive(true);
             statInventoryObject.SetActive(false);
@@ -86,7 +86,7 @@ namespace TonyDev.Game.UI.Inventory
 
         public void SwitchToTowerPanel()
         {
-            SoundManager.PlaySound("button", Player.LocalInstance.transform.position);
+            SoundManager.PlaySound("button",0.5f, Player.LocalInstance.transform.position);
             towerInventoryObject.SetActive(true);
             gearInventoryObject.SetActive(false);
             statInventoryObject.SetActive(false);
@@ -94,7 +94,7 @@ namespace TonyDev.Game.UI.Inventory
 
         public void SwitchToStatPanel()
         {
-            SoundManager.PlaySound("button", Player.LocalInstance.transform.position);
+            SoundManager.PlaySound("button",0.5f, Player.LocalInstance.transform.position);
             towerInventoryObject.SetActive(false);
             gearInventoryObject.SetActive(false);
             statInventoryObject.SetActive(true);

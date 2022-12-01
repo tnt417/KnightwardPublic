@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
@@ -153,7 +154,7 @@ namespace TonyDev.Game.Level.Rooms
         [ServerCallback]
         public void GenerateRooms()
         {
-            CmdSetMap(GameManager.DungeonFloor != 1 && GameManager.DungeonFloor % 10 == 0 ? roomGenerator.GenerateBossMap() : roomGenerator.Generate()); //Randomly generate rooms
+            CmdSetMap(GameManager.DungeonFloor != 1 && GameManager.DungeonFloor % 10 == 0 ? roomGenerator.GenerateBossMap(GameManager.DungeonFloor) : roomGenerator.Generate(GameManager.DungeonFloor)); //Randomly generate rooms
         }
 
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.
@@ -285,8 +286,16 @@ namespace TonyDev.Game.Level.Rooms
                     r.enabled = false;
 
                     r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
-                    foreach (var go in r.roomChildObjects.Where(go => go.GetComponent<Player>() == null))
+                    foreach (var go in r.roomChildObjects.ToList().Where(go => go.GetComponent<Player>() == null))
                     {
+                       var e = go.GetComponent<Enemy>();
+
+                        if (e != null)
+                        {
+                            WaveManager.Instance.MoveEnemyToWave(e);
+                            continue;
+                        }
+                        
                         if (go != null)
                         {
                             var networkIdentity = go.GetComponent<NetworkIdentity>();

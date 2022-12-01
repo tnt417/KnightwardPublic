@@ -1,0 +1,527 @@
+fileFormatVersion: 2
+guid: b1f7e7f22ce501c44a590e84eb0594f3
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 11
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMasterTextureLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 16
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Server
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: castleWallSingle
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 16
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: 4}
+        - {x: -4, y: -4}
+        - {x: 4, y: -4}
+        - {x: 4, y: 4}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4f0b2ce38aebf5249bd2b6f190c2f837
+      internalID: 566624296
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallEndCap
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 32
+        width: 16
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 0, y: 4}
+        - {x: 0, y: -4}
+        - {x: 8, y: -4}
+        - {x: 8, y: 4}
+      tessellationDetail: 0
+      bones: []
+      spriteID: df36dc0c7e560124d85569889427289a
+      internalID: 1913358822
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallHorizontalSegment
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 32
+        width: 16
+        height: 48
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -8, y: 4}
+        - {x: -8, y: -4}
+        - {x: 8, y: -4}
+        - {x: 8, y: 4}
+      tessellationDetail: 0
+      bones: []
+      spriteID: bceb002695b35354d8955bd686b6d014
+      internalID: -269875169
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallVerticalEndcapBottom
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 12
+        width: 16
+        height: 30
+      alignment: 9
+      pivot: {x: 0.5, y: 0.4}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: 15}
+        - {x: -4, y: -7}
+        - {x: 4, y: -7}
+        - {x: 4, y: 15}
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf3b138e3aeaf084fbb67be5c08d6d9b
+      internalID: -1165686597
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallVerticalSegment
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 42
+        width: 16
+        height: 16
+      alignment: 9
+      pivot: {x: 0.5, y: -0.125}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: 8}
+        - {x: -4, y: -8}
+        - {x: 4, y: -8}
+        - {x: 4, y: 8}
+      tessellationDetail: 0
+      bones: []
+      spriteID: bca6d0e68750fe948991e672c9bb52ee
+      internalID: -871850453
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallVerticalSegmentTop
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 58
+        width: 16
+        height: 22
+      alignment: 9
+      pivot: {x: 0.5, y: -0.09090909}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: -3}
+        - {x: -4, y: -11}
+        - {x: 4, y: -11}
+        - {x: 4, y: -3}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 962c28d7930b0d94583f89091f555dcb
+      internalID: -253757356
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallUprightT
+      rect:
+        serializedVersion: 2
+        x: 95
+        y: 44
+        width: 18
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.33333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -9, y: -10}
+        - {x: -4, y: -10}
+        - {x: -4, y: -18}
+        - {x: 4, y: -18}
+        - {x: 4, y: -10}
+        - {x: 9, y: -10}
+        - {x: 9, y: -2}
+        - {x: -9, y: -2}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 299bc868330803843883b5dfbbf88813
+      internalID: 1718273909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallSidewaysT
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 36
+        width: 16
+        height: 23
+      alignment: 9
+      pivot: {x: 0.5, y: 0.17391305}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: 11.5}
+        - {x: -4, y: -11.5}
+        - {x: 8, y: -11.5}
+        - {x: 8, y: -3.5}
+        - {x: 4, y: -3.5}
+        - {x: 4, y: 11.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: f3368f7b90493af46864b6dd91d8700b
+      internalID: -24833667
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallIntersect
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 36
+        width: 16
+        height: 31
+      alignment: 9
+      pivot: {x: 0.5, y: 0.12903225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: 14.5}
+        - {x: -4, y: -7.5}
+        - {x: -8, y: -7.5}
+        - {x: -8, y: -15.5}
+        - {x: 8, y: -15.5}
+        - {x: 8, y: -7.5}
+        - {x: 4, y: -7.5}
+        - {x: 4, y: 14.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9e5cbc18cc23f4348b56c6f597cc46a9
+      internalID: -1657158624
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallTInverted
+      rect:
+        serializedVersion: 2
+        x: 240
+        y: 12
+        width: 16
+        height: 39
+      alignment: 9
+      pivot: {x: 0.5, y: 0.30769232}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: 18.5}
+        - {x: -4, y: -3.5}
+        - {x: -8, y: -3.5}
+        - {x: -8, y: -11.5}
+        - {x: 8, y: -11.5}
+        - {x: 8, y: -3.5}
+        - {x: 4, y: -3.5}
+        - {x: 4, y: 18.5}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8bd02dc8d4b2e2e4981ca7e9b07c3fb2
+      internalID: 834677299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallLUp
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 12
+        width: 16
+        height: 32
+      alignment: 9
+      pivot: {x: 0.5, y: 0.375}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: 4, y: 0}
+        - {x: 4, y: 16}
+        - {x: -4, y: 16}
+        - {x: -4, y: -8}
+        - {x: 8, y: -8}
+        - {x: 8, y: 0}
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff06b97026993ef4e8142fb1a7531dab
+      internalID: 1092918605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: castleWallLDown
+      rect:
+        serializedVersion: 2
+        x: 272
+        y: 44
+        width: 16
+        height: 36
+      alignment: 9
+      pivot: {x: 0.5, y: 0.33333334}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape:
+      - - {x: -4, y: -2}
+        - {x: -4, y: -18}
+        - {x: 4, y: -18}
+        - {x: 4, y: -10}
+        - {x: 8, y: -10}
+        - {x: 8, y: -2}
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39c6aa55560188248bf5c78543f3a1b9
+      internalID: -1729492834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      castleWallThin_49: -1919573404
+      castleWallThin_69: 1843035190
+      castleWallThin_39: -170309199
+      castleWallThin_75: -1686898489
+      castleWallVerticalEndcapBottom: -1165686597
+      castleWallThin_47: -1223795559
+      castleWallLUp: 1092918605
+      castleWallThin_32: 906283570
+      castleWallThin_51: 1520055425
+      castleWallThin_25: 475038931
+      castleWallThin_37: -1534511970
+      castleWallThin_44: -165839547
+      castleWallThin_8: 1657929689
+      castleWallThin_36: -191864285
+      castleWallThin_61: -1341247375
+      castleWallThin_56: -1693054550
+      castleWallHorizontalSegment: -269875169
+      castleWallIntersect: -1657158624
+      castleWallThin_72: 1991130061
+      castleWallUprightT: 1718273909
+      castleWallSidewaysT: -24833667
+      castleWallThin_38: 113039747
+      castleWallThin_41: 480756557
+      castleWallThin_74: 1245449127
+      castleWallThin_40: -1077459888
+      castleWallThin_62: 435222759
+      castleWallThin_58: -1570555043
+      castleWallThin_42: 320773007
+      castleWallThin_31: -400255561
+      castleWallThin_23: 647609425
+      castleWallThin_34: 691498796
+      castleWallVerticalSegmentTop: -253757356
+      castleWallThin_63: 904340087
+      castleWallThin_9: -1453562864
+      castleWallThin_65: -921467228
+      castleWallThin_3: -161468944
+      castleWallThin_50: 979552542
+      castleWallThin_57: -2515995
+      castleWallThin_17: 1581903456
+      castleWallThin_4: -1027129553
+      castleWallThin_13: -1138567251
+      castleWallThin_21: 2073050008
+      castleWallThin_73: 208550883
+      castleWallThin_20: 825256776
+      castleWallThin_52: 1956561039
+      castleWallThin_28: 502476005
+      castleWallThin_16: 755255402
+      castleWallThin_26: -1621277178
+      castleWallThin_55: -1008270531
+      castleWallThin_64: 927841338
+      castleWallSingle: 566624296
+      castleWallThin_48: -1433820326
+      castleWallVerticalEndcapTop: -16438578
+      castleWallThin_30: -1459056096
+      castleWallThin_12: 1466976276
+      castleWallThin_33: -1270322728
+      castleWallThin_24: 29305167
+      castleWallThin_29: -1886784564
+      castleWallThin_60: -736854188
+      castleWallThin_22: 1973316052
+      castleWallThin_35: 1845114066
+      castleWallThin_66: 1526439380
+      castleWallThin_71: -571245546
+      castleWallThin_53: -2112785082
+      castleWallThin_2: -2069475487
+      castleWallThin_27: -611065409
+      castleWallVerticalSegment: -871850453
+      castleWallLDown: -1729492834
+      castleWallThin_45: 801350112
+      castleWallThin_70: 321594711
+      castleWallThin_54: 1435833103
+      castleWallThin_46: -1793915065
+      castleWallThin_68: -996262877
+      castleWallThin_11: -1589924943
+      castleWallTInverted: -1469920218
+      castleWallThin_67: 1157798011
+      castleWallThin_59: -643576569
+      castleWallThin_43: -1065268112
+      castleWallThin_6: -794382132
+      castleWallThin_15: -1182571207
+      castleWallEndCap: 1913358822
+      castleWallThin_18: -229738719
+      castleWallThin_10: -488982308
+      castleWallThin_14: 149738994
+      castleWallThin_19: -2002461811
+      castleWallThin_5: 1049460086
+      castleWallThin_7: 639547786
+  spritePackingTag: 
+  pSDRemoveMatte: 0
+  pSDShowRemoveMatteOption: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

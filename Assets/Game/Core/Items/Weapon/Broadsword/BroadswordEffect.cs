@@ -36,7 +36,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
 
         private void PlaySound()
         {
-            SoundManager.PlaySoundPitchVariant("dagger", Entity.transform.position, 0.6f, 0.8f);
+            SoundManager.PlaySoundPitchVariant("dagger", 0.5f,Entity.transform.position, 0.6f, 0.8f);
         }
 
         [NonSerialized] private int _successiveDeflects = 0;
@@ -51,7 +51,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
             ObjectSpawner.SpawnTextPopup(pos, "Deflected!", Color.blue, 0.5f);
             DiscountCooldown(RefundCooldownAmount, true); //Refund cooldown upon blocking
 
-            SoundManager.PlaySound("anvil", pos);
+            SoundManager.PlaySound("anvil",0.5f, pos);
             
             _successiveDeflects++;
 

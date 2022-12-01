@@ -124,7 +124,7 @@ namespace TonyDev.Game.UI.Tower
 
             if (!ValidSpot(pos)) return;
 
-            SoundManager.PlaySound("interact", pos);
+            SoundManager.PlaySound("interact", 0.5f, pos);
             
             var success = GameManager.Instance.SpawnTower(_selectedTowerItem,
                 towerPlacementIndicator.transform.position, Player.LocalInstance.CurrentParentIdentity);

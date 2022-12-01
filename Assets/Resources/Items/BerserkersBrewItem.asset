@@ -19,6 +19,7 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 1
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349928119730176
     projectiles: []
@@ -30,6 +31,7 @@ MonoBehaviour:
       type: {class: BerserkersBrewEffect, ns: TonyDev.Game.Core.Items.Relics.BerserkersBrew, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         ActivateButton: 98
         Cooldown: 10
         Duration: 5

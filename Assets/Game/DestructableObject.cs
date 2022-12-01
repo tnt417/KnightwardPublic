@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
@@ -27,16 +30,37 @@ namespace TonyDev.Game
 
         public float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility = false)
         {
+            if (_dying)
+            {
+                successful = false;
+                return 0;
+            }
+            
             successful = true;
             hitsRemaining--;
             animator.Play(hitAnimation);
-            if(hitsRemaining <= 0) Die();
+
+            if (hitsRemaining <= 0)
+            {
+                Die();
+            }
             return damage;
         }
 
+        private bool _dying = false;
+
         public void Die()
         {
+            var token = new CancellationTokenSource();
+            token.RegisterRaiseCancelOnDestroy(this);
+            DieTask().AttachExternalCancellation(token.Token);
+        }
+        
+        public async UniTask DieTask()
+        {
+            _dying = true;
             ObjectSpawner.SpawnMoney(moneyDrop, transform.position, GetComponentInParent<NetworkIdentity>());
+            await UniTask.Delay(TimeSpan.FromSeconds(0.1f));
             onDestroy?.Invoke();
             Destroy(gameObject);
         }

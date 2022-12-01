@@ -137,7 +137,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
         {
             var repeatless = outcomes.ToList();
             
-            SoundManager.PlaySound("die", slots[0].transform.position);
+            SoundManager.PlaySound("die",0.5f, slots[0].transform.position);
             
             foreach (var s in slots)
             {
@@ -184,7 +184,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
                 return;
             }
 
-            SoundManager.PlaySound("hit", slots[0].transform.position);
+            SoundManager.PlaySound("hit",0.5f, slots[0].transform.position);
 
             var unusedEntries = outcomes.ToList();
             

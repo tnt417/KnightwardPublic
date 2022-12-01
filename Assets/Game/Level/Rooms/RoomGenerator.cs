@@ -46,20 +46,10 @@ namespace TonyDev.Game.Level.Rooms
         //Editor variables
         [SerializeField] public int mapRadius;
         [SerializeField] public Vector2 roomOffset;
-        [SerializeField] private RoomEntry[] roomEntries;
+        [SerializeField] public MapGenConfig config;
 
         [SerializeField] private RoomManager roomManager;
-
-        [Header("Gen Settings")] [SerializeField]
-        private Vector2Int roomAmountRange;
-
-        [SerializeField] private int uncommonAmount;
-
-        [SerializeField] private int specialAmount;
         //
-
-        private GameObject[] GuaranteedGeneratePrefabs => roomEntries.Where(r => r.tier == RoomGenerateTier.Guaranteed)
-            .Select(r => r.roomPrefab).ToArray();
 
         private Vector2Int _startingRoomPos;
         public int MapSize => mapRadius * 2 + 1;
@@ -71,7 +61,7 @@ namespace TonyDev.Game.Level.Rooms
             _startingRoomPos = new Vector2Int(mapRadius, mapRadius);
             _seed = Random.Range(0, 100000); //Get a random seed to generate the room based on.
 
-            foreach (var prefab in roomEntries.Select(r => r.roomPrefab))
+            foreach (var prefab in config.mapZones.SelectMany(mz => mz.roomEntries.Select(r => r.roomPrefab)))
             {
                 NetworkClient.RegisterPrefab(prefab);
             }
@@ -83,25 +73,30 @@ namespace TonyDev.Game.Level.Rooms
         }
 
         [Server]
-        public Map Generate() //Returns an array of randomly generated rooms
+        public Map Generate(int floor) //Returns an array of randomly generated rooms
         {
             if (!GameManager.Instance.isServer) return default;
 
             if (_generated) return roomManager.map;
 
-            var roomCount = Random.Range(roomAmountRange.x, roomAmountRange.y);
+            var theme = config.mapZones.Where(z => floor >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
+            
+            var guaranteedGeneratePrefabs = theme.roomEntries.Where(r => r.tier == RoomGenerateTier.Guaranteed)
+                .Select(r => r.roomPrefab).ToArray();
+
+            var roomCount = Random.Range(theme.roomAmountRange.x, theme.roomAmountRange.y);
 
             var generateShape = GetMapShape(roomCount);
 
             var rooms = new Room[MapSize, MapSize];
             var prefabs = new GameObject[MapSize, MapSize];
 
-            var remainingGuaranteed = GuaranteedGeneratePrefabs.Length;
-            var remainingSpecial = specialAmount;
-            var remainingUncommon = uncommonAmount;
+            var remainingGuaranteed = guaranteedGeneratePrefabs.Length;
+            var remainingSpecial = theme.specialAmount;
+            var remainingUncommon = theme.uncommonAmount;
             var remainingCommon = roomCount - remainingGuaranteed - remainingSpecial - remainingUncommon;
 
-            var entryList = roomEntries.ToList();
+            var entryList = theme.roomEntries.ToList();
             var chosenPrefabs = new List<GameObject>();
 
             var genTimeout = Time.time + 2f;
@@ -157,11 +152,13 @@ namespace TonyDev.Game.Level.Rooms
         }
 
         [Server]
-        public Map GenerateBossMap()
+        public Map GenerateBossMap(int floor)
         {
+            var theme = config.mapZones.Where(z => floor >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
+            
             var rooms = new Room[MapSize, MapSize];
             rooms[mapRadius, mapRadius] = GenerateRoom(new Vector2Int(mapRadius, mapRadius),
-                Tools.SelectRandom(roomEntries.Where(re => re.tier == RoomGenerateTier.Boss)).roomPrefab);
+                Tools.SelectRandom(theme.roomEntries.Where(re => re.tier == RoomGenerateTier.Boss)).roomPrefab);
 
             return new Map(rooms, new Vector2Int(mapRadius, mapRadius));
         }

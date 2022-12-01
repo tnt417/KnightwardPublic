@@ -49,7 +49,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[0].strength
@@ -72,8 +72,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 7400000, guid: 3a8d52df16a269a418664f7818df96db, type: 2}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[1].animation
+      value: 
+      objectReference: {fileID: 7400000, guid: c21e0a1c5eb91ce4d852ecb15094f337, type: 2}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[0].enemyAnimationState
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[1].enemyAnimationState
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754642, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Controller
@@ -172,6 +180,7 @@ MonoBehaviour:
       destroyOnApply: 0
       lifetime: 2
       spawnOnDestroyKey: iceWizardShotDeath
+      ignoreInvincibility: 0
     disableMovement: 0
     travelSpeed: 12
     offsetDegrees: 0

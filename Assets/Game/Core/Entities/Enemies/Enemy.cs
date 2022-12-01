@@ -74,7 +74,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             var deathPos = transform.position;
             GameManager.Instance.CmdSpawnMoney(enemyData.baseMoneyReward, deathPos, CurrentParentIdentity);
-            SoundManager.PlaySound("die", deathPos);
+            SoundManager.PlaySound("die",0.5f, deathPos);
         }
     }
 }

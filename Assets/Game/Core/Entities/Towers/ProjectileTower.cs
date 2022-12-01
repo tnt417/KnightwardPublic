@@ -45,7 +45,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         [ClientRpc]
         private void RpcFire(Vector2 direction)
         {
-            SoundManager.PlaySound("dagger", transform.position);
+            SoundManager.PlaySound("dagger",0.5f, transform.position);
             towerAnimator.PlayAnimation(TowerAnimationState.Fire);
             if (rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
         }

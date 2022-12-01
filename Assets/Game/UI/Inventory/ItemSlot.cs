@@ -49,7 +49,7 @@ namespace TonyDev.Game.UI.Inventory
         
         public void OnClick()
         {
-            SoundManager.PlaySound("button", Player.LocalInstance.transform.position);
+            SoundManager.PlaySound("button",0.5f, Player.LocalInstance.transform.position);
             if(Item.itemType is ItemType.Tower) TowerUIController.Instance.StartPlacingTower(this, Item);
         }
 
@@ -57,7 +57,7 @@ namespace TonyDev.Game.UI.Inventory
         {
             var essence = ItemGenerator.GenerateEssence(Item, _insertionFloor);
 
-            SoundManager.PlaySound("interact", Player.LocalInstance.transform.position, 0.8f);
+            SoundManager.PlaySound("interact",0.5f, Player.LocalInstance.transform.position, 0.8f);
             
             GameManager.Essence += essence;
             

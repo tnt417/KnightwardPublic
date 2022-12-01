@@ -41,6 +41,8 @@ namespace TonyDev.Game.Core.Behavior
 
                 Rb2d.velocity = t != null ? (followTransform.Invoke().position - transform.position).normalized * speed.Invoke() : Vector2.zero;
             }
+
+            Rb2d.velocity = Vector2.zero;
         }
         
         protected async UniTask GotoOverSeconds(Vector2 position, float seconds)

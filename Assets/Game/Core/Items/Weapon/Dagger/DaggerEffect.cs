@@ -20,7 +20,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         private void PlaySound()
         {
-            SoundManager.PlaySoundPitchVariant("dagger", Entity.transform.position, 0.8f, 1.2f);
+            SoundManager.PlaySoundPitchVariant("dagger",0.5f, Entity.transform.position, 0.8f, 1.2f);
         }
 
         protected override void OnAbilityActivate()
