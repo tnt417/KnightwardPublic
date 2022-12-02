@@ -33,6 +33,13 @@ namespace TonyDev.Game.Core.Items
 
         public Queue<Item> RelicItems { get; private set; } = new();
 
+        public int RelicSlotCount { get; private set; } = 3;
+
+        public void AddRelicSlot()
+        {
+            RelicSlotCount++;
+        }
+
         public static Action<Item> OnItemInsertLocal;
 
         public void InsertStarterItems()
@@ -73,7 +80,7 @@ namespace TonyDev.Game.Core.Items
 
             return replacement == item ? null : replacement;
         }
-        
+
         //Replaces/inserts items into inventory and returns the item that was replaced, if any.
         public Item InsertItem(Item item)
         {
@@ -139,12 +146,13 @@ namespace TonyDev.Game.Core.Items
                             {
                                 break;
                             }
+
                             RelicItems.Enqueue(replacedItem);
                         }
                     }
 
                     RelicItems.Enqueue(item);
-                    if (RelicItems.Count > 3) replacedItem = RelicItems.Dequeue();
+                    if (RelicItems.Count > RelicSlotCount) replacedItem = RelicItems.Dequeue();
                     break;
                 case ItemType.Tower:
                     return null;

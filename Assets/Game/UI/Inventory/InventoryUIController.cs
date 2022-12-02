@@ -67,9 +67,12 @@ namespace TonyDev.Game.UI.Inventory
             armorSlot.Item = PlayerInventory.Instance.ArmorItem;
 
             var relicArray = PlayerInventory.Instance.RelicItems.ToArray();
-            if(relicArray.Length >= 1) relicSlots[0].Item = relicArray[0];
-            if(relicArray.Length >= 2) relicSlots[1].Item = relicArray[1];
-            if(relicArray.Length >= 3) relicSlots[2].Item = relicArray[2];
+
+            for (int i = 0; i < relicSlots.Length; i++)
+            {
+                relicSlots[i].gameObject.SetActive(i+1 <= PlayerInventory.Instance.RelicSlotCount);
+                if(relicArray.Length >= i+1) relicSlots[i].Item = relicArray[i];
+            }
             //
 
             essenceText.text = GameManager.Essence.ToString();

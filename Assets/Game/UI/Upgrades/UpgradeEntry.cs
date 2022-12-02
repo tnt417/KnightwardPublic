@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using TonyDev.Game.Core.Behavior;
 using TonyDev.Game.Core.Entities;
@@ -11,6 +12,11 @@ using UnityEngine.UI;
 
 namespace TonyDev
 {
+    public enum UpgradeCategory
+    {
+        Offensive, Defensive, Utility, Crystal
+    }
+    
     public class UpgradeEntry : MonoBehaviour
     {
         //References to UI elements
@@ -19,6 +25,7 @@ namespace TonyDev
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private TMP_Text costText;
 
+        [SerializeField] private Image backgroundImage;
         [SerializeField] private Image iconImage;
 
         [SerializeField] private Button purchaseButton;
@@ -35,6 +42,8 @@ namespace TonyDev
 
         private bool _set; // Has this class had the 'set' method called? If not, shouldn't allow it to be purchased
 
+        public string UpgradeName => nameText.text; // Used to get a reference to the upgrade's name upon checking prereqs
+        
         public void TryPurchase() // Called when clicking "Buy" button
         {
             if (GameManager.Essence < _cost || !_purchasableFunc.Invoke() || !_set) return; // Check if purchasable.
@@ -50,7 +59,7 @@ namespace TonyDev
 
         // Called in UpgradeManager
         public void Set(int scrapCost, Sprite icon, string upgradeName, string description, Func<bool> isPurchasable,
-            int id, bool local)
+            int id, UpgradeCategory category, bool local)
         {
             if (_set) return; // Don't allow to be set twice. New object should be instantiated in that case.
             
@@ -63,17 +72,37 @@ namespace TonyDev
 
             _purchasableFunc = isPurchasable;
 
+            backgroundImage.color = category switch
+            {
+                UpgradeCategory.Offensive => new Color(120/255f, 29/255f, 79/255f, 1f),
+                UpgradeCategory.Defensive => new Color(59/255f, 125/255f, 79/255f, 1f),
+                UpgradeCategory.Utility => new Color(207/255f, 117/255f, 43/255f, 1f),
+                UpgradeCategory.Crystal => new Color(173/255f, 47/255f, 69/255f, 1f),
+                _ => Color.white
+            };
+
             _id = id;
 
             _local = local;
 
             _set = true;
+            
+            CheckShouldBeActive().Forget();
             /*****************************************/
         }
 
         private void Update()
         {
-            purchaseButton.interactable = GameManager.Essence >= _cost && _purchasableFunc.Invoke(); // Don't allow button to be clicked if can't afford or purchase
+            purchaseButton.interactable = GameManager.Essence >= _cost; // Don't allow button to be clicked if can't afford or purchase
+        }
+
+        private async UniTask CheckShouldBeActive()
+        {
+            while (this != null)
+            {
+                gameObject.SetActive(_purchasableFunc.Invoke());
+                await UniTask.WaitForFixedUpdate();
+            }
         }
     }
 }

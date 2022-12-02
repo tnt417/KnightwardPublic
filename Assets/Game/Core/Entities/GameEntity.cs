@@ -62,7 +62,7 @@ namespace TonyDev.Game.Core.Entities
             if (successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
         }
 
-        protected bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
+        public bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
 
         [Command(requiresAuthority = false)]
         public void CmdSetHealth(float currentHealth, float maxHealth)

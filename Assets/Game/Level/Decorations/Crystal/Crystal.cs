@@ -11,8 +11,6 @@ namespace TonyDev.Game.Level.Decorations.Crystal
     {
         public static Crystal Instance;
         
-        public static Func<float> CrystalRegen = () => 0;
-
         private new void Awake()
         {
             if(Instance == null) Instance = this;
@@ -28,17 +26,9 @@ namespace TonyDev.Game.Level.Decorations.Crystal
             CmdAddEffect(new CrystalArmorEffect(), this);
         }
 
-        private new void Update()
-        {
-            var hpRegen = CrystalRegen.Invoke() * Time.deltaTime;
-            ApplyDamage(-hpRegen, out var successful);
-            base.Update();
-        }
-        
         //Interface code. Only abnormal thing is the game is over when the crystal dies.
         #region IDamageable
         public override Team Team => Team.Player;
-        public override int MaxHealth => 5000;
         #endregion
 
         [GameCommand(Keyword = "ci", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled crystal invulnerability.")]
