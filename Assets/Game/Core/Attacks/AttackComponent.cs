@@ -88,10 +88,18 @@ namespace TonyDev.Game.Core.Attacks
 
         private Vector2 _velocity;
         private Vector2 _oneFrameAgo;
- 
+
+        private Vector3 _lastScale;
+        
         private void FixedUpdate () {
             _velocity = (Vector2)transform.position - _oneFrameAgo;
             _oneFrameAgo = transform.position;
+
+            var newScale = Vector3.one * (_owner == null ? 1 : _owner.Stats.GetStat(Stat.AoeSize));
+
+            if (_lastScale != newScale) transform.localScale = newScale;
+            
+            _lastScale = transform.localScale;
         }
         
         private void Start()
@@ -106,12 +114,6 @@ namespace TonyDev.Game.Core.Attacks
 
         private void Update()
         {
-            if (team == Team.Enemy && Damage > 0)
-            {
-                damageMultiplier =
-                    1 + Mathf.Log10(GameManager.EnemyDifficultyScale) * 0.5f; //Enemy damage scales as time passes.
-            }
-
             //Tick hit cooldown timers
             Dictionary<GameObject, float> newHitCooldowns = new();
 
@@ -252,7 +254,7 @@ namespace TonyDev.Game.Core.Attacks
             if (destroyOnApply) Destroy(gameObject); //Destroy when done if that option is selected
         }
 
-        private void OnTriggerEnter2D(Collider2D other)
+        private void OnTriggerStay2D(Collider2D other)
         {
             if (destroyOnAnyCollide && other.gameObject != _owner.gameObject)
                 Destroy(gameObject); //Destroy if destroyOnAnyCollide is true.

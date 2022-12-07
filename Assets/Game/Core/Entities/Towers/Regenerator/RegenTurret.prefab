@@ -108,7 +108,7 @@ MonoBehaviour:
     source: 
   targetIntangible: 1
   towerAnimator: {fileID: 6938340393128323355}
-  targetRadius: 3
+  targetRadius: 6
   myItem:
     uiSprite: {fileID: 0}
     itemName: 
@@ -141,6 +141,7 @@ MonoBehaviour:
     waveDistance: 0
     childOfOwner: 0
     effects: []
+  fireSound: dagger
   references:
     version: 2
     RefIds: []

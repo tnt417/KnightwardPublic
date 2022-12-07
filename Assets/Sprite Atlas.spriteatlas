@@ -128,6 +128,10 @@ SpriteAtlas:
   - {fileID: 834677299, guid: 6a03fcc1d089be44a9c12bb2a38347ad, type: 3}
   - {fileID: -1657158624, guid: 6a03fcc1d089be44a9c12bb2a38347ad, type: 3}
   - {fileID: -253757356, guid: 6a03fcc1d089be44a9c12bb2a38347ad, type: 3}
+  - {fileID: -59251338, guid: 2c9f4f128328eb940a2e5419072b4cf7, type: 3}
+  - {fileID: 923779608, guid: 2c9f4f128328eb940a2e5419072b4cf7, type: 3}
+  - {fileID: -364805847, guid: 2c9f4f128328eb940a2e5419072b4cf7, type: 3}
+  - {fileID: -1129458587, guid: 2c9f4f128328eb940a2e5419072b4cf7, type: 3}
   - {fileID: 21300000, guid: dbf98a321e4d9db4785d7e73de909ee1, type: 3}
   - {fileID: -1369264050, guid: bd5f6242f30e62248a86dbde0c9b8fd0, type: 3}
   - {fileID: 288614523, guid: bd5f6242f30e62248a86dbde0c9b8fd0, type: 3}
@@ -251,7 +255,9 @@ SpriteAtlas:
   - {fileID: -667373352, guid: 365fd0e82ab537d488a329142564922c, type: 3}
   - {fileID: -1677868144, guid: 365fd0e82ab537d488a329142564922c, type: 3}
   - {fileID: 21300000, guid: 91203ae8704f03643a8ea5147f56ea7c, type: 3}
+  - {fileID: 21300000, guid: 4b9e1cf8faddfb04893121ad11af6f9a, type: 3}
   - {fileID: 21300000, guid: bd6bcd4977a4e48438f8137af1776091, type: 3}
+  - {fileID: 21300000, guid: 86f63f891070f8a4eb9bbed32d5df0f6, type: 3}
   - {fileID: -439185120, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
   - {fileID: 451852544, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
   - {fileID: -1509124595, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
@@ -265,6 +271,7 @@ SpriteAtlas:
   - {fileID: -922664671, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
   - {fileID: 1953514867, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
   - {fileID: -1062254719, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
+  - {fileID: 21300000, guid: c56313faf03139d43a0cd4b9704234c2, type: 3}
   - {fileID: 21300000, guid: fbca2efa9c68b0548970da33d6272def, type: 3}
   - {fileID: 21300000, guid: c505801b72e7f134ab5832760a64c0c5, type: 3}
   - {fileID: -878651424, guid: 4b2b771bae119f24fbfb07ec113f822c, type: 3}
@@ -302,6 +309,7 @@ SpriteAtlas:
   - {fileID: -7329591253019825581, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: -5672041578588515963, guid: b0d31f8b193215d4c9cb4511e79e24ab, type: 3}
   - {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
+  - {fileID: 21300000, guid: bf69a59b7068c5449ada10bfad1c7ca7, type: 3}
   - {fileID: 5857459245231526258, guid: 28a6a6ab5d29fc3418946cf9498f89c7, type: 3}
   - {fileID: -3730583077205547749, guid: 28a6a6ab5d29fc3418946cf9498f89c7, type: 3}
   - {fileID: 5885808454508878124, guid: 28a6a6ab5d29fc3418946cf9498f89c7, type: 3}
@@ -407,6 +415,10 @@ SpriteAtlas:
   - {fileID: 1654864542332646423, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: -366055929809456832, guid: c047180f1eaaa854d8f6d9c1c23e348a, type: 3}
   - {fileID: 21300000, guid: dc780d0f4fe036c468a2bf1d5f449ff6, type: 3}
+  - {fileID: -1748479399, guid: 966d6c1f76da89d4ea0dc3f22c3bdace, type: 3}
+  - {fileID: 2087067208, guid: 966d6c1f76da89d4ea0dc3f22c3bdace, type: 3}
+  - {fileID: -1490210010, guid: 966d6c1f76da89d4ea0dc3f22c3bdace, type: 3}
+  - {fileID: 1026734868, guid: 966d6c1f76da89d4ea0dc3f22c3bdace, type: 3}
   - {fileID: -1758354645, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
   - {fileID: -88458111, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
   - {fileID: 1593396120, guid: 41bf002fe8430db479ae1b2c6b932c49, type: 3}
@@ -504,6 +516,10 @@ SpriteAtlas:
   - castleWallTInverted
   - castleWallIntersect
   - castleWallVerticalSegmentTop
+  - solartower_0
+  - solartower_1
+  - solartower_2
+  - solartower_3
   - RedStimulant
   - wallWindow_0
   - wallWindow_1
@@ -627,7 +643,9 @@ SpriteAtlas:
   - button_0
   - button_1
   - vine
+  - ghosttowerUI
   - coldprogress
+  - flamethrowerUI
   - inventoryIcons_12
   - inventoryIcons_11
   - inventoryIcons_10
@@ -641,6 +659,7 @@ SpriteAtlas:
   - inventoryIcons_5
   - inventoryIcons_6
   - inventoryIcons_7
+  - flamethrowerhead
   - TeslaTowerUI
   - swingMap
   - shopkeeper_0
@@ -678,6 +697,7 @@ SpriteAtlas:
   - hanginglantern_4
   - hanginglantern_5
   - swordSlash2
+  - solartowerUI
   - potion 8
   - potion 9
   - potion 6
@@ -783,6 +803,10 @@ SpriteAtlas:
   - rugTile_17
   - rugTile_16
   - barrel
+  - ghostslime_1
+  - ghostslime_0
+  - ghostslime_3
+  - ghostslime_2
   - smash_8
   - smash_9
   - smash_0

@@ -23,8 +23,6 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             enemyData = data;
 
-            Team = Team.Enemy;
-
             var hitbox = GetComponent<CircleCollider2D>();
             var coll = GetComponent<BoxCollider2D>();
 

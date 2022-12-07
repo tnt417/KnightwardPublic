@@ -107,12 +107,12 @@ namespace TonyDev.Game.Core.Behavior
 
         protected async UniTask FlipSpriteToTarget()
         {
-            var sr = GetComponent<SpriteRenderer>();
+            var sr = GetComponentInChildren<SpriteRenderer>();
             
             while (Enemy != null)
             {
                 await UniTask.WaitForFixedUpdate();
-                if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
+                if (!isActiveAndEnabled || gameObject == null || Enemy == null || Enemy.Targets.Count == 0) continue;
                 sr.flipX = Enemy.Targets[0]?.transform.position.x > transform.position.x;
             }
         }

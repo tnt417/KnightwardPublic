@@ -129,8 +129,8 @@ namespace TonyDev.Game.Global
 
         #region Game
 
-        public static int EnemyDifficultyScale =>
-            Mathf.CeilToInt(Timer.GameTimer / 60f); //Enemy difficulty scale. Goes up by 1 every minute.
+        public static float EnemyDifficultyScale =>
+            Timer.GameTimer / 60f * 0.3f + DungeonFloor * 0.7f; //Enemy difficulty scale. Goes up by 1 every minute.
 
         [SyncVar] [HideInInspector] public int dungeonFloor = 1;
         public static int DungeonFloor => Instance.dungeonFloor;
@@ -144,6 +144,22 @@ namespace TonyDev.Game.Global
         {
             waveProgress = newProgress;
             wave = newWave;
+        }
+
+        [GameCommand(Keyword = "killall", PermissionLevel = PermissionLevel.Cheat,
+            SuccessMessage = "Cleared all enemies.")]
+        public static void KillAllEnemies()
+        {
+            Instance.CmdClearEnemies();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdClearEnemies()
+        {
+            foreach (var e in Entities.Where(e => e != null && e is Enemy))
+            {
+                e.Die();
+            }
         }
 
         [Command(requiresAuthority = false)]
@@ -221,12 +237,20 @@ namespace TonyDev.Game.Global
 
         public SyncList<Vector2Int> OccupiedTowerSpots = new();
 
-        public int maxArenaTowers = 5;
+        [SyncVar] private int _maxTowers = 5;
+
+        public int MaxTowers => _maxTowers;
+
+        [Command(requiresAuthority = false)]
+        public void CmdSetTowerLimit(int limit)
+        {
+            _maxTowers = limit;
+        }
 
         public bool SpawnTower(Item towerItem, Vector2 pos, NetworkIdentity parent)
         {
             if (parent == null &&
-                Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= maxArenaTowers)
+                Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= MaxTowers)
             {
                 ObjectSpawner.SpawnTextPopup(pos, "Tower limit reached!", Color.red, 0.7f);
                 return false;
@@ -241,7 +265,7 @@ namespace TonyDev.Game.Global
         public void CmdSpawnTower(Item towerItem, Vector2 pos, NetworkIdentity parent)
         {
             if (parent == null &&
-                Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= maxArenaTowers) return;
+                Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= MaxTowers) return;
 
             ObjectSpawner.SpawnTower(towerItem, pos, parent);
             OccupiedTowerSpots.Add(new Vector2Int((int) pos.x, (int) pos.y));

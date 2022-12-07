@@ -28,6 +28,7 @@ MonoBehaviour:
       stat: 0
       strength: 1
       source: Weapon
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4292349809548066816
     projectiles:
@@ -58,6 +59,7 @@ MonoBehaviour:
       type: {class: DaggerEffect, ns: TonyDev.Game.Core.Effects.ItemEffects, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         ActivateButton: 113
         Cooldown: 1
         Duration: 0.5

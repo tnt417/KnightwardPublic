@@ -57,7 +57,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
         [Command(requiresAuthority = false)]
         private void CmdRoll()
         {
-            RpcRoll(Random.Range(3, 7));
+            RpcRoll(Random.Range(2, 3));
         }
 
         [ClientRpc]
@@ -169,7 +169,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
 
             slots.Add(go.GetComponent<Slot>());
 
-            var slotXOffset = (slots.Count % 2 == 1 ? -1 : 1) * 1.5f * slots.Count / 2;
+            var slotXOffset = (slots.Count % 2 == 1 ? -1 : 1) * 1.5f * Mathf.FloorToInt(slots.Count / 2f);
 
             go.transform.position = (Vector2) slotObject.transform.position + new Vector2(slotXOffset, 0);
         }

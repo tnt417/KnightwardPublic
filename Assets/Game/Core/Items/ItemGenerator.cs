@@ -58,7 +58,7 @@ namespace TonyDev.Game.Core.Items
                 return 0;
             }
 
-            return (int) (GenerateCost(item, dungeonFloor) * Random.Range(0.4f, 0.5f));
+            return (int) Mathf.Pow(GenerateCost(item, dungeonFloor) * Random.Range(0.4f, 0.5f), 1.3f);
         }
 
         //Returns a randomly generated item based on input parameters

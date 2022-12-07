@@ -19,6 +19,7 @@ MonoBehaviour:
     itemType: 3
     itemRarity: 0
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects: []
     projectiles: []
     spawnablePrefabName: ballista

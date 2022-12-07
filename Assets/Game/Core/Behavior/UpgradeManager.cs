@@ -9,7 +9,9 @@ using TonyDev.Game.Core.Items;
 using TonyDev.Game.Core.Items.Relics.FlamingBoot;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
+using TonyDev.Game.UI.Tower;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Core.Behavior
 {
@@ -35,10 +37,25 @@ namespace TonyDev.Game.Core.Behavior
 
         private float _moveSinceActive; // Used to close the UI when the player tries to move
 
+        [FormerlySerializedAs("_filter")] public List<UpgradeCategory> filter;
+
+        public void ToggleUICrystal()
+        {
+            ToggleUI(new List<UpgradeCategory> {UpgradeCategory.Crystal});
+        }
+        
+        public void ToggleUIPlayer()
+        {
+            ToggleUI(new List<UpgradeCategory> {UpgradeCategory.Defensive, UpgradeCategory.Offensive, UpgradeCategory.Utility});
+        }
+        
         // Toggle the UI object. 
-        public void ToggleUI()
+        private void ToggleUI(List<UpgradeCategory> newFilter)
         {
             _moveSinceActive = 0f;
+            
+            filter = newFilter;
+            
             uiToggleObject.SetActive(!uiToggleObject.activeSelf);
         }
 
@@ -104,6 +121,21 @@ namespace TonyDev.Game.Core.Behavior
                         targetTeam = Team.Player
                     }, Crystal.Instance);
                 }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(300, ObjectFinder.GetSprite("crystal_0"), "Ally Strength Aura I",
+                "Allies within 7 tiles of the crystal gain +40% damage and potency.",
+                () => true,
+                (upgrade, entity) =>
+                {
+                    Crystal.Instance.CmdAddEffect(new AreaBuffEffect()
+                    {
+                        Radius = 7f, StatBonuses = new[]
+                        {
+                            new StatBonus(StatType.AdditivePercent, Stat.Damage, 0.4f, "Ally Strength Aura I"),
+                        },
+                        targetTeam = Team.Player
+                    }, Crystal.Instance);
+                }, UpgradeCategory.Crystal);
 
             RegisterLocalUpgrade(50, ObjectFinder.GetSprite("inventoryIcons_3"), "Damage I",
                 "x1.25 to player damage stat",
@@ -130,6 +162,39 @@ namespace TonyDev.Game.Core.Behavior
                     entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, 1.25f, "Damage III");
                 }, UpgradeCategory.Offensive);
             
+            RegisterLocalUpgrade(50, ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed I",
+                "x1.15 to player attack speed stat",
+                () => true,
+                (upgrade, entity) =>
+                {
+                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed I");
+                }, UpgradeCategory.Offensive);
+
+            RegisterLocalUpgrade(300, ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed II",
+                "x1.15 to player attack speed stat",
+                () => _purchasedUpgrades.Contains("Attack Speed I"),
+                (upgrade, entity) =>
+                {
+                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed II");
+                }, UpgradeCategory.Offensive);
+
+            RegisterLocalUpgrade(700, ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed III",
+                "x1.15 to player attack speed stat",
+                () => _purchasedUpgrades.Contains("Attack Speed I") &&
+                      _purchasedUpgrades.Contains("Attack Speed II"),
+                (upgrade, entity) =>
+                {
+                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed III");
+                }, UpgradeCategory.Offensive);
+            
+            RegisterLocalUpgrade(250, ObjectFinder.GetSprite("inventoryIcons_5"), "Better Regen",
+                "x2 to player regen stat",
+                () => true,
+                (upgrade, entity) =>
+                {
+                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.HpRegen, 2f, "Better Regen");
+                }, UpgradeCategory.Defensive);
+
             RegisterLocalUpgrade(1000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics I",
                 "Gain an extra relic slot.",
                 () => true,
@@ -145,6 +210,46 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     PlayerInventory.Instance.AddRelicSlot();
                 }, UpgradeCategory.Utility);
+            
+            RegisterGlobalUpgrade(200, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit I",
+                "Increase the tower limit by +1.",
+                () => true,
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(500, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit II",
+                "Increase the tower limit by +1.",
+                () => _purchasedUpgrades.Contains("Tower Limit I"),
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(1000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit III",
+                "Increase the tower limit by +1.",
+                () => _purchasedUpgrades.Contains("Tower Limit II"),
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(1500, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit IV",
+                "Increase the tower limit by +1.",
+                () => _purchasedUpgrades.Contains("Tower Limit III"),
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(2000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit V",
+                "Increase the tower limit by +1.",
+                () => _purchasedUpgrades.Contains("Tower Limit IV"),
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
 
             #endregion
         }

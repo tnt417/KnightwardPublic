@@ -16,6 +16,8 @@ namespace TonyDev.Game.Core.Entities.Towers
         [SerializeField] private ProjectileData[] projectileData; //Prefab spawned upon fire
         //
 
+        public string fireSound;
+
         private void Start()
         {
             base.Start();
@@ -45,7 +47,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         [ClientRpc]
         private void RpcFire(Vector2 direction)
         {
-            SoundManager.PlaySound("dagger",0.5f, transform.position);
+            if(!string.IsNullOrEmpty(fireSound)) SoundManager.PlaySound(fireSound,0.5f, transform.position);
             towerAnimator.PlayAnimation(TowerAnimationState.Fire);
             if (rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
         }

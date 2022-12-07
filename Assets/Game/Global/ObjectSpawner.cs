@@ -157,9 +157,9 @@ namespace TonyDev.Game.Global
 
         //All enemies should be spawned using this method.
         [Server]
-        public static void SpawnEnemy(GameObject prefab, Vector2 position, NetworkIdentity parent)
+        public static Enemy SpawnEnemy(GameObject prefab, Vector2 position, NetworkIdentity parent)
         {
-            if (prefab == null) return;
+            if (prefab == null) return null;
 
             var enemy = Instantiate(prefab, position,
                 Quaternion.identity).GetComponent<Enemy>();
@@ -171,6 +171,8 @@ namespace TonyDev.Game.Global
             enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
 
             enemy.CmdSetParentIdentity(parent);
+
+            return enemy;
         }
 
         [GameCommand(Keyword = "spawn", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawned.")]

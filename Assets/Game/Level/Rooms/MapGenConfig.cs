@@ -29,5 +29,6 @@ namespace TonyDev
     public class MapGenConfig : ScriptableObject
     {
         public MapTheme[] mapZones;
+        public int loopPoint;
     }
 }

@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: Ghost TowerData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: 4b9e1cf8faddfb04893121ad11af6f9a, type: 3}
+    itemName: Ghost Tower
+    itemDescription: 
+    itemType: 3
+    itemRarity: 2
+    statBonuses: []
+    bypassStatGeneration: 0
+    itemEffects: []
+    projectiles: []
+    spawnablePrefabName: ghostTower
+  references:
+    version: 2
+    RefIds: []

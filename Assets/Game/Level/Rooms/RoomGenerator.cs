@@ -79,7 +79,7 @@ namespace TonyDev.Game.Level.Rooms
 
             if (_generated) return roomManager.map;
 
-            var theme = config.mapZones.Where(z => floor >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
+            var theme = config.mapZones.Where(z => floor%config.loopPoint >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
             
             var guaranteedGeneratePrefabs = theme.roomEntries.Where(r => r.tier == RoomGenerateTier.Guaranteed)
                 .Select(r => r.roomPrefab).ToArray();
@@ -154,7 +154,7 @@ namespace TonyDev.Game.Level.Rooms
         [Server]
         public Map GenerateBossMap(int floor)
         {
-            var theme = config.mapZones.Where(z => floor >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
+            var theme = config.mapZones.Where(z => (floor-1)%config.loopPoint+1 >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
             
             var rooms = new Room[MapSize, MapSize];
             rooms[mapRadius, mapRadius] = GenerateRoom(new Vector2Int(mapRadius, mapRadius),

@@ -42,6 +42,8 @@ namespace TonyDev
 
         private bool _set; // Has this class had the 'set' method called? If not, shouldn't allow it to be purchased
 
+        private UpgradeCategory _category; // Keep track of the category for checking filter visibility.
+        
         public string UpgradeName => nameText.text; // Used to get a reference to the upgrade's name upon checking prereqs
         
         public void TryPurchase() // Called when clicking "Buy" button
@@ -72,6 +74,8 @@ namespace TonyDev
 
             _purchasableFunc = isPurchasable;
 
+            _category = category;
+            
             backgroundImage.color = category switch
             {
                 UpgradeCategory.Offensive => new Color(120/255f, 29/255f, 79/255f, 1f),
@@ -100,8 +104,8 @@ namespace TonyDev
         {
             while (this != null)
             {
-                gameObject.SetActive(_purchasableFunc.Invoke());
                 await UniTask.WaitForFixedUpdate();
+                gameObject.SetActive(_purchasableFunc.Invoke() && UpgradeManager.Instance.filter.Contains(_category));
             }
         }
     }

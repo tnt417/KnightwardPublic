@@ -19,6 +19,7 @@ MonoBehaviour:
     itemType: 2
     itemRarity: 2
     statBonuses: []
+    bypassStatGeneration: 0
     itemEffects:
     - rid: 4023140872783659008
     projectiles: []
@@ -30,4 +31,5 @@ MonoBehaviour:
       type: {class: CrystalNecklaceEffect, ns: TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace, asm: TonyDev}
       data:
         effectDescription: 
+        DungeonFloorUponCreation: 0
         ArmorBonusFlat: 40

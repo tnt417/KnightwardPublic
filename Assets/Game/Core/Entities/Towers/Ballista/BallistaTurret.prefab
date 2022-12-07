@@ -99,14 +99,24 @@ MonoBehaviour:
   targetIntangible: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
-  prefab: {fileID: 0}
+  myItem:
+    uiSprite: {fileID: 0}
+    itemName: 
+    itemDescription: 
+    itemType: 0
+    itemRarity: 0
+    statBonuses: []
+    bypassStatGeneration: 0
+    itemEffects: []
+    projectiles: []
+    spawnablePrefabName: 
   rotateToFaceTargetObject: {fileID: 5988369303423483918}
   projectileData:
   - prefabKey: 
     projectileSprite: {fileID: 21300000, guid: b8cf5e6e4483c834ca3cc04fd6a606b4, type: 3}
     attackData:
       damageMultiplier: 1
-      knockbackMultiplier: 1
+      knockbackMultiplier: 0.2
       hitboxRadius: 0.3
       team: 1
       destroyOnApply: 1
@@ -121,6 +131,7 @@ MonoBehaviour:
     waveDistance: 0
     childOfOwner: 0
     effects: []
+  fireSound: dagger
   references:
     version: 2
     RefIds: []

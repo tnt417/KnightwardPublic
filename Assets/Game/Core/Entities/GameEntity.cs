@@ -419,7 +419,7 @@ namespace TonyDev.Game.Core.Entities
 
         #region IDamageable
 
-        public virtual Team Team { get; protected set; } = default;
+        [field:SerializeField] public virtual Team Team { get; protected set; } = default;
 
         public Action<Team> OnTeamChange;
 
