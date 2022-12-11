@@ -343,6 +343,7 @@ MonoBehaviour:
   minimapIcon: {fileID: 368543389579951487, guid: d60cc33038e33174cb6cf2a89c6bc955, type: 3}
   roomChildObjects: []
   cleared: 0
+  wallTilemap: {fileID: 4178251166612281919}
 --- !u!114 &-1173334797647341656
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -371,7 +372,7 @@ GameObject:
   - component: {fileID: 4178251166305122762}
   - component: {fileID: 4178251166305122760}
   - component: {fileID: 4178251166305122763}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FloorLayer
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -2194,7 +2195,7 @@ GameObject:
   - component: {fileID: 2227054910215127739}
   - component: {fileID: 5110865341829826504}
   - component: {fileID: 7736281001848981673}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: WallLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}

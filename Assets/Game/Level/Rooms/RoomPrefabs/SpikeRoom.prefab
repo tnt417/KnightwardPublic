@@ -382,6 +382,8 @@ MonoBehaviour:
       m_Calls: []
   minimapIcon: {fileID: 1164472910, guid: e6927ddccd7d0b440b2ac743ab5b828b, type: 3}
   roomChildObjects: []
+  cleared: 0
+  wallTilemap: {fileID: 4178251166612281919}
 --- !u!114 &-6024427228372827693
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -410,7 +412,7 @@ GameObject:
   - component: {fileID: 4178251166305122762}
   - component: {fileID: 4178251166305122760}
   - component: {fileID: 4178251166305122763}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FloorLayer
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -2293,7 +2295,7 @@ GameObject:
   - component: {fileID: 2227054910215127739}
   - component: {fileID: 5110865341829826504}
   - component: {fileID: 7736281001848981673}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: WallLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3207,6 +3209,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &3773110990071900947 stripped
@@ -3358,6 +3364,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &4557313883967229225 stripped
@@ -3419,6 +3429,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -3482,6 +3496,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &4256076474673753269 stripped
@@ -3543,6 +3561,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -3606,6 +3628,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &2876929599699524462 stripped
@@ -3668,6 +3694,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &2636682838754836453 stripped
@@ -3729,6 +3759,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -4122,6 +4156,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &1681159494437767793 stripped
@@ -4183,6 +4221,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -4246,6 +4288,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &1369407150270840072 stripped
@@ -4307,6 +4353,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -4467,6 +4517,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &1969331821307152021 stripped
@@ -4528,6 +4582,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -4591,6 +4649,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &1821974081727351275 stripped
@@ -4652,6 +4714,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -4715,6 +4781,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &466694375550945476 stripped
@@ -4776,6 +4846,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -4839,6 +4913,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &1060727280045818028 stripped
@@ -4900,6 +4978,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -4963,6 +5045,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &9047576631374037151 stripped
@@ -5024,6 +5110,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -5087,6 +5177,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &8783616946169516281 stripped
@@ -5148,6 +5242,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -5211,6 +5309,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &7354544584121036745 stripped
@@ -5272,6 +5374,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -5335,6 +5441,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &7052734868303724233 stripped
@@ -5396,6 +5506,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -5459,6 +5573,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &6936721680678176066 stripped
@@ -5520,6 +5638,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -5583,6 +5705,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &8021052715175196103 stripped
@@ -5644,6 +5770,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -6126,6 +6256,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &6422027397621360680 stripped
@@ -6188,6 +6322,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &6366720391237395754 stripped
@@ -6249,6 +6387,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -6641,6 +6783,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -7131,6 +7277,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &5528815979139169018 stripped
@@ -7192,6 +7342,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
@@ -7255,6 +7409,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SpikeTrap
       objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
 --- !u!4 &5440983834985456309 stripped
@@ -7316,6 +7474,10 @@ PrefabInstance:
     - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
       propertyPath: m_Name
       value: SpikeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 5436490285182005553, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}
+      propertyPath: m_Layer
+      value: 13
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b19ac6632c81c6f43b3d958c0c4cdf4d, type: 3}

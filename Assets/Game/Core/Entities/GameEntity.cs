@@ -186,7 +186,6 @@ namespace TonyDev.Game.Core.Entities
             _effects.Callback += OnEffectsUpdated;
 
             _targetUpdateTimer = Random.Range(0, EntityTargetUpdatingRate);
-            Debug.Log(_targetUpdateTimer);
         }
 
         protected void Update()

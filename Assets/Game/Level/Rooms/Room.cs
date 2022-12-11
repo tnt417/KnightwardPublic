@@ -96,13 +96,15 @@ namespace TonyDev.Game.Level.Rooms
         public UnityEvent onRoomClearGlobal;
 
         public Sprite minimapIcon;
-        [field: SyncVar(hook = nameof(PlayerCountHook))] public int PlayerCount { get; private set; }
+
+        [field: SyncVar(hook = nameof(PlayerCountHook))]
+        public int PlayerCount { get; private set; }
 
         private void PlayerCountHook(int oldPlayerCount, int newPlayerCount)
         {
             MinimapManager.Instance.UpdatePlayerCount(RoomManager.Instance.map.GetRoomPos(this), newPlayerCount);
         }
-        
+
         //
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
@@ -120,7 +122,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             PlayerCount = playerCount;
         }
-        
+
         private void OnOpenDoorsDictionaryChange(SyncDictionary<Direction, bool>.Operation op, Direction key, bool open)
         {
             roomDoors.FirstOrDefault(rd => rd.direction == key)?.SetOpen(open);
@@ -184,7 +186,7 @@ namespace TonyDev.Game.Level.Rooms
         private void RegisterEntityTeamListener(GameEntity ge)
         {
             if (ge.CurrentParentIdentity != netIdentity) return;
-            
+
             ge.OnTeamChange += (_) => OnEntityChange(ge);
         }
 
@@ -284,7 +286,7 @@ namespace TonyDev.Game.Level.Rooms
         }
 
         private bool _checkLockDoors = false;
-        
+
         private void OnEntityChange(GameEntity entity)
         {
             if (this == null || !enabled) return;
@@ -296,17 +298,17 @@ namespace TonyDev.Game.Level.Rooms
         private void CmdOnLock()
         {
             if (this == null || !enabled) return;
-            
+
             cleared = false;
         }
-        
+
         [Command(requiresAuthority = false)]
         private void CmdOnClear()
         {
             if (this == null || !enabled) return;
 
             cleared = true;
-            
+
             onRoomClearServer?.Invoke();
             RpcBroadcastClear();
             OpenAllDoors(); //Otherwise, open/close the doors as normal.
@@ -338,5 +340,243 @@ namespace TonyDev.Game.Level.Rooms
                 CmdSetDoorOpen(rd.direction, false);
             }
         }
+
+        #region Pathfinding
+
+        public Pathfinding RoomPathfinding;
+
+        [SerializeField] private Tilemap wallTilemap;
+
+        private void OnEnable()
+        {
+            if (wallTilemap == null)
+            {
+                Debug.LogWarning("No floor tilemap found!");
+                return;
+            }
+
+            RoomPathfinding = new Pathfinding(wallTilemap);
+        }
+
+        #endregion
+    }
+
+    public class Pathfinding
+    {
+        public static Pathfinding ArenaPathfinding;
+
+        public static void CreateArenaPathfinding(Tilemap arenaTilemap)
+        {
+            ArenaPathfinding = new Pathfinding(arenaTilemap);
+        }
+
+        private const int MoveStraightCost = 10;
+        private const int MoveDiagonalCost = 14;
+
+        private PathNode[,] _grid;
+        private Tilemap _tilemap;
+
+        private int tilemapWidth;
+        private int tilemapHeight;
+
+        public Pathfinding(Tilemap obstacleTilemap)
+        {
+            _tilemap = obstacleTilemap;
+
+            _tilemap.CompressBounds();
+
+            tilemapWidth = _tilemap.cellBounds.size.x;
+            tilemapHeight = _tilemap.cellBounds.size.y;
+
+            Debug.Log("Tilemap: " + tilemapWidth + ", " + tilemapHeight);
+
+            _grid = new PathNode[tilemapWidth, tilemapHeight];
+
+            for (var x = 0; x < tilemapWidth; x++)
+            {
+                for (var y = 0; y < tilemapHeight; y++)
+                {
+                    _grid[x, y] = new PathNode(_grid, x, y);
+                }
+            }
+        }
+
+        public List<Vector2> GetPath(Vector2 startPos, Vector2 endPos)
+        {
+            //TODO: The issue is that tilemap.WorldToCell can return negative coordinates. Should make custom WorldToCell method to offset it properly.
+
+            // Convert input coordinates into tile coordinates.
+            var startTile = _tilemap.WorldToCell(startPos) - _tilemap.cellBounds.min;
+            var endTile = _tilemap.WorldToCell(endPos) - _tilemap.cellBounds.min; // - _tilemap.cellBounds.min;
+
+            var startNode = _grid[startTile.x, startTile.y];
+            var endNode = _grid[endTile.x, endTile.y];
+
+            var openList = new List<PathNode> {startNode};
+            var closedList = new List<PathNode>();
+
+            for (var x = 0; x < tilemapWidth; x++)
+            {
+                for (var y = 0; y < tilemapHeight; y++)
+                {
+                    var pathNode = _grid[x, y];
+                    pathNode.gCost = int.MaxValue;
+                    pathNode.CalculateFCost();
+                    pathNode.cameFromNode = null;
+
+                    // My code
+                    if (_tilemap.GetTile(new Vector3Int(x, y) + _tilemap.cellBounds.min) != null)
+                    {
+                        closedList.Add(pathNode);
+
+                        // If we find that our starting or ending nodes are occupied by a wall, which is likely since the hitboxes only partially cover the tiles,
+                        // then we need to find the nearest neighboring tile and use that instead.
+
+                        if (endNode == pathNode)
+                        {
+                            endNode = GetNearestNeighbor(endNode, endPos);
+                        }
+
+                        if (startNode == pathNode)
+                        {
+                            startNode = GetNearestNeighbor(startNode, startPos);
+                        }
+                    }
+                    // End my code
+                }
+            }
+
+            startNode.gCost = 0;
+            startNode.hCost = CalculateDistanceCost(startNode, endNode);
+            startNode.CalculateFCost();
+
+            while (openList.Count > 0)
+            {
+                var currentNode = LowestFCostNode(openList);
+                if (currentNode == endNode)
+                {
+                    return CalculatePath(endNode).Select(pn =>
+                        (Vector2) _tilemap.CellToWorld(new Vector3Int(pn.X, pn.Y) + _tilemap.cellBounds.min) +
+                        new Vector2(0.5f, 0.5f)).ToList();
+                }
+
+                openList.Remove(currentNode);
+                closedList.Add(currentNode);
+
+                foreach (var neighborNode in GetNeighborList(currentNode))
+                {
+                    if (closedList.Contains(neighborNode)) continue;
+
+                    var tentativeGCost = currentNode.gCost + CalculateDistanceCost(currentNode, neighborNode);
+                    if (tentativeGCost < neighborNode.gCost)
+                    {
+                        neighborNode.cameFromNode = currentNode;
+                        neighborNode.gCost = tentativeGCost;
+                        neighborNode.hCost = CalculateDistanceCost(neighborNode, endNode);
+                        neighborNode.CalculateFCost();
+
+                        if (!openList.Contains(neighborNode))
+                        {
+                            openList.Add(neighborNode);
+                        }
+                    }
+                }
+            }
+
+            // Out of nodes on the open list
+            return new List<Vector2>(); // No path
+        }
+
+        private PathNode GetNearestNeighbor(PathNode current, Vector2 worldPos)
+        {
+            return GetNeighborList(current)
+                .Where(pn => _tilemap.GetTile(new Vector3Int(pn.X, pn.Y) + _tilemap.cellBounds.min) == null)
+                .OrderBy(pn => Vector2.Distance(worldPos,
+                    (Vector2) _tilemap.CellToWorld(new Vector3Int(pn.X, pn.Y) +
+                                                   _tilemap.cellBounds.min) + new Vector2(0.5f, 0.5f)))
+                .FirstOrDefault();
+        }
+
+        private List<PathNode> GetNeighborList(PathNode currentNode)
+        {
+            var neighborList = new List<PathNode>();
+
+            if (currentNode.X - 1 >= 0)
+            {
+                neighborList.Add(_grid[currentNode.X - 1, currentNode.Y]); // Left
+                if (currentNode.Y - 1 >= 0) neighborList.Add(_grid[currentNode.X - 1, currentNode.Y - 1]); // Left down
+                if (currentNode.Y + 1 < _grid.GetLength(1))
+                    neighborList.Add(_grid[currentNode.X - 1, currentNode.Y + 1]); // Left up
+            }
+
+            if (currentNode.X + 1 < _grid.GetLength(0))
+            {
+                neighborList.Add(_grid[currentNode.X + 1, currentNode.Y]); // Right
+                if (currentNode.Y - 1 >= 0) neighborList.Add(_grid[currentNode.X + 1, currentNode.Y - 1]); // Right down
+                if (currentNode.Y + 1 < _grid.GetLength(1))
+                    neighborList.Add(_grid[currentNode.X + 1, currentNode.Y + 1]); // Right up
+            }
+
+            if (currentNode.Y - 1 >= 0) neighborList.Add(_grid[currentNode.X, currentNode.Y - 1]); // Down
+            if (currentNode.Y + 1 < _grid.GetLength(1)) neighborList.Add(_grid[currentNode.X, currentNode.Y + 1]); // Up
+
+            return neighborList;
+        }
+
+        private List<PathNode> CalculatePath(PathNode endNode)
+        {
+            var path = new List<PathNode> {endNode};
+            var currentNode = endNode;
+
+            while (currentNode.cameFromNode != null)
+            {
+                path.Add(currentNode.cameFromNode);
+                currentNode = currentNode.cameFromNode;
+            }
+
+            path.Reverse();
+
+            return path;
+        }
+
+        private int CalculateDistanceCost(PathNode a, PathNode b)
+        {
+            var xDistance = Mathf.Abs(a.X - b.X);
+            var yDistance = Mathf.Abs(a.Y - b.Y);
+            var remaining = Mathf.Abs(xDistance - yDistance);
+
+            return MoveDiagonalCost * Mathf.Min(xDistance, yDistance) + MoveStraightCost * remaining;
+        }
+
+        private PathNode LowestFCostNode(List<PathNode> pathNodeList)
+        {
+            return pathNodeList.OrderBy(pn => pn.fCost).FirstOrDefault();
+        }
+    }
+
+    public class PathNode
+    {
+        private PathNode[,] _grid;
+
+        public PathNode(PathNode[,] grid, int x, int y)
+        {
+            _grid = grid;
+            X = x;
+            Y = y;
+        }
+
+        public int X;
+        public int Y;
+
+        public int gCost;
+        public int hCost;
+        public int fCost;
+
+        public void CalculateFCost()
+        {
+            fCost = gCost + hCost;
+        }
+
+        public PathNode cameFromNode;
     }
 }

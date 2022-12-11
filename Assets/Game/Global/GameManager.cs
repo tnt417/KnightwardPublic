@@ -22,6 +22,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -343,6 +344,8 @@ namespace TonyDev.Game.Global
 
         #region Initialization
 
+        public Tilemap arenaWallTilemap;
+        
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -354,6 +357,8 @@ namespace TonyDev.Game.Global
 
             Player.OnLocalPlayerCreated += Init;
 
+            Pathfinding.CreateArenaPathfinding(arenaWallTilemap);
+            
             if (isServer)
             {
                 netIdentity.AssignClientAuthority(NetworkServer.localConnection);

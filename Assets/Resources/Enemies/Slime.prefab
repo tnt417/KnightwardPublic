@@ -15,18 +15,6 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3803095840298935939, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: m_Size.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3803095840298935939, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: m_Size.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3803095840298935939, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: m_Offset.y
-      value: -0.25
-      objectReference: {fileID: 0}
     - target: {fileID: 3978008237020764302, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0
@@ -45,7 +33,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.hitboxRadius
-      value: 0.3
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.baseMoneyReward

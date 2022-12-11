@@ -349,7 +349,7 @@ GameObject:
   - component: {fileID: 60166311}
   - component: {fileID: 60166310}
   - component: {fileID: 60166309}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: WallLayer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2592,7 +2592,7 @@ Camera:
   m_Depth: 0
   m_CullingMask:
     serializedVersion: 2
-    m_Bits: 4087
+    m_Bits: 12279
   m_RenderingPath: -1
   m_TargetTexture: {fileID: 0}
   m_TargetDisplay: 0
@@ -4704,7 +4704,7 @@ GameObject:
   - component: {fileID: 2147196906}
   - component: {fileID: 2147196908}
   - component: {fileID: 2147196907}
-  m_Layer: 0
+  m_Layer: 13
   m_Name: FloorLayer
   m_TagString: Floor
   m_Icon: {fileID: 0}
@@ -16460,6 +16460,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8211467678594754314, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: arenaWallTilemap
+      value: 
+      objectReference: {fileID: 60166312}
     - target: {fileID: 8211467678594754315, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
       propertyPath: m_RootOrder
       value: 6
