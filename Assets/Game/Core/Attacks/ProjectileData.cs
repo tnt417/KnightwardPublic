@@ -33,7 +33,9 @@ namespace TonyDev.Game.Core.Attacks
         [Header("Prefab")]
         public string prefabKey;
 
-        [Header("General Projectile Data")][JsonConverter(typeof(SpriteConverter))] public Sprite projectileSprite;
+        [Header("General Projectile Data")] [JsonConverter(typeof(SpriteConverter))]
+        public Sprite projectileSprite;
+
         public AttackData attackData;
 
         [Header("Projectile Movement Data")] public bool disableMovement;
@@ -43,6 +45,7 @@ namespace TonyDev.Game.Core.Attacks
         public float waveLength;
         public float waveDistance;
         public bool childOfOwner;
+        public bool doNotRotate;
 
         [Header("Effects")] [SerializeReference] [SerializeField]
         public List<GameEffect> effects;
@@ -64,10 +67,13 @@ namespace TonyDev.Game.Core.Attacks
                     alternatePrefab); //Generate prefab if not null, otherwise create new empty GameObject.
 
             //Add all necessary components for projectile functionality...
-            var rb = projectileObject.AddComponent<Rigidbody2D>();
+            var rb = projectileObject.GetComponent<Rigidbody2D>();
+            if (rb == null) rb = projectileObject.AddComponent<Rigidbody2D>();
+            
             var col = projectileObject.GetComponent<CircleCollider2D>();
             if (col == null)
                 col = projectileObject.AddComponent<CircleCollider2D>(); //Add collider if one doesn't already exist
+            
             var attack = projectileObject.GetComponent<AttackComponent>();
             if (attack == null)
                 attack = projectileObject.AddComponent<AttackComponent>(); //Don't override existing attack components.
@@ -83,12 +89,13 @@ namespace TonyDev.Game.Core.Attacks
             {
                 pb.owner = owner;
             }
-            
+
             if (!disableMovement)
             {
                 var move = projectileObject.AddComponent<ProjectileMovement>();
 
                 move.Set(this); //Send our projectile data to the movement class so things like sin wave movement works.
+                move.direction = rotatedDirection;
             }
 
             //Populate component variables...
@@ -115,7 +122,7 @@ namespace TonyDev.Game.Core.Attacks
 
             //Set transform configuration...
             projectileObject.transform.position = position; //Set the projectile's position to our enemy's position
-            projectileObject.transform.up = rotatedDirection; //Set the projectile's direction
+            if (!doNotRotate) projectileObject.transform.up = rotatedDirection; //Set the projectile's direction
             projectileObject.transform.localScale *= sizeMultiplier;
             projectileObject.layer = LayerMask.NameToLayer("Attacks");
 
@@ -124,7 +131,7 @@ namespace TonyDev.Game.Core.Attacks
             //Set Rigidbody configuration...
             rb.gravityScale = 0;
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-            rb.isKinematic = true;
+            //rb.isKinematic = true;
             rb.velocity = projectileObject.transform.up * travelSpeed; //Set the projectile's velocity
 
             GameManager.Instance.projectiles.Add(projectileObject);

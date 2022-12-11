@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Mirror;
 using TonyDev.Game.Core.Entities;
@@ -12,26 +13,35 @@ namespace TonyDev.Game.Global.Network
 {
     public class ParentInterestManagement : InterestManagement
     {
+        public static ParentInterestManagement Instance;
+
+        private void OnEnable()
+        {
+            Instance = this;
+        }
+
         [Tooltip("Rebuild all every 'rebuildInterval' seconds.")]
         public float rebuildInterval = 1;
 
         private double _lastRebuildTime;
 
+        private bool _needsRebuild = false;
+        
         [ServerCallback]
         private void Update()
         {
             // rebuild all spawned NetworkIdentity's observers every interval
-            if (NetworkTime.time >= _lastRebuildTime + rebuildInterval)
+            if (NetworkTime.time >= _lastRebuildTime + rebuildInterval || _needsRebuild)
             {
-                ForceRebuild();
+                RebuildAll();
                 _lastRebuildTime = NetworkTime.time;
+                _needsRebuild = false;
             }
         }
-
-        [ServerCallback]
+        
         public void ForceRebuild()
         {
-            RebuildAll();
+            _needsRebuild = true;
         }
 
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver)

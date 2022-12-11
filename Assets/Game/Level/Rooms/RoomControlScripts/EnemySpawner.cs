@@ -62,7 +62,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                 return;
             }
 
-            GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(prefab), position, _parentRoom.netIdentity);
+            GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(prefab), position, _parentRoom.netIdentity, 1);
             //var enemy = ObjectSpawner.SpawnEnemy(enemyData, position, _parentRoom.netIdentity); //Instantiate the enemy
             
             if (_parentRoom != null)

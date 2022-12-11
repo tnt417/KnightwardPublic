@@ -50,35 +50,35 @@ namespace TonyDev.Game.Level.Rooms
                     roomGenerator.roomOffset);
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdChangePlayerCount(Room room, int delta)
-        {
-            if (room == null) return;
-            
-            room.PlayerCountServer += delta;
-            CmdUpdatePlayerCount(room, room.PlayerCountServer);
-        }
-        
-        [Command(requiresAuthority = false)]
-        public void CmdUpdatePlayerCount(Room room, int count)
-        {
-            for (int i = 0; i < map.Rooms.GetLength(0); i++)
-            {
-                for (int j = 0; j < map.Rooms.GetLength(1); j++)
-                {
-                    if (map.Rooms[i, j] == room)
-                    {
-                        RpcUpdatePlayerCount(new Vector2Int(i, j), count);
-                    }   
-                }
-            }
-        }
-
-        [ClientRpc]
-        private void RpcUpdatePlayerCount(Vector2Int pos, int count)
-        {
-            MinimapManager.Instance.UpdatePlayerCount(pos, count);
-        }
+        // [Command(requiresAuthority = false)]
+        // public void CmdChangePlayerCount(Room room, int delta)
+        // {
+        //     if (room == null) return;
+        //     
+        //     room.PlayerCountServer += delta;
+        //     CmdUpdatePlayerCount(room, room.PlayerCountServer);
+        // }
+        //
+        // [Command(requiresAuthority = false)]
+        // public void CmdUpdatePlayerCount(Room room, int count)
+        // {
+        //     for (int i = 0; i < map.Rooms.GetLength(0); i++)
+        //     {
+        //         for (int j = 0; j < map.Rooms.GetLength(1); j++)
+        //         {
+        //             if (map.Rooms[i, j] == room)
+        //             {
+        //                 RpcUpdatePlayerCount(new Vector2Int(i, j), count);
+        //             }   
+        //         }
+        //     }
+        // }
+        //
+        // [ClientRpc]
+        // private void RpcUpdatePlayerCount(Vector2Int pos, int count)
+        // {
+        //     MinimapManager.Instance.UpdatePlayerCount(pos, count);
+        // }
 
         private void MapHook(Map oldMap, Map newMap)
         {
@@ -211,7 +211,7 @@ namespace TonyDev.Game.Level.Rooms
 
         public void SetActiveRoom(int x, int y)
         {
-            if(currentActiveRoom != null) CmdChangePlayerCount(currentActiveRoom, -1);
+            //if(currentActiveRoom != null) CmdChangePlayerCount(currentActiveRoom, -1);
             
             var newRoom = map.Rooms[x, y]; //Get the new room from the array
             if (newRoom == null)
@@ -223,7 +223,7 @@ namespace TonyDev.Game.Level.Rooms
             currentActiveRoom = newRoom; //Update currentActiveRoom variable
             currentActiveRoom.gameObject.SetActive(true); //Activate the new room
             
-            if(currentActiveRoom != null) CmdChangePlayerCount(currentActiveRoom, 1);
+            //if(currentActiveRoom != null) CmdChangePlayerCount(currentActiveRoom, 1);
             
             CmdUncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
             _smoothCameraFollow.SetCameraBounds(currentActiveRoom.RoomRect); //Update the camera bounds

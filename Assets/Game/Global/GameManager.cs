@@ -121,7 +121,7 @@ namespace TonyDev.Game.Global
         {
             foreach (var e in Entities.Where(e => e is Enemy))
             {
-                e.UpdateTarget();
+                e.CmdUpdateTarget();
             }
         }
 
@@ -292,9 +292,9 @@ namespace TonyDev.Game.Global
         }
 
         [Command(requiresAuthority = false)]
-        public void CmdSpawnEnemy(string enemyName, Vector2 position, NetworkIdentity parentRoom)
+        public void CmdSpawnEnemy(string enemyName, Vector2 position, NetworkIdentity parentRoom, int count)
         {
-            ObjectSpawner.SpawnEnemy(ObjectFinder.GetPrefab(enemyName), position, parentRoom);
+            for(var i = 0; i < count; i++) ObjectSpawner.SpawnEnemy(ObjectFinder.GetPrefab(enemyName), position, parentRoom);
         }
 
         [ClientRpc]

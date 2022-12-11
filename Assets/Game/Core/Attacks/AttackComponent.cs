@@ -105,8 +105,11 @@ namespace TonyDev.Game.Core.Attacks
         private void Start()
         {
             if(rb2d == null) rb2d = GetComponent<Rigidbody2D>();
-            if (rb2d == null) rb2d = gameObject.AddComponent<Rigidbody2D>();
-            rb2d.isKinematic = true; //Add a RigidBody if there isn't one
+            if (rb2d == null)
+            {
+                rb2d = gameObject.AddComponent<Rigidbody2D>();
+                rb2d.isKinematic = true; //Add a RigidBody if there isn't one
+            }
 
             if (_owner == null)
                 _owner = transform.root.GetComponent<GameEntity>(); //Owner is our own GameEntity if it hasn't been set yet.

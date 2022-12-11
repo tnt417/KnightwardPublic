@@ -3235,6 +3235,14 @@ MonoBehaviour:
     value: {fileID: 1150477889065159250, guid: 3ee09bc367937aa4f84579cc981bd729, type: 3}
   - key: flamethrower
     value: {fileID: 1150477889065159250, guid: 04a86c2b88b1d6e47b15de639867daae, type: 3}
+  - key: blackholeTower
+    value: {fileID: 1150477889065159250, guid: 41c659ef34e009946b6382b8564b208d, type: 3}
+  - key: blackholeShot
+    value: {fileID: 5067521168945854115, guid: 8e28d339a9ab7d94496e885426a77a51, type: 3}
+  - key: blackholePoof
+    value: {fileID: 8962233277319782168, guid: 612eb15b349900d46be75649c4ea3e91, type: 3}
+  - key: crystalPlate
+    value: {fileID: 7364631239115656474, guid: 15a575652d561d544875a643fd4fc652, type: 3}
   mainSpriteAtlas: {fileID: 4343727234628468602, guid: f72388a137dbf724ea8fdd908e8f3ce8, type: 2}
 --- !u!4 &861375079
 Transform:

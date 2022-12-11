@@ -156,6 +156,9 @@ SpriteAtlas:
   - {fileID: 834677299, guid: b1f7e7f22ce501c44a590e84eb0594f3, type: 3}
   - {fileID: -1657158624, guid: b1f7e7f22ce501c44a590e84eb0594f3, type: 3}
   - {fileID: -253757356, guid: b1f7e7f22ce501c44a590e84eb0594f3, type: 3}
+  - {fileID: -1049494571, guid: 6abade0384bf71d4ea63a93191823cbd, type: 3}
+  - {fileID: 377025499, guid: 6abade0384bf71d4ea63a93191823cbd, type: 3}
+  - {fileID: 1867620316, guid: 6abade0384bf71d4ea63a93191823cbd, type: 3}
   - {fileID: 21300000, guid: b411b92324489a243b79b369f954171e, type: 3}
   - {fileID: 478102434, guid: f37cd633977a01644b36e94380c2fcb7, type: 3}
   - {fileID: 197518867, guid: f37cd633977a01644b36e94380c2fcb7, type: 3}
@@ -168,6 +171,7 @@ SpriteAtlas:
   - {fileID: 6205161768357606934, guid: 04f3b5a37522a7f45a1121132b637e41, type: 3}
   - {fileID: 21300000, guid: acf12fa3c673a17488dc5e6c832805cb, type: 3}
   - {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
+  - {fileID: 21300000, guid: a9180544072f19b4f803fa6675f6e784, type: 3}
   - {fileID: 21300000, guid: ed1fe694abd310445a3f31c42fd72bb7, type: 3}
   - {fileID: 21300000, guid: e221e7a42d17a594099b06cd24984d1a, type: 3}
   - {fileID: 21300000, guid: f9e681b4bc031084483313a199201e08, type: 3}
@@ -365,6 +369,7 @@ SpriteAtlas:
   - {fileID: 4473523978737149865, guid: 9eae086de756a624dbf5eb480c577b45, type: 3}
   - {fileID: 21300000, guid: fabc999deea937a4faf81de61dd9c7e2, type: 3}
   - {fileID: 21300000, guid: aa6d0bbd1484b3747892f7b3b5e0c1c4, type: 3}
+  - {fileID: 21300000, guid: 78982dbdadf818e4e9fc57754fca64ee, type: 3}
   - {fileID: 21300000, guid: 9214ccdded46bf7438729b5624c73122, type: 3}
   - {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
   - {fileID: 21300000, guid: 59f5bafd69561cd4f9f3b7f501f9a502, type: 3}
@@ -544,6 +549,9 @@ SpriteAtlas:
   - castleWallTInverted
   - castleWallIntersect
   - castleWallVerticalSegmentTop
+  - blackhole_2
+  - blackhole_1
+  - blackhole_0
   - downarrow
   - desertchest_0
   - desertchest_1
@@ -556,6 +564,7 @@ SpriteAtlas:
   - book_blue 0
   - UIBackground1
   - wi_hammer
+  - blackholeUI
   - iceFloor
   - essence
   - pot
@@ -753,6 +762,7 @@ SpriteAtlas:
   - testTile_8
   - berserkersbrew
   - shadow
+  - CrystalPlate
   - empoweringtoxin
   - necklace
   - teardropjewel

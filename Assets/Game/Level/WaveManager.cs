@@ -198,7 +198,7 @@ namespace TonyDev.Game.Level
         {
             foreach (var e in enemyPrefabs)
             {
-                GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(e), GetSpawnpoint(), null);
+                GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(e), GetSpawnpoint(), null, 1);
             }
         }
 

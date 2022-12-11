@@ -7,6 +7,8 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
+using TonyDev.Game.Level.Rooms;
+using TonyDev.Game.UI.Minimap;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Player
@@ -15,7 +17,7 @@ namespace TonyDev.Game.Core.Entities.Player
     public class Player : GameEntity
     {
         public static event Action OnLocalPlayerCreated;
-        
+
         //Singleton code
         public static Player LocalInstance;
 
@@ -34,13 +36,32 @@ namespace TonyDev.Game.Core.Entities.Player
 
         #endregion
 
-        [SyncVar(hook=nameof(UsernameHook))] public string username;
+        [SyncVar(hook = nameof(UsernameHook))] public string username;
 
         public Action<string> OnUsernameChange;
 
         private bool _damageOnCooldown;
-        private const float PlayerDamageCooldown = 0.5f;
-        
+        private const float PlayerDamageCooldown = 0.1f;
+
+        protected override void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
+        {
+            base.ParentIdentityHook(oldIdentity, newIdentity);
+
+            if (!isServer) return;
+            
+            if (oldIdentity != null)
+            {
+                var oldRoom = oldIdentity.GetComponent<Room>();
+                if (oldRoom != null) oldRoom.CmdSetPlayerCount(oldRoom.PlayerCount - 1);
+            }
+
+            if (newIdentity != null)
+            {
+                var newRoom = newIdentity.GetComponent<Room>();
+                if (newRoom != null) newRoom.CmdSetPlayerCount(newRoom.PlayerCount + 1);
+            }
+        }
+
         public override float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility)
         {
             if (damage > 0 && _damageOnCooldown && !ignoreInvincibility)
@@ -49,8 +70,8 @@ namespace TonyDev.Game.Core.Entities.Player
                 return 0;
             }
 
-            if(!ignoreInvincibility) StartCoroutine(PauseDamageForSeconds(PlayerDamageCooldown));
-            
+            if (!ignoreInvincibility) StartCoroutine(PauseDamageForSeconds(PlayerDamageCooldown));
+
             return base.ApplyDamage(damage, out successful, ignoreInvincibility);
         }
 
@@ -60,12 +81,12 @@ namespace TonyDev.Game.Core.Entities.Player
             yield return new WaitForSeconds(seconds);
             _damageOnCooldown = false;
         }
-        
+
         public void UsernameHook(string oldUser, string newUser)
         {
             OnUsernameChange?.Invoke(username);
         }
-        
+
         public override void OnStartServer()
         {
             CmdSetUsername(LobbyManager.UsernameDict[netIdentity.connectionToClient.connectionId]);
@@ -77,7 +98,7 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             username = user;
         }
-        
+
         public override void OnStartLocalPlayer()
         {
             Team = Team.Player;
@@ -96,15 +117,15 @@ namespace TonyDev.Game.Core.Entities.Player
                 {
                     var direction = GameManager.MouseDirection;
                     var pos = transform.position;
-                    
+
                     ObjectSpawner.SpawnProjectile(this, pos, GameManager.MouseDirection, proj);
                 }
             };
-            
+
             //OnDamageOther += (_, _, _) => SoundManager.PlaySoundPitchVariant("hit", transform.position, 0.7f, 1f);
-            
+
             Init();
-            
+
             PlayerInventory.Instance.InsertStarterItems();
         }
 

@@ -22,7 +22,6 @@ namespace TonyDev.Game.Core.Entities.Towers.Flamethrower
         {
             if (tower.Targets.Count == 0 || tower.Targets[0] == null)
             {
-                tower.UpdateTarget();
                 particles.Stop();
                 flameCollider.enabled = false;
                 return;

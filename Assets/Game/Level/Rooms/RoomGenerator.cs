@@ -23,6 +23,20 @@ namespace TonyDev.Game.Level.Rooms
         public readonly Room[,] Rooms;
         public readonly Vector2Int StartingRoomPos;
         public Room StartingRoom => Rooms[StartingRoomPos.x, StartingRoomPos.y];
+
+        public Vector2Int GetRoomPos(Room room)
+        {
+            for (var i = 0; i < Rooms.GetLength(0); i++)
+            {
+                
+                for (var j = 0; j < Rooms.GetLength(1); j++)
+                {
+                    if (Rooms[i, j] == room) return new Vector2Int(i, j);
+                }
+            }
+
+            return new Vector2Int(0, 0);
+        }
     }
 
     public enum RoomGenerateTier

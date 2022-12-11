@@ -8,6 +8,7 @@ using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
+using TonyDev.Game.UI.Minimap;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Tilemaps;
@@ -95,9 +96,13 @@ namespace TonyDev.Game.Level.Rooms
         public UnityEvent onRoomClearGlobal;
 
         public Sprite minimapIcon;
+        [field: SyncVar(hook = nameof(PlayerCountHook))] public int PlayerCount { get; private set; }
 
-        [NonSerialized] public int PlayerCountServer;
-
+        private void PlayerCountHook(int oldPlayerCount, int newPlayerCount)
+        {
+            MinimapManager.Instance.UpdatePlayerCount(RoomManager.Instance.map.GetRoomPos(this), newPlayerCount);
+        }
+        
         //
         private List<Direction> _openDirections;
         public Rect RoomRect => FindRoomRect();
@@ -110,6 +115,12 @@ namespace TonyDev.Game.Level.Rooms
         public IEnumerable<GameEntity> ContainedEntities =>
             GameManager.EntitiesReadonly.Where(e => e.CurrentParentIdentity == netIdentity);
 
+        [Command(requiresAuthority = false)]
+        public void CmdSetPlayerCount(int playerCount)
+        {
+            PlayerCount = playerCount;
+        }
+        
         private void OnOpenDoorsDictionaryChange(SyncDictionary<Direction, bool>.Operation op, Direction key, bool open)
         {
             roomDoors.FirstOrDefault(rd => rd.direction == key)?.SetOpen(open);
@@ -159,6 +170,15 @@ namespace TonyDev.Game.Level.Rooms
             GameManager.OnEnemyAdd += RegisterEntityTeamListener;
             GameManager.OnEnemyRemove += OnEntityChange;
             CheckShouldLockDoors();
+        }
+
+        private void Update()
+        {
+            if (_checkLockDoors)
+            {
+                CheckShouldLockDoors();
+                _checkLockDoors = false;
+            }
         }
 
         private void RegisterEntityTeamListener(GameEntity ge)
@@ -263,11 +283,13 @@ namespace TonyDev.Game.Level.Rooms
             LockAllDoors();
         }
 
+        private bool _checkLockDoors = false;
+        
         private void OnEntityChange(GameEntity entity)
         {
             if (this == null || !enabled) return;
 
-            CheckShouldLockDoors();
+            _checkLockDoors = true;
         }
 
         [Command(requiresAuthority = false)]

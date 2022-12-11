@@ -42,7 +42,7 @@ namespace TonyDev.Game.Global
 
         public static GameObject SpawnProjectile(GameEntity owner, Vector2 pos, Vector2 direction,
             ProjectileData projectileData, bool localOnly = false) =>
-            GameManager.Instance.SpawnProjectile(owner, pos, direction, projectileData, localOnly);
+            GameManager.Instance.SpawnProjectile(owner, pos, direction.normalized, projectileData, localOnly);
 
         public static void SpawnDmgPopup(Vector2 position, float damage, bool critical)
         {
@@ -178,28 +178,29 @@ namespace TonyDev.Game.Global
         [GameCommand(Keyword = "spawn", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawned.")]
         public static void SpawnEnemyCommand(string enemyName, int amount = 1)
         {
-            for (var i = 0; i < amount; i++)
-                if (Camera.main is not null)
-                    GameManager.Instance.CmdSpawnEnemy(enemyName,
-                        Camera.main.ScreenToWorldPoint(Input.mousePosition),
-                        Player.LocalInstance.CurrentParentIdentity);
+            if (Camera.main is not null)
+                GameManager.Instance.CmdSpawnEnemy(enemyName,
+                    Camera.main.ScreenToWorldPoint(Input.mousePosition),
+                    Player.LocalInstance.CurrentParentIdentity, amount);
         }
 
         [GameCommand(Keyword = "spawnallitems", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Spawned.")]
         public static void SpawnAllItems()
         {
             var items = GameManager.AllItems.ToArray();
-            
-            var sqrLength = (int)Mathf.Sqrt(items.Length);
-            
+
+            var sqrLength = (int) Mathf.Sqrt(items.Length);
+
             for (var i = 0; i < items.Length; i++)
             {
                 var x = i / sqrLength;
                 var y = i % sqrLength;
 
                 var item = ItemGenerator.GenerateItemFromData(items[i]);
-                
-                GameManager.Instance.CmdSpawnItem(item, 0, (Vector2)Player.LocalInstance.transform.position + new Vector2((x-sqrLength/2)*2, (y-sqrLength/2)*2),
+
+                GameManager.Instance.CmdSpawnItem(item, 0,
+                    (Vector2) Player.LocalInstance.transform.position +
+                    new Vector2((x - sqrLength / 2) * 2, (y - sqrLength / 2) * 2),
                     Player.LocalInstance.CurrentParentIdentity);
             }
         }

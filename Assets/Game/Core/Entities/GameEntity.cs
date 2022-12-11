@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
@@ -11,11 +10,12 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
-using UnityEditor;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities
 {
+
     public abstract class GameEntity : NetworkBehaviour, IDamageable, IHideable
     {
         public event Action OnTargetChangeOwner;
@@ -119,7 +119,7 @@ namespace TonyDev.Game.Core.Entities
 
         public Action<NetworkIdentity> OnParentIdentityChange;
 
-        private void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
+        protected virtual void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
         {
             OnParentIdentityChange?.Invoke(newIdentity);
         }
@@ -147,7 +147,7 @@ namespace TonyDev.Game.Core.Entities
                 }
             }
 
-            FindObjectOfType<ParentInterestManagement>().ForceRebuild();
+            ParentInterestManagement.Instance.ForceRebuild();
         }
 
         #region Attack
@@ -184,6 +184,9 @@ namespace TonyDev.Game.Core.Entities
 
             OnAttack += () => _attackTimer = 0;
             _effects.Callback += OnEffectsUpdated;
+
+            _targetUpdateTimer = Random.Range(0, EntityTargetUpdatingRate);
+            Debug.Log(_targetUpdateTimer);
         }
 
         protected void Update()
@@ -196,24 +199,14 @@ namespace TonyDev.Game.Core.Entities
 
             if (!EntityOwnership) return;
 
-            _targetUpdateTimer += Time.deltaTime;
-            _attackTimer += Time.deltaTime;
-
-            if (_targetUpdateTimer > EntityTargetUpdatingRate)
-            {
-                UpdateTarget();
-                _targetUpdateTimer = 0f;
-            }
-
-            if (_attackTimer > AttackTimerMax)
-            {
-                Attack();
-            }
-
-            _effects.RemoveAll(e => e == null);
-
             foreach (var effect in _effects.ToArray())
             {
+                if (effect == null)
+                {
+                    _effects.Remove(effect);
+                    continue;
+                }
+                
                 effect.OnUpdateOwner();
             }
 
@@ -221,6 +214,32 @@ namespace TonyDev.Game.Core.Entities
             {
                 var hpRegen = Stats.GetStat(Stat.HpRegen) * Time.deltaTime; //Regen 1% of hp per second
                 ApplyDamage(-hpRegen, out var success, true); //Regen health by HpRegen per second
+            }
+
+            _attackTimer += Time.deltaTime;
+            
+            if (_attackTimer > AttackTimerMax)
+            {
+                Attack();
+            }
+            
+            if (this is Player.Player) return;
+            
+            _targetUpdateTimer += Time.deltaTime;
+
+            if (_targetUpdateTimer > EntityTargetUpdatingRate)
+            {
+                if (CurrentParentIdentity == null)
+                {
+                    CmdUpdateTarget();
+                }
+                else
+                {
+                    var room = CurrentParentIdentity.GetComponent<Room>();
+                    if(room.PlayerCount > 0) CmdUpdateTarget();
+                }
+                
+                _targetUpdateTimer -= EntityTargetUpdatingRate;
             }
         }
 
@@ -242,7 +261,7 @@ namespace TonyDev.Game.Core.Entities
 
             UpdateStats();
 
-            UpdateTarget();
+            CmdUpdateTarget();
             
             CurrentHealth = MaxHealth;
             OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
@@ -302,7 +321,8 @@ namespace TonyDev.Game.Core.Entities
             OnLocalHurt?.Invoke();
         }
 
-        public void UpdateTarget() //Updates entity's target and returns it.
+        [Command(requiresAuthority = false)]
+        public void CmdUpdateTarget() //Updates entity's target and returns it.
         {
             if (!EntityOwnership) return;
 
@@ -314,33 +334,43 @@ namespace TonyDev.Game.Core.Entities
             var range = 10f;
             if (this is Tower t) range = t.targetRadius;
 
+            var myPos = transform.position;
+
             var entities = GameManager.EntitiesReadonly
                 .Where(e => e != null
                             && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
-                            && (string.IsNullOrEmpty(targetTag) ||
-                                e.CompareTag(targetTag)) //Target things with our target tag if it is set
+                            && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
                             && e.Team == targetTeam //Target things of our target team
                             //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
                             && (e.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
                             && e != this //Don't target self
-                            && (e is Crystal && this is not Tower &&
-                                Vector2.Distance(e.transform.position, transform.position) < 200f
-                                || Vector2.Distance(e.transform.position, transform.position) < range)) //Distance check
-                .OrderBy(e => Vector2.Distance(e.transform.position, transform.position))
-                .Take(maxTargets).ToList(); //Find closest non-dead game entity object on the opposing team
+                            && Vector2.Distance(e.transform.position, myPos) < (e is Crystal && this is not Tower ? 200f : range)) //Distance check
+                .OrderBy(e => Vector2.Distance(e.transform.position, myPos))
+                .Take(maxTargets); //Find closest non-dead game entity object on the opposing team
 
-            CmdSetTargets(entities.ToArray());
-            OnTargetChangeOwner?.Invoke(); //Invoke the target changed method
-        }
-
-        [Command(requiresAuthority = false)]
-        private void CmdSetTargets(GameEntity[] gameEntities)
-        {
             Targets.Clear();
-            foreach (var ge in gameEntities)
+            //Targets.AddRange(entities);
+
+            foreach (var ge in entities)
             {
                 Targets.Add(ge);
             }
+            
+            // var targetList = Targets.ToList();
+            //
+            // foreach (var ge in targetList.Where(ge => !entities.Contains(ge)))
+            // {
+            //     Targets.Remove(ge);
+            // }
+            //
+            // foreach (var ge in entities)
+            // {
+            //     if (targetList.Contains(ge)) continue;
+            //
+            //     Targets.Add(ge);
+            // }
+
+            OnTargetChangeOwner?.Invoke(); //Invoke the target changed method
         }
 
         #region Effects
