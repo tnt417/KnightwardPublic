@@ -54,9 +54,10 @@ MonoBehaviour:
           attackData:
             damageMultiplier: 1
             knockbackMultiplier: 1
-            hitboxRadius: 0.4
+            hitboxRadius: 0.2
             team: 1
             destroyOnApply: 0
+            destroyOnCollideWall: 1
             lifetime: 2
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
@@ -67,6 +68,7 @@ MonoBehaviour:
           waveLength: 0
           waveDistance: 0
           childOfOwner: 0
+          doNotRotate: 0
           effects: []
         empoweredProjectile:
           prefabKey: SpearShot
@@ -77,6 +79,7 @@ MonoBehaviour:
             hitboxRadius: 0.4
             team: 1
             destroyOnApply: 0
+            destroyOnCollideWall: 1
             lifetime: 2
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
@@ -87,4 +90,5 @@ MonoBehaviour:
           waveLength: 0
           waveDistance: 0
           childOfOwner: 0
+          doNotRotate: 0
           effects: []

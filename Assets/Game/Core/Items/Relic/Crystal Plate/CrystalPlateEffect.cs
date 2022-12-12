@@ -34,7 +34,7 @@ namespace TonyDev
             if (_stored >= PercentHealthThreshold * Entity.NetworkMaxHealth)
             {
                 ProjectileData.attackData.damageMultiplier = _stored * DamageProportion / Entity.Stats.GetStat(Stat.Damage);
-                ObjectSpawner.SpawnProjectile(Entity, Entity.transform.position, Vector2.zero, ProjectileData);
+                ObjectSpawner.SpawnProjectile(Entity, Entity.transform.position, Vector2.zero, ProjectileData, true);
                 _stored = 0;
             }
         }

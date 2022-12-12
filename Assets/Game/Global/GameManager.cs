@@ -98,8 +98,8 @@ namespace TonyDev.Game.Global
 
         #region Entity
 
-        private static readonly List<GameEntity> Entities = new();
-        public static IEnumerable<GameEntity> EntitiesReadonly => Entities.AsReadOnly();
+        private static readonly HashSet<GameEntity> Entities = new();
+        public static HashSet<GameEntity> EntitiesReadonly => Entities.ToHashSet();
 
         public static void AddEntity(GameEntity entity)
         {

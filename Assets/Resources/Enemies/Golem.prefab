@@ -73,6 +73,7 @@ MonoBehaviour:
   team: 0
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  destroyOnHitWall: 0
   ignoreInvincibility: 1
   inflictBuffs: []
   inflictEffects: []
@@ -10563,7 +10564,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d463cc6b51d323744be2bd86d5d2e02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  followSpeed: 2
+  followSpeed: 4
   followTime: 5
   throwProjectile:
     prefabKey: GolemChain
@@ -10574,6 +10575,7 @@ MonoBehaviour:
       hitboxRadius: 0.5
       team: 0
       destroyOnApply: 0
+      destroyOnCollideWall: 1
       lifetime: 0.5
       spawnOnDestroyKey: 
       ignoreInvincibility: 0
@@ -10584,6 +10586,7 @@ MonoBehaviour:
     waveLength: 0
     waveDistance: 0
     childOfOwner: 0
+    doNotRotate: 0
     effects: []
   crystalAttackRange: 5
   references:

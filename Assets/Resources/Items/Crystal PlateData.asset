@@ -44,6 +44,7 @@ MonoBehaviour:
             hitboxRadius: 0.2
             team: 1
             destroyOnApply: 1
+            destroyOnCollideWall: 0
             lifetime: 10
             spawnOnDestroyKey: 
             ignoreInvincibility: 0

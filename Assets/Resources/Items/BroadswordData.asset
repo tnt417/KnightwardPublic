@@ -45,9 +45,10 @@ MonoBehaviour:
       attackData:
         damageMultiplier: 1
         knockbackMultiplier: 1
-        hitboxRadius: 0.7
+        hitboxRadius: 0.3
         team: 1
         destroyOnApply: 0
+        destroyOnCollideWall: 1
         lifetime: 0.2
         spawnOnDestroyKey: 
         ignoreInvincibility: 0
@@ -58,6 +59,7 @@ MonoBehaviour:
       waveLength: 0
       waveDistance: 0
       childOfOwner: 0
+      doNotRotate: 0
       effects: []
     spawnablePrefabName: 
   references:

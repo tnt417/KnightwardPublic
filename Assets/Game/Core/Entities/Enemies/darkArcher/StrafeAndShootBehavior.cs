@@ -9,6 +9,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.darkArcher
 {
     public class StrafeAndShootBehavior : EnemyBehavior
     {
+        public float pursueSpeed;
         public float strafeDistance;
         public float strafeRadius;
         public float strafeSpeed;
@@ -28,6 +29,10 @@ namespace TonyDev.Game.Core.Entities.Enemies.darkArcher
             {
                 await UniTask.WaitForFixedUpdate();
                 if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
+                
+                PlayAnimation(EnemyAnimationState.Move);
+                await PathfindFollowUntilDirectSight(() => FirstEnemyTarget,
+                    () => Enemy.Stats.GetStat(Stat.MoveSpeed) * pursueSpeed);
                 
                 await GotoOverSeconds((Vector2)transform.position + FindStrafeDirection(strafeDistance, strafeRadius) * strafeDistance, 1 / (Enemy.Stats.GetStat(Stat.MoveSpeed) * strafeSpeed));
                 PlayAnimation(EnemyAnimationState.Stop);

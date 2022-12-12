@@ -1,6 +1,9 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
@@ -11,6 +14,7 @@ using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
+using UnityEngine.Profiling;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities
@@ -187,7 +191,7 @@ namespace TonyDev.Game.Core.Entities
 
             _targetUpdateTimer = Random.Range(0, EntityTargetUpdatingRate);
         }
-
+        
         protected void Update()
         {
             foreach (var effect in _effects.ToArray())
@@ -237,7 +241,7 @@ namespace TonyDev.Game.Core.Entities
                     var room = CurrentParentIdentity.GetComponent<Room>();
                     if(room.PlayerCount > 0) CmdUpdateTarget();
                 }
-                
+
                 _targetUpdateTimer -= EntityTargetUpdatingRate;
             }
         }
@@ -323,8 +327,6 @@ namespace TonyDev.Game.Core.Entities
         [Command(requiresAuthority = false)]
         public void CmdUpdateTarget() //Updates entity's target and returns it.
         {
-            if (!EntityOwnership) return;
-
             /* Valid targets match our targetTag variable, match our targetTeam variable, do not target invulnerable or dead things (unless this object is a tower),
              * and only attack things within 10 tiles unless it is the crystal
              * 
@@ -335,39 +337,70 @@ namespace TonyDev.Game.Core.Entities
 
             var myPos = transform.position;
 
-            var entities = GameManager.EntitiesReadonly
-                .Where(e => e != null
-                            && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
-                            && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
-                            && e.Team == targetTeam //Target things of our target team
-                            //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
-                            && (e.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
-                            && e != this //Don't target self
-                            && Vector2.Distance(e.transform.position, myPos) < (e is Crystal && this is not Tower ? 200f : range)) //Distance check
-                .OrderBy(e => Vector2.Distance(e.transform.position, myPos))
-                .Take(maxTargets); //Find closest non-dead game entity object on the opposing team
-
-            Targets.Clear();
-            //Targets.AddRange(entities);
-
-            foreach (var ge in entities)
-            {
-                Targets.Add(ge);
-            }
+            var entitiesSet = GameManager.EntitiesReadonly;
             
-            // var targetList = Targets.ToList();
+            // Profiler.BeginSample("LINQ");
             //
-            // foreach (var ge in targetList.Where(ge => !entities.Contains(ge)))
-            // {
-            //     Targets.Remove(ge);
-            // }
+            // var entities = entitiesSet
+            //     .Where(e => e != null
+            //                 && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
+            //                 && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
+            //                 && e.Team == targetTeam //Target things of our target team
+            //                 //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
+            //                 && (e.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
+            //                 && e != this //Don't target self
+            //                 && Vector2.Distance(e.transform.position, myPos) < (e is Crystal && this is not Tower ? 200f : range)) //Distance check
+            //     .OrderBy(e => Vector2.Distance(e.transform.position, myPos))
+            //     .Take(maxTargets); //Find closest non-dead game entity object on the opposing team
+            //
+            // Targets.Clear();
+            //
+            // Debug.Log("A");
             //
             // foreach (var ge in entities)
             // {
-            //     if (targetList.Contains(ge)) continue;
-            //
             //     Targets.Add(ge);
             // }
+            //
+            // Profiler.EndSample();
+            
+            //Profiler.BeginSample("Manual");
+
+            SortedSet<KeyValuePair<float, GameEntity>> distances = new(new ByClosest());
+
+            foreach (var ge in entitiesSet)
+            {
+                var dist = Vector2.Distance(ge.transform.position, myPos);
+
+                if (ge != null
+                    && ge.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
+                    && (string.IsNullOrEmpty(targetTag) ||
+                        ge.CompareTag(targetTag)) //Target things with our target tag if it is set
+                    && ge.Team == targetTeam //Target things of our target team
+                    //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
+                    && (ge.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
+                    && ge != this //Don't target self
+                    && dist < (ge is Crystal && this is not Tower ? 200f : range))
+                {
+                    distances.Add(new KeyValuePair<float, GameEntity>(dist, ge));
+                }
+            }
+
+            Targets.Clear();
+
+            var index = 0;
+            
+            //Debug.Log("B");
+
+            foreach (var ge in distances)
+            {
+                index++;
+                Targets.Add(ge.Value);
+
+                if (index >= maxTargets) break;
+            }
+            
+            //Profiler.EndSample();
 
             OnTargetChangeOwner?.Invoke(); //Invoke the target changed method
         }
@@ -556,5 +589,16 @@ namespace TonyDev.Game.Core.Entities
         // {
         //     OnDeathBroadcast?.Invoke();
         // }
+    }
+
+    public class ByClosest : IComparer<KeyValuePair<float, GameEntity>>
+    {
+        public int Compare(KeyValuePair<float, GameEntity> x, KeyValuePair<float, GameEntity> y)
+        {
+            var (xK, _) = x;
+            var (yK, _) = y;
+            
+            return xK > yK ? 1 : -1;
+        }
     }
 }

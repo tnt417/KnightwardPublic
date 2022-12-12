@@ -21,6 +21,7 @@ namespace TonyDev.Game.Core.Attacks
         public float hitboxRadius;
         public Team team;
         public bool destroyOnApply;
+        public bool destroyOnCollideWall;
         [Tooltip("-1 for infinite")] public float lifetime;
         public string spawnOnDestroyKey;
         public bool ignoreInvincibility = false;
@@ -107,6 +108,7 @@ namespace TonyDev.Game.Core.Attacks
             attack.SetData(attackData, owner);
             attack.identifier = identifier;
             attack.OnDamageDealt += OnHitOther;
+            attack.destroyOnHitWall = attackData.destroyOnCollideWall;
 
             //Populate the AttackComponent's inflict effects
             foreach (var e in effects)

@@ -60,6 +60,9 @@ namespace TonyDev.Game.Core.Attacks
 
         [Tooltip("Should the object destroy when its collider collides?")] [SerializeField]
         public bool destroyOnAnyCollide;
+        
+        [Tooltip("Should the object destroy when its collider collides?")] [SerializeField]
+        public bool destroyOnHitWall = false;
 
         [Tooltip("Does the attack damage invincible entities?")] [SerializeField]
         public bool ignoreInvincibility = false;
@@ -259,6 +262,11 @@ namespace TonyDev.Game.Core.Attacks
 
         private void OnTriggerStay2D(Collider2D other)
         {
+            if (other.gameObject.layer == LayerMask.NameToLayer("Level") && destroyOnHitWall)
+            {
+                Destroy(gameObject);
+            }
+            
             if (destroyOnAnyCollide && other.gameObject != _owner.gameObject)
                 Destroy(gameObject); //Destroy if destroyOnAnyCollide is true.
             if (!_hitCooldowns.ContainsKey(other.transform.root.gameObject))

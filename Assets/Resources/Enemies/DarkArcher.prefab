@@ -154,6 +154,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 684736bdc93a664429f636e6fd5d9009, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pursueSpeed: 3
   strafeDistance: 4
   strafeRadius: 5
   strafeSpeed: 3
@@ -166,6 +167,7 @@ MonoBehaviour:
       hitboxRadius: 0.3
       team: 0
       destroyOnApply: 1
+      destroyOnCollideWall: 1
       lifetime: 2
       spawnOnDestroyKey: 
       ignoreInvincibility: 0
@@ -176,6 +178,7 @@ MonoBehaviour:
     waveLength: 0
     waveDistance: 0
     childOfOwner: 0
+    doNotRotate: 0
     effects: []
   references:
     version: 2

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
@@ -11,6 +12,7 @@ using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using TonyDev.Game.UI.Minimap;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.Profiling;
 using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
 using UnityEngine.UI;
@@ -379,6 +381,8 @@ namespace TonyDev.Game.Level.Rooms
         private int tilemapWidth;
         private int tilemapHeight;
 
+        private HashSet<PathNode> _closedNodes = new();
+        
         public Pathfinding(Tilemap obstacleTilemap)
         {
             _tilemap = obstacleTilemap;
@@ -397,13 +401,18 @@ namespace TonyDev.Game.Level.Rooms
                 for (var y = 0; y < tilemapHeight; y++)
                 {
                     _grid[x, y] = new PathNode(_grid, x, y);
+                    
+                    if (_tilemap.GetTile(new Vector3Int(x, y) + _tilemap.cellBounds.min) != null)
+                    {
+                        _closedNodes.Add(_grid[x, y]);
+                    }
                 }
             }
         }
 
         public List<Vector2> GetPath(Vector2 startPos, Vector2 endPos)
         {
-            //TODO: The issue is that tilemap.WorldToCell can return negative coordinates. Should make custom WorldToCell method to offset it properly.
+            Profiler.BeginSample("Pathing");
 
             // Convert input coordinates into tile coordinates.
             var startTile = _tilemap.WorldToCell(startPos) - _tilemap.cellBounds.min;
@@ -412,8 +421,13 @@ namespace TonyDev.Game.Level.Rooms
             var startNode = _grid[startTile.x, startTile.y];
             var endNode = _grid[endTile.x, endTile.y];
 
-            var openList = new List<PathNode> {startNode};
-            var closedList = new List<PathNode>();
+            var openList = new HashSet<PathNode>() { startNode };//(new ByFCost());
+            var closedList = new HashSet<PathNode>();
+
+            foreach (var node in _closedNodes)
+            {
+                closedList.Add(node);
+            }
 
             for (var x = 0; x < tilemapWidth; x++)
             {
@@ -425,13 +439,8 @@ namespace TonyDev.Game.Level.Rooms
                     pathNode.cameFromNode = null;
 
                     // My code
-                    if (_tilemap.GetTile(new Vector3Int(x, y) + _tilemap.cellBounds.min) != null)
+                    if (_closedNodes.Contains(pathNode))
                     {
-                        closedList.Add(pathNode);
-
-                        // If we find that our starting or ending nodes are occupied by a wall, which is likely since the hitboxes only partially cover the tiles,
-                        // then we need to find the nearest neighboring tile and use that instead.
-
                         if (endNode == pathNode)
                         {
                             endNode = GetNearestNeighbor(endNode, endPos);
@@ -445,7 +454,7 @@ namespace TonyDev.Game.Level.Rooms
                     // End my code
                 }
             }
-
+            
             startNode.gCost = 0;
             startNode.hCost = CalculateDistanceCost(startNode, endNode);
             startNode.CalculateFCost();
@@ -461,6 +470,7 @@ namespace TonyDev.Game.Level.Rooms
                 }
 
                 openList.Remove(currentNode);
+                
                 closedList.Add(currentNode);
 
                 foreach (var neighborNode in GetNeighborList(currentNode))
@@ -475,14 +485,13 @@ namespace TonyDev.Game.Level.Rooms
                         neighborNode.hCost = CalculateDistanceCost(neighborNode, endNode);
                         neighborNode.CalculateFCost();
 
-                        if (!openList.Contains(neighborNode))
-                        {
-                            openList.Add(neighborNode);
-                        }
+                        openList.Add(neighborNode);
                     }
                 }
             }
 
+            Profiler.EndSample();
+            
             // Out of nodes on the open list
             return new List<Vector2>(); // No path
         }
@@ -491,15 +500,15 @@ namespace TonyDev.Game.Level.Rooms
         {
             return GetNeighborList(current)
                 .Where(pn => _tilemap.GetTile(new Vector3Int(pn.X, pn.Y) + _tilemap.cellBounds.min) == null)
-                .OrderBy(pn => Vector2.Distance(worldPos,
+                .OrderBy(pn => Vector2.Distance(worldPos - new Vector2(0f, 0.3f),
                     (Vector2) _tilemap.CellToWorld(new Vector3Int(pn.X, pn.Y) +
                                                    _tilemap.cellBounds.min) + new Vector2(0.5f, 0.5f)))
                 .FirstOrDefault();
         }
 
-        private List<PathNode> GetNeighborList(PathNode currentNode)
+        private HashSet<PathNode> GetNeighborList(PathNode currentNode)
         {
-            var neighborList = new List<PathNode>();
+            var neighborList = new HashSet<PathNode>();
 
             if (currentNode.X - 1 >= 0)
             {
@@ -548,9 +557,17 @@ namespace TonyDev.Game.Level.Rooms
             return MoveDiagonalCost * Mathf.Min(xDistance, yDistance) + MoveStraightCost * remaining;
         }
 
-        private PathNode LowestFCostNode(List<PathNode> pathNodeList)
+        private PathNode LowestFCostNode(HashSet<PathNode> pathNodeList)
         {
             return pathNodeList.OrderBy(pn => pn.fCost).FirstOrDefault();
+        }
+    }
+
+    public class ByFCost : IComparer<PathNode>
+    {
+        public int Compare(PathNode x, PathNode y)
+        {
+            return x.fCost == y.fCost ? 0 : x.fCost > y.fCost ? 1 : -1;
         }
     }
 

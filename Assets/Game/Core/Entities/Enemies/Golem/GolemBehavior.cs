@@ -36,7 +36,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Golem
                 if (Enemy.Targets[0] is Player.Player)
                 {
                     PlayAnimation(EnemyAnimationState.Move);
-                    await FollowForSeconds(() => FirstEnemyTarget, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * followSpeed, followTime);
+                    await PathfindForSeconds(() => FirstEnemyTarget, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * followSpeed, followTime);
                     PlayAnimation(EnemyAnimationState.Stop);
                     await UniTask.Delay(TimeSpan.FromSeconds(0.5));
                     PlayAnimation(EnemyAnimationState.Attack);

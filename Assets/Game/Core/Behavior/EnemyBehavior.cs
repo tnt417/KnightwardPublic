@@ -33,7 +33,7 @@ namespace TonyDev.Game.Core.Behavior
 
         protected bool RaycastForTransform(Transform target)
         {
-            var hit = Physics2D.Raycast(Enemy.transform.position, (FirstEnemyTarget.transform.position - transform.position),Mathf.Infinity, LayerMask.GetMask("Player", "Level"));
+            var hit = Physics2D.Raycast(Enemy.transform.position, (FirstEnemyTarget.transform.position - transform.position),Mathf.Infinity, LayerMask.GetMask("Player", "Level", "Crystal"));
             return hit.transform.root == target;
         }
         
@@ -43,9 +43,7 @@ namespace TonyDev.Game.Core.Behavior
             {
                 await UniTask.WaitForFixedUpdate();
 
-                var t = followTransform.Invoke();
-
-                if (t == null)
+                if (followTransform.Invoke() == null)
                 {
                     continue; // Wait for a target
                 }
@@ -69,12 +67,18 @@ namespace TonyDev.Game.Core.Behavior
                     pathfinding = room.RoomPathfinding;
                 }
 
+                var t = followTransform.Invoke();
+                
                 Vector2 lastTargetPos = t.position;
                 
                 var path = pathfinding.GetPath(Enemy.transform.position,lastTargetPos);
+
+                var pathLength = path.Count;
                 
-                foreach (var point in path)
+                for (var i = 1; i < pathLength; i++)
                 {
+                    var point = path[i];
+                    
                     if (t == null) break;
                     
                     var newTargetPos = (Vector2)t.position;
@@ -87,6 +91,13 @@ namespace TonyDev.Game.Core.Behavior
                     await Goto(point, speed, 1f / speed.Invoke());
                 }
             }
+        }
+
+        protected async UniTask PathfindForSeconds(Func<Transform> followTransform, Func<float> speed, float seconds)
+        {
+            var doneTime = Time.time + seconds;
+
+            await PathfindFollow(followTransform, speed, () => Time.time < doneTime);
         }
 
         protected async UniTask FollowForSeconds(Func<Transform> followTransform, Func<float> speed, float seconds)

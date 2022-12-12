@@ -20,6 +20,9 @@ namespace TonyDev.Game.Core.Entities.Enemies.Books
                 
                 if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
             
+                await PathfindFollowUntilDirectSight(() => FirstEnemyTarget,
+                    () => Enemy.Stats.GetStat(Stat.MoveSpeed) * dashSpeed);
+                
                 var directionVector = ((Vector2) Enemy.Targets[0].transform.position - (Vector2) transform.position).normalized;
                 if (!reached)
                 {
@@ -27,6 +30,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Books
                     reached = true;
                 }
                 await GotoOverSeconds((Vector2)Enemy.Targets[0].transform.position + directionVector*dashRadius, 1/(Enemy.Stats.GetStat(Stat.MoveSpeed)*dashSpeed));
+                
                 await UniTask.Delay(TimeSpan.FromSeconds(waitTimeSeconds));
             }
         }

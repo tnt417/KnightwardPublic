@@ -7,7 +7,7 @@ namespace Mirror
     public class SyncList<T> : SyncObject, IList<T>, IReadOnlyList<T>
     {
         public delegate void SyncListChanged(Operation op, int itemIndex, T oldItem, T newItem);
-
+        
         readonly IList<T> objects;
         readonly IEqualityComparer<T> comparer;
 

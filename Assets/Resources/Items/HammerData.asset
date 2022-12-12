@@ -40,6 +40,7 @@ MonoBehaviour:
         hitboxRadius: 0
         team: 1
         destroyOnApply: 0
+        destroyOnCollideWall: 0
         lifetime: 0.05
         spawnOnDestroyKey: 
         ignoreInvincibility: 0
@@ -50,6 +51,7 @@ MonoBehaviour:
       waveLength: 0
       waveDistance: 0
       childOfOwner: 0
+      doNotRotate: 0
       effects: []
     spawnablePrefabName: 
   references:
@@ -70,9 +72,10 @@ MonoBehaviour:
           attackData:
             damageMultiplier: 2
             knockbackMultiplier: 0.2
-            hitboxRadius: 0.5
+            hitboxRadius: 0.2
             team: 1
             destroyOnApply: 0
+            destroyOnCollideWall: 1
             lifetime: 1.5
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
@@ -83,6 +86,7 @@ MonoBehaviour:
           waveLength: 0
           waveDistance: 0
           childOfOwner: 0
+          doNotRotate: 0
           effects: []
         AttachedProjectile:
           prefabKey: HammerProjectile
@@ -93,6 +97,7 @@ MonoBehaviour:
             hitboxRadius: 0.3
             team: 1
             destroyOnApply: 0
+            destroyOnCollideWall: 0
             lifetime: -1
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
@@ -103,6 +108,7 @@ MonoBehaviour:
           waveLength: 0
           waveDistance: 0
           childOfOwner: 1
+          doNotRotate: 0
           effects: []
         MaxHammers: 4
         SpinSpeed: 2
@@ -121,6 +127,7 @@ MonoBehaviour:
             hitboxRadius: 0
             team: 1
             destroyOnApply: 0
+            destroyOnCollideWall: 0
             lifetime: 0.05
             spawnOnDestroyKey: hammerPool
             ignoreInvincibility: 0
@@ -131,6 +138,7 @@ MonoBehaviour:
           waveLength: 0
           waveDistance: 0
           childOfOwner: 0
+          doNotRotate: 0
           effects: []
         MaxAmount: 3
         ProjectileSpacing: 2.5
