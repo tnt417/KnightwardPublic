@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Steamworks;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
@@ -377,17 +378,21 @@ namespace TonyDev.Game.Global
 
         #region Gamestate Control
 
-        private static void ResetGame()
+        public static void ResetGame()
         {
-            Crystal.Instance.SetHealth(5000f);
+            if(Crystal.Instance != null) Crystal.Instance.SetHealth(5000f);
+            
             Money = 0;
+            Essence = 0;
+            MoneyDropBonusFactor = 0;
             Timer.GameTimer = 0;
-            AllItems.Clear();
-            Entities.Clear();
-            Destroy(FindObjectOfType<CustomNetworkManager>().gameObject);
-            EnemySpawners.Clear();
-            PlayerInventory.Instance.Clear();
-            PlayerStats.Stats.ClearStatBonuses();
+
+            AllItems?.Clear();
+            Entities?.Clear();
+            EnemySpawners?.Clear();
+            
+            if(PlayerInventory.Instance != null) PlayerInventory.Instance.Clear();
+            if(PlayerStats.Stats != null) PlayerStats.Stats.ClearStatBonuses();
         }
 
         //Switches back and forth between Arena and Dungeon phases
@@ -430,11 +435,30 @@ namespace TonyDev.Game.Global
 
         private void GameOver()
         {
-            ResetGame();
-            NetworkServer.Shutdown();
-            NetworkClient.Shutdown();
-            Destroy(gameObject);
-            SceneManager.LoadScene("GameOver");
+            GameOverTask().Forget();
+        }
+
+        private async UniTask GameOverTask()
+        {
+            CmdFocusAllCamOnCrystal();
+
+            await UniTask.Delay(TimeSpan.FromSeconds(3));
+            
+            NetworkManager.singleton.StopHost();
+        }
+
+        public bool doCrystalFocusing = false;
+        
+        [Command(requiresAuthority = false)]
+        private void CmdFocusAllCamOnCrystal()
+        {
+            RpcFocusAllCamOnCrystal();
+        }
+
+        [ClientRpc]
+        private void RpcFocusAllCamOnCrystal()
+        {
+            doCrystalFocusing = true;
         }
 
         //Teleports the player to the dungeon, sets the starting room as active, and sets the GamePhase to Dungeon.
@@ -468,6 +492,7 @@ namespace TonyDev.Game.Global
         private void CmdSetDungeonFloor(int floor)
         {
             dungeonFloor = floor;
+            SteamFriends.SetRichPresence("status", $"In game: Dungeon Floor {dungeonFloor}");
         }
 
         [Command(requiresAuthority = false)]

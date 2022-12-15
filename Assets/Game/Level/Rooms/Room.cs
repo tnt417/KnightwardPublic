@@ -392,8 +392,6 @@ namespace TonyDev.Game.Level.Rooms
             tilemapWidth = _tilemap.cellBounds.size.x;
             tilemapHeight = _tilemap.cellBounds.size.y;
 
-            Debug.Log("Tilemap: " + tilemapWidth + ", " + tilemapHeight);
-
             _grid = new PathNode[tilemapWidth, tilemapHeight];
 
             for (var x = 0; x < tilemapWidth; x++)

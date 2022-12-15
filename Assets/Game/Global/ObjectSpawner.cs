@@ -31,13 +31,14 @@ namespace TonyDev.Game.Global
         [SerializeField] private GameObject damageNumberPrefab;
         [SerializeField] private GameObject groundItemPrefab;
         [SerializeField] private GameObject chestPrefab;
-        [SerializeField] private float moneyOutwardForce;
         [SerializeField] private int objectPoolSize;
         private static readonly Queue<GameObject> PopupObjectPool = new();
 
         private void Awake()
         {
             if (_instance == null) _instance = this;
+            
+            PopupObjectPool.Clear();
         }
 
         public static GameObject SpawnProjectile(GameEntity owner, Vector2 pos, Vector2 direction,
@@ -115,43 +116,12 @@ namespace TonyDev.Game.Global
 
             for (var i = 0; i < amount * modifier; i += 0)
             {
-                var angle = Random.Range(0, 360);
-
-                var radAngle = angle * Mathf.Deg2Rad;
-                var dir = new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle));
-
-                var moneyObject = Instantiate(_instance.moneyPrefab, originPos, Quaternion.identity);
-                var money = moneyObject.GetComponent<MoneyObject>();
-
                 var remMoney = amount - i;
                 var addAmount = remMoney / 5f > 1 ? remMoney / 25f > 1 ? remMoney / 100f > 1 ? 100 : 25 : 5 : 1;
-
-                money.amount = addAmount;
+                
                 i += addAmount;
 
-                moneyObject.transform.localScale = addAmount switch
-                {
-                    1 => Vector3.one,
-                    5 => Vector3.one * 1.2f,
-                    25 => Vector3.one * 1.4f,
-                    100 => Vector3.one * 1.6f,
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-
-                if (parentRoom != null)
-                {
-                    var room = parentRoom.GetComponent<Room>();
-
-                    if (room != null)
-                    {
-                        money.CurrentParentIdentity = parentRoom;
-
-                        room.roomChildObjects.Add(moneyObject);
-                    }
-                }
-
-                var rb2d = moneyObject.GetComponent<Rigidbody2D>();
-                rb2d.velocity = dir * _instance.moneyOutwardForce;
+                MoneyObject.SpawnMoney(_instance.moneyPrefab, originPos, addAmount, parentRoom);
             }
         }
 

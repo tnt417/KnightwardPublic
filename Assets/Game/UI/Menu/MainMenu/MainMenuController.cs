@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using TonyDev.Game.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -22,9 +24,8 @@ namespace TonyDev.Game.UI.Menu.MainMenu
 
         public void OnPlayClick()
         {
-            SceneManager.LoadScene("LobbyScene"); //Go to main scene when the play button is clicked
+            TransitionController.TransitionScene("LobbyScene"); // Fade to main scene when the play button is clicked
         }
-
         public void QuitGame()
         {
             Application.Quit(0);

@@ -703,6 +703,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 793a2ebe9a18dbf43814b71d58fc5f47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   playerTilePrefab: {fileID: 1295298609159820296, guid: 12e52aed3e36ce34f9507c02bf551ed0, type: 3}
@@ -723,9 +724,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 1488393886
   serverOnly: 0
   visible: 2
-  m_AssetId: 4c493b66d2d662742bf60ed6050984a0
   hasSpawned: 0
 --- !u!223 &886404489716746641
 Canvas:

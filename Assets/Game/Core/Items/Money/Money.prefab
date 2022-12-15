@@ -235,6 +235,7 @@ MonoBehaviour:
   rb2d: {fileID: 3113712603496644198}
   attractRange: 3
   attractSpeed: 3
+  amount: 0
 --- !u!96 &477513598018090033
 TrailRenderer:
   serializedVersion: 2

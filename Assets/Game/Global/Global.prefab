@@ -302,7 +302,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8211467678594754315}
   - component: {fileID: 8211467678594754314}
-  - component: {fileID: 8211467678594754331}
   - component: {fileID: 8211467678594754332}
   - component: {fileID: 8211467678594754312}
   - component: {fileID: 3686404892870064107}
@@ -344,6 +343,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be04a97b237ff6141915e54e4395fb9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   itemData:
@@ -382,42 +382,7 @@ MonoBehaviour:
   waveProgress: 0
   wave: 0
   projectiles: []
-  maxArenaTowers: 5
---- !u!114 &8211467678594754331
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8211467678594754324}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b3278d54ba617e4fa9448a4b3a34fb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  gameSounds:
-  - name: moneyPickup
-    audioClip: {fileID: 8300000, guid: 0ac95b0cc4b6dfc43a20dc3efdf02935, type: 3}
-  - name: anvil
-    audioClip: {fileID: 8300000, guid: c7be87970628f0b48b573093d51bd44f, type: 3}
-  - name: button
-    audioClip: {fileID: 8300000, guid: 092a99dd51bfd4c41977f3d2f2abb4da, type: 3}
-  - name: dagger
-    audioClip: {fileID: 8300000, guid: dba4209b444306341ab3896cd3390bc4, type: 3}
-  - name: die
-    audioClip: {fileID: 8300000, guid: e00da5fb117c5c74aa65f91441781c81, type: 3}
-  - name: hit
-    audioClip: {fileID: 8300000, guid: 0564a7238c13fde4682cff031f0824eb, type: 3}
-  - name: interact
-    audioClip: {fileID: 8300000, guid: 12777e3cad839cd45afb9fceba39f70f, type: 3}
-  - name: spear
-    audioClip: {fileID: 8300000, guid: 144d444efbd04bf4b8edd5bca4e15c67, type: 3}
-  - name: ice1
-    audioClip: {fileID: 8300000, guid: 8b984cd17f18b2a43857e6c403ecf8ea, type: 3}
-  - name: ice2
-    audioClip: {fileID: 8300000, guid: 4070c1504e57d0a49b4442dd74e88278, type: 3}
-  - name: ice3
-    audioClip: {fileID: 8300000, guid: c792c3b717224dc4c976ec7f08de1169, type: 3}
+  arenaWallTilemap: {fileID: 0}
 --- !u!114 &8211467678594754332
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -431,9 +396,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2530396883
   serverOnly: 0
   visible: 2
-  m_AssetId: e32220fcac500b54a8b46caed7f2c8d0
   hasSpawned: 0
 --- !u!114 &8211467678594754312
 MonoBehaviour:
@@ -452,7 +417,6 @@ MonoBehaviour:
   damageNumberPrefab: {fileID: 6562519401315679430, guid: 30f80fb3160f23c448a99ca9de729f44, type: 3}
   groundItemPrefab: {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
   chestPrefab: {fileID: 7876539795197064780, guid: d366340610a237340be5830e57a02b98, type: 3}
-  moneyOutwardForce: 15
   objectPoolSize: 25
 --- !u!114 &3686404892870064107
 MonoBehaviour:
@@ -479,11 +443,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 969a83d3627813e489d1d9d88c13cec3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   upgradeEntryPrefab: {fileID: 8279129981254602085, guid: 91d8512e13c99614ea41dee4cc0cbb58, type: 3}
   upgradeEntryParent: {fileID: 6511333537215666209}
   uiToggleObject: {fileID: 5899570179780833545}
+  filter: 
 --- !u!1 &8211467678721974365
 GameObject:
   m_ObjectHideFlags: 0

@@ -501,6 +501,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2df5986e66d2a8440b07438f9f474c1d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   rb2D: {fileID: 1277911647}
@@ -517,6 +518,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c07181edd037cd40af31d580afaf7f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   targetTag: 
@@ -630,6 +632,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb075c3e7cc12a4293a7e4e4e2d4a39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   deathCooldown: 5
@@ -650,9 +653,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 484619090
   serverOnly: 0
   visible: 0
-  m_AssetId: 72b85c659924a5d4abc2ee6ab8b460a1
   hasSpawned: 0
 --- !u!114 &-6464742237505702463
 MonoBehaviour:
@@ -666,25 +669,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 1
   syncMode: 0
-  syncInterval: 0.05
-  clientAuthority: 1
-  sendInterval: 0.05
-  syncPosition: 1
-  syncRotation: 0
-  syncScale: 0
-  interpolatePosition: 1
-  interpolateRotation: 0
-  interpolateScale: 0
-  bufferTimeMultiplier: 3
-  bufferSizeLimit: 64
-  catchupThreshold: 6
-  catchupMultiplier: 0.1
+  syncInterval: 0
+  target: {fileID: 5567193263630704247}
+  clientAuthority: 0
   onlySyncOnChange: 0
   bufferResetMultiplier: 5
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+  syncPosition: 1
+  syncRotation: 0
+  syncScale: 0
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
@@ -700,6 +697,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cda2d443a22c8344f9f6dbe33b906206, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   playerSprites:

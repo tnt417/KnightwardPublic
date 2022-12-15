@@ -6,6 +6,7 @@ using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Items.Money;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.UI.Minimap;
@@ -322,6 +323,12 @@ namespace TonyDev.Game.Level.Rooms
                     r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
                     foreach (var go in r.roomChildObjects.Where(go => go.GetComponent<NetworkIdentity>() == null))
                     {
+                        if (go.GetComponent<MoneyObject>() != null)
+                        {
+                            go.SetActive(false);
+                            continue;
+                        }
+                        
                         Destroy(go);
                     }
                 }

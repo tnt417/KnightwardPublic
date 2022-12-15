@@ -216,65 +216,6 @@ Transform:
   m_Father: {fileID: 1223629565}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &27531722
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 27531724}
-  - component: {fileID: 27531723}
-  m_Layer: 0
-  m_Name: TransitionManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!223 &27531723
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27531722}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 1
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 1
-  m_TargetDisplay: 0
---- !u!224 &27531724
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 27531722}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0, y: 0, z: 0}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 835148979}
-  m_Father: {fileID: 0}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 0}
 --- !u!1001 &40530863
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2718,6 +2659,73 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2787348605893511017, guid: b7c5f14d62a6fc044a25c5702ad5ff73, type: 3}
   m_PrefabInstance: {fileID: 376858418}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &608766305
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 608766307}
+  - component: {fileID: 608766306}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &608766306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608766305}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b3278d54ba617e4fa9448a4b3a34fb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameSounds:
+  - name: moneyPickup
+    audioClip: {fileID: 8300000, guid: 0ac95b0cc4b6dfc43a20dc3efdf02935, type: 3}
+  - name: anvil
+    audioClip: {fileID: 8300000, guid: c7be87970628f0b48b573093d51bd44f, type: 3}
+  - name: button
+    audioClip: {fileID: 8300000, guid: 092a99dd51bfd4c41977f3d2f2abb4da, type: 3}
+  - name: dagger
+    audioClip: {fileID: 8300000, guid: dba4209b444306341ab3896cd3390bc4, type: 3}
+  - name: die
+    audioClip: {fileID: 8300000, guid: e00da5fb117c5c74aa65f91441781c81, type: 3}
+  - name: hit
+    audioClip: {fileID: 8300000, guid: 0564a7238c13fde4682cff031f0824eb, type: 3}
+  - name: interact
+    audioClip: {fileID: 8300000, guid: 12777e3cad839cd45afb9fceba39f70f, type: 3}
+  - name: spear
+    audioClip: {fileID: 8300000, guid: 144d444efbd04bf4b8edd5bca4e15c67, type: 3}
+  - name: ice1
+    audioClip: {fileID: 8300000, guid: 8b984cd17f18b2a43857e6c403ecf8ea, type: 3}
+  - name: ice2
+    audioClip: {fileID: 8300000, guid: 4070c1504e57d0a49b4442dd74e88278, type: 3}
+  - name: ice3
+    audioClip: {fileID: 8300000, guid: c792c3b717224dc4c976ec7f08de1169, type: 3}
+--- !u!4 &608766307
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608766305}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &636425796
 GameObject:
   m_ObjectHideFlags: 0
@@ -2805,7 +2813,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &681031662 stripped
 Transform:
@@ -3021,244 +3029,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2787348605893511017, guid: b7c5f14d62a6fc044a25c5702ad5ff73, type: 3}
   m_PrefabInstance: {fileID: 807285869}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &835148978
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 835148979}
-  - component: {fileID: 835148983}
-  - component: {fileID: 835148982}
-  - component: {fileID: 835148981}
-  - component: {fileID: 835148980}
-  m_Layer: 5
-  m_Name: SceneTransitionImage
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &835148979
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835148978}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 27531724}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &835148980
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835148978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 75eba362258f61840a1a9527b87b16c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!95 &835148981
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835148978}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7230eb381be7ae646b60c90f014ef637, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &835148982
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835148978}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
-  m_RaycastTarget: 0
-  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
-  m_Maskable: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Sprite: {fileID: 0}
-  m_Type: 0
-  m_PreserveAspect: 0
-  m_FillCenter: 1
-  m_FillMethod: 4
-  m_FillAmount: 1
-  m_FillClockwise: 1
-  m_FillOrigin: 0
-  m_UseSpriteMesh: 0
-  m_PixelsPerUnitMultiplier: 1
---- !u!222 &835148983
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 835148978}
-  m_CullTransparentMesh: 1
---- !u!1 &861375077
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 861375079}
-  - component: {fileID: 861375078}
-  m_Layer: 0
-  m_Name: ObjectFinder
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &861375078
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 861375077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 14e88d55862c6b748a9c87e733193e17, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  prefabEntries:
-  - key: broadswordEffect
-    value: {fileID: 0}
-  - key: groundItem
-    value: {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
-  - key: chest
-    value: {fileID: 7876539795197064780, guid: d366340610a237340be5830e57a02b98, type: 3}
-  - key: ballista
-    value: {fileID: 1150477889065159250, guid: 4984220720a15ef42bdfeff35a0e4b40, type: 3}
-  - key: spin
-    value: {fileID: 1150477889065159250, guid: 7591538168fe32242ae5ef4cd358f346, type: 3}
-  - key: regen
-    value: {fileID: 1150477889065159250, guid: 69391adfe88f19e48b1c95581c20e6f7, type: 3}
-  - key: regenShot
-    value: {fileID: 5620128404347004703, guid: 027c3024041a5be45b0c3c7c0d4ea649, type: 3}
-  - key: regenPool
-    value: {fileID: 2801006091708425565, guid: 945730bc6b73bd94b8e29d9d17e90b84, type: 3}
-  - key: celestial
-    value: {fileID: 1150477889065159250, guid: 9b89ea099a5a20c479a22d80c0e63779, type: 3}
-  - key: flameShot
-    value: {fileID: 5620128404347004703, guid: 89c93ef34e856be45889f169394b602e, type: 3}
-  - key: flame
-    value: {fileID: 1150477889065159250, guid: 48e8e215a852fb64c9abd7c2b983226e, type: 3}
-  - key: flamePool
-    value: {fileID: 2801006091708425565, guid: 2f06c53d652076b4ba3d151ee91d88a2, type: 3}
-  - key: ice
-    value: {fileID: 1150477889065159250, guid: 60657e33bce592c40b52b8b2cec0d4d6, type: 3}
-  - key: iceShot
-    value: {fileID: 5620128404347004703, guid: 66a56904f364cbb4daaf09bbefbc3f37, type: 3}
-  - key: icePool
-    value: {fileID: 2801006091708425565, guid: d9917e8cdfddf404099739d4b57a5d97, type: 3}
-  - key: teslaShot
-    value: {fileID: 2666719200309487284, guid: e6d4ebab25dae134293c80bad793fe45, type: 3}
-  - key: tesla
-    value: {fileID: 1150477889065159250, guid: 268971c8fa1580d43a904332b20b728f, type: 3}
-  - key: iceWizardShot
-    value: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
-  - key: iceWizardShotDeath
-    value: {fileID: 5252816401415666444, guid: 63d199c7d21207d4faae5144ee6f5ca2, type: 3}
-  - key: hammerPool
-    value: {fileID: 8269245536949468360, guid: 5dd558cf9d3778c459a85b96999b5e05, type: 3}
-  - key: dragonShot
-    value: {fileID: 1002176068994504789, guid: b5a1572995282a34f86144a70b1a57fb, type: 3}
-  - key: dragonPool
-    value: {fileID: 2801006091708425565, guid: 70e0c41dbb980c0449e2ebafd593f654, type: 3}
-  - key: indicator
-    value: {fileID: 3847870000451203287, guid: 790eff88a9854f94aaa3a78683327429, type: 3}
-  - key: firePath
-    value: {fileID: 2801006091708425565, guid: 079d08151f951e742b66d9b39ca16748, type: 3}
-  - key: particleTrail
-    value: {fileID: 622507783171182362, guid: 4cd8e5b9cbe869c4abb46046ace23618, type: 3}
-  - key: broadswordParticles
-    value: {fileID: 485460337944506454, guid: 0f08a66316ee4ce4ab63e92c6270c973, type: 3}
-  - key: HammerIndicator
-    value: {fileID: 5103858983301164108, guid: 5163dc7445cba4c43be50946b5c6f48b, type: 3}
-  - key: HammerProjectile
-    value: {fileID: 5404901476592251585, guid: 7ccb62db75597d84681d28a654f9c291, type: 3}
-  - key: CelestialBuffEffect
-    value: {fileID: 2004727793591240830, guid: 14b6d9f4f00ffa94c8e89e708999174e, type: 3}
-  - key: GolemChain
-    value: {fileID: 6392207524536597030, guid: 606e0c0cc0b19724db978f126147dfe1, type: 3}
-  - key: ExplosiveDeath
-    value: {fileID: 2506707523895749022, guid: 6a9e7f6ca686a2a439c53065a162ae63, type: 3}
-  - key: SpearShot
-    value: {fileID: 5520317220571029984, guid: 75b2f3210b1b8ba4bba372ac41ee2b11, type: 3}
-  - key: slot
-    value: {fileID: 5665303421295874671, guid: 6f6cbd0c26f6359488129f1541dffeb9, type: 3}
-  - key: fireBootTrail
-    value: {fileID: 2801006091708425565, guid: 603ebed400f09e64a877a74442ba9365, type: 3}
-  - key: solar
-    value: {fileID: 1150477889065159250, guid: 12c2c22f4c5939c49a3bd66569ad02bf, type: 3}
-  - key: ghostTower
-    value: {fileID: 1150477889065159250, guid: 3ee09bc367937aa4f84579cc981bd729, type: 3}
-  - key: flamethrower
-    value: {fileID: 1150477889065159250, guid: 04a86c2b88b1d6e47b15de639867daae, type: 3}
-  - key: blackholeTower
-    value: {fileID: 1150477889065159250, guid: 41c659ef34e009946b6382b8564b208d, type: 3}
-  - key: blackholeShot
-    value: {fileID: 5067521168945854115, guid: 8e28d339a9ab7d94496e885426a77a51, type: 3}
-  - key: blackholePoof
-    value: {fileID: 8962233277319782168, guid: 612eb15b349900d46be75649c4ea3e91, type: 3}
-  - key: crystalPlate
-    value: {fileID: 7364631239115656474, guid: 15a575652d561d544875a643fd4fc652, type: 3}
-  mainSpriteAtlas: {fileID: 4343727234628468602, guid: f72388a137dbf724ea8fdd908e8f3ce8, type: 2}
---- !u!4 &861375079
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 861375077}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 8
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &915543089 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7689249238747058000, guid: e6f0277ce42a2664183da87d1c0150b8, type: 3}
@@ -4031,6 +3801,134 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5207424610088142580, guid: b7f0a6ec1b4bb024b8fb0074d90e0128, type: 3}
   m_PrefabInstance: {fileID: 5207424610764511776}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1524232626
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1524232628}
+  - component: {fileID: 1524232627}
+  m_Layer: 0
+  m_Name: ObjectFinder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1524232627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524232626}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 14e88d55862c6b748a9c87e733193e17, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  prefabEntries:
+  - key: broadswordEffect
+    value: {fileID: 0}
+  - key: groundItem
+    value: {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
+  - key: chest
+    value: {fileID: 7876539795197064780, guid: d366340610a237340be5830e57a02b98, type: 3}
+  - key: ballista
+    value: {fileID: 1150477889065159250, guid: 4984220720a15ef42bdfeff35a0e4b40, type: 3}
+  - key: spin
+    value: {fileID: 1150477889065159250, guid: 7591538168fe32242ae5ef4cd358f346, type: 3}
+  - key: regen
+    value: {fileID: 1150477889065159250, guid: 69391adfe88f19e48b1c95581c20e6f7, type: 3}
+  - key: regenShot
+    value: {fileID: 5620128404347004703, guid: 027c3024041a5be45b0c3c7c0d4ea649, type: 3}
+  - key: regenPool
+    value: {fileID: 2801006091708425565, guid: 945730bc6b73bd94b8e29d9d17e90b84, type: 3}
+  - key: celestial
+    value: {fileID: 1150477889065159250, guid: 9b89ea099a5a20c479a22d80c0e63779, type: 3}
+  - key: flameShot
+    value: {fileID: 5620128404347004703, guid: 89c93ef34e856be45889f169394b602e, type: 3}
+  - key: flame
+    value: {fileID: 1150477889065159250, guid: 48e8e215a852fb64c9abd7c2b983226e, type: 3}
+  - key: flamePool
+    value: {fileID: 2801006091708425565, guid: 2f06c53d652076b4ba3d151ee91d88a2, type: 3}
+  - key: ice
+    value: {fileID: 1150477889065159250, guid: 60657e33bce592c40b52b8b2cec0d4d6, type: 3}
+  - key: iceShot
+    value: {fileID: 5620128404347004703, guid: 66a56904f364cbb4daaf09bbefbc3f37, type: 3}
+  - key: icePool
+    value: {fileID: 2801006091708425565, guid: d9917e8cdfddf404099739d4b57a5d97, type: 3}
+  - key: teslaShot
+    value: {fileID: 2666719200309487284, guid: e6d4ebab25dae134293c80bad793fe45, type: 3}
+  - key: tesla
+    value: {fileID: 1150477889065159250, guid: 268971c8fa1580d43a904332b20b728f, type: 3}
+  - key: iceWizardShot
+    value: {fileID: 987306188816282981, guid: a0a860cf1536b994288096428bca821b, type: 3}
+  - key: iceWizardShotDeath
+    value: {fileID: 5252816401415666444, guid: 63d199c7d21207d4faae5144ee6f5ca2, type: 3}
+  - key: hammerPool
+    value: {fileID: 8269245536949468360, guid: 5dd558cf9d3778c459a85b96999b5e05, type: 3}
+  - key: dragonShot
+    value: {fileID: 1002176068994504789, guid: b5a1572995282a34f86144a70b1a57fb, type: 3}
+  - key: dragonPool
+    value: {fileID: 2801006091708425565, guid: 70e0c41dbb980c0449e2ebafd593f654, type: 3}
+  - key: indicator
+    value: {fileID: 3847870000451203287, guid: 790eff88a9854f94aaa3a78683327429, type: 3}
+  - key: firePath
+    value: {fileID: 2801006091708425565, guid: 079d08151f951e742b66d9b39ca16748, type: 3}
+  - key: particleTrail
+    value: {fileID: 622507783171182362, guid: 4cd8e5b9cbe869c4abb46046ace23618, type: 3}
+  - key: broadswordParticles
+    value: {fileID: 485460337944506454, guid: 0f08a66316ee4ce4ab63e92c6270c973, type: 3}
+  - key: HammerIndicator
+    value: {fileID: 5103858983301164108, guid: 5163dc7445cba4c43be50946b5c6f48b, type: 3}
+  - key: HammerProjectile
+    value: {fileID: 5404901476592251585, guid: 7ccb62db75597d84681d28a654f9c291, type: 3}
+  - key: CelestialBuffEffect
+    value: {fileID: 2004727793591240830, guid: 14b6d9f4f00ffa94c8e89e708999174e, type: 3}
+  - key: GolemChain
+    value: {fileID: 6392207524536597030, guid: 606e0c0cc0b19724db978f126147dfe1, type: 3}
+  - key: ExplosiveDeath
+    value: {fileID: 2506707523895749022, guid: 6a9e7f6ca686a2a439c53065a162ae63, type: 3}
+  - key: SpearShot
+    value: {fileID: 5520317220571029984, guid: 75b2f3210b1b8ba4bba372ac41ee2b11, type: 3}
+  - key: slot
+    value: {fileID: 5665303421295874671, guid: 6f6cbd0c26f6359488129f1541dffeb9, type: 3}
+  - key: fireBootTrail
+    value: {fileID: 2801006091708425565, guid: 603ebed400f09e64a877a74442ba9365, type: 3}
+  - key: solar
+    value: {fileID: 1150477889065159250, guid: 12c2c22f4c5939c49a3bd66569ad02bf, type: 3}
+  - key: ghostTower
+    value: {fileID: 1150477889065159250, guid: 3ee09bc367937aa4f84579cc981bd729, type: 3}
+  - key: flamethrower
+    value: {fileID: 1150477889065159250, guid: 04a86c2b88b1d6e47b15de639867daae, type: 3}
+  - key: blackholeTower
+    value: {fileID: 1150477889065159250, guid: 41c659ef34e009946b6382b8564b208d, type: 3}
+  - key: blackholeShot
+    value: {fileID: 5067521168945854115, guid: 8e28d339a9ab7d94496e885426a77a51, type: 3}
+  - key: blackholePoof
+    value: {fileID: 8962233277319782168, guid: 612eb15b349900d46be75649c4ea3e91, type: 3}
+  - key: crystalPlate
+    value: {fileID: 7364631239115656474, guid: 15a575652d561d544875a643fd4fc652, type: 3}
+  mainSpriteAtlas: {fileID: 4343727234628468602, guid: f72388a137dbf724ea8fdd908e8f3ce8, type: 2}
+--- !u!4 &1524232628
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1524232626}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1595905841 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5902723317908624271, guid: 8fdab5f55a0d23b44aa0ce5037ff85ee, type: 3}
@@ -16466,7 +16364,7 @@ PrefabInstance:
       objectReference: {fileID: 60166312}
     - target: {fileID: 8211467678594754315, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
       propertyPath: m_RootOrder
-      value: 6
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8211467678594754315, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
       propertyPath: m_LocalPosition.x

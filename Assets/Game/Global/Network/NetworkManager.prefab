@@ -689,7 +689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7946368391397325085}
   - component: {fileID: 7946368391397325074}
-  - component: {fileID: 7946368391397325075}
+  - component: {fileID: 1057266554955491540}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -725,13 +725,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ded5d9c2bc51eb44914cf836366dc6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
   runInBackground: 1
   autoStartServerBuild: 1
-  serverTickRate: 30
-  offlineScene: Assets/Scenes/MainMenuScene.unity
+  autoConnectClientBuild: 0
+  sendRate: 30
+  offlineScene: 
   onlineScene: 
-  transport: {fileID: 7946368391397325075}
+  transport: {fileID: 1057266554955491540}
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
@@ -742,12 +743,12 @@ MonoBehaviour:
   - {fileID: 6097897818081006955, guid: 4c493b66d2d662742bf60ed6050984a0, type: 3}
   - {fileID: 1295298609159820296, guid: 12e52aed3e36ce34f9507c02bf551ed0, type: 3}
   - {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
-  - {fileID: 7876539795197064780, guid: d366340610a237340be5830e57a02b98, type: 3}
-  - {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
-  connectUIObject: {fileID: 7946368391365645739}
+  timeInterpolationGui: 0
   lobbyManagerPrefab: {fileID: 6097897818081006955, guid: 4c493b66d2d662742bf60ed6050984a0, type: 3}
-  networkedManagersPrefab: {fileID: 0}
---- !u!114 &7946368391397325075
+  connectUIObject: {fileID: 7946368391365645739}
+  joinButton: {fileID: 7946368390871879873}
+  hostButton: {fileID: 7946368392094228105}
+--- !u!114 &1057266554955491540
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -756,26 +757,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 7946368391397325072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6b0fecffa3f624585964b0d0eb21b18e, type: 3}
+  m_Script: {fileID: 11500000, guid: e6e55fca1f4e4844593a3dd65a3ecb39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Port: 7777
-  DualMode: 1
-  NoDelay: 1
-  Interval: 10
-  Timeout: 10000
-  FastResend: 2
-  CongestionWindow: 0
-  SendWindowSize: 4096
-  ReceiveWindowSize: 4096
-  MaxRetransmit: 40
-  NonAlloc: 1
-  MaximizeSendReceiveBuffersToOSLimit: 1
-  ReliableMaxMessageSize: 298449
-  UnreliableMaxMessageSize: 1199
-  debugLog: 0
-  statisticsGUI: 0
-  statisticsLog: 0
+  Channels: 0200000001000000
+  Timeout: 25
+  AllowSteamRelay: 1
+  UseNextGenSteamNetworking: 1
 --- !u!1 &7946368391477807326
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,9 +1,13 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
+using Steamworks;
 using TMPro;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global.Console;
+using TonyDev.Game.Level;
 using TonyDev.Game.UI.Lobby;
 using UnityEditor;
 using UnityEngine;
@@ -34,6 +38,14 @@ namespace TonyDev.Game.Global.Network
         private void OnPlayerCountChange(int oldValue, int newValue)
         {
             playerCountText.text = newValue + "/4";
+            SteamFriends.SetRichPresence("status", $"In lobby. ({newValue}/{NetworkManager.singleton.maxConnections})");
+        }
+
+
+        public override void OnStartServer()
+        {
+            playButton.onClick.AddListener(Play);
+            playButton.interactable = true;
         }
 
         private void Awake()
@@ -41,40 +53,60 @@ namespace TonyDev.Game.Global.Network
             playButton.interactable = false;
         }
 
-        public override void OnStartAuthority()
-        {
-            base.OnStartAuthority();
-
-            playButton.interactable = true;
-            playButton.onClick.AddListener(Play);
-        }
-
         [Server]
         private void Play()
         {
             playButton.interactable = false;
-            GameConsole.Log("Starting game...");
 
             foreach (var (key, value) in _playerTiles)
             {
                 UsernameDict[key] = value.username;
             }
+            
+            Debug.Log("Calling Cmd!");
+            
+            CmdBroadcastUsernames(UsernameDict.Keys.ToArray(), UsernameDict.Values.ToArray());
+            
+            PlayTask().Forget();
+        }
+        
+        [Server]
+        private async UniTask PlayTask()
+        {
+            GameConsole.Log("Starting game...");
+            
+            CmdFadeOut();
 
-            CmdFinishLobby(UsernameDict.Keys.ToArray(), UsernameDict.Values.ToArray());
+            await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds));
 
-            OnPlay?.Invoke();
+            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            
+            //OnPlay?.Invoke();
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdFinishLobby(int[] keys, string[] values)
+        private void CmdFadeOut()
         {
-            RpcSetUsernames(keys, values);
-            NetworkServer.Destroy(gameObject);
+            RpcFadeOut();
+        }
+        
+        [ClientRpc(includeOwner = true)]
+        private void RpcFadeOut()
+        {
+            TransitionController.Instance.FadeOut();
         }
 
-        [ClientRpc]
+        [Command(requiresAuthority = false)]
+        public void CmdBroadcastUsernames(int[] keys, string[] values)
+        {
+            Debug.Log("Cmd!");
+            RpcSetUsernames(keys, values);
+        }
+
+        [ClientRpc(includeOwner = true)]
         private void RpcSetUsernames(int[] keys, string[] values)
         {
+            Debug.Log("Rpc!");
             var newDict = new Dictionary<int, string>();
             for (var i = 0; i < keys.Length; i++)
             {
@@ -84,9 +116,11 @@ namespace TonyDev.Game.Global.Network
         }
 
         [Server]
-        public void OnNewPlayerConnected(NetworkConnectionToClient conn = null)
+        public async UniTask OnNewPlayerConnected(NetworkConnectionToClient conn)
         {
             if (conn == null) return;
+
+            await UniTask.DelayFrame(1);
 
             var connId = conn.connectionId;
 
@@ -99,13 +133,26 @@ namespace TonyDev.Game.Global.Network
 
             var newTile = Instantiate(playerTilePrefab, playerGridTransform);
 
-            NetworkServer.Spawn(newTile);
+            NetworkServer.Spawn(newTile, conn);
 
-            newTile.GetComponent<NetworkIdentity>().AssignClientAuthority(conn);
+            var tile = newTile.GetComponent<ConnectedPlayerTile>();
+            
+            tile.netIdentity.AssignClientAuthority(conn);
+            
+            await UniTask.DelayFrame(1);
 
             RpcOnNewTileCreated(newTile, connId); //Instantiate a tile for the newly joined player on all clients.
 
             _lobbyPlayerCount += 1;
+        }
+
+        [Server]
+        public void OnPlayerLeave(NetworkConnectionToClient conn)
+        {
+            if (conn == null) return;
+            
+            NetworkServer.Destroy(_playerTiles[conn.connectionId].gameObject);
+            _lobbyPlayerCount -= 1;
         }
 
         [TargetRpc]

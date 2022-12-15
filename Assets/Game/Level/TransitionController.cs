@@ -1,4 +1,5 @@
 using System;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -48,6 +49,19 @@ namespace TonyDev.Game.Level
         public void FadeOutDone()
         {
             OutTransitionDone = true;
+        }
+
+        public static void TransitionScene(string destination)
+        {
+            TransitionSceneTask(destination).Forget();
+        }
+
+        private static async UniTask TransitionSceneTask(string destination)
+        {
+            Instance.FadeOut();
+            await UniTask.WaitUntil(() => Instance.OutTransitionDone);
+            await SceneManager.LoadSceneAsync(destination);
+            Instance.FadeIn();
         }
     }
 }

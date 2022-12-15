@@ -25,6 +25,8 @@ namespace TonyDev.Game.Global.Console
 
         private static GameConsole _instance;
 
+        public static bool Exists => _instance != null;
+        
         public static bool IsTyping => _instance.consoleUIInput.isFocused;
 
         private float _sleepTimer;

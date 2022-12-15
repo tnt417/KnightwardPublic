@@ -18,8 +18,7 @@ namespace TonyDev.Game.Global
         private Rect _cameraBounds = Rect.zero;
         private float _z;
         private static Transform PlayerTransform => Player.LocalInstance.transform;
-        private static Transform CrystalTransform => Crystal.Instance.transform;
-    
+
         private void Start()
         {
             _z = transform.position.z; //Set the initial z level of the camera so it can be kept constant
@@ -84,11 +83,15 @@ namespace TonyDev.Game.Global
             _cameraBounds = Rect.zero; //Clears the camera bounds
         }
 
+        private Vector2 _crystalPos;
+        
         private void Update()
         {
 
             if (Player.LocalInstance == null) return;
 
+            if (_crystalPos == default && Crystal.Instance != null) _crystalPos = Crystal.Instance.transform.position;
+            
             if (_fixateNext)
             {
                 var fixatePos = new Vector3(PlayerTransform.position.x, PlayerTransform.position.y, _z);
@@ -97,12 +100,12 @@ namespace TonyDev.Game.Global
                 return;
             }
             
-            var trackCrystal = Input.GetKey(KeyCode.LeftAlt);
+            var trackCrystal = Input.GetKey(KeyCode.LeftAlt) || GameManager.Instance.doCrystalFocusing;
             Vector2 newPos;
             if (GameManager.GamePhase == GamePhase.Dungeon && trackCrystal) //This is done to prevent me from being dizzy.
             {
-                newPos = CrystalTransform.position;
-            }else newPos = Vector2.Lerp(transform.position, trackCrystal ? CrystalTransform.position : PlayerTransform.position
+                newPos = _crystalPos;
+            }else newPos = Vector2.Lerp(transform.position, trackCrystal ? _crystalPos : PlayerTransform.position
                 , followSpeed * Time.deltaTime); //Lerp towards the player's position. Or the crystal's if the key is held.
 
             if (GameManager.GamePhase == GamePhase.Dungeon && Input.GetKeyUp(KeyCode.LeftAlt)) //This is done to prevent me from being dizzy.
