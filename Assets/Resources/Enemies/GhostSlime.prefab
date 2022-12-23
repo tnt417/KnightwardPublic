@@ -293,6 +293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 123d362b97c6cf04486ba1b2372ef39e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   animator: {fileID: 7080094185981754642}
@@ -308,6 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fc0e2acef1e60784c9f1cbb60f9a3759, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   targetTag: 
@@ -339,6 +341,7 @@ MonoBehaviour:
       hitboxRadius: 0.4
       team: 1
       destroyOnApply: 0
+      destroyOnCollideWall: 0
       lifetime: 0
       spawnOnDestroyKey: 
       ignoreInvincibility: 0
@@ -380,9 +383,9 @@ Rigidbody2D:
   m_AngularDrag: 0.05
   m_GravityScale: 0
   m_Material: {fileID: 0}
-  m_Interpolate: 0
-  m_SleepingMode: 0
-  m_CollisionDetection: 1
+  m_Interpolate: 1
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
   m_Constraints: 4
 --- !u!58 &408949789115778733
 CircleCollider2D:
@@ -413,9 +416,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2409325644
   serverOnly: 0
   visible: 0
-  m_AssetId: 5f5c69ed1cb30f04c8d5b614dac475cb
   hasSpawned: 0
 --- !u!114 &-5837359734184844230
 MonoBehaviour:
@@ -429,25 +432,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
-  syncInterval: 0.05
+  syncInterval: 0
+  target: {fileID: 7080094185981754655}
   clientAuthority: 0
-  sendInterval: 0.05
-  syncPosition: 1
-  syncRotation: 0
-  syncScale: 0
-  interpolatePosition: 1
-  interpolateRotation: 0
-  interpolateScale: 0
-  bufferTimeMultiplier: 3
-  bufferSizeLimit: 64
-  catchupThreshold: 6
-  catchupMultiplier: 0.1
   onlySyncOnChange: 1
   bufferResetMultiplier: 5
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+  syncPosition: 1
+  syncRotation: 0
+  syncScale: 0
   showGizmos: 0
   showOverlay: 0
   overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
@@ -489,6 +486,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5e5d64adeefbb24b87a5e4f8b630731, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipRenderer: {fileID: 0}
+  flipFlip: 0
   chaseSpeedMultiplier: 2
 --- !u!1001 &7080094185844148543
 PrefabInstance:

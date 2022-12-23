@@ -43,7 +43,7 @@ namespace TonyDev.Game.UI.Tower
             {
                 foreach (var t in FindObjectsOfType<Core.Entities.Towers.Tower>())
                 {
-                    if (t.CurrentParentIdentity != null && t.CurrentParentIdentity.GetComponent<Room>() != null)
+                    if (t.CurrentParentIdentity != null)
                     {
                         t.CmdRequestPickup(); //Pickup all towers that are in the dungeon, whenever rooms are changed
                     }

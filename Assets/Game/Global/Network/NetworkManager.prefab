@@ -519,7 +519,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 7946368390938905434}
   m_TextViewport: {fileID: 7946368390654880028}
   m_TextComponent: {fileID: 7946368390925162918}
@@ -596,7 +596,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7946368391365645738
 RectTransform:
   m_ObjectHideFlags: 0
@@ -725,29 +725,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ded5d9c2bc51eb44914cf836366dc6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 0
+  dontDestroyOnLoad: 1
   runInBackground: 1
   autoStartServerBuild: 1
   autoConnectClientBuild: 0
   sendRate: 30
-  offlineScene: 
-  onlineScene: 
+  offlineScene: Assets/Scenes/MainMenuScene.unity
+  onlineScene: Assets/Scenes/LobbyScene.unity
   transport: {fileID: 1057266554955491540}
   networkAddress: localhost
   maxConnections: 4
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 4981228928076747058, guid: 72b85c659924a5d4abc2ee6ab8b460a1, type: 3}
-  autoCreatePlayer: 0
-  playerSpawnMethod: 0
+  autoCreatePlayer: 1
+  playerSpawnMethod: 1
   spawnPrefabs:
   - {fileID: 6097897818081006955, guid: 4c493b66d2d662742bf60ed6050984a0, type: 3}
   - {fileID: 1295298609159820296, guid: 12e52aed3e36ce34f9507c02bf551ed0, type: 3}
   - {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
   timeInterpolationGui: 0
-  lobbyManagerPrefab: {fileID: 6097897818081006955, guid: 4c493b66d2d662742bf60ed6050984a0, type: 3}
-  connectUIObject: {fileID: 7946368391365645739}
-  joinButton: {fileID: 7946368390871879873}
-  hostButton: {fileID: 7946368392094228105}
+  showRoomGUI: 0
+  minPlayers: 1
+  roomPlayerPrefab: {fileID: 727134826768173101, guid: d988b3e1f3a719d48b7eb6439d49a2d1, type: 3}
+  RoomScene: Assets/Scenes/LobbyScene.unity
+  GameplayScene: Assets/Scenes/CastleScene.unity
+  _allPlayersReady: 0
+  roomSlots: []
+  clientIndex: 0
 --- !u!114 &1057266554955491540
 MonoBehaviour:
   m_ObjectHideFlags: 0

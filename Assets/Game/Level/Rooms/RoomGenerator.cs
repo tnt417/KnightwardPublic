@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
@@ -12,8 +13,62 @@ using Random = UnityEngine.Random;
 namespace TonyDev.Game.Level.Rooms
 {
     [Serializable]
-    public struct Map
+    public struct SerializableMap
     {
+        public SerializableMap(uint[,] rooms, Vector2Int startingRoomPos)
+        {
+            Rooms = rooms;
+            StartingRoomPos = startingRoomPos;
+        }
+
+        public readonly uint[,] Rooms;
+        public readonly Vector2Int StartingRoomPos;
+
+        public static SerializableMap FromMap(Map map)
+        {
+            if (map.Rooms == null) return new SerializableMap(null, Vector2Int.zero);
+            
+            var width = map.Rooms.GetLength(0);
+            var height = map.Rooms.GetLength(1);
+            
+            var ids = new uint[width, height];
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    var room = map.Rooms[x, y];
+
+                    if (room == null) continue;
+                    
+                    ids[x, y] = map.Rooms[x, y].netId;
+                }
+            }
+
+            return new SerializableMap(ids, map.StartingRoomPos);
+        }
+    }
+    
+    public readonly struct Map
+    {
+        public static Map FromSerializable(SerializableMap serializableMap)
+        {
+            if (serializableMap.Rooms == null) return new Map(null, Vector2Int.zero);
+            
+            var width = serializableMap.Rooms.GetLength(0);
+            var height = serializableMap.Rooms.GetLength(1);
+            
+            var rooms = new Room[width, height];
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    rooms[x, y] = RoomManager.Instance.GetRoomFromID(serializableMap.Rooms[x, y]);
+                }
+            }
+
+            return new Map(rooms, serializableMap.StartingRoomPos);
+        }
+        
         public Map(Room[,] rooms, Vector2Int startingRoomPos)
         {
             Rooms = rooms;
@@ -28,7 +83,6 @@ namespace TonyDev.Game.Level.Rooms
         {
             for (var i = 0; i < Rooms.GetLength(0); i++)
             {
-                
                 for (var j = 0; j < Rooms.GetLength(1); j++)
                 {
                     if (Rooms[i, j] == room) return new Vector2Int(i, j);
@@ -38,7 +92,7 @@ namespace TonyDev.Game.Level.Rooms
             return new Vector2Int(0, 0);
         }
     }
-
+    
     public enum RoomGenerateTier
     {
         Common,
@@ -91,10 +145,11 @@ namespace TonyDev.Game.Level.Rooms
         {
             if (!GameManager.Instance.isServer) return default;
 
-            if (_generated) return roomManager.map;
+            if (_generated) return roomManager.Map;
 
-            var theme = config.mapZones.Where(z => floor%config.loopPoint >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
-            
+            var theme = config.mapZones.Where(z => floor % config.loopPoint >= z.startFloor)
+                .OrderByDescending(z => z.startFloor).FirstOrDefault();
+
             var guaranteedGeneratePrefabs = theme.roomEntries.Where(r => r.tier == RoomGenerateTier.Guaranteed)
                 .Select(r => r.roomPrefab).ToArray();
 
@@ -114,7 +169,7 @@ namespace TonyDev.Game.Level.Rooms
             var chosenPrefabs = new List<GameObject>();
 
             var genTimeout = Time.time + 2f;
-            
+
             while (remainingCommon > 0 && Time.time < genTimeout)
             {
                 var tier = remainingGuaranteed == 0
@@ -145,22 +200,23 @@ namespace TonyDev.Game.Level.Rooms
                 for (var j = 0; j < MapSize; j++)
                 {
                     if (generateShape[i, j] == 0) continue; //If the shape says not to generate, move on
-                    
+
                     var prefab = Tools.SelectRandom(chosenPrefabs); //Randomly scramble the prefabs across the map
 
                     if (prefab.CompareTag("StartRoom")) _startingRoomPos = new Vector2Int(i, j);
-                    
+
                     prefabs[i, j] = prefab;
-                    
+
                     chosenPrefabs.Remove(prefab);
                 }
             }
 
             for (var i = 0; i < MapSize; i++) //Generate every room
             for (var j = 0; j < MapSize; j++)
+            {
                 rooms[i, j] = GenerateRoom(new Vector2Int(i, j), prefabs[i, j]);
+            }
 
-            //rooms[_startingRoomPos.x, _startingRoomPos.y].gameObject.SetActive(true);
             _generated = true;
             return new Map(rooms, _startingRoomPos);
         }
@@ -168,35 +224,15 @@ namespace TonyDev.Game.Level.Rooms
         [Server]
         public Map GenerateBossMap(int floor)
         {
-            var theme = config.mapZones.Where(z => (floor-1)%config.loopPoint+1 >= z.startFloor).OrderByDescending(z => z.startFloor).FirstOrDefault();
-            
+            var theme = config.mapZones.Where(z => (floor - 1) % config.loopPoint + 1 >= z.startFloor)
+                .OrderByDescending(z => z.startFloor).FirstOrDefault();
+
             var rooms = new Room[MapSize, MapSize];
             rooms[mapRadius, mapRadius] = GenerateRoom(new Vector2Int(mapRadius, mapRadius),
                 Tools.SelectRandom(theme.roomEntries.Where(re => re.tier == RoomGenerateTier.Boss)).roomPrefab);
 
             return new Map(rooms, new Vector2Int(mapRadius, mapRadius));
         }
-
-        /*private GameObject GetRandomValidPrefab(Vector2Int index, int[,] shape, RoomGenerateTier tier)
-        {
-            var neededDoors = new List<Direction>();
-
-            if ((index.y + 1 < shape.GetLength(1) ? shape[index.x, index.y + 1] : 0) == 1)
-                neededDoors.Add(Direction.Up);
-            if ((index.y - 1 > 0 ? shape[index.x, index.y - 1] : 0) == 1)
-                neededDoors.Add(Direction.Down);
-            if ((index.x - 1 > 0 ? shape[index.x - 1, index.y] : 0) == 1)
-                neededDoors.Add(Direction.Left);
-            if ((index.x + 1 < shape.GetLength(0) ? shape[index.x + 1, index.y] : 0) == 1)
-                neededDoors.Add(Direction.Right);
-
-            var validPrefabs = roomEntries.Where(r => r.tier == tier).Select(r => r.roomPrefab).Where(r =>
-                neededDoors.TrueForAll(nd => r.GetComponent<Room>().GetDoorDirections().Contains(nd)));
-
-            var prefab = Tools.SelectRandom(validPrefabs);
-
-            return prefab;
-        }*/
 
         private Room GenerateRoom(Vector2Int index, GameObject prefab)
         {
@@ -212,84 +248,6 @@ namespace TonyDev.Game.Level.Rooms
             return go.GetComponent<Room>();
             //
         }
-
-        /*private int[,] GetMapShape(float roomCount) //Returns a generated int[,] that will determine the shape of the map
-        {
-            var branchShape =
-                new int[MapSize, MapSize]; //Map of 1s and 0s that will determine if a room is generated in a spot.
-
-            //Branch out cardinals, with a chance to continue/end the branch every step.
-            for (var x = mapRadius; x >= 0; x--) //LEFT BRANCH
-            {
-                if (Random.Range(0, 100) <= branchChance) branchShape[x, mapRadius] = 1;
-                else
-                {
-                    branchShape[x, mapRadius] = 0;
-                    break;
-                }
-            }
-
-            for (var x = mapRadius; x < MapSize; x++) //RIGHT BRANCH
-            {
-                if (Random.Range(0, 100) <= branchChance) branchShape[x, mapRadius] = 1;
-                else
-                {
-                    branchShape[x, mapRadius] = 0;
-                    break;
-                }
-            }
-
-            for (var y = mapRadius; y < MapSize; y++) //TOP BRANCH
-            {
-                if (Random.Range(0, 100) <= branchChance) branchShape[mapRadius, y] = 1;
-                else
-                {
-                    branchShape[mapRadius, y] = 0;
-                    break;
-                }
-            }
-
-            for (var y = mapRadius; y >= 0; y--) //BOTTOM BRANCH
-            {
-                if (Random.Range(0, 100) <= branchChance) branchShape[mapRadius, y] = 1;
-                else
-                {
-                    branchShape[mapRadius, y] = 0;
-                    break;
-                }
-            }
-            //
-
-            branchShape[mapRadius, mapRadius] = 1; //Make start room generate, obviously
-
-            var twigShape = new int[MapSize, MapSize]; //Separate array for the "twigs"
-
-            //Chance to generate rooms adjacent to the branches (twigs)
-            for (var i = 1; i < MapSize - 1; i++)
-            {
-                for (var j = 1; j < MapSize - 1; j++)
-                {
-                    if (branchShape[i, j] == 0) continue;
-                    if (Random.Range(0, 100) <= twigChance) twigShape[i + 1, j] = 1;
-                    if (Random.Range(0, 100) <= twigChance) twigShape[i - 1, j] = 1;
-                    if (Random.Range(0, 100) <= twigChance) twigShape[i, j + 1] = 1;
-                    if (Random.Range(0, 100) <= twigChance) twigShape[i, j - 1] = 1;
-                }
-            }
-            //
-
-            //Add the twig shape to the branch shape...
-            for (var i = 0; i < MapSize; i++)
-            {
-                for (var j = 0; j < MapSize; j++)
-                {
-                    if (twigShape[i, j] == 1) branchShape[i, j] = 1;
-                }
-            }
-            //
-
-            return branchShape; //...and return the final shape array
-        }*/
 
         //based on this website: https://www.boristhebrave.com/2020/09/12/dungeon-generation-in-binding-of-isaac/
         private int[,] GetMapShape(float roomCount)

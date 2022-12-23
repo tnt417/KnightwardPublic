@@ -62,20 +62,21 @@ namespace TonyDev.Game.UI.Lobby
 
         private static Sprite GetPlayerImage(ulong id)
         {
-            var avatarHandle = SteamFriends.GetMediumFriendAvatar(new CSteamID(id));
-            return GetSteamImageAsTexture(avatarHandle);
+            return GetSteamImageAsTexture(id);
         }
 
-        private static Sprite GetSteamImageAsTexture(int iImage)
+        private static Sprite GetSteamImageAsTexture(ulong id)
         {
+            var avatarHandle = SteamFriends.GetMediumFriendAvatar(new CSteamID(id));
+            
             Texture2D texture = null;
 
-            bool isValid = SteamUtils.GetImageSize(iImage, out uint width, out uint height);
+            bool isValid = SteamUtils.GetImageSize(avatarHandle, out uint width, out uint height);
             if (isValid)
             {
                 byte[] image = new byte[width * height * 4];
 
-                isValid = SteamUtils.GetImageRGBA(iImage, image, (int) (width * height * 4));
+                isValid = SteamUtils.GetImageRGBA(avatarHandle, image, (int) (width * height * 4));
 
                 if (isValid)
                 {

@@ -108,6 +108,8 @@ namespace TonyDev.Game.Level.Decorations
 
         protected void Update()
         {
+            if (!Active) return;
+            
             foreach (var kc in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Input.GetKeyDown(kv.Key) && IsInteractable))
             {
                 if (kc.Value == InteractType.Interact && cost != 0)
@@ -158,6 +160,8 @@ namespace TonyDev.Game.Level.Decorations
             get => _active;
         }
 
+        private static Interactable _current;
+        
         private void OnTriggerEnter2D(Collider2D other)
         {
             var id = other.GetComponent<NetworkIdentity>();
@@ -165,7 +169,28 @@ namespace TonyDev.Game.Level.Decorations
             if (id == null || !id.isLocalPlayer) return;
 
             if (!other.isTrigger || !other.CompareTag("Player") || !IsInteractable) return;
-            Active = true;
+
+            if (_current == null)
+            {
+                _current = this;
+                Active = true;
+                return;
+            }
+            
+            if (_current != this)
+            {
+                if (Vector2.Distance(other.transform.position, _current.transform.position) <
+                    Vector2.Distance(other.transform.position, transform.position)) // If the current one is closer, don't activate.
+                {
+                    Active = false;
+                }
+                else
+                {
+                    _current.Active = false;
+                    _current = this;
+                    Active = true;   
+                }
+            }
         }
 
         private void OnTriggerStay2D(Collider2D other)
@@ -173,6 +198,7 @@ namespace TonyDev.Game.Level.Decorations
             if (!IsInteractable)
             {
                 Active = false;
+                if (_current == this) _current = null;
                 return;
             }
             
@@ -182,7 +208,24 @@ namespace TonyDev.Game.Level.Decorations
             
             if (!other.isTrigger || !other.CompareTag("Player")) return;
 
-            Active = true;
+            if (_current == null)
+            {
+                Active = true;
+                _current = this;
+                return;
+            }
+            
+            if (Vector2.Distance(other.transform.position, _current.transform.position) <
+                Vector2.Distance(other.transform.position, transform.position)) // If the current one is closer, don't activate.
+            {
+                Active = false;
+            }
+            else
+            {
+                _current.Active = false;
+                Active = true;
+                _current = this;
+            }
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -192,7 +235,13 @@ namespace TonyDev.Game.Level.Decorations
             if (id == null || !id.isLocalPlayer) return;
 
             if (!other.isTrigger || !other.CompareTag("Player")) return;
+            
             Active = false;
+
+            if (_current == this)
+            {
+                _current = null;
+            }
         }
 
         private void SetActive(bool active)

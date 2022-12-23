@@ -104,8 +104,8 @@ namespace TonyDev
         {
             while (this != null)
             {
-                await UniTask.WaitForFixedUpdate();
                 gameObject.SetActive(_purchasableFunc.Invoke() && UpgradeManager.Instance.filter.Contains(_category));
+                await UniTask.WaitForFixedUpdate();
             }
         }
     }

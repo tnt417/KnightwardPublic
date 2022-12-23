@@ -4,11 +4,13 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.Global.Console
 {
@@ -25,8 +27,6 @@ namespace TonyDev.Game.Global.Console
 
         private static GameConsole _instance;
 
-        public static bool Exists => _instance != null;
-        
         public static bool IsTyping => _instance.consoleUIInput.isFocused;
 
         private float _sleepTimer;
@@ -34,12 +34,21 @@ namespace TonyDev.Game.Global.Console
         private void Awake()
         {
             //Singleton code
-            if (_instance == null || _instance == this) _instance = this;
-            else Destroy(transform.root.gameObject);
+            if (_instance != null)
+            {
+                Destroy(transform.root.gameObject);
+                return;
+            }
+            _instance = this;
             //
+
+            SceneManager.sceneLoaded += OnSceneLoad;
 
             DontDestroyOnLoad(gameObject.transform.root.gameObject);
 
+            _disabled = true;
+            consoleUIObject.SetActive(false);
+            
             consoleUIInput.onFocusSelectAll = false;
 
             consoleUIInput.onSubmit.AddListener(OnTextInput);
@@ -51,8 +60,25 @@ namespace TonyDev.Game.Global.Console
             Log("Welcome!");
         }
 
+        private bool _disabled = true;
+        
+        private void OnSceneLoad(Scene scene, LoadSceneMode mode)
+        {
+            if (scene.name == "MainMenuScene")
+            {
+                _disabled = true;
+                consoleUIObject.SetActive(false);
+            }
+            else
+            {
+                _disabled = false;
+            }
+        }
+
         private void Update()
         {
+            if (_disabled) return;
+            
             if (consoleUIObject.activeSelf)
             {
                 if (!consoleUIInput.isFocused)
@@ -86,6 +112,8 @@ namespace TonyDev.Game.Global.Console
 
         private void OnTextInput(string input)
         {
+            if (_disabled) return;
+            
             consoleUIInput.OnDeselect(new BaseEventData(EventSystem.current));
             consoleUIInput.text = "";
 
@@ -103,7 +131,7 @@ namespace TonyDev.Game.Global.Console
 
             if (GameManager.Instance != null)
             {
-                GameManager.Instance.CmdWriteChatMessage(input);
+                GameManager.Instance.CmdWriteChatMessage(input, CustomRoomPlayer.Local);
             }
         }
 
@@ -111,6 +139,8 @@ namespace TonyDev.Game.Global.Console
 
         private void OnSendCommand(string input)
         {
+            if (_disabled) return;
+            
             var words = input.Split(' ');
             var keyword = words[0];
 
@@ -170,11 +200,13 @@ namespace TonyDev.Game.Global.Console
         {
             if (string.IsNullOrEmpty(text)) return;
 
-            _instance._sleepTimer = 0;
-            _instance.consoleUIObject.SetActive(true);
-            
             _instance._consoleStringBuilder.AppendLine(text);
             _instance.consoleUIText.text = _instance._consoleStringBuilder.ToString();
+            
+            if (_instance._disabled) return;
+            
+            _instance._sleepTimer = 0;
+            _instance.consoleUIObject.SetActive(true);
         }
     }
 }

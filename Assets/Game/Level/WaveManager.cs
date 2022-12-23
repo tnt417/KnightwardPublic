@@ -44,7 +44,7 @@ namespace TonyDev.Game.Level
 
         private static float DifficultyThreshold =>
             500f * (1f + Mathf.Pow(GameManager.EnemyDifficultyScale, 1.15f) / 1.5f) *
-            (0.55f + 0.45f * NetworkServer.connections.Count);
+            (0.8f + 0.2f * NetworkServer.connections.Count);
 
         private float _waveTimer = 0;
         public int wavesSpawned = 0;
@@ -127,7 +127,7 @@ namespace TonyDev.Game.Level
                 }
                 else
                 {
-                    var newRoom = p.CurrentParentIdentity.GetComponent<Room>();
+                    var newRoom = RoomManager.Instance.GetRoomFromID(p.CurrentParentIdentity.netId);
 
                     total += newRoom.timeMultiplier;
                 }

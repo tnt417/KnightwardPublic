@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using TMPro;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
@@ -13,10 +15,12 @@ namespace TonyDev
     {
         public Vector2 DamageProportionRange;
         public float PercentHealthThreshold;
+        public Vector2 ProjectileAmountRange;
 
         public ProjectileData ProjectileData;
 
         private float DamageProportion => LinearScale(DamageProportionRange.x, DamageProportionRange.y, 50);
+        private int Projectiles => (int)LinearScale(ProjectileAmountRange.x, ProjectileAmountRange.y, 50);
 
         public override void OnAddOwner()
         {
@@ -33,10 +37,21 @@ namespace TonyDev
 
             if (_stored >= PercentHealthThreshold * Entity.NetworkMaxHealth)
             {
-                ProjectileData.attackData.damageMultiplier = _stored * DamageProportion / Entity.Stats.GetStat(Stat.Damage);
-                ObjectSpawner.SpawnProjectile(Entity, Entity.transform.position, Vector2.zero, ProjectileData, true);
-                _stored = 0;
+                Shoot().Forget();
             }
+        }
+
+        private async UniTask Shoot()
+        {
+            ProjectileData.attackData.damageMultiplier =
+                _stored * DamageProportion / Entity.Stats.GetStat(Stat.Damage);
+            for (int i = 0; i < Projectiles; i++)
+            {
+                ObjectSpawner.SpawnProjectile(Entity, Entity.transform.position, Vector2.zero, ProjectileData,
+                    true);
+                await UniTask.Delay(TimeSpan.FromSeconds(0.2f));
+            }
+            _stored = 0;
         }
 
         public override void OnRemoveOwner()
@@ -48,7 +63,7 @@ namespace TonyDev
         {
             return
                 $"When armor reduces incoming damage, store the amount. Once this amount reaches {Tools.WrapColor($"{PercentHealthThreshold:P0}", Color.yellow)}" +
-                $" of your maximum health, fire a homing projectile, dealing {Tools.WrapColor($"{DamageProportion:P0}", Color.yellow)} of this damage amount.";
+                $" of your maximum health, fire <color=yellow>{Projectiles}</color> homing projectile(s), each dealing {Tools.WrapColor($"{DamageProportion:P0}", Color.yellow)} of this damage amount.";
         }
     }
 }

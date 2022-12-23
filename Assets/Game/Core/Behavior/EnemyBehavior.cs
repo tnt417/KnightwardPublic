@@ -7,6 +7,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms;
 using UniRx;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Core.Behavior
 {
@@ -15,6 +16,9 @@ namespace TonyDev.Game.Core.Behavior
         protected Enemy Enemy;
         protected Rigidbody2D Rb2d;
 
+        [SerializeField] private SpriteRenderer flipRenderer;
+        [SerializeField] private bool flipFlip;
+        
         protected Transform FirstEnemyTarget => Enemy.Targets.Count > 0
             ? Enemy.Targets[0] != null ? Enemy.Targets[0].transform : null
             : null;
@@ -33,6 +37,7 @@ namespace TonyDev.Game.Core.Behavior
 
         protected bool RaycastForTransform(Transform target)
         {
+            if (target == null) return false;
             var hit = Physics2D.Raycast(Enemy.transform.position, (FirstEnemyTarget.transform.position - transform.position),Mathf.Infinity, LayerMask.GetMask("Player", "Level", "Crystal"));
             return hit.transform.root == target;
         }
@@ -60,7 +65,7 @@ namespace TonyDev.Game.Core.Behavior
                 }
                 else
                 {
-                    var room = Enemy.CurrentParentIdentity.GetComponent<Room>();
+                    var room = RoomManager.Instance.GetRoomFromID(Enemy.CurrentParentIdentity.netId);
 
                     if (room == null) continue;
 
@@ -190,18 +195,21 @@ namespace TonyDev.Game.Core.Behavior
 
         protected async UniTask FlipSpriteToTarget()
         {
-            var sr = GetComponentInChildren<SpriteRenderer>();
-
             while (Enemy != null)
             {
                 await UniTask.WaitForFixedUpdate();
                 if (!isActiveAndEnabled || gameObject == null || Enemy == null || Enemy.Targets.Count == 0) continue;
-                sr.flipX = Enemy.Targets[0]?.transform.position.x > transform.position.x;
+                
+                var flipX = Enemy.Targets[0]?.transform.position.x > transform.position.x;
+                if (flipFlip) flipX = !flipX;
+                flipRenderer.flipX = flipX;
             }
         }
 
         protected new void Start()
         {
+            if (flipRenderer == null) flipRenderer = GetComponentInChildren<SpriteRenderer>();
+            
             base.Start();
             DestroyToken.RegisterRaiseCancelOnDestroy(this);
             FlipSpriteToTarget().AttachExternalCancellation(DestroyToken.Token);
@@ -209,8 +217,8 @@ namespace TonyDev.Game.Core.Behavior
 
         protected void Awake()
         {
-            Enemy = GetComponent<Enemy>();
-            Rb2d = GetComponent<Rigidbody2D>();
+            Enemy = transform.GetComponent<Enemy>();
+            Rb2d = transform.GetComponent<Rigidbody2D>();
         }
     }
 }

@@ -47,8 +47,8 @@ namespace TonyDev.Game.Global.Network
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver)
         {
             if (identity == newObserver.identity) return true;
-            
-            var identityParentRoom = identity.GetComponent<Room>();
+
+            var identityParentRoom = RoomManager.Instance.GetRoomFromID(identity.netId);
             var identityParentHideable = identity.GetComponent<IHideable>();
 
             if (identityParentHideable == null && identityParentRoom == null)
@@ -106,7 +106,7 @@ namespace TonyDev.Game.Global.Network
         [ServerCallback]
         public override void SetHostVisibility(NetworkIdentity identity, bool visible)
         {
-            if (identity.GetComponent<Room>() != null) return;
+            if (RoomManager.Instance.RoomIdentities.ContainsKey(identity.netId)) return;
 
             var entity = identity.GetComponent<GameEntity>();
             if (entity != null) entity.VisibleToHost = visible;

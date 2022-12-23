@@ -58,7 +58,7 @@ namespace TonyDev.Game.Core.Items
                 return 0;
             }
 
-            return (int) Mathf.Pow(GenerateCost(item, dungeonFloor) * Random.Range(0.4f, 0.5f), 1.3f);
+            return (int) Mathf.Pow(GenerateCost(item, dungeonFloor) * Random.Range(0.3f, 0.4f), 1.3f);
         }
 
         //Returns a randomly generated item based on input parameters
@@ -174,10 +174,11 @@ namespace TonyDev.Game.Core.Items
                 case ItemType.Armor:
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Armor, ArmorStrength * multiplier, source));
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Health, HealthStrength * multiplier, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.HpRegen, HealthStrength * multiplier * 0.05f, source));
                     break;
                 case ItemType.Tower:
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, source));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier * 0.8f, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier * 0.8f, source));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(itemType), itemType, null);
@@ -227,10 +228,10 @@ namespace TonyDev.Game.Core.Items
             
             return (int) (item.itemRarity switch
             {
-                ItemRarity.Common => 10f * (1 + dungeonFloor/5f),
-                ItemRarity.Uncommon => 15f * (1 + dungeonFloor/5f),
-                ItemRarity.Rare => 20f * (1 + dungeonFloor/5f),
-                ItemRarity.Unique => 25f * (1 + dungeonFloor/5f),
+                ItemRarity.Common => 15f * (1.2f + dungeonFloor/7f) + 10f,
+                ItemRarity.Uncommon => 20f * (1.2f + dungeonFloor/7f) + 10f,
+                ItemRarity.Rare => 25f * (1.2f + dungeonFloor/7f) + 10f,
+                ItemRarity.Unique => 30f * (1.2f + dungeonFloor/7f) + 10f,
                 _ => 0
             });
         }

@@ -1,4 +1,8 @@
+using System;
 using Cysharp.Threading.Tasks;
+using Mirror;
+using TonyDev.Game.Global;
+using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -14,6 +18,8 @@ namespace TonyDev.Game.UI.Menu.MainMenu
         private void Start()
         {
             _originalCameraPos = mainCamera.transform.position;
+            
+            GameManager.ResetGame();
         }
 
         private void Update()
@@ -22,10 +28,28 @@ namespace TonyDev.Game.UI.Menu.MainMenu
                 _originalCameraPos + (Input.mousePosition - new Vector3(Screen.width / 2f, Screen.height / 2f)) * menuShiftEffectStrength/1000f; //Offset the camera pos based on mouse pos.
         }
 
-        public void OnPlayClick()
+        public void OnHostClick()
         {
-            TransitionController.TransitionScene("LobbyScene"); // Fade to main scene when the play button is clicked
+            var customNetManager = NetworkManager.singleton as CustomNetworkManager;
+            if (customNetManager != null)
+            {
+                TransitionHost(customNetManager).Forget();
+            }
         }
+
+        private async UniTask TransitionHost(CustomNetworkManager manager)
+        {
+            TransitionController.Instance.FadeOut();
+            await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds));
+            await manager.CreateAndHost();
+            TransitionController.Instance.FadeIn();
+        }
+        
+        public void OnJoinClick()
+        {
+            SteamLobbyManager.Singleton.ActivateJoinOverlay();
+        }
+        
         public void QuitGame()
         {
             Application.Quit(0);

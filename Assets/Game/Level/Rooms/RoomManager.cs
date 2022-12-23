@@ -11,6 +11,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.UI.Minimap;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Level.Rooms
 {
@@ -19,6 +20,8 @@ namespace TonyDev.Game.Level.Rooms
         public static RoomManager Instance; //Singleton instance
 
         public Room currentActiveRoom;
+
+        public readonly Dictionary<uint, Room> RoomIdentities = new();
 
         //Editor variables
         [SerializeField] private RoomGenerator roomGenerator;
@@ -32,16 +35,14 @@ namespace TonyDev.Game.Level.Rooms
         public int MapSize => roomGenerator.MapSize; //The shared width/height of the map
         private Vector2Int _currentActiveRoomIndex;
 
-        [SyncVar(hook = nameof(MapHook))] public Map map;
+        [SyncVar(hook = nameof(MapHook))] private SerializableMap _serializableMap;
+        public Map Map => Map.FromSerializable(_serializableMap);
 
         [Command(requiresAuthority = false)]
-        private void CmdSetMap(Map newMap)
+        private void CmdSetMap(SerializableMap newMap)
         {
-            map = new Map(newMap.Rooms, newMap.StartingRoomPos);
+            _serializableMap = new SerializableMap(newMap.Rooms, newMap.StartingRoomPos);
         }
-
-        private const float RequestRate = 0.25f;
-        private double _nextRequestTime;
 
         private void Update()
         {
@@ -51,38 +52,17 @@ namespace TonyDev.Game.Level.Rooms
                     roomGenerator.roomOffset);
         }
 
-        // [Command(requiresAuthority = false)]
-        // public void CmdChangePlayerCount(Room room, int delta)
-        // {
-        //     if (room == null) return;
-        //     
-        //     room.PlayerCountServer += delta;
-        //     CmdUpdatePlayerCount(room, room.PlayerCountServer);
-        // }
-        //
-        // [Command(requiresAuthority = false)]
-        // public void CmdUpdatePlayerCount(Room room, int count)
-        // {
-        //     for (int i = 0; i < map.Rooms.GetLength(0); i++)
-        //     {
-        //         for (int j = 0; j < map.Rooms.GetLength(1); j++)
-        //         {
-        //             if (map.Rooms[i, j] == room)
-        //             {
-        //                 RpcUpdatePlayerCount(new Vector2Int(i, j), count);
-        //             }   
-        //         }
-        //     }
-        // }
-        //
-        // [ClientRpc]
-        // private void RpcUpdatePlayerCount(Vector2Int pos, int count)
-        // {
-        //     MinimapManager.Instance.UpdatePlayerCount(pos, count);
-        // }
+        public Room GetRoomFromID(NetworkIdentity networkIdentity) => GetRoomFromID(networkIdentity.netId);
 
-        private void MapHook(Map oldMap, Map newMap)
+        public Room GetRoomFromID(uint roomId)
         {
+            return RoomIdentities.ContainsKey(roomId) ? RoomIdentities[roomId] : null;
+        }
+
+        private void MapHook(SerializableMap oldMap, SerializableMap newMap)
+        {
+            MapHookTask().Forget();
+            
             OnRoomsChanged?.Invoke();
             
             if (GameManager.GamePhase == GamePhase.Dungeon)
@@ -95,7 +75,24 @@ namespace TonyDev.Game.Level.Rooms
             }
         }
 
-        private bool InStartingRoom => _currentActiveRoomIndex == map.StartingRoomPos;
+        private async UniTask MapHookTask()
+        {
+            await UniTask.WaitUntil(() => Map.StartingRoom != null && Map.StartingRoom.netId != 0);
+            await UniTask.Yield();
+            
+            OnRoomsChanged?.Invoke();
+            
+            if (GameManager.GamePhase == GamePhase.Dungeon)
+            {
+                TeleportPlayerToStart();
+            
+                FindObjectOfType<SmoothCameraFollow>().FixateOnPlayer();
+                
+                TransitionController.Instance.FadeIn();
+            }
+        }
+
+        private bool InStartingRoom => _currentActiveRoomIndex == Map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public event Action OnRoomsChanged;
         public static Action OnActiveRoomChanged;
@@ -108,7 +105,12 @@ namespace TonyDev.Game.Level.Rooms
             //
         }
 
-        private void Start()
+        public override void OnStartServer()
+        {
+            GenerateTask().Forget();
+        }
+
+        public override void OnStartClient()
         {
             _smoothCameraFollow = FindObjectOfType<SmoothCameraFollow>(); //Initialize the camera follow variables
 
@@ -117,9 +119,7 @@ namespace TonyDev.Game.Level.Rooms
             OnRoomsChanged += DoDoorClosing;
             OnRoomsChanged?.Invoke();
 
-            OnActiveRoomChanged += () => CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom); 
-
-            if (isServer) StartCoroutine(GenerateWhenReady());
+            OnActiveRoomChanged += () => CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom);
         }
 
         [Command(requiresAuthority = false)]
@@ -146,16 +146,29 @@ namespace TonyDev.Game.Level.Rooms
             MinimapManager.Instance.UncoverRoom(pos);
         }
 
-        private IEnumerator GenerateWhenReady()
+        [Server]
+        public async UniTask GenerateTask()
         {
-            yield return new WaitUntil(()=>CustomNetworkManager.ReadyToStart);
-            GenerateRooms();
-        }
+            await UniTask.Yield();
+            
+            var newMap = GameManager.DungeonFloor != 1 && GameManager.DungeonFloor % 10 == 0
+                ? roomGenerator.GenerateBossMap(GameManager.DungeonFloor)
+                : roomGenerator.Generate(GameManager.DungeonFloor);
 
-        [ServerCallback]
-        public void GenerateRooms()
-        {
-            CmdSetMap(GameManager.DungeonFloor != 1 && GameManager.DungeonFloor % 10 == 0 ? roomGenerator.GenerateBossMap(GameManager.DungeonFloor) : roomGenerator.Generate(GameManager.DungeonFloor)); //Randomly generate rooms
+            await UniTask.WaitUntil(() =>
+            {
+                foreach (var r in newMap.Rooms)
+                {
+                    if(r == null) continue;
+                    if (GetRoomFromID(r.netId) == null) return false;
+                }
+
+                return true;
+            });
+
+            Debug.Log("Generated!");
+
+            CmdSetMap(SerializableMap.FromMap(newMap));
         }
 
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.
@@ -185,7 +198,7 @@ namespace TonyDev.Game.Level.Rooms
                     break;
             }
             
-            var room = map.Rooms[_currentActiveRoomIndex.x + dx, _currentActiveRoomIndex.y + dy];
+            var room = Map.Rooms[_currentActiveRoomIndex.x + dx, _currentActiveRoomIndex.y + dy];
             
             TransitionController.Instance.FadeInOut(); //Transition to make it less jarring.
             yield return
@@ -214,7 +227,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             //if(currentActiveRoom != null) CmdChangePlayerCount(currentActiveRoom, -1);
             
-            var newRoom = map.Rooms[x, y]; //Get the new room from the array
+            var newRoom = Map.Rooms[x, y]; //Get the new room from the array
             if (newRoom == null)
             {
                 Debug.LogWarning("New room is null!");
@@ -248,7 +261,7 @@ namespace TonyDev.Game.Level.Rooms
 
         private void DoDoorClosing()
         {
-            if (map.Rooms == null)
+            if (Map.Rooms == null)
             {
                 Debug.LogWarning("Room array is null!");
                 return;
@@ -258,7 +271,7 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < roomGenerator.MapSize; j++)
                 {
-                    if (map.Rooms[i, j] == null) continue; //If there's no room, move on
+                    if (Map.Rooms[i, j] == null) continue; //If there's no room, move on
 
                     //Set open directions based on room adjacency
                     var openDirections = new List<Direction>();
@@ -266,7 +279,7 @@ namespace TonyDev.Game.Level.Rooms
                     if (CheckIfRoomExistsAndHasDoor(i + 1, j, Direction.Left)) openDirections.Add(Direction.Right);
                     if (CheckIfRoomExistsAndHasDoor(i, j - 1, Direction.Up)) openDirections.Add(Direction.Down);
                     if (CheckIfRoomExistsAndHasDoor(i, j + 1, Direction.Down)) openDirections.Add(Direction.Up);
-                    map.Rooms[i, j].SetOpenDirections(openDirections);
+                    Map.Rooms[i, j].SetOpenDirections(openDirections);
                     //
                 }
             }
@@ -275,49 +288,59 @@ namespace TonyDev.Game.Level.Rooms
         private bool CheckIfRoomExistsAndHasDoor(int x, int y, Direction direction)
         {
             if (x < 0 || y < 0 || x > roomGenerator.MapSize - 1 || y > roomGenerator.MapSize - 1) return false;
-            return map.Rooms[x, y] != null && map.Rooms[x, y].GetDoorDirections().Contains(direction);
+            return Map.Rooms[x, y] != null && Map.Rooms[x, y].GetDoorDirections().Contains(direction);
         }
 
         [Server]
         public void ResetRooms()
         {
-            foreach (var r in map.Rooms) //Destroy all rooms and their child objects...
-                if (r != null)
+            Debug.Log("Resetting rooms!");
+        
+            foreach (var r in Map.Rooms)
+            {
+                //Destroy all rooms and their child objects...
+                if (r == null) continue;
+             
+                Debug.Log(r.name);
+                
+                r.enabled = false;
+
+                var childObjects = r.roomChildObjects.Where(go => go != null && go.GetComponent<Player>() == null);
+                foreach (var go in childObjects.ToList())
                 {
-                    r.enabled = false;
-
-                    r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
-                    foreach (var go in r.roomChildObjects.ToList().Where(go => go.GetComponent<Player>() == null))
-                    {
-                       var e = go.GetComponent<Enemy>();
-
-                        if (e != null)
-                        {
-                            WaveManager.Instance.MoveEnemyToWave(e);
-                            continue;
-                        }
-                        
-                        if (go != null)
-                        {
-                            var networkIdentity = go.GetComponent<NetworkIdentity>();
-                            if(networkIdentity == null) Destroy(go);
-                            else NetworkServer.Destroy(go);
-                        }
-                    }
+                    if (go == null) continue;
                     
-                    NetworkServer.Destroy(r.gameObject);
+                    var e = go.GetComponent<Enemy>();
+
+                    if (e != null)
+                    {
+                        WaveManager.Instance.MoveEnemyToWave(e);
+                        continue;
+                    }
+
+                    if (go != null)
+                    {
+                        var networkIdentity = go.GetComponent<NetworkIdentity>();
+                        if (networkIdentity == null) Destroy(go);
+                        else NetworkServer.Destroy(go);
+                    }
                 }
+
+                NetworkServer.Destroy(r.gameObject);
+            }
 
             DeactivateRoomPhase();
 
             MinimapManager.Instance.Reset();
             roomGenerator.Reset();
+            
+            RoomIdentities.Clear();
         }
         
         [ClientRpc]
         public void RpcResetRooms()
         {
-            foreach (var r in map.Rooms) //Destroy all rooms and their child objects...
+            foreach (var r in Map.Rooms) //Destroy all rooms and their child objects...
                 if (r != null)
                 {
                     r.roomChildObjects = r.roomChildObjects.Where(go => go != null).ToList();
@@ -336,8 +359,8 @@ namespace TonyDev.Game.Level.Rooms
 
         public void TeleportPlayerToStart()
         {
-            Player.LocalInstance.transform.position = map.StartingRoom.transform.position;
-            SetActiveRoom(map.StartingRoomPos.x, map.StartingRoomPos.y);
+            Player.LocalInstance.transform.position = Map.StartingRoom.transform.position;
+            SetActiveRoom(Map.StartingRoomPos.x, Map.StartingRoomPos.y);
         }
     }
 }

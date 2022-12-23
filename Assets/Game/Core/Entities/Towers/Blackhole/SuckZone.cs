@@ -11,7 +11,7 @@ namespace TonyDev
 {
     public class SuckZone : MonoBehaviour
     {
-        private List<Enemy> _suckList = new();
+        private readonly HashSet<Enemy> _suckList = new();
 
         public float suckSpeed;
         
@@ -37,10 +37,16 @@ namespace TonyDev
 
         private void FixedUpdate()
         {
+            var myPos = transform.position;
+            
+            _suckList.RemoveWhere(e => e == null);
+            
             foreach (var e in _suckList)
             {
-                e.transform.position = Vector2.MoveTowards(e.transform.position, transform.position,
-                    suckSpeed * Time.fixedDeltaTime * (10f-Vector2.Distance(e.transform.position, transform.position)));
+                var enemyPos = e.transform.position;
+                enemyPos = Vector2.MoveTowards(enemyPos, myPos,
+                    suckSpeed * Time.fixedDeltaTime);
+                e.transform.position = enemyPos;
             }
         }
     }

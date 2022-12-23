@@ -3457,6 +3457,10 @@ PrefabInstance:
       propertyPath: sceneId
       value: 802442691
       objectReference: {fileID: 0}
+    - target: {fileID: 8245161762205361821, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
+      propertyPath: m_SortingOrder
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 8245161763792584617, guid: 1252036d4bd7a6a43af0665d6600076e, type: 3}
       propertyPath: m_Name
       value: RoomManager
@@ -3913,6 +3917,10 @@ MonoBehaviour:
     value: {fileID: 8962233277319782168, guid: 612eb15b349900d46be75649c4ea3e91, type: 3}
   - key: crystalPlate
     value: {fileID: 7364631239115656474, guid: 15a575652d561d544875a643fd4fc652, type: 3}
+  - key: bloodstone
+    value: {fileID: 2066494607044447582, guid: 9cfec1d9c303aa34ab102f61631ea473, type: 3}
+  - key: phoenix
+    value: {fileID: 2066494607044447582, guid: fe16bab2adf539e408af85d8b7831a8e, type: 3}
   mainSpriteAtlas: {fileID: 4343727234628468602, guid: f72388a137dbf724ea8fdd908e8f3ce8, type: 2}
 --- !u!4 &1524232628
 Transform:

@@ -13,6 +13,7 @@ namespace TonyDev.Game.Core.Effects
         public KeyCode ActivateButton;
         public float Cooldown;
         public float Duration;
+        protected bool Ready => _cooldownTimer > ModifiedCooldown;
         [JsonConverter(typeof(SpriteConverter))] public Sprite abilitySprite;
         protected float ModifiedCooldown => Mathf.Clamp(Cooldown * (1 - Entity.Stats.GetStat(Stat.CooldownReduce)), 0, Mathf.Infinity);
 
@@ -23,6 +24,7 @@ namespace TonyDev.Game.Core.Effects
 
         protected virtual void OnAbilityActivate()
         {
+            _cooldownTimer = 0;
         }
 
         protected virtual void OnAbilityDeactivate()

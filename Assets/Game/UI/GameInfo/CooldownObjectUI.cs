@@ -48,8 +48,10 @@ namespace TonyDev.Game.UI.GameInfo
             if (ceilCd == _lastCeilCd) return;
 
             _lastCeilCd = ceilCd;
+
+            var keyName = _activateKey == KeyCode.None ? "Ready" : KeyName;
             
-            statusText.text = cd > 0 ? ceilCd.ToString() : KeyName;
+            statusText.text = cd > 0 ? ceilCd.ToString() : keyName;
             statusText.color = cd > 0 ? Color.white : Color.green;
         }
     }

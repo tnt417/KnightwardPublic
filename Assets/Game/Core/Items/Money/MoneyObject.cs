@@ -67,7 +67,7 @@ namespace TonyDev.Game.Core.Items.Money
             var go = kvp.Key;
             var money = kvp.Value;
             
-            var moneyObject = takeFromPool
+            var moneyObject = takeFromPool && go != null
                 ? go
                 : Instantiate(prefab);
 
@@ -76,7 +76,7 @@ namespace TonyDev.Game.Core.Items.Money
                 money.OnPickup();
             }
 
-            if (!takeFromPool) money = moneyObject.GetComponent<MoneyObject>();
+            if (money == null || money.rb2d == null) money = moneyObject.GetComponent<MoneyObject>();
 
             kvp = new KeyValuePair<GameObject, MoneyObject>(moneyObject, money);
 
@@ -86,7 +86,7 @@ namespace TonyDev.Game.Core.Items.Money
 
             if (parentIdentity != null)
             {
-                var room = parentIdentity.GetComponent<Room>();
+                var room = RoomManager.Instance.GetRoomFromID(parentIdentity.netId);
 
                 if (room != null)
                 {

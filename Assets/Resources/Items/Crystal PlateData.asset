@@ -33,8 +33,9 @@ MonoBehaviour:
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        DamageProportionRange: {x: 1.5, y: 2.5}
+        DamageProportionRange: {x: 1.5, y: 2}
         PercentHealthThreshold: 0.05
+        ProjectileAmountRange: {x: 2, y: 8}
         ProjectileData:
           prefabKey: crystalPlate
           projectileSprite: {fileID: 0}

@@ -7,7 +7,7 @@ namespace TonyDev.Game.Level.Decorations.Button
 {
     public class NetworkedInteractable : NetworkBehaviour
     {
-        [SerializeField] private Interactable interactable;
+        [SerializeField] public Interactable interactable;
 
         public UnityEvent<InteractType> onInteractGlobal = new ();
         public UnityEvent<InteractType> onInteractServer = new ();

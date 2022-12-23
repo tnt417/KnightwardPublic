@@ -47,7 +47,7 @@ MonoBehaviour:
         DungeonFloorUponCreation: 0
         ActivateButton: 99
         Cooldown: 1
-        Duration: 60
+        Duration: 10000
         abilitySprite: {fileID: 21300000, guid: fc0e20655c99aec43b6733b8061e5e43, type: 3}
         SlowAmount: 0.5
         SlowDuration: 3

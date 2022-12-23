@@ -63,6 +63,8 @@ namespace TonyDev.Game.Level.Decorations.Slots
         [ClientRpc]
         private void RpcRoll(int rollCount)
         {
+            buttonInteractable.interactable.enabled = false;
+        
             _rolls = 0;
             _maxRolls = rollCount;
             foreach (var s in slots)
@@ -154,6 +156,14 @@ namespace TonyDev.Game.Level.Decorations.Slots
                     s.SetEntry(chosen);
                 }
             }
+
+            DelayEnable().Forget();
+        }
+
+        private async UniTask DelayEnable()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
+            buttonInteractable.interactable.enabled = true;
         }
 
         [Command(requiresAuthority = false)]

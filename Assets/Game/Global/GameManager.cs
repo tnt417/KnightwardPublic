@@ -102,6 +102,11 @@ namespace TonyDev.Game.Global
         private static readonly HashSet<GameEntity> Entities = new();
         public static HashSet<GameEntity> EntitiesReadonly => Entities.ToHashSet();
 
+        public static IEnumerable<GameEntity> GetEntitiesInRange(Vector2 pos, float range)
+        {
+            return EntitiesReadonly.Where(e => Vector2.Distance(e.transform.position, pos) < range);
+        }
+        
         public static void AddEntity(GameEntity entity)
         {
             Entities.Add(entity);
@@ -187,10 +192,11 @@ namespace TonyDev.Game.Global
             (MainCamera.ScreenToWorldPoint(Input.mousePosition) - Player.LocalInstance.transform.position).normalized;
 
         [Command(requiresAuthority = false)]
-        public void CmdWriteChatMessage(string message, NetworkConnectionToClient sender = null)
+        public void CmdWriteChatMessage(string message, CustomRoomPlayer localRoomPlayer)
         {
-            if (sender == null) return;
-            RpcWriteConsole($"[{LobbyManager.UsernameDict[sender.connectionId]}] {message}");
+            if (localRoomPlayer == null) return;
+
+            RpcWriteConsole($"[{localRoomPlayer.username}] {message}");
         }
 
         [ClientRpc]
@@ -239,7 +245,7 @@ namespace TonyDev.Game.Global
 
         public SyncList<Vector2Int> OccupiedTowerSpots = new();
 
-        [SyncVar] private int _maxTowers = 5;
+        [SyncVar] private int _maxTowers = 3;
 
         public int MaxTowers => _maxTowers;
 
@@ -464,8 +470,8 @@ namespace TonyDev.Game.Global
         //Teleports the player to the dungeon, sets the starting room as active, and sets the GamePhase to Dungeon.
         private void EnterDungeonPhase()
         {
-            GamePhase = GamePhase.Dungeon;
             RoomManager.Instance.TeleportPlayerToStart(); //Move the player to the starting room and activate it
+            GamePhase = GamePhase.Dungeon;
             CmdReTargetEnemies();
         }
 
@@ -501,7 +507,7 @@ namespace TonyDev.Game.Global
             dungeonFloor += 1;
             RoomManager.Instance.RpcResetRooms();
             RoomManager.Instance.ResetRooms();
-            RoomManager.Instance.GenerateRooms();
+            RoomManager.Instance.GenerateTask().Forget();
 
             _busyRegen = false;
         }

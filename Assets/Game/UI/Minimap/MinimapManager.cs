@@ -45,7 +45,7 @@ namespace TonyDev.Game.UI.Minimap
         public void UpdateMinimap()
         {
             _roomManager = FindObjectOfType<RoomManager>();
-            _rooms = _roomManager.map.Rooms;
+            _rooms = _roomManager.Map.Rooms;
 
             if (_rooms == null) return;
 

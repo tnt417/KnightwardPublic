@@ -38,8 +38,8 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < dimension1; j++)
                 {
-                    var netId = value[i, j]?.netIdentity;
-                    writer.WriteNetworkIdentity(netId);
+                    var netId = value[i, j]?.netIdentity.netId;
+                    writer.WriteUIntNullable(netId);
                 }
             }
         }
@@ -59,9 +59,9 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < dimension1; j++)
                 {
-                    var netId = reader.ReadNetworkIdentity();
-                    if (netId == null) continue;
-                    rooms[i, j] = netId.GetComponent<Room>();
+                    var netId = reader.ReadUIntNullable();
+                    if (!netId.HasValue) continue;
+                    rooms[i, j] = RoomManager.Instance.RoomIdentities[netId.Value];
                 }
             }
 
@@ -84,6 +84,8 @@ namespace TonyDev.Game.Level.Rooms
 
     public class Room : NetworkBehaviour
     {
+        public bool started = false;
+
         //Editor variables
         [SerializeField] private RoomDoor[] roomDoors;
         [SerializeField] private GameObject spawnPrefabOnClear;
@@ -104,7 +106,7 @@ namespace TonyDev.Game.Level.Rooms
 
         private void PlayerCountHook(int oldPlayerCount, int newPlayerCount)
         {
-            MinimapManager.Instance.UpdatePlayerCount(RoomManager.Instance.map.GetRoomPos(this), newPlayerCount);
+            MinimapManager.Instance.UpdatePlayerCount(RoomManager.Instance.Map.GetRoomPos(this), newPlayerCount);
         }
 
         //
@@ -161,23 +163,30 @@ namespace TonyDev.Game.Level.Rooms
             WaveManager.Instance.UpdateRoomTimeMultipliers();
         }
 
-        private void Awake()
-        {
-            Player.LocalInstance.OnParentIdentityChange += CheckRoomVisibility;
-            _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
-        }
-
-        [ServerCallback]
-        private void Start()
+        public override void OnStartServer()
         {
             GameManager.OnEnemyAdd += OnEntityChange;
             GameManager.OnEnemyAdd += RegisterEntityTeamListener;
             GameManager.OnEnemyRemove += OnEntityChange;
             CheckShouldLockDoors();
         }
+        
+        public override void OnStartClient()
+        {
+            _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
+            Player.LocalPlayerChangeIdentity += CheckRoomVisibility;
+        }
 
+        private bool _initialized;
+        
         private void Update()
         {
+            if (!_initialized && netId != 0)
+            {
+                RoomManager.Instance.RoomIdentities[netId] = this;
+                _initialized = true;
+            }
+            
             if (_checkLockDoors)
             {
                 CheckShouldLockDoors();
@@ -416,8 +425,8 @@ namespace TonyDev.Game.Level.Rooms
             var startTile = _tilemap.WorldToCell(startPos) - _tilemap.cellBounds.min;
             var endTile = _tilemap.WorldToCell(endPos) - _tilemap.cellBounds.min; // - _tilemap.cellBounds.min;
 
-            var startNode = _grid[startTile.x, startTile.y];
-            var endNode = _grid[endTile.x, endTile.y];
+            var startNode = _grid[Mathf.Clamp(startTile.x, 0, _grid.GetLength(0)), Mathf.Clamp(startTile.y, 0, _grid.GetLength(1))];
+            var endNode = _grid[Mathf.Clamp(endTile.x, 0, _grid.GetLength(0)), Mathf.Clamp(endTile.y, 0, _grid.GetLength(1))];
 
             var openList = new HashSet<PathNode>() { startNode };//(new ByFCost());
             var closedList = new HashSet<PathNode>();

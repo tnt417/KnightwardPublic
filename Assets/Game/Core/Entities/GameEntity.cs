@@ -133,7 +133,7 @@ namespace TonyDev.Game.Core.Entities
         {
             if (_currentParentIdentity != null)
             {
-                var oldRoom = _currentParentIdentity.GetComponent<Room>();
+                var oldRoom = RoomManager.Instance.GetRoomFromID(_currentParentIdentity.netId);
                 if (oldRoom != null)
                 {
                     oldRoom.roomChildObjects.Remove(gameObject);
@@ -144,7 +144,7 @@ namespace TonyDev.Game.Core.Entities
 
             if (roomIdentity != null)
             {
-                var room = roomIdentity.GetComponent<Room>();
+                var room = RoomManager.Instance.GetRoomFromID(roomIdentity.netId);
                 if (room != null)
                 {
                     room.roomChildObjects.Add(gameObject);
@@ -238,8 +238,8 @@ namespace TonyDev.Game.Core.Entities
                 }
                 else
                 {
-                    var room = CurrentParentIdentity.GetComponent<Room>();
-                    if(room.PlayerCount > 0) CmdUpdateTarget();
+                    var room = RoomManager.Instance.GetRoomFromID(CurrentParentIdentity.netId);
+                    if(room != null && room.PlayerCount > 0) CmdUpdateTarget();
                 }
 
                 _targetUpdateTimer -= EntityTargetUpdatingRate;
@@ -249,8 +249,6 @@ namespace TonyDev.Game.Core.Entities
         protected void Init()
         {
             if (!EntityOwnership) return;
-
-            CustomNetworkManager.OnAllPlayersSpawned += UpdateStats;
 
             Stats.ReadOnly = false;
 

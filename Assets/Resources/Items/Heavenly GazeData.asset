@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: Heavenly GazeData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: 6dfc766a45122a34dbc5c4ecfd7a1f6b, type: 3}
+    itemName: Heavenly Gaze
+    itemDescription: 
+    itemType: 2
+    itemRarity: 3
+    statBonuses: []
+    bypassStatGeneration: 0
+    itemEffects:
+    - rid: 1191606023430078471
+    - rid: 1191606023430078472
+    projectiles: []
+    spawnablePrefabName: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 1191606023430078471
+      type: {class: HeavenlyGazeEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ActivateButton: 103
+        Cooldown: 10
+        Duration: 0
+        abilitySprite: {fileID: 21300000, guid: 6dfc766a45122a34dbc5c4ecfd7a1f6b, type: 3}
+        DamageMultRange: {x: 10, y: 20}
+    - rid: 1191606023430078472
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ScalingStatBonuses:
+        - type: 0
+          stat: 2
+          scalingType: 1
+          valueRange: {x: 0.2, y: 0.4}
+          byFloor: 50
+        - type: 0
+          stat: 0
+          scalingType: 0
+          valueRange: {x: 0.2, y: 0.5}
+          byFloor: 50

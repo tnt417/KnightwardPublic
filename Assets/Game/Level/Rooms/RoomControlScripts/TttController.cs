@@ -31,7 +31,12 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         private async UniTask ExecuteBehavior()
         {
             await UniTask.WaitUntil(() =>
-                _room.ContainedEntities.Any(e => e is Enemy)); //Wait until entities are spawned.
+            {
+                _room = RoomManager.Instance.GetRoomFromID(netId);
+                return _room != null &&
+                       _room.ContainedEntities.Any(e => e is Enemy);
+            }); //Wait until entities are spawned.
+
             _tttEnemies = _room.ContainedEntities.Where(e => e is Enemy);
 
             foreach (var ge in _tttEnemies)
@@ -46,8 +51,8 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 
         private void SetTile(Vector2 entityPos, bool claimed)
         {
-            var relativePos = entityPos - (Vector2)transform.position;
-            
+            var relativePos = entityPos - (Vector2) transform.position;
+
             var grantedArea = tttAreas.FirstOrDefault(area => area.detectionArea.Contains(relativePos));
 
             if (grantedArea == null) return;
@@ -79,13 +84,13 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             if (claimed)
             {
                 if (first.SpawnedPrefab != null) return;
-                
+
                 first.SpawnedPrefab =
-                    Instantiate(claimedPrefab, (Vector2)transform.position + pos, Quaternion.identity, transform);
+                    Instantiate(claimedPrefab, (Vector2) transform.position + pos, Quaternion.identity, transform);
             }
             else
             {
-                if(first.SpawnedPrefab != null) Destroy(first.SpawnedPrefab);
+                if (first.SpawnedPrefab != null) Destroy(first.SpawnedPrefab);
                 first.SpawnedPrefab = null;
             }
         }
@@ -98,11 +103,11 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         private async UniTask GrantTask()
         {
             await UniTask.WaitForEndOfFrame(this);
-            
+
             foreach (var area in tttAreas)
             {
                 if (area.SpawnedPrefab == null) continue;
-                
+
                 area.itemSpawner.SpawnItem();
             }
 
@@ -121,23 +126,22 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             foreach (var area in tttAreas)
             {
                 if (area.SpawnedPrefab == null) continue;
-                
+
                 Destroy(area.SpawnedPrefab);
             }
         }
 
-        private void Start()
+        public override void OnStartClient()
         {
             Player.LocalInstance.OnLocalHurt += () =>
             {
                 if (this == null) return;
                 SetTile(Player.LocalInstance.transform.position, false);
             };
+        }
 
-            if (!isServer) return;
-
-            _room = GetComponent<Room>();
-
+        public override void OnStartServer()
+        {
             var src = new CancellationTokenSource();
             src.RegisterRaiseCancelOnDestroy(this);
 
@@ -149,7 +153,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             Gizmos.color = new Color(1f, 0f, 1f, 0.7f);
 
             if (tttAreas == null) return;
-            
+
             foreach (var a in tttAreas)
             {
                 Gizmos.DrawCube(a.detectionArea.center, new Vector3(a.detectionArea.width, a.detectionArea.height, 1));

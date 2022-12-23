@@ -51,13 +51,13 @@ namespace TonyDev.Game.Core.Entities.Player
             
             if (oldIdentity != null)
             {
-                var oldRoom = oldIdentity.GetComponent<Room>();
+                var oldRoom = RoomManager.Instance.GetRoomFromID(oldIdentity.netId);
                 if (oldRoom != null) oldRoom.CmdSetPlayerCount(oldRoom.PlayerCount - 1);
             }
 
             if (newIdentity != null)
             {
-                var newRoom = newIdentity.GetComponent<Room>();
+                var newRoom = RoomManager.Instance.GetRoomFromID(newIdentity.netId);
                 if (newRoom != null) newRoom.CmdSetPlayerCount(newRoom.PlayerCount + 1);
             }
         }
@@ -89,7 +89,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public override void OnStartServer()
         {
-            CmdSetUsername(LobbyManager.UsernameDict[netIdentity.connectionToClient.connectionId]);
+            CmdSetUsername(CustomRoomPlayer.Local.username);
             base.OnStartServer();
         }
 
@@ -99,11 +99,15 @@ namespace TonyDev.Game.Core.Entities.Player
             username = user;
         }
 
+        public static Action<NetworkIdentity> LocalPlayerChangeIdentity;
+        
         public override void OnStartLocalPlayer()
         {
             Team = Team.Player;
             LocalInstance = this;
             OnLocalPlayerCreated?.Invoke();
+            
+            OnParentIdentityChange += (a) => LocalPlayerChangeIdentity?.Invoke(a);
 
             PlayerStats.Stats = Stats;
 
@@ -115,7 +119,6 @@ namespace TonyDev.Game.Core.Entities.Player
 
                 foreach (var proj in projectileData)
                 {
-                    var direction = GameManager.MouseDirection;
                     var pos = transform.position;
 
                     ObjectSpawner.SpawnProjectile(this, pos, GameManager.MouseDirection, proj);
@@ -127,6 +130,8 @@ namespace TonyDev.Game.Core.Entities.Player
             Init();
 
             PlayerInventory.Instance.InsertStarterItems();
+            
+            TransitionController.Instance.FadeIn();
         }
 
         [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat,

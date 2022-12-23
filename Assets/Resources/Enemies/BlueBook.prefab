@@ -152,6 +152,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: _assetId
+      value: 1117667244
+      objectReference: {fileID: 0}
+    - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_AssetId
       value: a5aa3be549ddf6b4ca6180ad5e2c00bc
       objectReference: {fileID: 0}
@@ -175,6 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 08d07dd96495fb84088179978fd7aee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipRenderer: {fileID: 0}
+  flipFlip: 0
   dashSpeed: 3
   waitTimeSeconds: 0.2
   dashRadius: 2

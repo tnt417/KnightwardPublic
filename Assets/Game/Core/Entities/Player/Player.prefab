@@ -640,6 +640,7 @@ MonoBehaviour:
   deathTimerText: {fileID: 2684003557218082394}
   walkParticleSystem: {fileID: 6009604398360732636}
   dead: 0
+  disableDeathHandling: 0
 --- !u!114 &702126737195634274
 MonoBehaviour:
   m_ObjectHideFlags: 0

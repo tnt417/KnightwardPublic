@@ -18,7 +18,10 @@ namespace TonyDev.Game.Core.Attacks
 
             foreach (var att in attacks)
             {
-                att.OnDamageDealt += (f, ge, b) => owner.OnDamageOther?.Invoke(f, ge, b);
+                att.OnDamageDealt += (f, ge, b) =>
+                {
+                    owner.OnDamageOther?.Invoke(f, ge, b);
+                };
             }
 
             return go;

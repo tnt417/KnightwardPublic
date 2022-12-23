@@ -579,8 +579,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  started: 0
   roomDoors:
   - {fileID: 7233540748473221879}
   - {fileID: 2062851405124684956}
@@ -652,9 +654,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 132289470
   serverOnly: 0
   visible: 2
-  m_AssetId: 45c16b161e455444e90ed32c04e8b43a
   hasSpawned: 0
 --- !u!114 &7404837842033890971
 MonoBehaviour:
@@ -668,71 +670,72 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4670e52d64c882243b959ddae200d595, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   tttAreas:
   - detectionArea:
       serializedVersion: 2
-      x: -8
-      y: 2.5
-      width: 5.5
-      height: 5.5
+      x: -7
+      y: 3
+      width: 4
+      height: 4
     itemSpawner: {fileID: 3518790553141482975}
   - detectionArea:
       serializedVersion: 2
-      x: -2.5
-      y: 2.5
-      width: 5
-      height: 5.5
+      x: -2
+      y: 3
+      width: 4
+      height: 4
     itemSpawner: {fileID: 4858806985621938719}
   - detectionArea:
       serializedVersion: 2
-      x: 2.5
-      y: 2.5
-      width: 5.5
-      height: 5.5
+      x: 3
+      y: 3
+      width: 4
+      height: 4
     itemSpawner: {fileID: 4678060985831451393}
   - detectionArea:
       serializedVersion: 2
-      x: -8
-      y: -2.5
-      width: 5.5
-      height: 5
+      x: -7
+      y: -2
+      width: 4
+      height: 4
     itemSpawner: {fileID: 5638586088924722593}
   - detectionArea:
       serializedVersion: 2
-      x: -2.5
-      y: -2.5
-      width: 5
-      height: 5
+      x: -2
+      y: -2
+      width: 4
+      height: 4
     itemSpawner: {fileID: 9212412699168517267}
   - detectionArea:
       serializedVersion: 2
-      x: 2.5
-      y: -2.5
-      width: 5.5
-      height: 5
+      x: 3
+      y: -2
+      width: 4
+      height: 4
     itemSpawner: {fileID: 1653259564346629522}
   - detectionArea:
       serializedVersion: 2
-      x: -8
-      y: -8
-      width: 5.5
-      height: 5.5
+      x: -7
+      y: -7
+      width: 4
+      height: 4
     itemSpawner: {fileID: 5264654728123951634}
   - detectionArea:
       serializedVersion: 2
-      x: -2.5
-      y: -8
-      width: 5.5
-      height: 5.5
+      x: -2
+      y: -7
+      width: 4
+      height: 4
     itemSpawner: {fileID: 7815219874760549440}
   - detectionArea:
       serializedVersion: 2
       x: 3
-      y: -8
-      width: 5
-      height: 5.5
+      y: -7
+      width: 4
+      height: 4
     itemSpawner: {fileID: 858198710816046203}
   claimedPrefab: {fileID: 2787348605893511019, guid: f133136805ef62c45a66b9fd8e793c78, type: 3}
 --- !u!1 &4178251166305122773

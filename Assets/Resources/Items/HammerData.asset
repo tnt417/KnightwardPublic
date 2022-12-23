@@ -31,28 +31,7 @@ MonoBehaviour:
     itemEffects:
     - rid: 8269505085799137282
     - rid: 8269505106771968000
-    projectiles:
-    - prefabKey: 
-      projectileSprite: {fileID: 0}
-      attackData:
-        damageMultiplier: 0
-        knockbackMultiplier: 0
-        hitboxRadius: 0
-        team: 1
-        destroyOnApply: 0
-        destroyOnCollideWall: 0
-        lifetime: 0.05
-        spawnOnDestroyKey: 
-        ignoreInvincibility: 0
-      disableMovement: 0
-      travelSpeed: 0
-      offsetDegrees: 0
-      waveAmplitude: 0
-      waveLength: 0
-      waveDistance: 0
-      childOfOwner: 0
-      doNotRotate: 0
-      effects: []
+    projectiles: []
     spawnablePrefabName: 
   references:
     version: 2

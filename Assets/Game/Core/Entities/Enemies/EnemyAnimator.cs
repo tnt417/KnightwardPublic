@@ -15,8 +15,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         Attack,
         Die
     }
-
-    [RequireComponent(typeof(Animator))]
+    
     public class EnemyAnimator : NetworkBehaviour
     {
         //Editor Variables

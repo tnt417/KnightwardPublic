@@ -156,6 +156,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: _assetId
+      value: 3304186731
+      objectReference: {fileID: 0}
+    - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_AssetId
       value: 488733a3e5fb5b243871d8e60b448a31
       objectReference: {fileID: 0}
@@ -178,6 +182,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b3f3e9a60b516443985856d16636a09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipRenderer: {fileID: 0}
+  flipFlip: 0
   dashSpeed: 3.5
   strafeDistance: 8
   strafeRadius: 4
@@ -191,6 +197,7 @@ MonoBehaviour:
       hitboxRadius: 0
       team: 0
       destroyOnApply: 1
+      destroyOnCollideWall: 0
       lifetime: 0.5
       spawnOnDestroyKey: dragonPool
       ignoreInvincibility: 0
@@ -201,6 +208,7 @@ MonoBehaviour:
     waveLength: 1
     waveDistance: 10
     childOfOwner: 0
+    doNotRotate: 0
     effects: []
   references:
     version: 2

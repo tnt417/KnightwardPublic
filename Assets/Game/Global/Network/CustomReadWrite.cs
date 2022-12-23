@@ -31,6 +31,48 @@ namespace TonyDev.Game.Global.Network
 
             return sprite;
         }
+        
+        public static void WriteUIntMap(this NetworkWriter writer, uint[,] value)
+        {
+            var isNull = value == null;
+            writer.WriteBool(isNull);
+            if (isNull) return;
+
+            var width = value.GetLength(0);
+            var height = value.GetLength(1);
+            
+            writer.WriteInt(width);
+            writer.WriteInt(height);
+
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    writer.WriteUInt(value[x, y]);
+                }
+            }
+        }
+
+        public static uint[,] ReadUIntMap(this NetworkReader reader)
+        {
+            var isNull = reader.ReadBool();
+            if (isNull) return null;
+
+            var width = reader.ReadInt();
+            var height = reader.ReadInt();
+
+            var array = new uint[width, height];
+            
+            for (var x = 0; x < width; x++)
+            {
+                for (var y = 0; y < height; y++)
+                {
+                    array[x, y] = reader.ReadUInt();
+                }
+            }
+
+            return array;
+        }
 
         #region GameEffect
 

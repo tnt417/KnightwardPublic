@@ -18,7 +18,7 @@ namespace TonyDev.Game.Global.Network
 {
     public class LobbyManager : NetworkBehaviour
     {
-        [SerializeField] private GameObject playerTilePrefab;
+        /*[SerializeField] private GameObject playerTilePrefab;
         [SerializeField] private Transform playerGridTransform;
         [SerializeField] private TMP_Text playerCountText;
         [SerializeField] private Button playButton;
@@ -169,6 +169,6 @@ namespace TonyDev.Game.Global.Network
             tileObject.transform.SetParent(playerGridTransform);
 
             _playerTiles[connId] = tileObject.GetComponent<ConnectedPlayerTile>();
-        }
+        }*/
     }
 }

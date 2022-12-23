@@ -172,6 +172,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: _assetId
+      value: 810175070
+      objectReference: {fileID: 0}
+    - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_AssetId
       value: 29d04ac690de74a4db4629939dd617fe
       objectReference: {fileID: 0}
@@ -5094,6 +5098,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e075accb6059bf846bf657533df52c09, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipRenderer: {fileID: 0}
+  flipFlip: 0
   chaseSpeedMultiplier: 6
   stompPauseTimeSeconds: 1.25
   stompParticles: {fileID: 1549936816730676055}

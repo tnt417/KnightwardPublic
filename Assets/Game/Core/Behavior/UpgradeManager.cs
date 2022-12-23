@@ -203,9 +203,33 @@ namespace TonyDev.Game.Core.Behavior
                     PlayerInventory.Instance.AddRelicSlot();
                 }, UpgradeCategory.Utility);
             
-            RegisterLocalUpgrade(5000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics II",
+            RegisterLocalUpgrade(3000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics II",
                 "Gain an extra relic slot.",
                 () => _purchasedUpgrades.Contains("More Relics I"),
+                (upgrade, entity) =>
+                {
+                    PlayerInventory.Instance.AddRelicSlot();
+                }, UpgradeCategory.Utility);
+            
+            RegisterLocalUpgrade(5000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics III",
+                "Gain an extra relic slot.",
+                () => _purchasedUpgrades.Contains("More Relics II"),
+                (upgrade, entity) =>
+                {
+                    PlayerInventory.Instance.AddRelicSlot();
+                }, UpgradeCategory.Utility);
+            
+            RegisterLocalUpgrade(7000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics IV",
+                "Gain an extra relic slot.",
+                () => _purchasedUpgrades.Contains("More Relics III"),
+                (upgrade, entity) =>
+                {
+                    PlayerInventory.Instance.AddRelicSlot();
+                }, UpgradeCategory.Utility);
+            
+            RegisterLocalUpgrade(10000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics V",
+                "Gain an extra relic slot.",
+                () => _purchasedUpgrades.Contains("More Relics IV"),
                 (upgrade, entity) =>
                 {
                     PlayerInventory.Instance.AddRelicSlot();
@@ -227,7 +251,7 @@ namespace TonyDev.Game.Core.Behavior
                     GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
                 }, UpgradeCategory.Crystal);
             
-            RegisterGlobalUpgrade(1000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit III",
+            RegisterGlobalUpgrade(800, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit III",
                 "Increase the tower limit by +1.",
                 () => _purchasedUpgrades.Contains("Tower Limit II"),
                 (upgrade, entity) =>
@@ -235,7 +259,7 @@ namespace TonyDev.Game.Core.Behavior
                     GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
                 }, UpgradeCategory.Crystal);
             
-            RegisterGlobalUpgrade(1500, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit IV",
+            RegisterGlobalUpgrade(1000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit IV",
                 "Increase the tower limit by +1.",
                 () => _purchasedUpgrades.Contains("Tower Limit III"),
                 (upgrade, entity) =>
@@ -243,9 +267,33 @@ namespace TonyDev.Game.Core.Behavior
                     GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
                 }, UpgradeCategory.Crystal);
             
-            RegisterGlobalUpgrade(2000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit V",
+            RegisterGlobalUpgrade(1500, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit V",
                 "Increase the tower limit by +1.",
                 () => _purchasedUpgrades.Contains("Tower Limit IV"),
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(2000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit VI",
+                "Increase the tower limit by +1.",
+                () => _purchasedUpgrades.Contains("Tower Limit V"),
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(2000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit VII",
+                "Increase the tower limit by +1.",
+                () => _purchasedUpgrades.Contains("Tower Limit VI"),
+                (upgrade, entity) =>
+                {
+                    GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
+                }, UpgradeCategory.Crystal);
+            
+            RegisterGlobalUpgrade(2000, ObjectFinder.GetSprite("ballistaTurretUI"), "Tower Limit VIII",
+                "Increase the tower limit by +1.",
+                () => _purchasedUpgrades.Contains("Tower Limit VII"),
                 (upgrade, entity) =>
                 {
                     GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);

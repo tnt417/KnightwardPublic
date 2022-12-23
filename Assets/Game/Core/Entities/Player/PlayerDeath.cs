@@ -5,6 +5,7 @@ using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
@@ -20,6 +21,8 @@ namespace TonyDev.Game.Core.Entities.Player
     
         [SyncVar] public bool dead;
         private float _deathTimer;
+        
+        public bool disableDeathHandling;
 
         private void Awake()
         {
@@ -46,12 +49,14 @@ namespace TonyDev.Game.Core.Entities.Player
         
         private void DieLocal()
         {
+            if (disableDeathHandling) return;
             if(isLocalPlayer) CmdDie();
         }
 
         [Command(requiresAuthority = false)]
         private void CmdDie()
         {
+            if (disableDeathHandling) return;
             dead = true;
             RpcDie();
         }
@@ -59,6 +64,7 @@ namespace TonyDev.Game.Core.Entities.Player
         [ClientRpc]
         private void RpcDie()
         {
+            if (disableDeathHandling) return;
             if (isLocalPlayer)
             {
                 ObjectSpawner.SpawnMoney(GameManager.Money, Player.LocalInstance.transform.position, Player.LocalInstance.CurrentParentIdentity); //Drop money on the ground
@@ -73,7 +79,7 @@ namespace TonyDev.Game.Core.Entities.Player
             walkParticleSystem.Stop(); //Turn off walk particles
         }
         
-        private void ReviveLocal()
+        public void ReviveLocal()
         {
             if(isLocalPlayer) CmdRevive();
         }

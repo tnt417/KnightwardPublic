@@ -383,6 +383,7 @@ MonoBehaviour:
   wave: 0
   projectiles: []
   arenaWallTilemap: {fileID: 0}
+  doCrystalFocusing: 0
 --- !u!114 &8211467678594754332
 MonoBehaviour:
   m_ObjectHideFlags: 0

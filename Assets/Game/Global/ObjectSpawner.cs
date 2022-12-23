@@ -190,7 +190,7 @@ namespace TonyDev.Game.Global
 
             if (parent != null)
             {
-                var room = parent.GetComponent<Room>();
+                var room = RoomManager.Instance.GetRoomFromID(parent.netId);
 
                 if (room != null)
                 {
@@ -222,7 +222,7 @@ namespace TonyDev.Game.Global
 
             if (parent != null)
             {
-                var room = parent.GetComponent<Room>();
+                var room = RoomManager.Instance.GetRoomFromID(parent.netId);
 
                 if (room != null)
                 {

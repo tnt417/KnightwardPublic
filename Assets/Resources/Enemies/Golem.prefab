@@ -10537,6 +10537,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: _assetId
+      value: 970054302
+      objectReference: {fileID: 0}
+    - target: {fileID: 8955302732940848532, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_AssetId
       value: e88e4c048269cd94d92c8e7e2a384562
       objectReference: {fileID: 0}
@@ -10564,6 +10568,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d463cc6b51d323744be2bd86d5d2e02b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flipRenderer: {fileID: 0}
+  flipFlip: 0
   followSpeed: 4
   followTime: 5
   throwProjectile:
