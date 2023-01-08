@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities;
@@ -11,6 +13,7 @@ using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.UI;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using Random = System.Random;
 
@@ -20,6 +23,7 @@ namespace TonyDev.Game.Core.Items
     {
         //Editor variables
         [SerializeField] private int rarityBoost;
+        [SerializeField] private Animator animator;
 
         [SerializeField] private SpriteRenderer spriteRenderer;
         //
@@ -28,8 +32,7 @@ namespace TonyDev.Game.Core.Items
 
         private bool _pickupAble = true;
 
-        [FormerlySerializedAs("onPickup")]
-        public UnityEvent onPickupServer = new();
+        [FormerlySerializedAs("onPickup")] public UnityEvent onPickupServer = new();
         public UnityEvent onPickupGlobal = new();
 
         private void Awake()
@@ -39,17 +42,18 @@ namespace TonyDev.Game.Core.Items
                     .sharedMaterial); //Create a copy of the renderer's material to allow temporary editing.
 
             _interactable = GetComponent<InteractableItem>();
-            
-            _interactable.AddInteractKey(KeyCode.F, InteractType.Scrap);
-            
+
+            _interactable.AddInteractKey(Key.F, InteractType.Scrap);
+
             _interactable.onInteract.AddListener((type) =>
             {
                 if (cost > GameManager.Money)
                 {
-                    ObjectSpawner.SpawnTextPopup(Player.LocalInstance.transform.position, "You can't afford this!", Color.red, 0.5f);
+                    ObjectSpawner.SpawnTextPopup(Player.LocalInstance.transform.position, "You can't afford this!",
+                        Color.red, 0.5f);
                     return;
                 }
-                
+
                 if (type is InteractType.Purchase or InteractType.Pickup)
                 {
                     CmdRequestPickup(GameManager.Money);
@@ -57,11 +61,18 @@ namespace TonyDev.Game.Core.Items
                         DisablePickupForSeconds(
                             0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
                 }
-                else if(type == InteractType.Scrap)
+                else if (type == InteractType.Scrap)
                 {
                     CmdRequestScrap(GameManager.Money);
                 }
             });
+        }
+
+        private float _birthTime = Mathf.Infinity;
+
+        public override void OnStartClient()
+        {
+            _birthTime = Time.time;
         }
 
         public override void OnStartServer()
@@ -74,6 +85,25 @@ namespace TonyDev.Game.Core.Items
 
         private void OnItemChangeHook(Item oldItem, Item newItem)
         {
+            ItemChangeTask(oldItem, newItem).Forget();
+        }
+
+        private async UniTask ItemChangeTask(Item oldItem, Item newItem)
+        {
+            if (oldItem != null && Time.time - _birthTime > 0.5f)
+            {
+                animator.Play("GroundItemPickup");
+                await UniTask.Delay(250);
+                spriteRenderer.sprite = newItem.uiSprite; //Update the sprite
+                UpdateOutlineColor(); //Update the outline color
+
+                _pickupPending = false;
+
+                animator.Play("GroundItemSpawn");
+                await UniTask.Delay(250);
+                return;
+            }
+
             spriteRenderer.sprite = newItem.uiSprite; //Update the sprite
             UpdateOutlineColor(); //Update the outline color
         }
@@ -84,11 +114,27 @@ namespace TonyDev.Game.Core.Items
         {
             if (newItem == null)
             {
-                NetworkServer.Destroy(gameObject);
+                ItemDestroyTask().Forget();
                 return;
             }
 
             Item = newItem; //Update the item
+        }
+
+        [Server]
+        private async UniTask ItemDestroyTask()
+        {
+            RpcPlayPickup();
+            _interactable.Active = false;
+            _interactable.enabled = false;
+            await UniTask.Delay(250);
+            NetworkServer.Destroy(gameObject);
+        }
+
+        [ClientRpc]
+        private void RpcPlayPickup()
+        {
+            animator.Play("GroundItemPickup");
         }
 
         [SerializeField] [SyncVar(hook = nameof(OnCostChangeHook))]
@@ -112,7 +158,7 @@ namespace TonyDev.Game.Core.Items
         {
             cost = newCost;
         }
-        
+
         [Command(requiresAuthority = false)]
         public void CmdSetEssence(int newEssence)
         {
@@ -140,14 +186,15 @@ namespace TonyDev.Game.Core.Items
         }
 
         private bool _pickupPending = false;
-        
+
         [Command(requiresAuthority = false)]
         private void CmdRequestPickup(int senderMoney, NetworkConnectionToClient sender = null)
         {
-            if (senderMoney < cost || !_pickupAble || _pickupPending) return; //If the item is too expensive, don't allow pickup.
+            if (senderMoney < cost || !_pickupAble || _pickupPending)
+                return; //If the item is too expensive, don't allow pickup.
 
             _pickupPending = true;
-            
+
             RpcNotifyPickup();
             TargetConfirmPickup(sender, cost);
 
@@ -179,9 +226,9 @@ namespace TonyDev.Game.Core.Items
         {
             GameManager.Essence += confirmedEssence;
             GameManager.Money -= confirmedCost;
-            
+
             ObjectSpawner.SpawnTextPopup(transform.position, "+" + confirmedEssence + " essence", Color.cyan, 0.8f);
-            
+
             CmdNotifyReplacementItem(null);
         }
 
@@ -201,14 +248,15 @@ namespace TonyDev.Game.Core.Items
         private void CmdNotifyReplacementItem(Item newItem)
         {
             if (newItem == null)
-                NetworkServer.Destroy(gameObject); //If no item was replaced, just destroy this GroundItem
+            {
+                ItemDestroyTask().Forget();
+                //NetworkServer.Destroy(gameObject); //If no item was replaced, just destroy this GroundItem
+            }
             else
             {
                 CmdSetItem(newItem); //Otherwise, replaced the item
                 CmdSetCost(0); //Don't make the player pay for their replaced item
             }
-            
-            _pickupPending = false;
         }
 
         private IEnumerator DisablePickupForSeconds(float seconds) //Disables pickup for a specified number of seconds

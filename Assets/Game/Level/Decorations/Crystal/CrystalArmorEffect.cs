@@ -16,7 +16,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
             
             _nextBuffTime = Time.time + 1f;
             
-            Entity.Stats.AddBuff(new StatBonus(StatType.Flat, Stat.Armor, GameManager.EnemyDifficultyScale * 20f, EffectIdentifier), 1f);
+            Entity.Stats.AddBuff(new StatBonus(StatType.Flat, Stat.Armor, GameManager.EnemyDifficultyScale * 10f, EffectIdentifier), 1f);
         }
     }
 }

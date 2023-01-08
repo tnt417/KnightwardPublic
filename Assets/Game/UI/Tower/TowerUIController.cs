@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.UI.Inventory;
 using UnityEngine;
@@ -14,6 +16,8 @@ namespace TonyDev.Game.UI.Tower
 
         private ItemSlot _selectedTowerSlot;
 
+        public List<Item> towers;
+        
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -25,6 +29,8 @@ namespace TonyDev.Game.UI.Tower
         {
             var itemSlot = Instantiate(uiTowerPrefab, uiTowerGrid.transform).GetComponent<ItemSlot>();
             itemSlot.Item = item;
+            towers.Add(item);
+            towers = towers.OrderBy(t => t.itemName).ToList();
         }
 
         public void StartPlacingTower(ItemSlot slot, Item item)
@@ -35,6 +41,7 @@ namespace TonyDev.Game.UI.Tower
 
         public void ConfirmPlace()
         {
+            towers.Remove(_selectedTowerSlot.Item);
             Destroy(_selectedTowerSlot.gameObject); //Called when clicking while placing. Destroys the UI tower that was just placed.
         }
     }

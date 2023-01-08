@@ -1,4 +1,5 @@
 using System;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,8 @@ namespace TonyDev.Game.UI.Healthbar
         [SerializeField] private Slider healthSlider;
         [SerializeField] private Slider lagBehindSlider;
         [SerializeField] private Slider shieldSlider;
+        [SerializeField] private Slider decaySlider;
+        [SerializeField] private Image decayImage;
         [SerializeField] private Image fillImage;
         //
     
@@ -48,9 +51,19 @@ namespace TonyDev.Game.UI.Healthbar
             {
                 healthSlider.maxValue = gameEntity.NetworkMaxHealth; //Update the slider values.
                 healthSlider.value = gameEntity.NetworkCurrentHealth + gameEntity.ClientHealthDisparity;
+                
                 fillImage.color = gameEntity.IsInvulnerable
                     ? Color.blue//new Color(0.572549f, 0.909804f, 0.7529413f)
                     : new Color(0.3882353f, 0.6705883f, 0.2470588f);
+                
+                var dmg = PoisonEffect.GetPoisonDamage(gameEntity);
+                
+                decaySlider.maxValue = gameEntity.NetworkCurrentHealth;
+                decaySlider.value = dmg;
+
+                var willKill = dmg > gameEntity.NetworkCurrentHealth;
+
+                decayImage.color = willKill ? Color.red : Color.gray;
             }
             else
             {

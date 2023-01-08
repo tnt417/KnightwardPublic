@@ -39,7 +39,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
     public static class PlayerStats
     {
-        public static EntityStats Stats = new();
+        public static EntityStats Stats => Player.LocalInstance == null ? null : Player.LocalInstance.Stats;
 
         #region Item Stats
 

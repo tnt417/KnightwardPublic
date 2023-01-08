@@ -15,8 +15,7 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: b20d8451005ea46439928f2c9551ae85, type: 3}
     itemName: Poison Necklace
-    itemDescription: <color=green>On hit, poison enemies for <color=orange>100% damage</color>
-      over 10 seconds.</color>
+    itemDescription: 
     itemType: 2
     itemRarity: 0
     statBonuses: []
@@ -33,7 +32,7 @@ MonoBehaviour:
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        DamageMultiplierScale: {x: 0.8, y: 2}
+        DamageMultiplierScale: {x: 2, y: 5}
         TickFrequencyScale: {x: 1, y: 0.3}
         TickCount: 10
         DoPoisonStacking: 0

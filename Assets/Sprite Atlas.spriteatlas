@@ -138,6 +138,7 @@ SpriteAtlas:
   - {fileID: 288614523, guid: bd5f6242f30e62248a86dbde0c9b8fd0, type: 3}
   - {fileID: 21300000, guid: 8041074266557304d9bd0cacbaf52ba0, type: 3}
   - {fileID: 21300000, guid: e27c4c6211681df41a38930130a81ec9, type: 3}
+  - {fileID: 21300000, guid: 8d36cd82cd52bcb43ae05415dfa7fe23, type: 3}
   - {fileID: 21300000, guid: 21ed80a234edc954cb8cde6da8e8fdae, type: 3}
   - {fileID: -1550675817, guid: cd10e1c2d92657c41a838506da9d3145, type: 3}
   - {fileID: 940693111, guid: cd10e1c2d92657c41a838506da9d3145, type: 3}
@@ -266,6 +267,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: fb7380495a0658f46965dc4c68ae3016, type: 3}
   - {fileID: 21300000, guid: bd6bcd4977a4e48438f8137af1776091, type: 3}
   - {fileID: 21300000, guid: 86f63f891070f8a4eb9bbed32d5df0f6, type: 3}
+  - {fileID: 21300000, guid: 9590a9d91c1221e42aff8981078d7e7d, type: 3}
   - {fileID: -439185120, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
   - {fileID: 451852544, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
   - {fileID: -1509124595, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
@@ -281,6 +283,7 @@ SpriteAtlas:
   - {fileID: -1062254719, guid: 3471424a62f99fa43a5b7f9f8bc64d32, type: 3}
   - {fileID: 21300000, guid: 3d20df4a97fbf504aaa2839aed7ba042, type: 3}
   - {fileID: 21300000, guid: 6dfc766a45122a34dbc5c4ecfd7a1f6b, type: 3}
+  - {fileID: 21300000, guid: 67d2fcaaaf039f9439d57cf34b986f5f, type: 3}
   - {fileID: 21300000, guid: c56313faf03139d43a0cd4b9704234c2, type: 3}
   - {fileID: 21300000, guid: fbca2efa9c68b0548970da33d6272def, type: 3}
   - {fileID: 21300000, guid: c505801b72e7f134ab5832760a64c0c5, type: 3}
@@ -364,6 +367,14 @@ SpriteAtlas:
   - {fileID: 1629883976, guid: a616b7fcc53918640a449943e4ac8019, type: 3}
   - {fileID: 1644794737, guid: a616b7fcc53918640a449943e4ac8019, type: 3}
   - {fileID: 21300000, guid: c1d9512d51ae2954493b135c2f347ca4, type: 3}
+  - {fileID: 0, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
+  - {fileID: -2557773321243470698, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
+  - {fileID: 257579187058176457, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
+  - {fileID: -2366864222129252157, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
+  - {fileID: 1957714722623059309, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
+  - {fileID: 7109518031367584354, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
+  - {fileID: 3984661565143532033, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
+  - {fileID: -6953609280830869164, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
   - {fileID: 7118200970282507426, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
   - {fileID: -1689484523459101905, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
   - {fileID: -5491492863171229553, guid: 8cdbe25da88768f4496756826d10bb43, type: 3}
@@ -548,6 +559,7 @@ SpriteAtlas:
   - wallWindow_1
   - hotprogress
   - ai_glacialArmor
+  - ai_fireArmor
   - ai_crimsonArmor
   - dragon_2
   - dragon_1
@@ -676,6 +688,7 @@ SpriteAtlas:
   - colorplayer
   - coldprogress
   - flamethrowerUI
+  - icon
   - inventoryIcons_12
   - inventoryIcons_11
   - inventoryIcons_10
@@ -691,6 +704,7 @@ SpriteAtlas:
   - inventoryIcons_7
   - bloodstone
   - heavenlygaze
+  - ai_goldenArmor
   - flamethrowerhead
   - TeslaTowerUI
   - swingMap
@@ -774,6 +788,14 @@ SpriteAtlas:
   - IceTower_0
   - IceTower_1
   - desertpot
+  - beetle 9
+  - beetle 11
+  - beetle 10
+  - beetle 13
+  - beetle 12
+  - beetle 15
+  - beetle 14
+  - beetle 16
   - beetle 2
   - beetle 3
   - beetle 0

@@ -5,6 +5,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.UI.Menu.MainMenu
@@ -25,7 +26,7 @@ namespace TonyDev.Game.UI.Menu.MainMenu
         private void Update()
         {
             mainCamera.transform.position =
-                _originalCameraPos + (Input.mousePosition - new Vector3(Screen.width / 2f, Screen.height / 2f)) * menuShiftEffectStrength/1000f; //Offset the camera pos based on mouse pos.
+                _originalCameraPos + (Vector3)(Mouse.current.position.ReadValue() - new Vector2(Screen.width / 2f, Screen.height / 2f)) * menuShiftEffectStrength/1000f; //Offset the camera pos based on mouse pos.
         }
 
         public void OnHostClick()

@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.Core.Effects
 {
@@ -35,12 +38,21 @@ namespace TonyDev.Game.Core.Effects
                 SpawnHammer();
             }
 
-            for (int i = 0; i < _hammers.Count; i++)
+            if (_hammers.Count == 0) return;
+
+            var modifiedSpinSpeed = SpinSpeed * Entity.Stats.GetStat(Stat.AttackSpeed);
+
+            var hammerList = _hammers.ToList();
+            
+            for (var i = 0; i < hammerList.Count; i++)
             {
-                var go = _hammers[i];
-                go.transform.localPosition = new Vector2(Mathf.Cos(Time.time*SpinSpeed + (float) i / _hammers.Count * 2 * Mathf.PI),
-                    Mathf.Sin(Time.time*SpinSpeed + (float) i / _hammers.Count * 2 * Mathf.PI)) * SpinRadius;
+                var (go, att) = hammerList[i];
+                
+                go.transform.localPosition = new Vector2(Mathf.Cos(Time.time*modifiedSpinSpeed + (float) i / _hammers.Count * 2 * Mathf.PI),
+                    Mathf.Sin(Time.time*modifiedSpinSpeed + (float) i / _hammers.Count * 2 * Mathf.PI)) * SpinRadius;
                 go.transform.GetChild(0).transform.up = Vector2.Perpendicular((Vector2) go.transform.localPosition - Vector2.zero);
+
+                att.damageCooldown = 1f / Entity.Stats.GetStat(Stat.AttackSpeed);
             }
         }
 
@@ -48,11 +60,13 @@ namespace TonyDev.Game.Core.Effects
         {
             base.OnAbilityActivate();
 
-            foreach (var go in _hammers)
+            foreach (var  (go, _) in _hammers)
             {
-                var dir = (GameManager.MainCamera.ScreenToWorldPoint(Input.mousePosition) - go.transform.position).normalized;
+                var position = go.transform.position;
                 
-                ObjectSpawner.SpawnProjectile(Entity, go.transform.position, dir,
+                var dir = (GameManager.MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) - position).normalized;
+                
+                ObjectSpawner.SpawnProjectile(Entity, position, dir,
                     DetachProjectile);
             }
 
@@ -64,10 +78,10 @@ namespace TonyDev.Game.Core.Effects
 
         private void DestroyAllHammers()
         {
-            foreach (var go in _hammers)
+            foreach (var (key, value) in _hammers)
             {
-                GameManager.Instance.CmdDestroyProjectile(go.GetComponent<AttackComponent>().identifier);
-                Object.Destroy(go);
+                GameManager.Instance.CmdDestroyProjectile(value.identifier);
+                Object.Destroy(key);
             }
             
             _hammerRespawnTimer = Time.time + HammerRespawnTime;
@@ -79,7 +93,7 @@ namespace TonyDev.Game.Core.Effects
             base.OnAbilityDeactivate();
         }
 
-        private readonly List<GameObject> _hammers = new();
+        private readonly Dictionary<GameObject, AttackComponent> _hammers = new();
 
         private void SpawnHammer()
         {
@@ -87,14 +101,15 @@ namespace TonyDev.Game.Core.Effects
             
             var hammer = ObjectSpawner.SpawnProjectile(Entity, (Vector2) Entity.transform.position + new Vector2(2, 0),
                 Vector2.zero, AttachedProjectile, true);
-            _hammers.Add(hammer);
-            
+
             var att = hammer.GetComponent<AttackComponent>();
                 
             att.OnDamageDealt += (dmg, _, _) =>
             {
                 if(dmg > 0) SpawnHammer();
             };
+            
+            _hammers.Add(hammer, att);
         }
     }
 }

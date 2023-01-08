@@ -19,7 +19,7 @@ namespace TonyDev
         public string enemyName;
 
         public float baseDelay;
-        public float maxSpawns;
+        public int maxSpawns;
 
         private void Start()
         {
@@ -29,14 +29,28 @@ namespace TonyDev
             Animate().AttachExternalCancellation(token.Token);
         }
 
-        private List<GameObject> _spawnedEnemies = new();
+        private List<GameEntity> _spawnedEnemies = new();
         
         private async UniTask Animate()
         {
             while (tower != null)
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(baseDelay / tower.Stats.GetStat(Stat.AttackSpeed)));
-                await UniTask.WaitUntil(() => _spawnedEnemies.Count < maxSpawns);
+
+                _spawnedEnemies = _spawnedEnemies.Where(ge => ge != null).ToList();
+                
+                if (_spawnedEnemies.Count >= maxSpawns)
+                {
+                    var removing = _spawnedEnemies[maxSpawns-1];
+                    if (removing != null)
+                    {
+                        removing.Die();
+                    }
+                    else
+                    {
+                        _spawnedEnemies.Remove(removing);
+                    }
+                }
                 animator.Play("GhostSpawn");
             }
         }
@@ -51,10 +65,11 @@ namespace TonyDev
 
             enemy.Stats.ReadOnly = false;
             enemy.Stats.AddStatBonus(StatType.Override, Stat.Damage, tower.Stats.GetStat(Stat.Damage), "GhostTower");
+            enemy.Stats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, tower.Stats.GetStat(Stat.MoveSpeed), "GhostTower");
             
-            _spawnedEnemies.Add(enemy.gameObject);
+            _spawnedEnemies.Add(enemy);
 
-            enemy.OnDeathOwner += (_) => _spawnedEnemies.Remove(enemy.gameObject);
+            enemy.OnDeathOwner += (_) => _spawnedEnemies.Remove(enemy);
         }
         
         [ServerCallback]
@@ -62,7 +77,7 @@ namespace TonyDev
         {
             foreach (var ge in _spawnedEnemies.ToList())
             {
-                ge.GetComponent<GameEntity>().Die();
+                ge.Die();
             }
         }
     }

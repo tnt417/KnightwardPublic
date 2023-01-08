@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5776122630287784441}
-  - component: {fileID: 6896059557794123035}
   - component: {fileID: 5726748515536175969}
   m_Layer: 8
   m_Name: Sprite
@@ -33,26 +32,6 @@ Transform:
   m_Father: {fileID: 2329739912400454220}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!95 &6896059557794123035
-Animator:
-  serializedVersion: 4
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7316027935704092990}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 80f621d85a451c24db3c0c1473bd312f, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!212 &5726748515536175969
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -128,17 +107,21 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4143216695699966044, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754640, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: animator
       value: 
-      objectReference: {fileID: 6896059557794123035}
+      objectReference: {fileID: 1336656054451656487}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.enemyName
       value: Beetle
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.size
-      value: 3
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.hitboxRadius
@@ -161,8 +144,16 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].stat
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[4].stat
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.size
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[0].strength
@@ -177,17 +168,37 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[4].strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.contactAttackData.hitboxRadius
       value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[0].animation
       value: 
-      objectReference: {fileID: 7400000, guid: c21e0a1c5eb91ce4d852ecb15094f337, type: 2}
+      objectReference: {fileID: 7400000, guid: 7ea56f88a55f61d4f94819c1c050e759, type: 2}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[1].animation
       value: 
       objectReference: {fileID: 7400000, guid: 53fea439d4db5a64798576b680b41e4b, type: 2}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[2].animation
+      value: 
+      objectReference: {fileID: 7400000, guid: 62e49b20aa193ec4d9ad9accac4a4b01, type: 2}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[3].animation
+      value: 
+      objectReference: {fileID: 7400000, guid: c2def7869df22634b89a95ab25785196, type: 2}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[4].animation
+      value: 
+      objectReference: {fileID: 7400000, guid: 4daac7772d6fcfb45b000a9b18922908, type: 2}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.contactAttackData.damageMultiplier
       value: 1
@@ -195,6 +206,18 @@ PrefabInstance:
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[1].enemyAnimationState
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[2].enemyAnimationState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[3].enemyAnimationState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: enemyData.animations.Array.data[4].enemyAnimationState
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754642, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Controller
@@ -277,7 +300,27 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
   m_PrefabInstance: {fileID: 4761828991951568723}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1695600129202186138
+--- !u!95 &1336656054451656487
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2329739912400454215}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 80f621d85a451c24db3c0c1473bd312f, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &3390096103853825705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -286,12 +329,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 2329739912400454215}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a5e5d64adeefbb24b87a5e4f8b630731, type: 3}
+  m_Script: {fileID: 11500000, guid: 33b9072fd25178548a0f26b116fee769, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   flipRenderer: {fileID: 5726748515536175969}
   flipFlip: 1
-  chaseSpeedMultiplier: 5
+  chaseTime: 3
+  chaseSpeed: 4
+  dashSpeed: 4
+  dashRadius: 2
+  sandProjectile:
+    prefabKey: sandShot
+    projectileSprite: {fileID: 0}
+    attackData:
+      damageMultiplier: 0.5
+      knockbackMultiplier: 1
+      hitboxRadius: 0
+      team: 0
+      destroyOnApply: 1
+      destroyOnCollideWall: 1
+      lifetime: 1.5
+      spawnOnDestroyKey: 
+      ignoreInvincibility: 0
+    disableMovement: 0
+    travelSpeed: 8
+    offsetDegrees: 0
+    waveAmplitude: 0
+    waveLength: 0
+    waveDistance: 0
+    childOfOwner: 0
+    doNotRotate: 0
+    effects: []
+  references:
+    version: 2
+    RefIds: []
+--- !u!114 &4818311969024668957
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2329739912400454215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d3413993769548879c11be84b68fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seconds: 0
+  spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
 --- !u!4 &2329739912400454220 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}

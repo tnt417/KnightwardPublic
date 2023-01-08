@@ -234,8 +234,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  started: 0
   roomDoors:
   - {fileID: 7233540748473221879}
   - {fileID: 2062851405124684956}
@@ -282,9 +284,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2777285534
   serverOnly: 0
   visible: 2
-  m_AssetId: f6ea2f5f325eb4847b5be701e44503e6
   hasSpawned: 0
 --- !u!114 &8632290567538872406
 MonoBehaviour:
@@ -298,6 +300,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99fb17303c876704290b981877183438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   interactable: {fileID: 1199896591759854561}
@@ -332,6 +335,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df25f1cd216d5f84d9553e9401bbd805, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   slots:
@@ -347,6 +351,8 @@ MonoBehaviour:
     outcome: 3
   - slotSprite: {fileID: 21300000, guid: d8b67f9e00774da4f8cacb79dcf22edf, type: 3}
     outcome: 5
+  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
+    outcome: 4
   - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
     outcome: 4
   - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}

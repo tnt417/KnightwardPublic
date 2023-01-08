@@ -19,17 +19,22 @@ namespace TonyDev
         private Vector2 _hitPosition;
         
         private bool _hit = false;
-        
+
         private new void Start()
         {
             base.Start();
             _startPosition = transform.position;
+            lineRenderer.positionCount = 1;
             lineRenderer.SetPosition(0, _startPosition);
         }
 
         private void FixedUpdate()
         {
-            if(!_hit) lineRenderer.SetPosition(1, transform.position);
+            if (!_hit)
+            {
+                lineRenderer.positionCount = 2;
+                lineRenderer.SetPosition(1, transform.position);
+            }
         }
 
         protected override async UniTask ExecuteBehavior()
@@ -48,6 +53,8 @@ namespace TonyDev
             var lineDistance = Vector2.Distance(_startPosition, _hitPosition);
             var travelTime = lineDistance / retractSpeed;
             var animationEndTime = Time.time + travelTime;
+            
+            lineRenderer.positionCount = 2;
             
             while (isActiveAndEnabled && Time.time < animationEndTime)
             {

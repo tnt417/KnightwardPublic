@@ -19,6 +19,9 @@ namespace TonyDev.Game.Core.Entities.Enemies.slime
             {
                 await UniTask.WaitForFixedUpdate();
                 if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
+
+                await PathfindFollowUntilDirectSight(() => FirstEnemyTarget,
+                    () => Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier);
                 
                 await FollowUntil(() => FirstEnemyTarget, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier,
                     () => gameObject == null || _stomping);

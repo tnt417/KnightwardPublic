@@ -19,8 +19,10 @@ using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using TonyDev.Game.UI.GameInfo;
+using TonyDev.Game.UI.Tower;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
@@ -106,7 +108,7 @@ namespace TonyDev.Game.Global
         {
             return EntitiesReadonly.Where(e => Vector2.Distance(e.transform.position, pos) < range);
         }
-        
+
         public static void AddEntity(GameEntity entity)
         {
             Entities.Add(entity);
@@ -169,27 +171,16 @@ namespace TonyDev.Game.Global
             }
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdSetBreakMultiplier(float value)
-        {
-            RpcSetBreakMultiplier(value);
-        }
-
-        [ClientRpc]
-        private void RpcSetBreakMultiplier(float value)
-        {
-            WaveManager.BreakPassingMultiplier = value;
-        }
-
         #endregion
 
         #region Input
 
-        public static bool GameControlsActive => !GameConsole.IsTyping;
+        public static bool GameControlsActive => !GameConsole.IsTyping && !PauseController.Paused;
         public static Camera MainCamera;
 
         public static Vector2 MouseDirection =>
-            (MainCamera.ScreenToWorldPoint(Input.mousePosition) - Player.LocalInstance.transform.position).normalized;
+            (MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
+             Player.LocalInstance.transform.position).normalized;
 
         [Command(requiresAuthority = false)]
         public void CmdWriteChatMessage(string message, CustomRoomPlayer localRoomPlayer)
@@ -255,7 +246,7 @@ namespace TonyDev.Game.Global
             _maxTowers = limit;
         }
 
-        public bool SpawnTower(Item towerItem, Vector2 pos, NetworkIdentity parent)
+        private bool SpawnTower(Item towerItem, Vector2 pos, NetworkIdentity parent)
         {
             if (parent == null &&
                 Entities.Count(e => e is Tower && e.CurrentParentIdentity == null) >= MaxTowers)
@@ -267,6 +258,34 @@ namespace TonyDev.Game.Global
             CmdSpawnTower(towerItem, pos, parent);
 
             return true;
+        }
+
+        public async UniTask<bool> SpawnTowerTask(Item towerItem, Vector2 pos, NetworkIdentity parent)
+        {
+            var occupied = Instance.OccupiedTowerSpots.Contains(new Vector2Int((int) pos.x, (int) pos.y));
+
+            if (!occupied)
+            {
+                return SpawnTower(towerItem, pos, parent);
+            }
+
+            Item pickingUpItem = null;
+            
+            foreach (var ge in Entities.Where(ge => ge is Tower))
+            {
+                var tower = ge as Tower;
+
+                if ((Vector2)tower.transform.position != pos) continue;
+
+                pickingUpItem = tower.myItem;
+
+                tower.CmdRequestPickup();
+                break;
+            }
+
+            await UniTask.WaitUntil(() => TowerUIController.Instance.towers.Contains(pickingUpItem));
+            
+            return SpawnTower(towerItem, pos, parent);
         }
 
         [Command(requiresAuthority = false)]
@@ -302,7 +321,8 @@ namespace TonyDev.Game.Global
         [Command(requiresAuthority = false)]
         public void CmdSpawnEnemy(string enemyName, Vector2 position, NetworkIdentity parentRoom, int count)
         {
-            for(var i = 0; i < count; i++) ObjectSpawner.SpawnEnemy(ObjectFinder.GetPrefab(enemyName), position, parentRoom);
+            for (var i = 0; i < count; i++)
+                ObjectSpawner.SpawnEnemy(ObjectFinder.GetPrefab(enemyName), position, parentRoom);
         }
 
         [ClientRpc]
@@ -323,21 +343,25 @@ namespace TonyDev.Game.Global
         {
             var identifier = AttackComponent.GetUniqueIdentifier(owner);
             var go = AttackFactory.CreateProjectileAttack(owner, pos, direction, projectileData, identifier);
-            if (!localOnly) Instance.CmdSpawnProjectile(owner.netIdentity, pos, direction, projectileData, identifier);
+            if (!localOnly)
+                Instance.CmdSpawnProjectile(owner.netIdentity, pos, direction, projectileData, identifier,
+                    Player.LocalInstance.netId);
             return go;
         }
 
         [Command(requiresAuthority = false)]
         private void CmdSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction,
-            ProjectileData projectileData, string identifier)
+            ProjectileData projectileData, string identifier, uint senderPlayerNetId)
         {
-            RpcSpawnProjectile(owner, pos, direction, projectileData, identifier);
+            RpcSpawnProjectile(owner, pos, direction, projectileData, identifier, senderPlayerNetId);
         }
 
         [ClientRpc]
         private void RpcSpawnProjectile(NetworkIdentity owner, Vector2 pos, Vector2 direction,
-            ProjectileData projectileData, string identifier)
+            ProjectileData projectileData, string identifier, uint excludePlayer)
         {
+            if (Player.LocalInstance.netId == excludePlayer) return;
+
             if (owner == null || owner == NetworkClient.localPlayer)
                 return; //Projectiles should be spawned locally for the owner player of the projectile.
 
@@ -352,7 +376,7 @@ namespace TonyDev.Game.Global
         #region Initialization
 
         public Tilemap arenaWallTilemap;
-        
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -365,7 +389,7 @@ namespace TonyDev.Game.Global
             Player.OnLocalPlayerCreated += Init;
 
             Pathfinding.CreateArenaPathfinding(arenaWallTilemap);
-            
+
             if (isServer)
             {
                 netIdentity.AssignClientAuthority(NetworkServer.localConnection);
@@ -386,8 +410,8 @@ namespace TonyDev.Game.Global
 
         public static void ResetGame()
         {
-            if(Crystal.Instance != null) Crystal.Instance.SetHealth(5000f);
-            
+            if (Crystal.Instance != null) Crystal.Instance.SetHealth(5000f);
+
             Money = 0;
             Essence = 0;
             MoneyDropBonusFactor = 0;
@@ -396,9 +420,9 @@ namespace TonyDev.Game.Global
             AllItems?.Clear();
             Entities?.Clear();
             EnemySpawners?.Clear();
-            
-            if(PlayerInventory.Instance != null) PlayerInventory.Instance.Clear();
-            if(PlayerStats.Stats != null) PlayerStats.Stats.ClearStatBonuses();
+
+            if (PlayerInventory.Instance != null) PlayerInventory.Instance.Clear();
+            if (PlayerStats.Stats != null) PlayerStats.Stats.ClearStatBonuses();
         }
 
         //Switches back and forth between Arena and Dungeon phases
@@ -449,12 +473,12 @@ namespace TonyDev.Game.Global
             CmdFocusAllCamOnCrystal();
 
             await UniTask.Delay(TimeSpan.FromSeconds(3));
-            
+
             NetworkManager.singleton.StopHost();
         }
 
         public bool doCrystalFocusing = false;
-        
+
         [Command(requiresAuthority = false)]
         private void CmdFocusAllCamOnCrystal()
         {

@@ -15,18 +15,45 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: cf147b06c970c464ea750e7f9f6b0e1d, type: 3}
     itemName: Enchanted Stopwatch
-    itemDescription: 'TODO: Needs to be made to work in multiplayer.
-
-
-      Time
-      passes at 3/4ths the normal rate. Getting hit passes 3 seconds of time.'
+    itemDescription: 
     itemType: 2
     itemRarity: 2
     statBonuses: []
     bypassStatGeneration: 0
-    itemEffects: []
+    itemEffects:
+    - rid: 1191606179873947648
+    - rid: 1191606179873947649
     projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1191606179873947648
+      type: {class: EnchantedStopwatchEffect, ns: TonyDev.Game.Core.Items.Relics.Stopwatch, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        RadiusRange: {x: 5, y: 8}
+        MoveStealRange: {x: 0.2, y: 0.4}
+        AttackStealRange: {x: 0.3, y: 0.5}
+    - rid: 1191606179873947649
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ScalingStatBonuses:
+        - type: 1
+          stat: 0
+          scalingType: 0
+          valueRange: {x: 0.3, y: 0.5}
+          byFloor: 50
+        - type: 0
+          stat: 4
+          scalingType: 1
+          valueRange: {x: 0.1, y: 0.3}
+          byFloor: 50
+        - type: 0
+          stat: 5
+          scalingType: 1
+          valueRange: {x: 1, y: 3}
+          byFloor: 50

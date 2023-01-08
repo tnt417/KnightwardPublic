@@ -2357,7 +2357,7 @@ MonoBehaviour:
   m_Content: {fileID: 2594374340234441495}
   m_Horizontal: 0
   m_Vertical: 1
-  m_MovementType: 1
+  m_MovementType: 2
   m_Elasticity: 0.1
   m_Inertia: 1
   m_DecelerationRate: 0.135
@@ -2386,6 +2386,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiTowerPrefab: {fileID: 3345507759578261345, guid: 19633b47b0cd8c04790aef194d26df01, type: 3}
   uiTowerGrid: {fileID: 6700427910445459457}
+  towers: []
+  references:
+    version: 2
+    RefIds: []
 --- !u!1 &3501246023064041244
 GameObject:
   m_ObjectHideFlags: 0
@@ -4345,6 +4349,8 @@ GameObject:
   m_Component:
   - component: {fileID: 8031932738826649066}
   - component: {fileID: 8031932738826649065}
+  - component: {fileID: 299835763237650322}
+  - component: {fileID: 8148509606653918734}
   m_Layer: 5
   m_Name: InventoryUI
   m_TagString: Untagged
@@ -4370,7 +4376,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: -370}
   m_SizeDelta: {x: 600, y: 600}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &8031932738826649065
@@ -4385,6 +4391,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e37f1d78d045aa34593a3952bfc65d8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  animator: {fileID: 8148509606653918734}
   inventoryObject: {fileID: 8787289332321516222}
   gearInventoryObject: {fileID: 8031932738909692566}
   towerInventoryObject: {fileID: 3432247853795581020}
@@ -4413,6 +4420,56 @@ MonoBehaviour:
   dodgeText: {fileID: 7731364475548819076}
   attackSpeedText: {fileID: 8565472087646760577}
   cooldownText: {fileID: 7743927816450041544}
+--- !u!114 &299835763237650322
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8031932738826649067}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 64d2aa38a1e210f44ae875ee098edd23, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Keyboard&Mouse
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
+--- !u!95 &8148509606653918734
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8031932738826649067}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: e55865c887e6d064486ae820626a180b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8031932738909692566
 GameObject:
   m_ObjectHideFlags: 0

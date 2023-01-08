@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -54,12 +55,12 @@ namespace TonyDev.Game.Core.Effects
                 _chargeTimer += Time.deltaTime;
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (Player.LocalInstance.fireKeyHeld)
             {
                 _charging = true;
             }
             
-            if (Input.GetMouseButtonUp(0))
+            if (!Player.LocalInstance.fireKeyHeld && _charging)
             {
                 _charging = false;
                 Launch();

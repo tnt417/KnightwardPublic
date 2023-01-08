@@ -10,7 +10,9 @@ using TMPro;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+using UnityEngine.UIElements;
 
 namespace TonyDev.Game.Global.Console
 {
@@ -92,20 +94,28 @@ namespace TonyDev.Game.Global.Console
                     _sleepTimer = 0;
                 }
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.Slash) && !consoleUIInput.isFocused)
+        public void OnChat(InputValue value)
+        {
+            if (!value.isPressed) return;
+            
+            if (!consoleUIInput.isFocused)
+            {
+                consoleUIObject.SetActive(true);
+                consoleUIInput.Select();
+                _sleepTimer = 0;
+            }
+        }
+
+        public void OnCommand(InputValue value)
+        {
+            if (value.isPressed && !consoleUIInput.isFocused)
             {
                 consoleUIObject.SetActive(true);
                 consoleUIInput.ActivateInputField();
                 consoleUIInput.text = "/";
                 consoleUIInput.MoveToEndOfLine(false, false);
-                _sleepTimer = 0;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Return) && !consoleUIInput.isFocused)
-            {
-                consoleUIObject.SetActive(true);
-                consoleUIInput.Select();
                 _sleepTimer = 0;
             }
         }

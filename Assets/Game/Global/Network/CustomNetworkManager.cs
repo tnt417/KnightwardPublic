@@ -18,8 +18,10 @@ namespace TonyDev.Game.Global.Network
     {
         public new void Start()
         {
-            base.Start();
+            _lobbyCreated = false;
             maxConnections = SteamLobbyManager.MaxConnections;
+            
+            base.Start();
         }
         
         public override void OnClientDisconnect()
@@ -39,19 +41,28 @@ namespace TonyDev.Game.Global.Network
             }
         }
 
+        private bool _lobbyCreated = false;
+        
         public async UniTask CreateAndHost()
         {
+            networkAddress = "localhost";
+            
             SteamLobbyManager.Singleton.HostLobby();
             
-            var lobbyCreated = false;
+            _lobbyCreated = false;
 
-            SteamLobbyManager.Singleton.OnLobbyCreateSuccessful += () =>
-            {
-                lobbyCreated = true;
-                StartHost();
-            };
+            SteamLobbyManager.Singleton.OnLobbyCreateSuccessful += OnLobbyCreateSuccessful;
 
-            await UniTask.WaitUntil(() => lobbyCreated);
+            await UniTask.WaitUntil(() => _lobbyCreated);
+        }
+
+        private void OnLobbyCreateSuccessful()
+        {
+            _lobbyCreated = true;
+            Debug.Log("Starting host!");
+            StartHost();
+
+            SteamLobbyManager.Singleton.OnLobbyCreateSuccessful -= OnLobbyCreateSuccessful;
         }
 
         public override void OnRoomServerPlayersReady()

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MapGenConfig
   m_EditorClassIdentifier: 
   mapZones:
-  - startFloor: 0
+  - startFloor: 1
     zone: 0
     uncommonAmount: 2
     specialAmount: 1
@@ -21,8 +21,6 @@ MonoBehaviour:
     roomEntries:
     - tier: 0
       roomPrefab: {fileID: 4178251165929004475, guid: 66a72d55e2c30dc41b0ff6d39c824a28, type: 3}
-    - tier: 0
-      roomPrefab: {fileID: 4178251165929004475, guid: c2f6992808ebf3747a73cb75031d047d, type: 3}
     - tier: 0
       roomPrefab: {fileID: 4178251165929004475, guid: 791930a0a51a3e745a6834cdc33b6a70, type: 3}
     - tier: 1
@@ -47,8 +45,6 @@ MonoBehaviour:
       roomPrefab: {fileID: 4178251165929004475, guid: 45c16b161e455444e90ed32c04e8b43a, type: 3}
     - tier: 1
       roomPrefab: {fileID: 4178251165929004475, guid: aaabc7c9f51f0804087bb4fbe147a9b5, type: 3}
-    - tier: 1
-      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
     - tier: 4
       roomPrefab: {fileID: 4178251165929004475, guid: b95e3c86f47680346ae38602e9b429b1, type: 3}
   - startFloor: 11
@@ -74,13 +70,35 @@ MonoBehaviour:
     - tier: 4
       roomPrefab: {fileID: 1124590283425073302, guid: 905f9d0574272d84283567c86a0260cf, type: 3}
     - tier: 2
-      roomPrefab: {fileID: 7562392510374480235, guid: a04786ebdf10be24f98108f399041824, type: 3}
+      roomPrefab: {fileID: 4178251165929004475, guid: 00f85dae950723a47862834ce2543b75, type: 3}
     - tier: 0
-      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
-    - tier: 0
-      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+      roomPrefab: {fileID: 4178251165929004475, guid: 744248b93730e8c43a581edbdbf7607d, type: 3}
     - tier: 0
       roomPrefab: {fileID: 4178251165929004475, guid: c2f6992808ebf3747a73cb75031d047d, type: 3}
+  - startFloor: 21
+    zone: 2
+    uncommonAmount: 1
+    specialAmount: 2
+    roomAmountRange: {x: 5, y: 6}
+    roomEntries:
+    - tier: 2
+      roomPrefab: {fileID: 7562392510374480235, guid: a04786ebdf10be24f98108f399041824, type: 3}
+    - tier: 1
+      roomPrefab: {fileID: 6922258286344746195, guid: 03c1a0660a9af6c4f828f75bd895c8ed, type: 3}
+    - tier: 3
+      roomPrefab: {fileID: 6922258286344746195, guid: fe010d5f92c111041b7ecebdeb4fd333, type: 3}
+    - tier: 3
+      roomPrefab: {fileID: 1124590283425073302, guid: fe9111b670e8b324d946617465a2e7ce, type: 3}
+    - tier: 2
+      roomPrefab: {fileID: 373691286257917635, guid: c2533c91701f90a48bcb98c293a8fe09, type: 3}
     - tier: 0
-      roomPrefab: {fileID: 1158627630686436465, guid: d1329fb3c8fcda54c92531ae2c8e3177, type: 3}
-  loopPoint: 20
+      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+  - startFloor: 0
+    zone: 0
+    uncommonAmount: 0
+    specialAmount: 0
+    roomAmountRange: {x: 1, y: 1}
+    roomEntries:
+    - tier: 3
+      roomPrefab: {fileID: 6922258286344746195, guid: 86dc29b3091a0d7469a083c093bdaa11, type: 3}
+  loopPoint: 31

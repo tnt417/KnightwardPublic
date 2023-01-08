@@ -66,7 +66,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 48
+    maxTextureSize: 64
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -84,7 +84,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 32
+        y: 48
         width: 14
         height: 16
       alignment: 0
@@ -105,7 +105,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 14
-        y: 32
+        y: 48
         width: 14
         height: 16
       alignment: 0
@@ -126,7 +126,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 28
-        y: 32
+        y: 48
         width: 14
         height: 16
       alignment: 0
@@ -146,8 +146,8 @@ TextureImporter:
       name: beetle 3
       rect:
         serializedVersion: 2
-        x: 0
-        y: 16
+        x: 42
+        y: 48
         width: 14
         height: 16
       alignment: 0
@@ -168,7 +168,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 32
+        y: 48
         width: 14
         height: 16
       alignment: 0
@@ -188,8 +188,8 @@ TextureImporter:
       name: beetle 5
       rect:
         serializedVersion: 2
-        x: 14
-        y: 16
+        x: 0
+        y: 32
         width: 14
         height: 16
       alignment: 0
@@ -209,8 +209,8 @@ TextureImporter:
       name: beetle 6
       rect:
         serializedVersion: 2
-        x: 28
-        y: 16
+        x: 14
+        y: 32
         width: 14
         height: 16
       alignment: 0
@@ -230,8 +230,8 @@ TextureImporter:
       name: beetle 7
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 28
+        y: 32
         width: 14
         height: 16
       alignment: 0
@@ -252,7 +252,7 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 0
-        y: 32
+        y: 48
         width: 14
         height: 16
       alignment: 0
@@ -264,6 +264,174 @@ TextureImporter:
       bones: []
       spriteID: fa0bc61f5b0649bc0800000000000000
       internalID: -3777287852901224273
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 10
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 32
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 11
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 12
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 16
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 13
+      rect:
+        serializedVersion: 2
+        x: 28
+        y: 16
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 14
+      rect:
+        serializedVersion: 2
+        x: 42
+        y: 16
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 15
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: beetle 16
+      rect:
+        serializedVersion: 2
+        x: 14
+        y: 0
+        width: 14
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 00000000000000000800000000000000
+      internalID: 0
       vertices: []
       indices: 
       edges: []
@@ -280,11 +448,19 @@ TextureImporter:
     secondaryTextures: []
     nameFileIdTable:
       beetle 5: -6598490390759530595
+      beetle 11: 0
       beetle 6: 5517400142446647039
       beetle 4: -4810293747441480381
+      beetle 13: 0
+      beetle 9: 0
+      beetle 14: 0
       beetle 3: -1689484523459101905
+      beetle 15: 0
+      beetle 16: 0
       beetle 1: 1243433717067460437
+      beetle 10: 0
       beetle 8: -3777287852901224273
+      beetle 12: 0
       beetle 2: 7118200970282507426
       beetle 0: -5491492863171229553
       beetle 7: -1324100371385678427

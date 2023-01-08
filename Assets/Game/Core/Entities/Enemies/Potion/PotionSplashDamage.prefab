@@ -67,12 +67,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   identifier: 
   damage: 20
-  damageMultiplier: 0.2
-  knockbackMultiplier: 0
+  damageMultiplier: 2
+  knockbackMultiplier: 0.2
   damageCooldown: 2
   team: 0
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  destroyOnHitWall: 0
   ignoreInvincibility: 1
   inflictBuffs: []
   inflictEffects: []
@@ -89,7 +90,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a37d3413993769548879c11be84b68fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  seconds: 1
+  seconds: 0.5
   spawnPrefabOnDestroy: {fileID: 0}
 --- !u!198 &5713301706756607162
 ParticleSystem:
@@ -100,7 +101,7 @@ ParticleSystem:
   m_GameObject: {fileID: 2801006091708425565}
   serializedVersion: 8
   lengthInSec: 1
-  simulationSpeed: 1
+  simulationSpeed: 2
   stopAction: 0
   cullingMode: 0
   ringBufferMode: 0
@@ -285,15 +286,15 @@ ParticleSystem:
       maxGradient:
         serializedVersion: 2
         key0: {r: 0.90196085, g: 0.27058825, b: 0.22352943, a: 1}
-        key1: {r: 0.47058827, g: 0.1137255, b: 0.30980393, a: 1}
+        key1: {r: 0.6784314, g: 0.18431373, b: 0.27058825, a: 1}
         key2: {r: 0.6784314, g: 0.18431373, b: 0.27058825, a: 0}
-        key3: {r: 1, g: 0.9333334, b: 0.5137255, a: 0}
-        key4: {r: 0.50345993, g: 1, b: 0, a: 0}
-        key5: {r: 0.50345993, g: 1, b: 0, a: 0}
+        key3: {r: 0.6784314, g: 0.18431373, b: 0.27058825, a: 0}
+        key4: {r: 0.6784314, g: 0.18431373, b: 0.27058825, a: 0}
+        key5: {r: 0.6784314, g: 0.18431373, b: 0.27058825, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
         ctime0: 0
-        ctime1: 32768
+        ctime1: 65535
         ctime2: 65535
         ctime3: 65535
         ctime4: 65535
@@ -309,7 +310,7 @@ ParticleSystem:
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_NumColorKeys: 3
+        m_NumColorKeys: 2
         m_NumAlphaKeys: 2
       minGradient:
         serializedVersion: 2
@@ -806,7 +807,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 1.5
+      value: 0.1
       mode: 0
       spread: 0
       speed:
@@ -1028,7 +1029,7 @@ ParticleSystem:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-    m_BurstCount: 1
+    m_BurstCount: 2
     m_Bursts:
     - serializedVersion: 2
       time: 0
@@ -1036,6 +1037,64 @@ ParticleSystem:
         serializedVersion: 2
         minMaxState: 0
         scalar: 200
+        minScalar: 30
+        maxCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        minCurve:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 1
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      cycleCount: 1
+      repeatInterval: 0.01
+      probability: 1
+    - serializedVersion: 2
+      time: 0.2
+      countCurve:
+        serializedVersion: 2
+        minMaxState: 0
+        scalar: 100
         minScalar: 30
         maxCurve:
           serializedVersion: 2
@@ -2082,15 +2141,15 @@ ParticleSystem:
         m_RotationOrder: 4
     radial:
       serializedVersion: 2
-      minMaxState: 0
-      scalar: -0.1
+      minMaxState: 1
+      scalar: 10
       minScalar: 0
       maxCurve:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 3
           time: 0
-          value: 0
+          value: 0.29702964
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -2099,7 +2158,7 @@ ParticleSystem:
           outWeight: 0.33333334
         - serializedVersion: 3
           time: 1
-          value: 0
+          value: 0.004943542
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -4878,7 +4937,7 @@ ParticleSystemRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: ebff5c81fd26c82489639b48dddd7056, type: 2}
+  - {fileID: 2100000, guid: 78c704e211473a644967c5d8e12b0a3e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -11,6 +11,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.UI.Tower;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Core.Behavior
@@ -311,7 +312,7 @@ namespace TonyDev.Game.Core.Behavior
 
             if (!uiToggleObject.activeSelf) return; // Don't do redundant checks if already deactivated
 
-            if (Input.GetKeyDown(KeyCode.Escape) || _moveSinceActive > 1f) // Check should deactivate
+            if (Keyboard.current[Key.Escape].wasPressedThisFrame || _moveSinceActive > 1f) // Check should deactivate
             {
                 uiToggleObject.SetActive(false); // Deactivate
             }

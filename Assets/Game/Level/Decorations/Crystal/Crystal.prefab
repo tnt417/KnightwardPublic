@@ -151,6 +151,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eced12fa32c2bc1419cc42585fcfb5b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   targetTag: 
@@ -182,7 +183,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 0
 --- !u!114 &3319039379709736289
 MonoBehaviour:
@@ -197,9 +198,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 3432245516
   serverOnly: 0
   visible: 2
-  m_AssetId: 8d3f408f264fc6b448bfee518430f6d6
   hasSpawned: 0
 --- !u!58 &7676856395648185354
 CircleCollider2D:
@@ -659,6 +660,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7127552388381089783, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229557978599297077, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229557978599297077, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7229557978599297077, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
+      propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

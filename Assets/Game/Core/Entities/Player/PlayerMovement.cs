@@ -4,6 +4,7 @@ using System.Linq;
 using Mirror;
 using TonyDev.Game.Global;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Vector2 = UnityEngine.Vector2;
 
 namespace TonyDev.Game.Core.Entities.Player
@@ -20,7 +21,7 @@ namespace TonyDev.Game.Core.Entities.Player
                 Force = force;
                 Direction = direction;
             }
-            
+
             public readonly Vector2 Direction; //Direction of the force
             public readonly float InitialForce; //The force at the creation of the force
             public float Force; //The current force
@@ -38,24 +39,26 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public Action<Vector2> OnPlayerMove;
 
-        private Vector2 _lastMovementInput;
+        private Vector2 _currentMovementInput;
 
         private List<GameForce> _forceVectors = new();
 
         private void FixedUpdate()
         {
-            if (!DoMovement || !hasAuthority) return;
+            if (!DoMovement || !isOwned) return;
 
             //dx and dy are either 1, 0, or -1 depending on keys being pressed
-            var dx = (Input.GetKey(KeyCode.A) && GameManager.GameControlsActive ? -1 : 0) +
-                     (Input.GetKey(KeyCode.D) && GameManager.GameControlsActive ? 1 : 0);
-            var dy = (Input.GetKey(KeyCode.S) && GameManager.GameControlsActive ? -1 : 0) +
-                     (Input.GetKey(KeyCode.W) && GameManager.GameControlsActive ? 1 : 0);
-            
+            var dx = _currentMovementInput.x; //(Input.GetKey(KeyCode.A) && GameManager.GameControlsActive ? -1 : 0) +
+            //(Input.GetKey(KeyCode.D) && GameManager.GameControlsActive ? 1 : 0);
+            var dy = _currentMovementInput.y; //(Input.GetKey(KeyCode.S) && GameManager.GameControlsActive ? -1 : 0) +
+            //(Input.GetKey(KeyCode.W) && GameManager.GameControlsActive ? 1 : 0);
+
             //Dampen forces over time according to a curve. Force has a floor to ensure that it always completes its path. Trim forces with no units remaining.
             _forceVectors = _forceVectors.Select(x =>
             {
-                x.Force = x.InitialForce * Mathf.Clamp(-Mathf.Pow(2f*(x.UnitsRemaining / x.InitialUnits)-1f, 16f) + 1f, 0.2f, x.InitialForce);
+                x.Force = x.InitialForce *
+                          Mathf.Clamp(-Mathf.Pow(2f * (x.UnitsRemaining / x.InitialUnits) - 1f, 16f) + 1f, 0.2f,
+                              x.InitialForce);
                 x.UnitsRemaining -= x.Force * Time.fixedDeltaTime;
                 return x;
             }).Where(x => x.UnitsRemaining > 0).ToList();
@@ -65,19 +68,17 @@ namespace TonyDev.Game.Core.Entities.Player
                 ? _forceVectors.Select(x => x.Force * x.Direction).Aggregate((x, y) => x + y)
                 : Vector2.zero;
 
-            //Used for dashing direction
-            _lastMovementInput = new Vector2(dx, dy);
+            var movement = /*Time.fixedDeltaTime **/ (new Vector2(dx, dy).normalized * GetSpeedMultiplier() + forceSum);
 
-            var movement = Time.fixedDeltaTime * (new Vector2(dx, dy).normalized * GetSpeedMultiplier() + forceSum);
-            
             //Move the rigidbody to the correct position
-            rb2D.MovePosition((Vector2) transform.position +
-                              movement);
+            //rb2D.MovePosition((Vector2) transform.position + movement);
 
+            rb2D.AddForce(movement);
+            
             OnPlayerMove?.Invoke(movement);
-            
+
             if (Player.LocalInstance.playerAnimator == null) return;
-            
+
             //Set animation directions based on the keys that were pressed.
             if (dy > 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Up;
             if (dy < 0) Player.LocalInstance.playerAnimator.PlayerAnimState = PlayerAnimState.Down;
@@ -87,9 +88,20 @@ namespace TonyDev.Game.Core.Entities.Player
             //
         }
 
+        public void OnMove(InputValue value)
+        {
+            if (!GameManager.GameControlsActive)
+            {
+                _currentMovementInput = Vector2.zero;
+                return;
+            }
+            if (!isOwned) return;
+            _currentMovementInput = value.Get<Vector2>();
+        }
+
         public void Dash(float distance)
         {
-            AddForce(_lastMovementInput.normalized, distance);
+            AddForce(_currentMovementInput.normalized, distance);
         }
 
         private void AddForce(Vector2 direction, float units)

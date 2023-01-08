@@ -27,6 +27,10 @@ PrefabInstance:
       propertyPath: m_SpriteTilingProperty.oldSize.y
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 4143216695699966044, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.enemyName
       value: Potion
@@ -190,6 +194,20 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
   m_PrefabInstance: {fileID: 4455883852642452386}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &-8453588589962416134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6888245627200159414}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d3413993769548879c11be84b68fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seconds: 0
+  spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
 --- !u!114 &391586794741510673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -206,17 +224,28 @@ MonoBehaviour:
   flipFlip: 0
   followSpeed: 6
   detonateDistance: 1
---- !u!114 &2250562069221476118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6888245627200159414}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a37d3413993769548879c11be84b68fe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seconds: 1000000
-  spawnPrefabOnDestroy: {fileID: 2801006091708425565, guid: fe18cc1e17c046546a488df4c9eeb304, type: 3}
+  detonateProjectile:
+    prefabKey: 
+    projectileSprite: {fileID: 0}
+    attackData:
+      damageMultiplier: 1
+      knockbackMultiplier: 1
+      hitboxRadius: 0
+      team: 0
+      destroyOnApply: 0
+      destroyOnCollideWall: 0
+      lifetime: 0.001
+      spawnOnDestroyKey: potionSplash
+      ignoreInvincibility: 0
+    disableMovement: 1
+    travelSpeed: 0
+    offsetDegrees: 0
+    waveAmplitude: 0
+    waveLength: 0
+    waveDistance: 0
+    childOfOwner: 1
+    doNotRotate: 1
+    effects: []
+  references:
+    version: 2
+    RefIds: []

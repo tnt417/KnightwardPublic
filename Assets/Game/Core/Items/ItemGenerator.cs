@@ -24,9 +24,10 @@ namespace TonyDev.Game.Core.Items
 
         private static Item GetTowerItem(ItemRarity itemRarity)
         {
-            return Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Tower && i.itemRarity == itemRarity).ToArray());
+            return Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item)
+                .Where(i => i.itemType == ItemType.Tower && i.itemRarity == itemRarity).ToArray());
         }
-        
+
         public static Item GenerateItem(int rarityBoost)
         {
             var itemType = Item.RandomItemType;
@@ -38,20 +39,22 @@ namespace TonyDev.Game.Core.Items
         {
             var item = Object.Instantiate(data).item;
 
-            item.statBonuses = StatBonus.Combine(GenerateItemStats(item.itemType, item.itemRarity, item.bypassStatGeneration), item.statBonuses).ToArray();
+            item.statBonuses = StatBonus
+                .Combine(GenerateItemStats(item.itemType, item.itemRarity, item.bypassStatGeneration), item.statBonuses)
+                .ToArray();
 
             if (item.itemType == ItemType.Relic)
             {
                 return ScaleRelicStats(item);
             }
-            
+
             return item;
         }
-        
+
         public static int GenerateEssence(Item item, int dungeonFloor = 0)
         {
             if (dungeonFloor <= 0) dungeonFloor = GameManager.DungeonFloor;
-            
+
             if (item == null)
             {
                 Debug.LogWarning("Cannot generate essence for null item!");
@@ -64,7 +67,6 @@ namespace TonyDev.Game.Core.Items
         //Returns a randomly generated item based on input parameters
         public static Item GenerateItemOfType(ItemType type, ItemRarity rarity)
         {
-
             //Instantiate local variables that will end up at the parameters for the generated item.
             Item item = null;
             var itemName = string.Empty;
@@ -74,7 +76,14 @@ namespace TonyDev.Game.Core.Items
 
             if (type == ItemType.Weapon)
             {
-                item = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Weapon));
+                item = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item)
+                    .Where(i => i.itemType == ItemType.Weapon));
+            }
+
+            if (type == ItemType.Armor)
+            {
+                item = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item)
+                    .Where(i => i.itemType == ItemType.Armor));
             }
 
             //Set sprites and item names based on the item type
@@ -86,15 +95,28 @@ namespace TonyDev.Game.Core.Items
                         Debug.LogWarning("Failed to generate weapon item!");
                         return null;
                     }
+
+                    bypassStatGen = item.bypassStatGeneration;
+                    
                     sprite = item.uiSprite;
                     itemName = item.itemName;
                     break;
                 case ItemType.Armor:
-                    sprite = Tools.SelectRandom(_armorSprites);
-                    itemName = "Armor";
+                    if (item == null)
+                    {
+                        Debug.LogWarning("Failed to generate armor item!");
+                        return null;
+                    }
+
+                    bypassStatGen = item.bypassStatGeneration;
+                    
+                    sprite = item.uiSprite;
+                    itemName = item.itemName;
                     break;
                 case ItemType.Relic:
-                    var selectedRelic = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item).Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
+                    var selectedRelic = Tools.SelectRandom(GameManager.AllItems
+                        .Select(id => Object.Instantiate(id).item)
+                        .Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
                     bypassStatGen = selectedRelic.bypassStatGeneration;
                     return ScaleRelicStats(selectedRelic);
                 case ItemType.Tower:
@@ -110,7 +132,9 @@ namespace TonyDev.Game.Core.Items
                 itemType = type,
                 itemRarity = rarity,
                 itemName = itemName,
-                statBonuses = item == null ? GenerateItemStats(type, rarity, bypassStatGen) : StatBonus.Combine(GenerateItemStats(type, rarity, bypassStatGen), item.statBonuses).ToArray(),
+                statBonuses = item == null
+                    ? GenerateItemStats(type, rarity, bypassStatGen)
+                    : StatBonus.Combine(GenerateItemStats(type, rarity, bypassStatGen), item.statBonuses).ToArray(),
                 uiSprite = sprite,
                 itemEffects = item?.itemEffects.AsReadOnly().ToList(),
                 projectiles = item?.projectiles
@@ -119,9 +143,12 @@ namespace TonyDev.Game.Core.Items
 
         #region Stat Generation
 
-        public static float StatStrengthFactor => 1f + GameManager.DungeonFloor/15f;
+        public static float StatStrengthFactor => 1f + GameManager.DungeonFloor / 15f;
         private static float DamageStrength => Random.Range(0.95f, 1.05f) * GameManager.DungeonFloor * 1.75f + 15f;
-        private static float AttackSpeedStrength => Random.Range(0.95f, 1.05f) + Mathf.Log(GameManager.DungeonFloor, 50);
+
+        private static float AttackSpeedStrength =>
+            Random.Range(0.95f, 1.05f) + Mathf.Log(GameManager.DungeonFloor, 50);
+
         private static float ArmorStrength => Random.Range(0.95f, 1.05f) * 5 * GameManager.DungeonFloor;
         private static float HealthStrength => Random.Range(0.95f, 1.05f) * 20 * GameManager.DungeonFloor;
 
@@ -135,10 +162,10 @@ namespace TonyDev.Game.Core.Items
 
                 original.statBonuses[i] = bonus;
             }
-            
+
             return original;
         }
-        
+
         private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity, bool bypassStatGen)
         {
             if (itemType is not (ItemType.Armor or ItemType.Weapon or ItemType.Tower) || bypassStatGen) return null;
@@ -148,7 +175,7 @@ namespace TonyDev.Game.Core.Items
             Uncommon = base dmg+, base attack spd+
             Rare = base dmg++, base attack spd++, bonus stat
             Unique = base dmg++, base attack spd++, bonus stat, bonus stat, special effect (ONLY DROPS FROM SPECIAL PLACES!) TODO*/
-            
+
             //1. add stat bonuses to an array without a strength
             //2. adjust the strength of the effects depending on the stat
 
@@ -164,21 +191,25 @@ namespace TonyDev.Game.Core.Items
             };
 
             var source = Enum.GetName(typeof(ItemType), itemType);
-            
+
             switch (itemType)
             {
                 case ItemType.Weapon:
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, source));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier,
+                        source));
                     break;
                 case ItemType.Armor:
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Armor, ArmorStrength * multiplier, source));
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Health, HealthStrength * multiplier, source));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.HpRegen, HealthStrength * multiplier * 0.05f, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.HpRegen, HealthStrength * multiplier * 0.05f,
+                        source));
                     break;
                 case ItemType.Tower:
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier * 0.8f, source));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier * 0.8f, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage,
+                        Mathf.Pow(DamageStrength * multiplier, 1.3f), source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier,
+                        source));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(itemType), itemType, null);
@@ -205,33 +236,36 @@ namespace TonyDev.Game.Core.Items
         {
             return stat switch
             {
-                Stat.Damage => DamageStrength*0.3f,
-                Stat.AttackSpeed => AttackSpeedStrength*0.3f,
+                Stat.Damage => DamageStrength * 0.3f,
+                Stat.AttackSpeed => AttackSpeedStrength * 0.3f,
                 Stat.Armor => ArmorStrength * 0.3f,
                 Stat.Health => HealthStrength * 0.3f,
-                Stat.CritChance => Random.Range(0.2f, 0.3f) + Mathf.Lerp(0.2f, 0.5f, Mathf.Log(GameManager.DungeonFloor, 50f)),
+                Stat.CritChance => Random.Range(0.2f, 0.3f) +
+                                   Mathf.Lerp(0.2f, 0.5f, Mathf.Log(GameManager.DungeonFloor, 50f)),
                 Stat.Dodge => Random.Range(0f, 0.1f) + Mathf.Lerp(0.2f, 0.4f, Mathf.Log(GameManager.DungeonFloor, 50f)),
                 Stat.AoeSize => Random.Range(0.2f, 0.75f),
                 Stat.MoveSpeed => Random.Range(0f, 2f) + Mathf.Lerp(1f, 3f, Mathf.Log(GameManager.DungeonFloor, 50f)),
-                Stat.CooldownReduce => Random.Range(0f, 0.1f) + Mathf.Lerp(0.2f, 0.4f, Mathf.Log(GameManager.DungeonFloor, 50f)),
+                Stat.CooldownReduce => Random.Range(0f, 0.1f) +
+                                       Mathf.Lerp(0.2f, 0.4f, Mathf.Log(GameManager.DungeonFloor, 50f)),
                 Stat.HpRegen => HealthStrength / 10f,
                 _ => throw new ArgumentOutOfRangeException(nameof(stat), stat, null)
             };
         }
+
         #endregion
 
         public static float DungeonInteractMultiplier => (1 + GameManager.DungeonFloor / 5f);
-        
+
         public static int GenerateCost(Item item, int dungeonFloor)
         {
             if (item == null) return 0;
-            
+
             return (int) (item.itemRarity switch
             {
-                ItemRarity.Common => 15f * (1.2f + dungeonFloor/7f) + 10f,
-                ItemRarity.Uncommon => 20f * (1.2f + dungeonFloor/7f) + 10f,
-                ItemRarity.Rare => 25f * (1.2f + dungeonFloor/7f) + 10f,
-                ItemRarity.Unique => 30f * (1.2f + dungeonFloor/7f) + 10f,
+                ItemRarity.Common => 15f * (1.2f + dungeonFloor / 7f) + 10f,
+                ItemRarity.Uncommon => 20f * (1.2f + dungeonFloor / 7f) + 10f,
+                ItemRarity.Rare => 25f * (1.2f + dungeonFloor / 7f) + 10f,
+                ItemRarity.Unique => 30f * (1.2f + dungeonFloor / 7f) + 10f,
                 _ => 0
             });
         }

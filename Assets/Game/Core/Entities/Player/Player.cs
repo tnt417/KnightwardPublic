@@ -10,6 +10,8 @@ using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.UI.Minimap;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
@@ -26,7 +28,14 @@ namespace TonyDev.Game.Core.Entities.Player
         public PlayerAnimator playerAnimator;
         public PlayerDeath playerDeath;
 
-        protected override bool CanAttack => Input.GetMouseButton(0) && base.CanAttack && !playerDeath.dead;
+        public bool fireKeyHeld = false;
+        protected override bool CanAttack => fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused;
+
+        public void OnFire(InputValue value)
+        {
+            if (!isOwned) return;
+            fireKeyHeld = value.isPressed;
+        }
 
         //All implementations of IDamageable contained in a region
 
@@ -48,7 +57,7 @@ namespace TonyDev.Game.Core.Entities.Player
             base.ParentIdentityHook(oldIdentity, newIdentity);
 
             if (!isServer) return;
-            
+
             if (oldIdentity != null)
             {
                 var oldRoom = RoomManager.Instance.GetRoomFromID(oldIdentity.netId);
@@ -100,16 +109,14 @@ namespace TonyDev.Game.Core.Entities.Player
         }
 
         public static Action<NetworkIdentity> LocalPlayerChangeIdentity;
-        
+
         public override void OnStartLocalPlayer()
         {
             Team = Team.Player;
             LocalInstance = this;
             OnLocalPlayerCreated?.Invoke();
-            
-            OnParentIdentityChange += (a) => LocalPlayerChangeIdentity?.Invoke(a);
 
-            PlayerStats.Stats = Stats;
+            OnParentIdentityChange += (a) => LocalPlayerChangeIdentity?.Invoke(a);
 
             OnAttack += () =>
             {
@@ -125,12 +132,36 @@ namespace TonyDev.Game.Core.Entities.Player
                 }
             };
 
+            OnDamageOther += (dmg, ge, _) =>
+            {
+                if (ge != null)
+                {
+                    var percentDealt = dmg / ge.Stats.GetStat(Stat.Health);
+                    if (percentDealt > 0.1f)
+                    {
+                        SmoothCameraFollow.Shake(percentDealt * 0.5f, 100f);
+                    }
+                }
+                else
+                {
+                    SmoothCameraFollow.Shake(0.5f, 100f);
+                }
+            };
+
+            OnHurtOwner += (dmg) =>
+            {
+                var dmgPercent = dmg / Stats.GetStat(Stat.Health);
+                if (dmgPercent < 0.1f) return;
+                SmoothCameraFollow.Shake(dmgPercent * 1f, 100f);
+                //SmoothCameraFollow.Shake(dmg/Stats.GetStat(Stat.Health), 5f);
+            };
+
             //OnDamageOther += (_, _, _) => SoundManager.PlaySoundPitchVariant("hit", transform.position, 0.7f, 1f);
 
             Init();
 
             PlayerInventory.Instance.InsertStarterItems();
-            
+
             TransitionController.Instance.FadeIn();
         }
 

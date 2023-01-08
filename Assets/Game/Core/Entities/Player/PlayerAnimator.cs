@@ -131,6 +131,14 @@ namespace TonyDev.Game.Core.Entities.Player
         }
         //
 
+        private float _playerScale = 1;
+        
+        public void ModifyPlayerSize(float multiplier)
+        {
+            _playerScale *= multiplier;
+            playerAnimator.transform.localScale = _playerScale * Vector3.one;
+        }
+
         [SyncVar(hook=nameof(OnSkinChanged))] private PlayerSkin _skin;
 
         public override void OnStartAuthority()

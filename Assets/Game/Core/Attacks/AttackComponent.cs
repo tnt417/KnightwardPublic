@@ -34,7 +34,7 @@ namespace TonyDev.Game.Core.Attacks
         
         #region Variables
 
-        private const float KnockbackForce = 1000f; //A multiplier so knockback values can be for example 20 instead of 20000
+        private const float KnockbackForce = 10f; //A multiplier so knockback values can be for example 20 instead of 20000
 
         #region Inspector Variables
 
@@ -120,23 +120,22 @@ namespace TonyDev.Game.Core.Attacks
 
         private void Update()
         {
-            //Tick hit cooldown timers
-            Dictionary<GameObject, float> newHitCooldowns = new();
-
-            foreach (var go in _hitCooldowns.Keys)
+            var hitObjects = _hitCooldowns.ToArray();
+            
+            foreach (var (go, cd) in hitObjects)
             {
-                if (go == null || !_hitCooldowns.ContainsKey(go)) continue;
-                var newTime = _hitCooldowns[go] - Time.deltaTime;
-                if (newTime > 0) newHitCooldowns.Add(go, newTime);
-                else
+                if (go == null)
                 {
-                    _hitCooldowns = newHitCooldowns;
+                    _hitCooldowns.Remove(go);
+                    continue;
+                }
+
+                if (cd < Time.time)
+                {
+                    _hitCooldowns.Remove(go);
                     CheckCollision(go);
                 }
             }
-
-            _hitCooldowns = newHitCooldowns;
-            //
         }
 
         private bool _quitting;
@@ -151,7 +150,7 @@ namespace TonyDev.Game.Core.Attacks
             if (_quitting) return;
             
             GameManager.Instance.projectiles.Remove(gameObject);
-            GameManager.Instance.CmdDestroyProjectile(identifier);
+            if(NetworkClient.active) GameManager.Instance.CmdDestroyProjectile(identifier);
         }
 
         #region DamageHandling
@@ -171,20 +170,26 @@ namespace TonyDev.Game.Core.Attacks
         private void TryDamage(Collider2D other)
         {
             if (!NetworkClient.active) return;
-
-            var netId = other.GetComponent<NetworkIdentity>();
-            var entity = other.GetComponent<GameEntity>();
-
-            //Don't want to return in cases where the thing being hit is local player, so hit detection doesn't have latency with the player.
-            if (_owner != null && !_owner.hasAuthority && (entity == null || entity is not Player))
-                return; //Only call damage code on attacks that are owned by our client.
-
+            
             var damageable = other.GetComponent<IDamageable>();
 
+            if (damageable == null) return;
+            
+            var ge = damageable is GameEntity entity ? entity : null;
+            
+            //Don't want to return in cases where the thing being hit is local player, so hit detection doesn't have latency with the player.
+            if (_owner != null && !_owner.isOwned && (ge == null || ge is not Player))
+                return; //Only call damage code on attacks that are owned by our client.
+
+            var go = other.gameObject;
+            
+            var onCooldown = _hitCooldowns.ContainsKey(go) && _hitCooldowns[go] > Time.time;
+
             //
-            if (damageable == null || damageable.Team == team || !damageable.IsTangible ||
-                _hitCooldowns.ContainsKey(other.gameObject) ||
-                !other.isTrigger) return; //Check if valid thing to hit
+            if (damageable.Team == team || !damageable.IsTangible ||
+                onCooldown || !other.isTrigger) return; //Check if valid thing to hit
+
+            _hitCooldowns[go] = Time.time + damageCooldown; //Put the object on cooldown
 
             var crit = IsCriticalHit;
             
@@ -193,25 +198,25 @@ namespace TonyDev.Game.Core.Attacks
                                               ? 2
                                               : 1));
 
-            if (entity is Player && entity != Player.LocalInstance) return;
+            if (ge is Player && ge != Player.LocalInstance) return;
 
             float damageDealt = 0;
             
-            if (netId != null)
+            if (ge != null)
             {
                 var success = true;
-                damageDealt = netId == NetworkClient.localPlayer
-                    ? entity.ApplyDamage(modifiedDamage, out success, ignoreInvincibility)
+                damageDealt = ge.isLocalPlayer
+                    ? ge.ApplyDamage(modifiedDamage, out success, ignoreInvincibility)
                     : modifiedDamage; //Do damage before command if hitting player
                 if (!success) return;
-                if(entity is Enemy && !NetworkServer.active) entity.ClientHealthDisparity -= damageDealt;
-                entity.LocalHurt(damageDealt, crit);
-                entity.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer, ignoreInvincibility);
+                if(ge is Enemy && !NetworkServer.active) ge.ClientHealthDisparity -= damageDealt;
+                ge.LocalHurt(damageDealt, crit);
+                ge.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer, ignoreInvincibility);
                 
                 if (inflictEffects != null) //Inflict effects...
                     foreach (var e in inflictEffects)
                     {
-                        entity.CmdAddEffect(e, _owner);
+                        ge.CmdAddEffect(e, _owner);
                     }
             }
             else
@@ -224,7 +229,7 @@ namespace TonyDev.Game.Core.Attacks
                 if (!success) return;
             }
 
-            OnDamageDealt?.Invoke(damageDealt, entity, crit);
+            OnDamageDealt?.Invoke(damageDealt, ge, crit);
 
             var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
 
@@ -234,33 +239,34 @@ namespace TonyDev.Game.Core.Attacks
             
             if (kb.x != 0 || kb.y != 0)
             {
-                if(entity != null) entity.ApplyKnockbackGlobal(kb); //Apply the knockback
+                if(ge != null) ge.ApplyKnockbackGlobal(kb); //Apply the knockback
             }
 
-            _hitCooldowns.Add(other.gameObject, damageCooldown); //Put the object on cooldown
-
             //Add inflict buffs and effects
-            if (entity != null)
+            if (ge != null)
             {
                 if (inflictBuffs != null) //Inflict buffs...
                     foreach (var b in inflictBuffs)
                     {
-                        entity.Stats.AddBuff(new StatBonus(b.statType, b.stat, b.strength, GetInstanceID().ToString()),
+                        ge.Stats.AddBuff(new StatBonus(b.statType, b.stat, b.strength, GetInstanceID().ToString()),
                             damageCooldown);
                     }
 
-                if (inflictEffects != null && netId == null) //Inflict effects...
+                if (inflictEffects != null)
+                {
+                    //Inflict effects...
                     foreach (var e in inflictEffects)
                     {
-                        entity.CmdAddEffect(e, _owner);
+                        ge.CmdAddEffect(e, _owner);
                     }
+                }
             }
             //
 
             if (destroyOnApply) Destroy(gameObject); //Destroy when done if that option is selected
         }
 
-        private void OnTriggerStay2D(Collider2D other)
+        private void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.layer == LayerMask.NameToLayer("Level") && destroyOnHitWall)
             {
@@ -269,10 +275,8 @@ namespace TonyDev.Game.Core.Attacks
             
             if (destroyOnAnyCollide && other.gameObject != _owner.gameObject)
                 Destroy(gameObject); //Destroy if destroyOnAnyCollide is true.
-            if (!_hitCooldowns.ContainsKey(other.transform.root.gameObject))
-            {
-                TryDamage(other); //On trigger enter, try to damage the other collider.
-            }
+            
+            TryDamage(other); //On trigger enter, try to damage the other collider.
         }
 
         #endregion

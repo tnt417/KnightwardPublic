@@ -1,0 +1,56 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: Flaming CoatData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: 8d36cd82cd52bcb43ae05415dfa7fe23, type: 3}
+    itemName: Flaming Coat
+    itemDescription: 
+    itemType: 1
+    itemRarity: 0
+    statBonuses: []
+    bypassStatGeneration: 0
+    itemEffects:
+    - rid: 7149686571226103809
+    projectiles: []
+    spawnablePrefabName: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 7149686571226103809
+      type: {class: AttackEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ProjectileData:
+          prefabKey: flameArmorPool
+          projectileSprite: {fileID: 0}
+          attackData:
+            damageMultiplier: 0.5
+            knockbackMultiplier: 0
+            hitboxRadius: 3
+            team: 1
+            destroyOnApply: 0
+            destroyOnCollideWall: 0
+            lifetime: 0
+            spawnOnDestroyKey: 
+            ignoreInvincibility: 0
+          disableMovement: 1
+          travelSpeed: 0
+          offsetDegrees: 0
+          waveAmplitude: 0
+          waveLength: 0
+          waveDistance: 0
+          childOfOwner: 1
+          doNotRotate: 1
+          effects: []

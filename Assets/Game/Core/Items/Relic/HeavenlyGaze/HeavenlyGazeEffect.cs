@@ -32,6 +32,7 @@ namespace TonyDev
 
         public override void OnRemoveOwner()
         {
+            base.OnRemoveOwner();
             // Remove the highlight from the enemy and the OnNextAttack event
             if(_vfx != null) _highlightedEnemy.CmdRemoveEffect(_vfx);
             Entity.OnDamageOther -= IncreaseDamage;

@@ -39,7 +39,7 @@ namespace TonyDev.Game.Core.Behavior
         {
             if (target == null) return false;
             var hit = Physics2D.Raycast(Enemy.transform.position, (FirstEnemyTarget.transform.position - transform.position),Mathf.Infinity, LayerMask.GetMask("Player", "Level", "Crystal"));
-            return hit.transform.root == target;
+            return hit.transform != null && target != null && hit.transform.root == target;
         }
         
         protected async UniTask PathfindFollow(Func<Transform> followTransform, Func<float> speed, Func<bool> predicate)

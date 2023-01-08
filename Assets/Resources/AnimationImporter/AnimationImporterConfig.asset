@@ -14,11 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _animationNamesThatDoNotLoop:
   - death
+  - Burrow
   _automaticImporting: 0
   _spritePixelsPerUnit: 16
   _pivotAlignmentType: 0
   _targetObjectType: 0
-  _pathToSpriteRendererComponent: 
+  _pathToSpriteRendererComponent: Sprite
   _pathToImageComponent: 
   _spriteAlignment: 0
   _spriteAlignmentCustomX: 0

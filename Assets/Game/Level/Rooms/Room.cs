@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
@@ -155,12 +156,6 @@ namespace TonyDev.Game.Level.Rooms
                 l2d.enabled = visible;
             foreach (var roomDoor in GetComponentsInChildren<RoomDoor>())
                 roomDoor.SetHostVisibility(visible);
-        }
-
-        public void SetTimeMultiplier(float mult)
-        {
-            timeMultiplier = mult;
-            WaveManager.Instance.UpdateRoomTimeMultipliers();
         }
 
         public override void OnStartServer()
@@ -419,7 +414,6 @@ namespace TonyDev.Game.Level.Rooms
 
         public List<Vector2> GetPath(Vector2 startPos, Vector2 endPos)
         {
-            Profiler.BeginSample("Pathing");
 
             // Convert input coordinates into tile coordinates.
             var startTile = _tilemap.WorldToCell(startPos) - _tilemap.cellBounds.min;
@@ -497,8 +491,6 @@ namespace TonyDev.Game.Level.Rooms
                 }
             }
 
-            Profiler.EndSample();
-            
             // Out of nodes on the open list
             return new List<Vector2>(); // No path
         }

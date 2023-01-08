@@ -1,6 +1,7 @@
 using System;
 using Newtonsoft.Json;
 using TonyDev.Game.Core.Entities;
+using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.UI.GameInfo;
 using UnityEngine;
@@ -32,21 +33,45 @@ namespace TonyDev.Game.Core.Effects
         }
 
         private int _cooldownID;
+
+        private int _abilityIndex;
         
         public override void OnAddOwner()
         {
+            _abilityIndex = AbilityControlManager.Instance.GetOpenIndex();
+        
+            if (ActivateButton != KeyCode.None)
+            {
+                ActivateButton = _abilityIndex switch
+                {
+                    0 => KeyCode.Alpha1,
+                    1 => KeyCode.Alpha2,
+                    2 => KeyCode.Alpha3,
+                    3 => KeyCode.Alpha4,
+                    4 => KeyCode.Alpha5,
+                    5 => KeyCode.Alpha6,
+                    6 => KeyCode.Alpha7,
+                    7 => KeyCode.Alpha8,
+                    8 => KeyCode.Alpha9,
+                    9 => KeyCode.Alpha0,
+                    _ => KeyCode.None
+                };
+            }
+            
             _cooldownID = CooldownUIController.RegisterCooldown(abilitySprite, () => ModifiedCooldown, () => ModifiedCooldown - _cooldownTimer, ActivateButton);
+            AbilityControlManager.Instance.RegisterCallback(TryActivate, _abilityIndex);
         }
 
         public override void OnRemoveOwner()
         {
             OnAbilityDeactivate();
             CooldownUIController.RemoveCooldown(_cooldownID);
+            AbilityControlManager.Instance.UnregisterCallback(_abilityIndex);
         }
 
-        protected void ProcessActivateKeys()
+        protected void TryActivate()
         {
-            if (_cooldownTimer > ModifiedCooldown && Input.GetKeyDown(ActivateButton))
+            if (_cooldownTimer > ModifiedCooldown)
             {
                 Active = true;
                 OnAbilityActivate();
@@ -58,8 +83,6 @@ namespace TonyDev.Game.Core.Effects
         public override void OnUpdateOwner()
         {
             _cooldownTimer += Time.deltaTime;
-
-            ProcessActivateKeys();
 
             if (Active)
             {

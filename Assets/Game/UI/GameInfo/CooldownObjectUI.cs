@@ -14,7 +14,7 @@ namespace TonyDev.Game.UI.GameInfo
         private Func<float> _totalCooldown;
         private Func<float> _remainingCooldown;
         private KeyCode _activateKey;
-        private string KeyName => Enum.GetName(typeof(KeyCode), _activateKey);
+        private string KeyName => Enum.GetName(typeof(KeyCode), _activateKey)?.Replace("Alpha", "");
 
         private bool _set;
         

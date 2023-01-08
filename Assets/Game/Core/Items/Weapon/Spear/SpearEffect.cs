@@ -69,6 +69,8 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         protected override void OnAbilityActivate()
         {
+            OnAbilityDeactivate();
+            
             _empowered = true;
 
             Entity.Stats.AddBuff(
@@ -82,6 +84,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         protected override void OnAbilityDeactivate()
         {
+            Entity.Stats.RemoveBuffsOfSource("spearEffect");
             _empowered = false;
         }
     }

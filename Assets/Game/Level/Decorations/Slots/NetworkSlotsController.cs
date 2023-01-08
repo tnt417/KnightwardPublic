@@ -78,12 +78,14 @@ namespace TonyDev.Game.Level.Decorations.Slots
         [ServerCallback]
         private void GiveReward()
         {
+            var validOutcomes = outcomes;
+            
             if (slots.Count >= maxSlots)
             {
-                outcomes = outcomes.Where(o => o.outcome != SlotOutcome.ExtraSlot).ToArray();
+                validOutcomes = outcomes.Where(o => o != null && o.outcome != SlotOutcome.ExtraSlot).ToArray();
             }
 
-            var determinedOutcome = Tools.SelectRandom(outcomes);
+            var determinedOutcome = Tools.SelectRandom(validOutcomes);
 
             CmdSetReward(determinedOutcome.outcome);
 
@@ -112,7 +114,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
                     }
                     break;
                 case SlotOutcome.ExtraSlot:
-                    CmdAddSlot();
+                    if (slots.Count < maxSlots) CmdAddSlot();
                     break;
                 case SlotOutcome.Nothing:
                     break;
@@ -162,7 +164,8 @@ namespace TonyDev.Game.Level.Decorations.Slots
 
         private async UniTask DelayEnable()
         {
-            await UniTask.Delay(TimeSpan.FromSeconds(1.5f));
+            await UniTask.Delay(TimeSpan.FromSeconds(1.1f));
+            if (buttonInteractable == null) return;
             buttonInteractable.interactable.enabled = true;
         }
 

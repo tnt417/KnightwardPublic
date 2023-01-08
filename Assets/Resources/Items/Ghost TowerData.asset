@@ -20,9 +20,21 @@ MonoBehaviour:
     itemRarity: 2
     statBonuses: []
     bypassStatGeneration: 0
-    itemEffects: []
+    itemEffects:
+    - rid: 1191606179873947650
     projectiles: []
     spawnablePrefabName: ghostTower
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1191606179873947650
+      type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        ScalingStatBonuses:
+        - type: 0
+          stat: 5
+          scalingType: 1
+          valueRange: {x: 0, y: 2}
+          byFloor: 50

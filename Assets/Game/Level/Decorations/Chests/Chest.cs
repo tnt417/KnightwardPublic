@@ -20,14 +20,11 @@ namespace TonyDev.Game.Level.Decorations.Chests
         public UnityEvent onOpenServer;
         public UnityEvent onOpenGlobal;
 
-        [SyncVar] public bool opened;
+        [SyncVar(hook=nameof(OpenHook))] public bool opened;
 
-        private void Start()
+        private void OpenHook(bool oldState, bool newState)
         {
-            if (opened)
-            {
-                chestAnimator.Play("ChestOpenIdle");
-            }
+            chestAnimator.SetBool("open", newState);
         }
 
         private void OnTriggerEnter2D(Collider2D other)

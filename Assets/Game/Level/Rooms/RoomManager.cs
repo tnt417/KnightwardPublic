@@ -131,7 +131,7 @@ namespace TonyDev.Game.Level.Rooms
         [ClientRpc]
         private void RpcBroadcastRoomChange(Player sender, Room room)
         {
-            OnActiveRoomChangedGlobal.Invoke(sender, room);
+            OnActiveRoomChangedGlobal?.Invoke(sender, room);
         }
 
         [Command(requiresAuthority = false)]

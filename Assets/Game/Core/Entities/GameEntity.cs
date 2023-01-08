@@ -49,14 +49,6 @@ namespace TonyDev.Game.Core.Entities
         [Command(requiresAuthority = false)]
         public void CmdDamageEntity(float damage, bool isCrit, NetworkIdentity exclude, bool ignoreInvincibility)
         {
-            /*var entity = entityObject.GetComponent<GameEntity>();
-
-            if (entity == null)
-            {
-                Debug.LogWarning($"Net object {entityObject.gameObject.name} is not an entity!");
-                return;
-            }*/
-
             var successful = true;
 
             var dmg = this is Player.Player
@@ -64,6 +56,12 @@ namespace TonyDev.Game.Core.Entities
                 : ApplyDamage(damage, out successful,
                     ignoreInvincibility); //Players should have already been damaged on the client
             if (successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
+        }
+
+        [Command(requiresAuthority = false)]
+        public void CmdRemoveBonusesFromSource(string source)
+        {
+            Stats.RemoveStatBonuses(source);
         }
 
         public bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
@@ -160,7 +158,7 @@ namespace TonyDev.Game.Core.Entities
         private float _attackTimer;
         public Action OnAttack;
 
-        //Invokes the attack event
+        //Invokes the attack event 
         public void Attack() //Called in animator events on some entities
         {
             if (!EntityOwnership) return;
@@ -258,7 +256,10 @@ namespace TonyDev.Game.Core.Entities
             }
 
             Stats.OnStatsChanged += UpdateStats;
-            Stats.OnStatsChanged += () => CmdSetHealth(CurrentHealth, MaxHealth);
+            Stats.OnStatsChanged += () =>
+            {
+                CmdSetHealth(CurrentHealth, MaxHealth);
+            };
 
             UpdateStats();
 
@@ -336,52 +337,20 @@ namespace TonyDev.Game.Core.Entities
             var myPos = transform.position;
 
             var entitiesSet = GameManager.EntitiesReadonly;
-            
-            // Profiler.BeginSample("LINQ");
-            //
-            // var entities = entitiesSet
-            //     .Where(e => e != null
-            //                 && e.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
-            //                 && (string.IsNullOrEmpty(targetTag) || e.CompareTag(targetTag)) //Target things with our target tag if it is set
-            //                 && e.Team == targetTeam //Target things of our target team
-            //                 //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
-            //                 && (e.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
-            //                 && e != this //Don't target self
-            //                 && Vector2.Distance(e.transform.position, myPos) < (e is Crystal && this is not Tower ? 200f : range)) //Distance check
-            //     .OrderBy(e => Vector2.Distance(e.transform.position, myPos))
-            //     .Take(maxTargets); //Find closest non-dead game entity object on the opposing team
-            //
-            // Targets.Clear();
-            //
-            // Debug.Log("A");
-            //
-            // foreach (var ge in entities)
-            // {
-            //     Targets.Add(ge);
-            // }
-            //
-            // Profiler.EndSample();
-            
-            //Profiler.BeginSample("Manual");
 
             SortedSet<KeyValuePair<float, GameEntity>> distances = new(new ByClosest());
 
             foreach (var ge in entitiesSet)
             {
+                if (ge == null || ge.Team != targetTeam || (!ge.IsTangible && !targetIntangible) || ge == this ||
+                    (!string.IsNullOrEmpty(targetTag) && !ge.CompareTag(targetTag)) ||
+                    ge.CurrentParentIdentity != CurrentParentIdentity) continue;
+                    
                 var dist = Vector2.Distance(ge.transform.position, myPos);
-
-                if (ge != null
-                    && ge.CurrentParentIdentity == CurrentParentIdentity //If both have the same parent netId
-                    && (string.IsNullOrEmpty(targetTag) ||
-                        ge.CompareTag(targetTag)) //Target things with our target tag if it is set
-                    && ge.Team == targetTeam //Target things of our target team
-                    //&& (this is Tower || !e.IsInvulnerable && e.IsAlive) //Don't target invulnerable things, unless we are a tower (meant for tesla tower)
-                    && (ge.IsTangible || targetIntangible) //Don't target intangible, unless we target intangible
-                    && ge != this //Don't target self
-                    && dist < (ge is Crystal && this is not Tower ? 200f : range))
-                {
-                    distances.Add(new KeyValuePair<float, GameEntity>(dist, ge));
-                }
+                
+                if(!(dist < (ge is Crystal && this is not Tower ? 200f : range))) continue;
+                
+                distances.Add(new KeyValuePair<float, GameEntity>(dist, ge));
             }
 
             Targets.Clear();
@@ -406,7 +375,8 @@ namespace TonyDev.Game.Core.Entities
         #region Effects
 
         private SyncList<GameEffect> _effects = new();
-
+        public List<GameEffect> EffectsReadonly => _effects.ToList();
+        
         private void OnEffectsUpdated(SyncList<GameEffect>.Operation op, int index, GameEffect oldEffect,
             GameEffect newEffect)
         {

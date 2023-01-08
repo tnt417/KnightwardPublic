@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
@@ -56,12 +58,12 @@ namespace TonyDev.Game.UI.Tower
             if (!CanPlace) towerPlacementIndicator.SetActive(false);
             if (!Placing) return; //Don't move on if not placing
 
-            var mousePos = _mainCamera.ScreenToWorldPoint(Input.mousePosition); //Get the mouse position
+            var mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //Get the mouse position
             towerPlacementIndicator.transform.position =
                 new Vector3(Mathf.Ceil(mousePos.x), Mathf.Ceil(mousePos.y), 0) -
                 new Vector3(0.5f, 0.5f, 0); //Set the indicator position, snapping to a grid
 
-            if (Input.GetMouseButtonDown(0)) SpawnTower(); //Spawn a tower if placing and click
+            if (Mouse.current.leftButton.wasPressedThisFrame) SpawnTower().Forget(); //Spawn a tower if placing and click
         }
 
         private void FixedUpdate()
@@ -97,10 +99,8 @@ namespace TonyDev.Game.UI.Tower
 
         private bool ValidSpot(Vector2 pos)
         {
-            var vec2Int = new Vector2Int((int) pos.x, (int) pos.y);
-
             //Don't place on top of occupied spots
-            if (GameManager.Instance.OccupiedTowerSpots.Contains(vec2Int)) return false;
+            //if (GameManager.Instance.OccupiedTowerSpots.Contains(vec2Int)) return false; //Commented out to allow for tower swapping
 
             //Only place on floor tiles
             var floorAtSpot = FindObjectsOfType<Tilemap>().Where(tm => tm.gameObject.CompareTag("Floor"))
@@ -118,17 +118,17 @@ namespace TonyDev.Game.UI.Tower
         }
 
         //Spawns a tower at the indicator position and exits from placing mode
-        private void SpawnTower()
+        private async UniTask SpawnTower()
         {
             var pos = (Vector2) towerPlacementIndicator.transform.position;
 
             if (!ValidSpot(pos)) return;
 
+            var success = await GameManager.Instance.SpawnTowerTask(_selectedTowerItem,
+                towerPlacementIndicator.transform.position, Player.LocalInstance.CurrentParentIdentity).Preserve();
+            
             SoundManager.PlaySound("interact", 0.5f, pos);
             
-            var success = GameManager.Instance.SpawnTower(_selectedTowerItem,
-                towerPlacementIndicator.transform.position, Player.LocalInstance.CurrentParentIdentity);
-
             if (!success) return;
 
             TowerUIController.Instance.ConfirmPlace();

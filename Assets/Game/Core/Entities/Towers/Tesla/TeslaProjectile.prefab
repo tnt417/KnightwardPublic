@@ -54,6 +54,7 @@ MonoBehaviour:
   team: 1
   destroyOnApply: 1
   destroyOnAnyCollide: 1
+  destroyOnHitWall: 0
   ignoreInvincibility: 0
   inflictBuffs: []
   inflictEffects: []
@@ -964,7 +965,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 0
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1017,7 +1018,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 0
+      scalar: 5
       minScalar: 0
       maxCurve:
         serializedVersion: 2

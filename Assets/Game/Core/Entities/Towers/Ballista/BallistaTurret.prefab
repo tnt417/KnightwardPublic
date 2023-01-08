@@ -86,6 +86,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609f77bd4fcb4e94db92f5f804f88634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   targetTag: 
@@ -97,6 +98,7 @@ MonoBehaviour:
     strength: 1
     source: 
   targetIntangible: 0
+  <Team>k__BackingField: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 5
   myItem:
@@ -120,6 +122,7 @@ MonoBehaviour:
       hitboxRadius: 0.3
       team: 1
       destroyOnApply: 1
+      destroyOnCollideWall: 0
       lifetime: 0.6666667
       spawnOnDestroyKey: 
       ignoreInvincibility: 0
@@ -130,6 +133,7 @@ MonoBehaviour:
     waveLength: 0
     waveDistance: 0
     childOfOwner: 0
+    doNotRotate: 0
     effects: []
   fireSound: dagger
   references:
@@ -164,9 +168,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2765411287
   serverOnly: 0
   visible: 0
-  m_AssetId: 4984220720a15ef42bdfeff35a0e4b40
   hasSpawned: 0
 --- !u!1 &4032208556319356246
 GameObject:

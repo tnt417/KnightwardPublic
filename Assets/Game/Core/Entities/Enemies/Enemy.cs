@@ -62,7 +62,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             OnLocalHurt += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Hurt);
             if (!EntityOwnership) return;
             OnDeathOwner += (float value) => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Die);
-            OnAttack += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Attack);
+            //OnAttack += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Attack);
             //_enemyMovementBase.OnStartMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Move);
             //_enemyMovementBase.OnStopMove += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Stop);
         }

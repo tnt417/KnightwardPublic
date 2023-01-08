@@ -1,5 +1,6 @@
 using TonyDev.Game.Level.Decorations;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.Core.Items
 {
@@ -22,7 +23,7 @@ namespace TonyDev.Game.Core.Items
         public override void SetCost(int newCost)
         {
             base.SetCost(newCost);
-            OverrideInteractKey(KeyCode.E, newCost == 0 ? InteractType.Pickup : InteractType.Purchase);
+            OverrideInteractKey(Key.E, newCost == 0 ? InteractType.Pickup : InteractType.Purchase);
         }
 
         private bool _essenceChanged;

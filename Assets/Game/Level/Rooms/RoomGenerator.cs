@@ -27,10 +27,10 @@ namespace TonyDev.Game.Level.Rooms
         public static SerializableMap FromMap(Map map)
         {
             if (map.Rooms == null) return new SerializableMap(null, Vector2Int.zero);
-            
+
             var width = map.Rooms.GetLength(0);
             var height = map.Rooms.GetLength(1);
-            
+
             var ids = new uint[width, height];
             for (var x = 0; x < width; x++)
             {
@@ -39,7 +39,7 @@ namespace TonyDev.Game.Level.Rooms
                     var room = map.Rooms[x, y];
 
                     if (room == null) continue;
-                    
+
                     ids[x, y] = map.Rooms[x, y].netId;
                 }
             }
@@ -47,16 +47,16 @@ namespace TonyDev.Game.Level.Rooms
             return new SerializableMap(ids, map.StartingRoomPos);
         }
     }
-    
+
     public readonly struct Map
     {
         public static Map FromSerializable(SerializableMap serializableMap)
         {
             if (serializableMap.Rooms == null) return new Map(null, Vector2Int.zero);
-            
+
             var width = serializableMap.Rooms.GetLength(0);
             var height = serializableMap.Rooms.GetLength(1);
-            
+
             var rooms = new Room[width, height];
             for (var x = 0; x < width; x++)
             {
@@ -68,7 +68,7 @@ namespace TonyDev.Game.Level.Rooms
 
             return new Map(rooms, serializableMap.StartingRoomPos);
         }
-        
+
         public Map(Room[,] rooms, Vector2Int startingRoomPos)
         {
             Rooms = rooms;
@@ -92,7 +92,7 @@ namespace TonyDev.Game.Level.Rooms
             return new Vector2Int(0, 0);
         }
     }
-    
+
     public enum RoomGenerateTier
     {
         Common,
@@ -170,17 +170,36 @@ namespace TonyDev.Game.Level.Rooms
 
             var genTimeout = Time.time + 2f;
 
-            while (remainingCommon > 0 && Time.time < genTimeout)
+            while (remainingGuaranteed + remainingSpecial + remainingUncommon + remainingCommon > 0 && Time.time < genTimeout)
             {
                 var tier = remainingGuaranteed == 0
                     ? remainingSpecial == 0 ? remainingUncommon == 0 ? RoomGenerateTier.Common :
                     RoomGenerateTier.Uncommon : RoomGenerateTier.Special
                     : RoomGenerateTier.Guaranteed;
 
-                if (tier == RoomGenerateTier.Common) remainingCommon--;
-                if (tier == RoomGenerateTier.Uncommon) remainingUncommon--;
-                if (tier == RoomGenerateTier.Special) remainingSpecial--;
-                if (tier == RoomGenerateTier.Guaranteed) remainingGuaranteed--;
+                if (tier == RoomGenerateTier.Common)
+                {
+                    if (remainingCommon == 0) continue;
+                    remainingCommon--;
+                }
+
+                if (tier == RoomGenerateTier.Uncommon)
+                {
+                    if (remainingUncommon == 0) continue;
+                    remainingUncommon--;
+                }
+
+                if (tier == RoomGenerateTier.Special)
+                {
+                    if (remainingSpecial == 0) continue;
+                    remainingSpecial--;
+                }
+
+                if (tier == RoomGenerateTier.Guaranteed)
+                {
+                    if (remainingGuaranteed == 0) continue;
+                    remainingGuaranteed--;
+                }
 
                 var chosenEntry = Tools.SelectRandom(entryList.Where(r => r.tier == tier));
 

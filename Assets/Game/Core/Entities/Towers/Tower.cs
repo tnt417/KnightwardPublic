@@ -28,6 +28,31 @@ namespace TonyDev.Game.Core.Entities.Towers
             myItem = newItem;
         }
 
+        private new void Awake()
+        {
+            base.Awake();
+            
+            _interactableButton = gameObject.AddComponent<InteractableButton>();
+            _interactableButton.onInteract.AddListener((type) =>
+            {
+                if (this != null && type == InteractType.Interact) CmdRequestPickup();
+            });
+        }
+        
+        private InteractableButton _interactableButton;
+
+        public void NotifyMouseHover()
+        {
+            _interactableButton.overrideCurrent = true;
+            _interactableButton.Active = true;
+        }
+
+        public void NotifyMouseUnhover()
+        {
+            _interactableButton.overrideCurrent = false;
+            _interactableButton.Active = false;
+        }
+
         protected void Start()
         {
             Init();
@@ -35,13 +60,7 @@ namespace TonyDev.Game.Core.Entities.Towers
             var coll = gameObject.AddComponent<BoxCollider2D>();
             coll.size = new Vector2(0.2f, 0.2f);
             coll.isTrigger = true;
-            
-            var interact = gameObject.AddComponent<InteractableButton>();
-            interact.onInteract.AddListener((type) =>
-            {
-                if (this != null && type == InteractType.Interact) CmdRequestPickup();
-            });
-            
+
             if (!EntityOwnership) return;
 
             if (myItem.statBonuses != null)

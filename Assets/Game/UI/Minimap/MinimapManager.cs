@@ -60,17 +60,18 @@ namespace TonyDev.Game.UI.Minimap
             {
                 for (var j = 0; j < _roomManager.MapSize; j++)
                 {
+                    if (_rooms[i, j] == null) continue;
+                    
                     var go = Instantiate(minimapRoomPrefab, uiRoomGridLayout.transform);
+                    var rectTransform = (RectTransform)go.transform;
+                    rectTransform.localPosition = new Vector2((i-_roomManager.MapSize/2) * 100, (j-_roomManager.MapSize/2) * 100);
                     _uiRoomObjects[i, j] = go;
                     var symbolImage = go.GetComponentsInChildren<Image>()
                         .FirstOrDefault(img => img.CompareTag("MinimapIcon"));
-
-                    if (_rooms[i, j] != null) continue;
-
-                    go.GetComponent<Image>().enabled = false;
-                    if (symbolImage != null) symbolImage.enabled = false;
                 }
             }
+
+            UpdateMinimapSymbols();
         }
 
         public void UpdatePlayerCount(Vector2Int pos, int playerCount)
@@ -94,7 +95,21 @@ namespace TonyDev.Game.UI.Minimap
         public void UncoverRoom(Vector2Int position)
         {
             _discoveredRooms[position.x, position.y] = 1;
-            UpdateMinimapSymbols();
+
+            var roomObj = _uiRoomObjects[position.x, position.y];
+            
+            if (roomObj == null) return;
+            
+            var symbolImage = roomObj.GetComponentsInChildren<Image>()
+                .FirstOrDefault(img => img.CompareTag("MinimapIcon"));
+
+            if (symbolImage == null)
+            {
+                Debug.LogWarning("Room image missing!");
+                return;
+            }
+            
+            symbolImage.sprite = _rooms[position.x, position.y].minimapIcon;
         }
 
         [GameCommand(Keyword = "revealmap", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Map revealed.")]
@@ -115,6 +130,8 @@ namespace TonyDev.Game.UI.Minimap
             {
                 for (var j = 0; j < _roomManager.MapSize; j++)
                 {
+                    if (_uiRoomObjects[i, j] == null) continue;
+                    
                     var symbolImage = _uiRoomObjects[i, j].GetComponentsInChildren<Image>()
                         .FirstOrDefault(img => img.CompareTag("MinimapIcon")); //Get the symbol image
 

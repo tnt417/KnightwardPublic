@@ -1,16 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mirror;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
-using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.UI;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace TonyDev.Game.Level.Decorations
@@ -33,9 +31,9 @@ namespace TonyDev.Game.Level.Decorations
 
         private GameObject _indicatorObject;
         protected Indicator Indicator;
-        protected Dictionary<KeyCode, InteractType> _interactKeys = new ();
+        protected Dictionary<Key, InteractType> _interactKeys = new ();
 
-        public void AddInteractKey(KeyCode keyCode, InteractType type)
+        public void AddInteractKey(Key keyCode, InteractType type)
         {
             if (!(_interactKeys.ContainsKey(keyCode) && _interactKeys[keyCode] == type)) //If key hasn't been added yet for this interact type, add it
             {
@@ -44,7 +42,7 @@ namespace TonyDev.Game.Level.Decorations
             }
         }
         
-        public void OverrideInteractKey(KeyCode keyCode, InteractType type)
+        public void OverrideInteractKey(Key keyCode, InteractType type)
         {
             _interactKeys[keyCode] = type;
             RebuildControlLabel();
@@ -57,7 +55,7 @@ namespace TonyDev.Game.Level.Decorations
             StringBuilder sb = new();
             foreach (var (key, value) in _interactKeys)
             {
-                sb.AppendLine("[" + Enum.GetName(typeof(KeyCode), key) + "] " +
+                sb.AppendLine("[" + Enum.GetName(typeof(Key), key) + "] " +
                               Enum.GetName(typeof(InteractType), value));
             }
             
@@ -74,7 +72,7 @@ namespace TonyDev.Game.Level.Decorations
             _indicatorObject = Instantiate(ObjectFinder.GetPrefab("indicator"), transform);
             Indicator = _indicatorObject.GetComponent<Indicator>();
             
-            AddInteractKey(KeyCode.E, InteractType.Interact);
+            AddInteractKey(Key.E, InteractType.Interact);
 
             SetCost((int)(scaleCost ? cost*ItemGenerator.DungeonInteractMultiplier : cost));
             SetLabel(label, true);
@@ -110,9 +108,9 @@ namespace TonyDev.Game.Level.Decorations
         {
             if (!Active) return;
             
-            foreach (var kc in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Input.GetKeyDown(kv.Key) && IsInteractable))
+            foreach (var (_, value) in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Keyboard.current[kv.Key].wasPressedThisFrame && IsInteractable))
             {
-                if (kc.Value == InteractType.Interact && cost != 0)
+                if (value == InteractType.Interact && cost != 0)
                 {
                     if(GameManager.Money < cost)
                     {
@@ -126,7 +124,7 @@ namespace TonyDev.Game.Level.Decorations
                     }
                 }
 
-                onInteract?.Invoke(kc.Value);
+                onInteract?.Invoke(value);
             }
 
             if (_costChanged)
@@ -149,7 +147,7 @@ namespace TonyDev.Game.Level.Decorations
 
         private bool _active = true;
 
-        private bool Active
+        public bool Active
         {
             set
             {
@@ -160,15 +158,18 @@ namespace TonyDev.Game.Level.Decorations
             get => _active;
         }
 
+        public bool overrideCurrent;
+        
         private static Interactable _current;
         
         private void OnTriggerEnter2D(Collider2D other)
         {
+            if (overrideCurrent) return;
+            if (!other.isTrigger || !other.CompareTag("Player") || !IsInteractable) return;
+        
             var id = other.GetComponent<NetworkIdentity>();
 
             if (id == null || !id.isLocalPlayer) return;
-
-            if (!other.isTrigger || !other.CompareTag("Player") || !IsInteractable) return;
 
             if (_current == null)
             {
@@ -195,6 +196,9 @@ namespace TonyDev.Game.Level.Decorations
 
         private void OnTriggerStay2D(Collider2D other)
         {
+            if (overrideCurrent) return;
+            if (!other.isTrigger || !other.CompareTag("Player")) return;
+            
             if (!IsInteractable)
             {
                 Active = false;
@@ -205,8 +209,6 @@ namespace TonyDev.Game.Level.Decorations
             var id = other.GetComponent<NetworkIdentity>();
 
             if (id == null || !id.isLocalPlayer) return;
-            
-            if (!other.isTrigger || !other.CompareTag("Player")) return;
 
             if (_current == null)
             {
@@ -230,12 +232,13 @@ namespace TonyDev.Game.Level.Decorations
 
         private void OnTriggerExit2D(Collider2D other)
         {
+            if (overrideCurrent) return;
+            if (!other.isTrigger || !other.CompareTag("Player")) return;
+            
             var id = other.GetComponent<NetworkIdentity>();
 
             if (id == null || !id.isLocalPlayer) return;
 
-            if (!other.isTrigger || !other.CompareTag("Player")) return;
-            
             Active = false;
 
             if (_current == this)

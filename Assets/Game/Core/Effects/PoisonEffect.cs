@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Runtime.Serialization;
 using TonyDev.Game.Core.Effects.ItemEffects;
 using TonyDev.Game.Core.Entities;
@@ -15,6 +16,13 @@ namespace TonyDev.Game.Core.Effects
         private float _timer;
 
         public bool Expired => Ticks <= 0;
+
+        public static float GetPoisonDamage(GameEntity gameEntity) => gameEntity.EffectsReadonly.OfType<PoisonEffect>().Sum(pe => pe.RemainingDamage());
+
+        public float RemainingDamage()
+        {
+            return Ticks * Damage;
+        }
         
         public override void OnAddOwner()
         {

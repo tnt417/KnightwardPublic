@@ -237,8 +237,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  started: 0
   roomDoors:
   - {fileID: 7233540748473221879}
   - {fileID: 2062851405124684956}
@@ -285,9 +287,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2658084331
   serverOnly: 0
   visible: 2
-  m_AssetId: f5022b61eea734f4c8d20243e5329b1c
   hasSpawned: 0
 --- !u!114 &8632290567538872406
 MonoBehaviour:
@@ -301,6 +303,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99fb17303c876704290b981877183438, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   interactable: {fileID: 1199896591759854561}
@@ -335,6 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: df25f1cd216d5f84d9553e9401bbd805, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   slots:
@@ -2382,7 +2386,7 @@ PrefabInstance:
     - target: {fileID: 1774958872793528143, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: doorTile
       value: 
-      objectReference: {fileID: 11400000, guid: a8de654b9b1ffdc40b9c0f6be2738eda, type: 2}
+      objectReference: {fileID: 11400000, guid: 28ac1633c4411e54aace9ca7ae52f135, type: 2}
     - target: {fileID: 1774958872793528143, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: wallTilemap
       value: 
@@ -3074,7 +3078,7 @@ PrefabInstance:
     - target: {fileID: 222899981039721528, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: doorTile
       value: 
-      objectReference: {fileID: 11400000, guid: a8de654b9b1ffdc40b9c0f6be2738eda, type: 2}
+      objectReference: {fileID: 11400000, guid: 28ac1633c4411e54aace9ca7ae52f135, type: 2}
     - target: {fileID: 222899981039721528, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: Direction
       value: 1
@@ -4991,7 +4995,7 @@ PrefabInstance:
     - target: {fileID: 222899981039721528, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: doorTile
       value: 
-      objectReference: {fileID: 11400000, guid: a8de654b9b1ffdc40b9c0f6be2738eda, type: 2}
+      objectReference: {fileID: 11400000, guid: 28ac1633c4411e54aace9ca7ae52f135, type: 2}
     - target: {fileID: 222899981039721528, guid: 3fb23fbb6ba0ee846aa934c005391093, type: 3}
       propertyPath: wallTilemap
       value: 
@@ -5098,7 +5102,7 @@ PrefabInstance:
     - target: {fileID: 1774958872793528143, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: doorTile
       value: 
-      objectReference: {fileID: 11400000, guid: a8de654b9b1ffdc40b9c0f6be2738eda, type: 2}
+      objectReference: {fileID: 11400000, guid: 28ac1633c4411e54aace9ca7ae52f135, type: 2}
     - target: {fileID: 1774958872793528143, guid: 9278aa95b3727824f97f42581517cf41, type: 3}
       propertyPath: Direction
       value: 3

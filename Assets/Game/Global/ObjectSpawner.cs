@@ -19,6 +19,7 @@ using TonyDev.Game.Level.Decorations.Chests;
 using TonyDev.Game.Level.Rooms;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
@@ -150,7 +151,7 @@ namespace TonyDev.Game.Global
         {
             if (Camera.main is not null)
                 GameManager.Instance.CmdSpawnEnemy(enemyName,
-                    Camera.main.ScreenToWorldPoint(Input.mousePosition),
+                    Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue()),
                     Player.LocalInstance.CurrentParentIdentity, amount);
         }
 

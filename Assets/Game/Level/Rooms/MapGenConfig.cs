@@ -9,7 +9,7 @@ namespace TonyDev
 {
     public enum MapZone
     {
-        Basic, Desert
+        Basic, Desert, Ice
     }
 
     [Serializable]

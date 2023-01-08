@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using kcp2k;
@@ -58,7 +59,7 @@ namespace TonyDev
 
         private void Start()
         {
-            if (_beenInitialized) return;
+            //if (_beenInitialized) return;
 
             OnReset();
 

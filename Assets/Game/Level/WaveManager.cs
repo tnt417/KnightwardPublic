@@ -73,15 +73,7 @@ namespace TonyDev.Game.Level
 
         private void Start()
         {
-            WaitToUpdateRoomMultipliers().Forget();
             _waveCooldown = breakLength;
-        }
-
-        private async UniTask WaitToUpdateRoomMultipliers()
-        {
-            await UniTask.WaitUntil(() => Player.LocalInstance != null);
-            UpdateRoomTimeMultipliers();
-            RoomManager.OnActiveRoomChangedGlobal += (_, _) => UpdateRoomTimeMultipliers();
         }
 
         [ServerCallback]
@@ -110,31 +102,7 @@ namespace TonyDev.Game.Level
             _waveCooldown += seconds;
         }
 
-        public static float BreakPassingMultiplier;
-
-        [ServerCallback]
-        public void UpdateRoomTimeMultipliers()
-        {
-            var total = 0f;
-
-            var players = FindObjectsOfType<Player>();
-
-            foreach (var p in players)
-            {
-                if (p.CurrentParentIdentity == null)
-                {
-                    total += 0.3f; //If the player is in the arena on a break, slow time
-                }
-                else
-                {
-                    var newRoom = RoomManager.Instance.GetRoomFromID(p.CurrentParentIdentity.netId);
-
-                    total += newRoom.timeMultiplier;
-                }
-            }
-
-            GameManager.Instance.CmdSetBreakMultiplier(total / players.Length);
-        }
+        public static float BreakPassingMultiplier => 1f;
 
         [GameCommand(Keyword = "nextwave", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Spawning next wave.")]

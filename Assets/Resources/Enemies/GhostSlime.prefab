@@ -256,6 +256,7 @@ GameObject:
   - component: {fileID: -5837359734184844230}
   - component: {fileID: 3803095840298935939}
   - component: {fileID: 6567730869863121471}
+  - component: {fileID: -2599525473326200845}
   m_Layer: 8
   m_Name: GhostSlime
   m_TagString: Enemy
@@ -385,7 +386,7 @@ Rigidbody2D:
   m_Material: {fileID: 0}
   m_Interpolate: 1
   m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!58 &408949789115778733
 CircleCollider2D:
@@ -489,6 +490,20 @@ MonoBehaviour:
   flipRenderer: {fileID: 0}
   flipFlip: 0
   chaseSpeedMultiplier: 2
+--- !u!114 &-2599525473326200845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7080094185981754644}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a37d3413993769548879c11be84b68fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seconds: 0
+  spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
 --- !u!1001 &7080094185844148543
 PrefabInstance:
   m_ObjectHideFlags: 0
