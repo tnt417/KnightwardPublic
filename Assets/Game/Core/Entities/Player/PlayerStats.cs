@@ -153,7 +153,7 @@ namespace TonyDev.Game.Core.Entities.Player
             {Stat.CooldownReduce, "P0,"}
         };
         
-        private static readonly Dictionary<Stat, string> StatLabelKey = new Dictionary<Stat, string>()
+        public static readonly Dictionary<Stat, string> StatLabelKey = new Dictionary<Stat, string>()
         {
             {Stat.Armor, "Armor"},
             {Stat.Damage, "Damage"},

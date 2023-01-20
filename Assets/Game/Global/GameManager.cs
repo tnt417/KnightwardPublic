@@ -382,8 +382,17 @@ namespace TonyDev.Game.Global
             if (Instance == null) Instance = this;
             else Destroy(this);
 
-            AllItems = Resources.LoadAll<ItemData>("Items").Select(id => Instantiate(id)).ToList();
+            AllItems = Resources.LoadAll<ItemData>("Items").Select(Instantiate).ToList();
 
+            foreach (var crp in FindObjectsOfType<CustomRoomPlayer>())
+            {
+                if (crp.isOwned) continue;
+                foreach (var itemName in crp.UnlockedItemNames)
+                {
+                    UnlocksManager.Instance.AddUnlockSessionOnly(itemName);
+                }
+            }
+            
             Random.InitState((int) DateTime.Now.Ticks);
 
             Player.OnLocalPlayerCreated += Init;
@@ -533,7 +542,18 @@ namespace TonyDev.Game.Global
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.GenerateTask().Forget();
 
+            if (dungeonFloor > 1 && (dungeonFloor-1) % 10 == 0)
+            {
+                RpcUnlockRandomItem();
+            }
+
             _busyRegen = false;
+        }
+
+        [ClientRpc]
+        private void RpcUnlockRandomItem()
+        {
+            UnlocksManager.Instance.UnlockRandomItem();
         }
 
         private async UniTask NextDungeonFloor()

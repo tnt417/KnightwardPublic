@@ -268,11 +268,6 @@ namespace TonyDev.Game.Core.Attacks
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (other.gameObject.layer == LayerMask.NameToLayer("Level") && destroyOnHitWall)
-            {
-                Destroy(gameObject);
-            }
-            
             if (destroyOnAnyCollide && other.gameObject != _owner.gameObject)
                 Destroy(gameObject); //Destroy if destroyOnAnyCollide is true.
             

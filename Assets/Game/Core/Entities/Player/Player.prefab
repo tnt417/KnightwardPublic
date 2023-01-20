@@ -232,13 +232,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1289176794089353617}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 2468685822208163573}
-  m_RootOrder: 1
+  m_Father: {fileID: 1379122113293074349}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &78912763753454545
 SpriteRenderer:
@@ -281,15 +281,15 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: -623884591, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9375, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
+  m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 1
 --- !u!1 &2078632121062737528
@@ -303,7 +303,7 @@ GameObject:
   - component: {fileID: 1379122113293074349}
   - component: {fileID: 8144095813932333948}
   m_Layer: 7
-  m_Name: PlayerBody
+  m_Name: PlayerSprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -320,7 +320,8 @@ Transform:
   m_LocalPosition: {x: 0, y: -0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 4694542399364187344}
   m_Father: {fileID: 2468685822208163573}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -365,12 +366,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 9119549463136492614, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
+  m_Sprite: {fileID: -1603714717, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.9375, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -407,7 +408,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1379122113293074349}
-  - {fileID: 4694542399364187344}
   - {fileID: 687210292646537960}
   - {fileID: 1886764939606172995}
   - {fileID: 7021041495485311932}
@@ -549,6 +549,7 @@ GameObject:
   - component: {fileID: -6464742237505702463}
   - component: {fileID: 2453021677114858237}
   - component: {fileID: 3678488959114238567}
+  - component: {fileID: 5455837209950973606}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -626,6 +627,14 @@ MonoBehaviour:
   - statType: 0
     stat: 9
     strength: 5
+    source: 
+  - statType: 0
+    stat: 2
+    strength: 0.1
+    source: 
+  - statType: 0
+    stat: 8
+    strength: 0.1
     source: 
   targetIntangible: 0
   <Team>k__BackingField: 1
@@ -799,7 +808,9 @@ MonoBehaviour:
   - {fileID: -1255095844715257567, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: -4994663590258028075, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: -8169895673413398706, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
-  playerSpriteRenderer: {fileID: 8144095813932333948}
+  playerSpriteRenderers:
+  - {fileID: 8144095813932333948}
+  - {fileID: 78912763753454545}
   playerAnimator: {fileID: 29065221820089324}
   playerAnimationValues: {fileID: 8587305128165645186}
   playerWalkParticles: {fileID: 6009604398360732636}
@@ -881,6 +892,23 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &5455837209950973606
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4981228928076747058}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0.05
+  clientAuthority: 1
+  animator: {fileID: 29065221820089324}
 --- !u!1 &4991830317333741039
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,7 +1074,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2468685822208163573}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6782587555636319016
 SpriteRenderer:
@@ -1241,7 +1269,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2468685822208163573}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!198 &6009604398360732636
 ParticleSystem:
@@ -6077,7 +6105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7127552388381089783, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7127552388381089783, guid: 59186fb3545d64843a1ab34f045dce4e, type: 3}
       propertyPath: m_AnchorMax.x

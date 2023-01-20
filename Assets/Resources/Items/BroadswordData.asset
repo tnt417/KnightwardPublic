@@ -45,15 +45,15 @@ MonoBehaviour:
       attackData:
         damageMultiplier: 1
         knockbackMultiplier: 1
-        hitboxRadius: 0.3
+        hitboxRadius: 0.5
         team: 1
         destroyOnApply: 0
         destroyOnCollideWall: 1
-        lifetime: 0.2
+        lifetime: 0.15
         spawnOnDestroyKey: 
         ignoreInvincibility: 0
       disableMovement: 0
-      travelSpeed: 12
+      travelSpeed: 20
       offsetDegrees: 0
       waveAmplitude: 0
       waveLength: 0

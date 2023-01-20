@@ -11,8 +11,8 @@ namespace TonyDev.Game.Level.Decorations.BlessingChalice
         protected override void OnInteract(InteractType type)
         {
             var boostStat = Enum.Parse<Stat>(Tools.SelectRandom(Enum.GetNames(typeof(Stat))));
-            ObjectSpawner.SpawnTextPopup(transform.position, "+10% " + Enum.GetName(typeof(Stat), boostStat), Color.green, 0.5f);
-            Player.LocalInstance.Stats.AddStatBonus(StatType.AdditivePercent, boostStat, 0.1f, "Chalice");
+            ObjectSpawner.SpawnTextPopup(transform.position, "+20% " + PlayerStats.StatLabelKey[boostStat], Color.green, 0.4f);
+            Player.LocalInstance.Stats.AddStatBonus(StatType.AdditivePercent, boostStat, 0.2f, "Chalice");
             IsInteractable = false;
             PlayInteractSound();
         }

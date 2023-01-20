@@ -42,7 +42,14 @@ namespace TonyDev.Game.UI.Inventory
 
         private void OnItemSet(Item item)
         {
-            if (image != null) image.sprite = item?.uiSprite;
+            if (image != null)
+            {
+                image.sprite = item?.uiSprite;
+            }
+            else
+            {
+                image.enabled = false;
+            }
             if (nameText != null) nameText.text = item?.itemName;
             if(descriptionText != null) descriptionText.text = item?.GetItemDescription();
         }

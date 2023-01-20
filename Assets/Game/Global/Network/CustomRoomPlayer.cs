@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Steamworks;
@@ -24,7 +25,8 @@ namespace TonyDev.Game.Global.Network
 
         [SyncVar(hook = nameof(OnSkinChanged))]
         public PlayerSkin skin;
-
+        
+        public readonly SyncList<string> UnlockedItemNames = new();
 
         [Header("UI")] public Transform uiTransform;
         public Button actionButton;
@@ -32,7 +34,7 @@ namespace TonyDev.Game.Global.Network
         public TMP_Text usernameText;
         public TMP_Text statusText;
         public Image profileImage;
-        public Image playerImage;
+        public Image[] playerImages;
 
         public Button skinLeft;
         public Button skinRight;
@@ -41,11 +43,23 @@ namespace TonyDev.Game.Global.Network
         
         private void OnSkinChanged(PlayerSkin oldSkin, PlayerSkin newSkin)
         {
-            playerImage.material = new Material(playerImage.material);
+            foreach (var playerImage in playerImages)
+            {
+                playerImage.material = new Material(playerImage.material);
 
-            playerImage.material.SetColor("_LowColor", newSkin.LowColor);
-            playerImage.material.SetColor("_MidColor", newSkin.MidColor);
-            playerImage.material.SetColor("_HighColor", newSkin.HighColor);
+                playerImage.material.SetColor("_LowColor", newSkin.LowColor);
+                playerImage.material.SetColor("_MidColor", newSkin.MidColor);
+                playerImage.material.SetColor("_HighColor", newSkin.HighColor);
+            }
+        }
+
+        [Command]
+        public void CmdSetUnlockedItems(string[] items)
+        {
+            foreach (var i in items)
+            {
+                UnlockedItemNames.Add(i);
+            }
         }
         
         [Command(requiresAuthority = false)]
@@ -74,6 +88,8 @@ namespace TonyDev.Game.Global.Network
 
             CmdSetSteamId(SteamUser.GetSteamID().m_SteamID);
             CmdSetUsername(SteamFriends.GetPersonaName());
+
+            CmdSetUnlockedItems(UnlocksManager.Instance.Unlocks.Keys.ToArray());
 
             if (!UIEnabled) return;
 

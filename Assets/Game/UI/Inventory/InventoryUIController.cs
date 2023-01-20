@@ -94,7 +94,14 @@ namespace TonyDev.Game.UI.Inventory
             for (var i = 0; i < relicSlots.Length; i++)
             {
                 relicSlots[i].gameObject.SetActive(i + 1 <= PlayerInventory.Instance.RelicSlotCount);
-                if (relicArray.Length >= i + 1) relicSlots[i].Item = relicArray[i];
+                if (relicArray.Length >= i + 1)
+                {
+                    relicSlots[i].Item = relicArray[i];
+                }
+                else
+                {
+                    relicSlots[i].Item = null;
+                }
             }
             //
 

@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TonyDev.Game.Core.Effects;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
@@ -44,12 +46,27 @@ namespace TonyDev.Game.Core.Items
 
         public void InsertStarterItems()
         {
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Weapon,
-                ItemRarity.Common)); //Add a starting sword to the player's inventory.
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Armor,
-                ItemRarity.Common)); //Add armor to inventory
+            var broadswordItem = Object.Instantiate(GameManager.AllItems.FirstOrDefault(i => i.item.itemName == "Broadsword")).item;
+            InsertItem(new Item()
+            {
+                itemName = "Starter Sword",
+                bypassStatGeneration = true,
+                itemDescription = "A weak starter sword.",
+                itemEffects = new List<GameEffect>(),
+                itemRarity = ItemRarity.Common,
+                itemType = ItemType.Weapon, 
+                projectiles = broadswordItem.projectiles,
+                spawnablePrefabName = "",
+                statBonuses = new StatBonus[]
+                {
+                    new StatBonus(StatType.Flat, Stat.Damage, 15, "Starter Sword"),
+                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 1f, "Starter Sword")
+                },
+                uiSprite = broadswordItem.uiSprite
+            });
+            
             InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common)); //Add armor to inventory
+                ItemRarity.Common));
         }
 
         private static void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI
@@ -97,16 +114,7 @@ namespace TonyDev.Game.Core.Items
 
             if (item.IsEquippable)
             {
-                if (replacedItem != null)
-                {
-                    if (replacedItem.itemEffects != null)
-                    {
-                        foreach (var effect in replacedItem.itemEffects) Player.LocalInstance.CmdRemoveEffect(effect);
-                    }
-
-                    PlayerStats.Stats.RemoveStatBonuses(replacedItem
-                        .itemName); //Remove stat bonuses of the now removed item
-                }
+                OnUnEquip(replacedItem);
 
                 if (item.itemEffects != null)
                     foreach (var effect in item.itemEffects)
@@ -120,6 +128,20 @@ namespace TonyDev.Game.Core.Items
             OnItemInsertLocal?.Invoke(item);
 
             return replacedItem; //Return the item that was replaced. If nothing was replaced, returns null.
+        }
+
+        public void OnUnEquip(Item item)
+        {
+            if (item != null)
+            {
+                if (item.itemEffects != null)
+                {
+                    foreach (var effect in item.itemEffects) Player.LocalInstance.CmdRemoveEffect(effect);
+                }
+
+                PlayerStats.Stats.RemoveStatBonuses(item
+                    .itemName); //Remove stat bonuses of the now removed item
+            }
         }
 
         private Item SwapSlot(Item item)

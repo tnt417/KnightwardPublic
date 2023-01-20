@@ -203,7 +203,7 @@ namespace TonyDev.Game.Global
 
             NetworkServer.Spawn(groundItemObject);
             gi.CmdSetItem(item);
-            gi.CmdSetCost((int) (ItemGenerator.GenerateCost(item, GameManager.DungeonFloor) * costMultiplier));
+            gi.CmdSetCost((int) (ItemGenerator.GenerateCost(item.itemRarity, GameManager.DungeonFloor) * costMultiplier));
             gi.CmdSetEssence(ItemGenerator.GenerateEssence(item));
 
             return gi;

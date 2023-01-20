@@ -28,7 +28,7 @@ namespace TonyDev.Game.Core.Entities
         public const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
 
-        protected virtual bool CanAttack => IsAlive || this is Tower;
+        public virtual bool CanAttack => IsAlive || this is Tower;
 
         //Editor fields
         [Header("Targeting")] [SerializeField] private string targetTag;
@@ -155,8 +155,9 @@ namespace TonyDev.Game.Core.Entities
         #region Attack
 
         protected virtual float AttackTimerMax => 1 / Stats.GetStat(Stat.AttackSpeed);
-        private float _attackTimer;
+        protected float AttackTimer;
         public Action OnAttack;
+        public float NormalizedAttackTime => AttackTimer/AttackTimerMax;
 
         //Invokes the attack event 
         public void Attack() //Called in animator events on some entities
@@ -184,7 +185,7 @@ namespace TonyDev.Game.Core.Entities
         {
             GameManager.AddEntity(this);
 
-            OnAttack += () => _attackTimer = 0;
+            OnAttack += () => AttackTimer = 0;
             _effects.Callback += OnEffectsUpdated;
 
             _targetUpdateTimer = Random.Range(0, EntityTargetUpdatingRate);
@@ -217,9 +218,9 @@ namespace TonyDev.Game.Core.Entities
                 ApplyDamage(-hpRegen, out var success, true); //Regen health by HpRegen per second
             }
 
-            _attackTimer += Time.deltaTime;
+            AttackTimer += Time.deltaTime;
             
-            if (_attackTimer > AttackTimerMax)
+            if (AttackTimer > AttackTimerMax)
             {
                 Attack();
             }

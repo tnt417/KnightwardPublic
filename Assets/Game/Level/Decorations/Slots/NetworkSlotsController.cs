@@ -18,7 +18,15 @@ namespace TonyDev.Game.Level.Decorations.Slots
         Enemies,
         Chest,
         ExtraSlot,
-        Nothing
+        Nothing,
+        Weapon,
+        Relic,
+        Tower,
+        Armor,
+        Common,
+        Uncommon,
+        Rare,
+        Unique
     }
 
     [Serializable]

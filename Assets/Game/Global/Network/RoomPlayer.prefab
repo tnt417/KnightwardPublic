@@ -142,7 +142,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 9119549463136492614, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
+  m_Sprite: {fileID: -1203979061, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -314,7 +314,8 @@ MonoBehaviour:
   usernameText: {fileID: 5074532061556837802}
   statusText: {fileID: 216818219746201825}
   profileImage: {fileID: 1035971197479594365}
-  playerImage: {fileID: 2932481306278766334}
+  playerImages:
+  - {fileID: 2932481306278766334}
   skinLeft: {fileID: 6637477459448443484}
   skinRight: {fileID: 380644248970082428}
 --- !u!114 &3393300252707124381

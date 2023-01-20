@@ -29,7 +29,7 @@ namespace TonyDev.Game.Core.Entities.Player
         public PlayerDeath playerDeath;
 
         public bool fireKeyHeld = false;
-        protected override bool CanAttack => fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused;
+        public override bool CanAttack => fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused;
 
         public void OnFire(InputValue value)
         {

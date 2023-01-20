@@ -6,6 +6,7 @@ using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Global;
 using UnityEngine;
+using UnityEngine.XR;
 using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
@@ -24,7 +25,7 @@ namespace TonyDev.Game.Core.Items
 
         private static Item GetTowerItem(ItemRarity itemRarity)
         {
-            return Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item)
+            return Tools.SelectRandom(UnlocksManager.UnlockedItems.Select(id => Object.Instantiate(id).item)
                 .Where(i => i.itemType == ItemType.Tower && i.itemRarity == itemRarity).ToArray());
         }
 
@@ -61,7 +62,7 @@ namespace TonyDev.Game.Core.Items
                 return 0;
             }
 
-            return (int) Mathf.Pow(GenerateCost(item, dungeonFloor) * Random.Range(0.3f, 0.4f), 1.3f);
+            return (int) Mathf.Pow(GenerateCost(item.itemRarity, dungeonFloor) * Random.Range(0.3f, 0.4f), 1.3f);
         }
 
         //Returns a randomly generated item based on input parameters
@@ -76,13 +77,13 @@ namespace TonyDev.Game.Core.Items
 
             if (type == ItemType.Weapon)
             {
-                item = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item)
+                item = Tools.SelectRandom(UnlocksManager.UnlockedItems.Select(id => Object.Instantiate(id).item)
                     .Where(i => i.itemType == ItemType.Weapon));
             }
 
             if (type == ItemType.Armor)
             {
-                item = Tools.SelectRandom(GameManager.AllItems.Select(id => Object.Instantiate(id).item)
+                item = Tools.SelectRandom(UnlocksManager.UnlockedItems.Select(id => Object.Instantiate(id).item)
                     .Where(i => i.itemType == ItemType.Armor));
             }
 
@@ -114,7 +115,7 @@ namespace TonyDev.Game.Core.Items
                     itemName = item.itemName;
                     break;
                 case ItemType.Relic:
-                    var selectedRelic = Tools.SelectRandom(GameManager.AllItems
+                    var selectedRelic = Tools.SelectRandom(UnlocksManager.UnlockedItems
                         .Select(id => Object.Instantiate(id).item)
                         .Where(i => i.itemType == ItemType.Relic && i.itemRarity == rarity));
                     bypassStatGen = selectedRelic.bypassStatGeneration;
@@ -256,11 +257,9 @@ namespace TonyDev.Game.Core.Items
 
         public static float DungeonInteractMultiplier => (1 + GameManager.DungeonFloor / 5f);
 
-        public static int GenerateCost(Item item, int dungeonFloor)
+        public static int GenerateCost(ItemRarity itemRarity, int dungeonFloor)
         {
-            if (item == null) return 0;
-
-            return (int) (item.itemRarity switch
+            return (int) (itemRarity switch
             {
                 ItemRarity.Common => 15f * (1.2f + dungeonFloor / 7f) + 10f,
                 ItemRarity.Uncommon => 20f * (1.2f + dungeonFloor / 7f) + 10f,

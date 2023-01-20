@@ -130,6 +130,11 @@ namespace TonyDev.Game.Core.Attacks
 
             if (childOfOwner) projectileObject.transform.parent = owner.transform;
 
+            if (attackData.destroyOnCollideWall)
+            {
+                Object.Instantiate(ObjectFinder.GetPrefab("WallDestroy"), projectileObject.transform);
+            }
+            
             //Set Rigidbody configuration...
             rb.gravityScale = 0;
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
