@@ -95,7 +95,7 @@ namespace TonyDev.Editor
 
             DisplayGeneralInfo(sp); //Show fields that applies to all items
 
-            if (itemType is ItemType.Armor or ItemType.Weapon or ItemType.Relic)
+            if (itemType is ItemType.Armor or ItemType.Weapon or ItemType.Relic or ItemType.Tower)
                 DisplayEquippableInfo(sp); //Show equippable-specific fields
 
             if (itemType is ItemType.Tower) DisplaySpawnableInfo(sp); //Show spawnable-specific fields
@@ -155,7 +155,7 @@ namespace TonyDev.Editor
             {
                 SearchWindow.Open(
                     new SearchWindowContext(GUIUtility.GUIToScreenPoint(Event.current.mousePosition)),
-                    new EffectListSearchProvider(Game.Global.Tools.GetTypes<GameEffect>().ToArray(),
+                    new EffectListSearchProvider(Game.Global.GameTools.GetTypes<GameEffect>().ToArray(),
                         (x) => AddEffect(x)));
             }
 

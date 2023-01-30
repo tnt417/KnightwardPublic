@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
@@ -6,6 +7,7 @@ using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace TonyDev.Game.UI.Inventory
 {
@@ -18,9 +20,11 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private GameObject gearInventoryObject;
         [SerializeField] private GameObject towerInventoryObject;
         [SerializeField] private GameObject statInventoryObject;
+        [SerializeField] private GameObject relicSlotPrefab;
         [SerializeField] private ItemSlot weaponSlot;
         [SerializeField] private ItemSlot armorSlot;
-        [SerializeField] private ItemSlot[] relicSlots;
+        [SerializeField] private GameObject relicLayout;
+        private readonly Dictionary<Item, ItemSlot> _relicSlots = new();
         [SerializeField] private TMP_Text essenceText;
         [SerializeField] private TMP_Text moneyText;
         [SerializeField] private TMP_Text damageText;
@@ -48,6 +52,23 @@ namespace TonyDev.Game.UI.Inventory
             towerInventoryObject.SetActive(false);
             gearInventoryObject.SetActive(true);
             statInventoryObject.SetActive(false);
+
+            PlayerInventory.OnItemInsertLocal += (item) =>
+            {
+                if (item.itemType != ItemType.Relic) return;
+                var slot = Instantiate(relicSlotPrefab, relicLayout.transform);
+                var itemSlot = slot.GetComponent<ItemSlot>();
+                itemSlot.Item = item;
+                
+                _relicSlots.Add(item, itemSlot);
+            };
+
+            PlayerInventory.OnItemRemoveLocal += (item) =>
+            {
+                if (item.itemType != ItemType.Relic) return;
+                Destroy(_relicSlots[item].gameObject);
+                _relicSlots.Remove(item);
+            };
         }
 
         private void OnDestroy()
@@ -89,20 +110,20 @@ namespace TonyDev.Game.UI.Inventory
             weaponSlot.Item = PlayerInventory.Instance.WeaponItem;
             armorSlot.Item = PlayerInventory.Instance.ArmorItem;
 
-            var relicArray = PlayerInventory.Instance.RelicItems.ToArray();
-
-            for (var i = 0; i < relicSlots.Length; i++)
-            {
-                relicSlots[i].gameObject.SetActive(i + 1 <= PlayerInventory.Instance.RelicSlotCount);
-                if (relicArray.Length >= i + 1)
-                {
-                    relicSlots[i].Item = relicArray[i];
-                }
-                else
-                {
-                    relicSlots[i].Item = null;
-                }
-            }
+            // var relicArray = PlayerInventory.Instance.RelicItems.ToArray();
+            //
+            // for (var i = 0; i < _relicSlots.Length; i++)
+            // {
+            //     _relicSlots[i].gameObject.SetActive(i + 1 <= PlayerInventory.Instance.RelicSlotCount);
+            //     if (relicArray.Length >= i + 1)
+            //     {
+            //         _relicSlots[i].Item = relicArray[i];
+            //     }
+            //     else
+            //     {
+            //         _relicSlots[i].Item = null;
+            //     }
+            // }
             //
 
             essenceText.text = GameManager.Essence.ToString();

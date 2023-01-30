@@ -15,11 +15,13 @@ namespace TonyDev.Game.Level.Rooms
     public class RoomDoor : MonoBehaviour
     {
         //Editor variables
-        public Vector2Int[] wallTileSpots;
         public Tilemap wallTilemap;
-        public TileBase doorTile;
         public Direction direction;
         private BoxCollider2D _collider;
+
+        [SerializeField] private Animator animator;
+
+        [SerializeField] private ParticleSystem particles;
         //
 
         public bool IsOpen { get; private set; }
@@ -31,12 +33,16 @@ namespace TonyDev.Game.Level.Rooms
 
         public void SetOpen(bool open)
         {
-            foreach (var pos in wallTileSpots)
+            // foreach (var pos in wallTileSpots)
+            // {
+            //     wallTilemap.SetTile((Vector3Int) pos, open ? null : doorTile);
+            // }
             {
-                wallTilemap.SetTile((Vector3Int) pos, open ? null : doorTile);
+                
             }
-
-            wallTilemap.CompressBounds();
+            animator.Play(open ? "GateOpen" : "GateClose");
+            
+            //wallTilemap.CompressBounds();
             
             IsOpen = open;
             _collider.enabled = open;
@@ -57,15 +63,20 @@ namespace TonyDev.Game.Level.Rooms
             _hostInterestVisibility = visible;
             _collider.enabled = IsOpen && visible;
         }
-        
-        public void OnDrawGizmos()
+
+        public void PlayParticles()
         {
-            for (var i = 0; i < wallTileSpots.Length; i++)
-            {
-                var pos = wallTileSpots[i];
-                Gizmos.color = new Color(1, 0, 0, 0.5f);
-                Gizmos.DrawCube(new Vector3(pos.x, pos.y, 0), Vector3.one);
-            }
+            particles.Play();
         }
+
+        // public void OnDrawGizmos()
+        // {
+        //     for (var i = 0; i < wallTileSpots.Length; i++)
+        //     {
+        //         var pos = wallTileSpots[i];
+        //         Gizmos.color = new Color(1, 0, 0, 0.5f);
+        //         Gizmos.DrawCube(new Vector3(pos.x, pos.y, 0), Vector3.one);
+        //     }
+        // }
     }
 }

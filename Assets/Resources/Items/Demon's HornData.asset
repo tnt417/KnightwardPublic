@@ -21,8 +21,9 @@ MonoBehaviour:
     statBonuses:
     - statType: 2
       stat: 7
-      strength: 0
+      strength: 0.2
       source: 
+      hidden: 0
     bypassStatGeneration: 0
     itemEffects:
     - rid: 1191606023430078469
@@ -40,15 +41,15 @@ MonoBehaviour:
         - type: 2
           stat: 1
           scalingType: 0
-          valueRange: {x: 1.5, y: 2}
+          valueRange: {x: 1.2, y: 2}
           byFloor: 50
         - type: 2
           stat: 6
           scalingType: 0
-          valueRange: {x: 1.5, y: 2}
+          valueRange: {x: 1.2, y: 2}
           byFloor: 50
         - type: 2
           stat: 9
           scalingType: 0
-          valueRange: {x: 2, y: 4}
+          valueRange: {x: 1.2, y: 4}
           byFloor: 50

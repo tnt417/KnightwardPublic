@@ -233,8 +233,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb2d: {fileID: 3113712603496644198}
-  attractRange: 3
-  attractSpeed: 3
+  attractRange: 10
+  attractSpeed: 4
   amount: 0
 --- !u!96 &477513598018090033
 TrailRenderer:
@@ -278,7 +278,7 @@ TrailRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: -1
-  m_Time: 0.07
+  m_Time: 0.03
   m_Parameters:
     serializedVersion: 3
     widthMultiplier: 1
@@ -287,7 +287,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.2500038
+        value: 0.17258072
         inSlope: 0
         outSlope: 0
         tangentMode: 0

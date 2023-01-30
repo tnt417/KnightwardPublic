@@ -634,7 +634,7 @@ Tilemap:
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 52
-    m_Data: {fileID: 11400000, guid: a8de654b9b1ffdc40b9c0f6be2738eda, type: 2}
+    m_Data: {fileID: 11400000, guid: a8e64b90123cc3f4bb1bc13508d37d43, type: 2}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   m_TileSpriteArray:
@@ -2715,8 +2715,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8962060ff21a437409d4f3c30ba61d87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  started: 0
   roomDoors:
   - {fileID: 6390904252563177871}
   - {fileID: 2338220459388030948}
@@ -2751,9 +2753,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2455027914
   serverOnly: 0
   visible: 2
-  m_AssetId: 13a45a52d081ff64baf23106a3b8a578
   hasSpawned: 0
 --- !u!1 &1131030671676053517
 GameObject:

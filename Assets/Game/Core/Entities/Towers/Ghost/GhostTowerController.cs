@@ -67,6 +67,8 @@ namespace TonyDev
             enemy.Stats.AddStatBonus(StatType.Override, Stat.Damage, tower.Stats.GetStat(Stat.Damage), "GhostTower");
             enemy.Stats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, tower.Stats.GetStat(Stat.MoveSpeed), "GhostTower");
             
+            tower.SubtractDurability(1);
+            
             _spawnedEnemies.Add(enemy);
 
             enemy.OnDeathOwner += (_) => _spawnedEnemies.Remove(enemy);

@@ -36,11 +36,11 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
             if (_empowered)
             {
-                var direction1 = Tools.Rotate(direction, -10 * Mathf.Deg2Rad);
-                var direction2 = Tools.Rotate(direction, 10 * Mathf.Deg2Rad);
+                //var direction1 = GameTools.Rotate(direction, -10 * Mathf.Deg2Rad);
+                //var direction2 = GameTools.Rotate(direction, 10 * Mathf.Deg2Rad);
                 ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction, empoweredProjectile);
-                ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction1, empoweredProjectile);
-                ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction2, empoweredProjectile);
+                //ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction1, empoweredProjectile);
+                //ObjectSpawner.SpawnProjectile(Entity, spawnPos, direction2, empoweredProjectile);
             }
             else
             {

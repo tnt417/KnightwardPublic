@@ -28,7 +28,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Grants a {Tools.WrapColor($"{additivePercentBonus:P0}", Color.yellow)} bonus to damage, attack speed, health, and armor.</color>";
+                $"<color=green>Grants a {GameTools.WrapColor($"{additivePercentBonus:P0}", Color.yellow)} bonus to damage, attack speed, health, and armor.</color>";
         }
     }
 }

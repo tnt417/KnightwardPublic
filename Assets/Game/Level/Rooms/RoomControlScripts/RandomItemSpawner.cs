@@ -1,7 +1,6 @@
 using Mirror;
 using TonyDev.Game.Global;
 using UnityEngine;
-using Tools = TonyDev.Game.Global.Tools;
 
 namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 {
@@ -20,7 +19,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 
             for (var i = 0; i < count; i++)
             {
-                var spawner = Tools.SelectRandom(spawners);
+                var spawner = GameTools.SelectRandom(spawners);
                 spawner.SpawnItem();
             }
         }

@@ -24,58 +24,95 @@ MonoBehaviour:
       stat: 7
       strength: 0.1
       source: Weapon
-    - statType: 1
-      stat: 1
-      strength: 0.5
-      source: Weapon
-    - statType: 1
+      hidden: 0
+    - statType: 0
       stat: 0
-      strength: 0.5
+      strength: 2
       source: Weapon
-    - statType: 1
-      stat: 3
-      strength: 0.25
-      source: Weapon
+      hidden: 0
     bypassStatGeneration: 0
     itemEffects:
-    - rid: 8269505059713712128
-    projectiles:
-    - prefabKey: 
-      projectileSprite: {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
-      attackData:
-        damageMultiplier: 1
-        knockbackMultiplier: 1
-        hitboxRadius: 0.5
-        team: 1
-        destroyOnApply: 0
-        destroyOnCollideWall: 1
-        lifetime: 0.15
-        spawnOnDestroyKey: 
-        ignoreInvincibility: 0
-      disableMovement: 0
-      travelSpeed: 20
-      offsetDegrees: 0
-      waveAmplitude: 0
-      waveLength: 0
-      waveDistance: 0
-      childOfOwner: 0
-      doNotRotate: 0
-      effects: []
+    - rid: 7149687125831057408
+    - rid: 7149687186422759424
+    projectiles: []
     spawnablePrefabName: 
   references:
     version: 2
     RefIds:
-    - rid: 8269505059713712128
-      type: {class: BroadswordEffect, ns: TonyDev.Game.Core.Items.Weapon.Broadsword, asm: TonyDev}
+    - rid: 7149687125831057408
+      type: {class: SlowWhileClickingEffect, ns: TonyDev, asm: TonyDev}
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        ActivateButton: 113
-        Cooldown: 5
-        Duration: 1
-        abilitySprite: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
-        RefundCooldownAmount: 1
-        BonusExpirationTime: 5
-        AttackSpeedBonusMultiplier: 0.2
-        MoveSpeedBonusMultiplier: 0.2
-        MaxSuccession: 5
+        SpeedMultiplier: 0.4
+    - rid: 7149687186422759424
+      type: {class: BroadswordSwingEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        Attack1:
+          prefabKey: BroadswordAttack1
+          projectileSprite: {fileID: 0}
+          attackData:
+            damageMultiplier: 0.33
+            knockbackMultiplier: 1
+            hitboxRadius: 1
+            team: 1
+            destroyOnApply: 0
+            destroyOnCollideWall: 0
+            lifetime: 0.5
+            spawnOnDestroyKey: 
+            ignoreInvincibility: 0
+          disableMovement: 1
+          travelSpeed: 0
+          offsetDegrees: 0
+          waveAmplitude: 0
+          waveLength: 0
+          waveDistance: 0
+          childOfOwner: 1
+          doNotRotate: 0
+          effects: []
+        Attack2:
+          prefabKey: BroadswordAttack2
+          projectileSprite: {fileID: 0}
+          attackData:
+            damageMultiplier: 0.33
+            knockbackMultiplier: 1
+            hitboxRadius: 1.5
+            team: 1
+            destroyOnApply: 0
+            destroyOnCollideWall: 0
+            lifetime: 0.5
+            spawnOnDestroyKey: 
+            ignoreInvincibility: 0
+          disableMovement: 1
+          travelSpeed: 1
+          offsetDegrees: 0
+          waveAmplitude: 0
+          waveLength: 0
+          waveDistance: 0
+          childOfOwner: 1
+          doNotRotate: 0
+          effects: []
+        Attack3:
+          prefabKey: 
+          projectileSprite: {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
+          attackData:
+            damageMultiplier: 2
+            knockbackMultiplier: 1
+            hitboxRadius: 0.5
+            team: 1
+            destroyOnApply: 1
+            destroyOnCollideWall: 1
+            lifetime: 0.1
+            spawnOnDestroyKey: 
+            ignoreInvincibility: 0
+          disableMovement: 0
+          travelSpeed: 30
+          offsetDegrees: 0
+          waveAmplitude: 0
+          waveLength: 0
+          waveDistance: 0
+          childOfOwner: 1
+          doNotRotate: 0
+          effects: []

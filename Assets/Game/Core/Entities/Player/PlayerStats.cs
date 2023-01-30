@@ -17,20 +17,22 @@ namespace TonyDev.Game.Core.Entities.Player
         public Stat stat;
         public float strength;
         [HideInInspector] public string source;
+        public bool hidden;
 
-        public StatBonus(StatType statType, Stat stat, float strength, string source)
+        public StatBonus(StatType statType, Stat stat, float strength, string source, bool hidden = false)
         {
             this.statType = statType;
             this.stat = stat;
             this.strength = strength;
             this.source = source;
+            this.hidden = hidden;
         }
 
         public static List<StatBonus> Combine(IEnumerable<StatBonus> bonus1, IEnumerable<StatBonus> bonus2)
         {
             if (bonus1 == null) return bonus2.ToList();
             if (bonus2 == null) return bonus1.ToList();
-            
+
             var statBonuses = bonus1.ToList();
             statBonuses.AddRange(bonus2);
             return statBonuses;
@@ -76,7 +78,7 @@ namespace TonyDev.Game.Core.Entities.Player
             var statBonuses = new List<StatBonus>();
             foreach (var t in stats)
             {
-                var statBonusArray = Stats.GetStatBonuses(t, true);
+                var statBonusArray = Stats.GetStatBonuses(t, true).Where(sb => !sb.hidden);
                 statBonuses.AddRange(statBonusArray);
             }
 
@@ -86,10 +88,12 @@ namespace TonyDev.Game.Core.Entities.Player
         public static string
             GetStatsTextFromBonuses(IEnumerable<StatBonus> statBonuses,
                 bool includeLabels,
-                bool separateTypes, 
+                bool separateTypes,
                 bool tower = false) //Returns a text description of stats, based on the stat bonuses specified.
         {
             if (statBonuses == null) return "";
+
+            statBonuses = statBonuses.Where(sb => !sb.hidden);
             
             var statBonusList = statBonuses.ToList();
 
@@ -110,27 +114,38 @@ namespace TonyDev.Game.Core.Entities.Player
                 {
                     if (statBonusList.All(sb => sb.stat != stat)) continue; //Skip if no stats of stat type
 
-                    if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.Flat)) //If there are flat stat types...
+                    if (statBonusList.Any(sb =>
+                        sb.stat == stat && sb.statType == StatType.Flat)) //If there are flat stat types...
                     {
-                        var flatStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.Flat).Select(sb => sb.strength)
+                        var flatStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.Flat)
+                            .Select(sb => sb.strength)
                             .Sum(); //...Sum them up...
 
-                        stringBuilder.AppendLine(StatToText(stat, StatType.Flat, flatStrength, includeLabels, tower)); //...And append the text.
+                        stringBuilder.AppendLine(StatToText(stat, StatType.Flat, flatStrength, includeLabels,
+                            tower)); //...And append the text.
                     }
 
-                    if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.AdditivePercent)) //If there are additive stat types...
+                    if (statBonusList.Any(sb =>
+                        sb.stat == stat &&
+                        sb.statType == StatType.AdditivePercent)) //If there are additive stat types...
                     {
-                        var additiveStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.AdditivePercent).Select(sb => sb.strength)
+                        var additiveStrength = statBonusList
+                            .Where(sb => sb.stat == stat && sb.statType == StatType.AdditivePercent)
+                            .Select(sb => sb.strength)
                             .Sum(); //...Sum them up...
-                        
-                        stringBuilder.AppendLine(StatToText(stat, StatType.AdditivePercent, additiveStrength, includeLabels, tower)); //...And append the text.
+
+                        stringBuilder.AppendLine(StatToText(stat, StatType.AdditivePercent, additiveStrength,
+                            includeLabels, tower)); //...And append the text.
                     }
 
-                    if (statBonusList.Any(sb => sb.stat == stat && sb.statType == StatType.Multiplicative)) //If there are multiplicative stat types...
+                    if (statBonusList.Any(sb =>
+                        sb.stat == stat &&
+                        sb.statType == StatType.Multiplicative)) //If there are multiplicative stat types...
                     {
-                        var multStrength = statBonusList.Where(sb => sb.stat == stat && sb.statType == StatType.Multiplicative)
+                        var multStrength = statBonusList
+                            .Where(sb => sb.stat == stat && sb.statType == StatType.Multiplicative)
                             .Select(sb => sb.strength).Aggregate((total, next) => total * next); //...Product them...
-                        
+
                         stringBuilder.AppendLine(StatToText(stat, StatType.Multiplicative, multStrength, includeLabels, tower)); //...And append the text.
                     }
                 }
@@ -146,13 +161,13 @@ namespace TonyDev.Game.Core.Entities.Player
             {Stat.Dodge, "P0,"},
             {Stat.Health, "F0,"},
             {Stat.AoeSize, "P0,"},
-            {Stat.AttackSpeed, "P0,"},
+            {Stat.AttackSpeed, "F1,"},
             {Stat.CritChance, "P0,"},
             {Stat.HpRegen, "F1,/s"},
             {Stat.MoveSpeed, "F1,/s"},
             {Stat.CooldownReduce, "P0,"}
         };
-        
+
         public static readonly Dictionary<Stat, string> StatLabelKey = new Dictionary<Stat, string>()
         {
             {Stat.Armor, "Armor"},
@@ -166,7 +181,7 @@ namespace TonyDev.Game.Core.Entities.Player
             {Stat.MoveSpeed, "Move Speed"},
             {Stat.CooldownReduce, "Cooldown Reduction"}
         };
-        
+
         private static readonly Dictionary<Stat, string> TowerStatLabelKey = new Dictionary<Stat, string>()
         {
             {Stat.Armor, "Armor"},
@@ -180,8 +195,23 @@ namespace TonyDev.Game.Core.Entities.Player
             {Stat.MoveSpeed, "Speed"},
             {Stat.CooldownReduce, "Cooldown Reduction"}
         };
+        
+        private static readonly Dictionary<Stat, int> SpriteLabelKey = new Dictionary<Stat, int>()
+        {
+            {Stat.Armor, 7},
+            {Stat.Damage, 3},
+            {Stat.Dodge, 10},
+            {Stat.Health, 4},
+            {Stat.AoeSize, 6},
+            {Stat.AttackSpeed, 11},
+            {Stat.CritChance, 9},
+            {Stat.HpRegen, 5},
+            {Stat.MoveSpeed, 8},
+            {Stat.CooldownReduce, 12}
+        };
 
-        private static string StatToText(Stat stat, StatType type, float strength, bool includeLabels, bool isTower)
+        private static string StatToText(Stat stat, StatType type, float strength, bool includeLabels,
+            bool isTower)
         {
             var sb = new StringBuilder();
             var formatting = StatFormattingKey[stat].Split(',');
@@ -194,26 +224,29 @@ namespace TonyDev.Game.Core.Entities.Player
                 _ => "white"
             };
 
-            sb.Append(includeLabels ? (isTower ? TowerStatLabelKey[stat] : StatLabelKey[stat]) + ": " : "");
-
             sb.Append("<color=" + colorTag + ">");
 
+            if(includeLabels) sb.Append("<sprite=" + SpriteLabelKey[stat] + ">");
+            
             switch (type)
             {
                 case StatType.Override or StatType.Flat:
-                    sb.Append(Tools.RemoveWhitespace(strength.ToString(formatting[0])) + formatting[1]);
+                    sb.Append($"{GameTools.RemoveWhitespace(strength.ToString(formatting[0])) + formatting[1],-3}");
                     break;
                 case StatType.AdditivePercent:
-                    sb.Append((strength > 0 ? "+" : "") + Tools.RemoveWhitespace(strength.ToString("P0")) + " total"/*+ formatting[1]*/);
+                    sb.Append(
+                        $"{(strength > 0 ? "+" : "") + GameTools.RemoveWhitespace(strength.ToString("P0")) + " total",-3}");
                     break;
                 case StatType.Multiplicative:
-                    sb.Append("x" + Tools.RemoveWhitespace(strength.ToString("F2")) /*+ formatting[1]*/);
+                    sb.Append($"{"x" + GameTools.RemoveWhitespace(strength.ToString("F1")),-3}");
                     break;
                 default:
                     break;
             }
 
             sb.Append("</color>");
+            
+            sb.Append(" " + (includeLabels ? (isTower ? TowerStatLabelKey[stat] : StatLabelKey[stat]) : ""));
 
             return sb.ToString();
         }

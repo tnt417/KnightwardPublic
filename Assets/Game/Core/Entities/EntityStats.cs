@@ -149,11 +149,11 @@ namespace TonyDev.Game.Core.Entities
         }
 
         public void
-            AddStatBonus(StatType statType, Stat stat, float strength, string source) //Adds a stat bonus to the list.
+            AddStatBonus(StatType statType, Stat stat, float strength, string source, bool hidden = false) //Adds a stat bonus to the list.
         {
             if (ReadOnly) return;
             
-            _activeStatBonuses.Add(new StatBonus(statType, stat, strength, source));
+            _activeStatBonuses.Add(new StatBonus(statType, stat, strength, source, hidden));
             OnStatsChanged?.Invoke();
         }
 

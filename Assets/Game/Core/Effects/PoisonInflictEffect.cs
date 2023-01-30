@@ -22,6 +22,8 @@ namespace TonyDev.Game.Core.Effects
         
         public void InflictPoison(float dmg, GameEntity entity, bool crit)
         {
+            if (entity.Team == Entity.Team) return;
+            
             if (DoPoisonStacking || (_lastInflictedEffects.ContainsKey(entity) && _lastInflictedEffects[entity] is null or {Expired: true}) || !_lastInflictedEffects.ContainsKey(entity))
             {
                 _lastInflictedEffects[entity] = new PoisonEffect()

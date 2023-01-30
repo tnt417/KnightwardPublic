@@ -593,6 +593,7 @@ MonoBehaviour:
   syncInterval: 0.1
   rb2D: {fileID: 1277911647}
   speedMultiplier: 1
+  currentMovementInput: {x: 0, y: 0}
 --- !u!114 &1277911644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -616,26 +617,32 @@ MonoBehaviour:
     stat: 5
     strength: 5
     source: 
+    hidden: 0
   - statType: 0
     stat: 3
     strength: 1
     source: 
+    hidden: 0
   - statType: 0
     stat: 6
     strength: 100
     source: 
+    hidden: 0
   - statType: 0
     stat: 9
-    strength: 5
+    strength: 1
     source: 
+    hidden: 0
   - statType: 0
     stat: 2
     strength: 0.1
     source: 
+    hidden: 0
   - statType: 0
     stat: 8
     strength: 0.1
     source: 
+    hidden: 0
   targetIntangible: 0
   <Team>k__BackingField: 1
   playerMovement: {fileID: 1277911643}

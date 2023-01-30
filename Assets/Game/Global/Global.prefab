@@ -416,12 +416,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 947311960b0652148b815935f24d6e3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
   moneyPrefab: {fileID: 8160531449727603268, guid: a9c54b6367138d14da1bbb2c5dac3205, type: 3}
+  healthPrefab: {fileID: 8160531449727603268, guid: cc00a3c2549a4ce4688a8660673e700a, type: 3}
+  essencePrefab: {fileID: 8160531449727603268, guid: bfd652edc49eb2a47b35d2027b6a81b6, type: 3}
   damageNumberPrefab: {fileID: 6562519401315679430, guid: 30f80fb3160f23c448a99ca9de729f44, type: 3}
   groundItemPrefab: {fileID: 6833170357674812498, guid: 3a1bc219a25fb84418f19714827555ec, type: 3}
   chestPrefab: {fileID: 7876539795197064780, guid: d366340610a237340be5830e57a02b98, type: 3}
-  objectPoolSize: 25
+  objectPoolSize: 100
+  outlineMaterial: {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
+  spriteMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
 --- !u!114 &3686404892870064107
 MonoBehaviour:
   m_ObjectHideFlags: 0

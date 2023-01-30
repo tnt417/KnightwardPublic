@@ -97,6 +97,7 @@ MonoBehaviour:
     stat: 3
     strength: 1
     source: 
+    hidden: 0
   targetIntangible: 0
   <Team>k__BackingField: 0
   towerAnimator: {fileID: 6938340393128323355}
@@ -112,6 +113,7 @@ MonoBehaviour:
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 
+  durability: 0
   rotateToFaceTargetObject: {fileID: 5988369303423483918}
   projectileData:
   - prefabKey: 
@@ -224,7 +226,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -308,7 +310,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

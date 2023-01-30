@@ -33,6 +33,6 @@ MonoBehaviour:
         effectDescription: 
         DungeonFloorUponCreation: 0
         DamageMultiplierScale: {x: 2, y: 5}
-        TickFrequencyScale: {x: 1, y: 0.3}
-        TickCount: 10
+        TickFrequencyScale: {x: 0.5, y: 0.3}
+        TickCount: 5
         DoPoisonStacking: 0

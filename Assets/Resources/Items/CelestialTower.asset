@@ -18,10 +18,16 @@ MonoBehaviour:
     itemDescription: 
     itemType: 3
     itemRarity: 1
-    statBonuses: []
+    statBonuses:
+    - statType: 0
+      stat: 6
+      strength: 1000000
+      source: 
+      hidden: 1
     bypassStatGeneration: 1
     itemEffects:
     - rid: 4023140979131547648
+    - rid: 7149687182027128834
     projectiles: []
     spawnablePrefabName: celestial
   references:
@@ -37,3 +43,8 @@ MonoBehaviour:
         StatBonusCount: 2
         baseBonusMagnitude: 0.15
         Buffs: []
+    - rid: 7149687182027128834
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

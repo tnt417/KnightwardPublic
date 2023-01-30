@@ -345,23 +345,32 @@ MonoBehaviour:
   outcomes:
   - slotSprite: {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
     outcome: 0
+  - slotSprite: {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
+    outcome: 0
   - slotSprite: {fileID: 368543389579951487, guid: d60cc33038e33174cb6cf2a89c6bc955, type: 3}
     outcome: 2
-  - slotSprite: {fileID: -6834524911116659543, guid: 77232101e9d80754089e3481d34866da, type: 3}
-    outcome: 3
+  - slotSprite: {fileID: 21300000, guid: 7fb87b9ee17c1ae4d968b40bd23f92bc, type: 3}
+    outcome: 8
   - slotSprite: {fileID: 21300000, guid: d8b67f9e00774da4f8cacb79dcf22edf, type: 3}
     outcome: 5
   - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
     outcome: 4
-  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
-    outcome: 4
-  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
-    outcome: 4
-  - slotSprite: {fileID: 21300000, guid: 63ab3161c9ba6f243bdd79c52314ac42, type: 3}
-    outcome: 4
+  - slotSprite: {fileID: 21300000, guid: 67d2fcaaaf039f9439d57cf34b986f5f, type: 3}
+    outcome: 9
+  - slotSprite: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
+    outcome: 6
+  - slotSprite: {fileID: 21300000, guid: 944e2aed17cb1d54c9a802524b437557, type: 3}
+    outcome: 7
   slotObject: {fileID: 8076060698382201093}
   buttonInteractable: {fileID: 8632290567538872406}
   maxSlots: 7
+  enemyPossibilities:
+  - {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
+  - {fileID: 8527089446520657152, guid: 14983a18b011814489321b49e3460803, type: 3}
+  - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+  - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
+  - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+  - {fileID: 5390747538436612196, guid: 96f95ca97a146694f85952de52da3e3f, type: 3}
 --- !u!1 &4178251166305122773
 GameObject:
   m_ObjectHideFlags: 0
@@ -2074,7 +2083,7 @@ Tilemap:
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 44
-    m_Data: {fileID: 11400000, guid: a8de654b9b1ffdc40b9c0f6be2738eda, type: 2}
+    m_Data: {fileID: 11400000, guid: a8e64b90123cc3f4bb1bc13508d37d43, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 0
     m_Data: {fileID: 0}
@@ -2799,7 +2808,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3522160093811696820, guid: 2ef4fab6e44b4a546b04e85dc5ef7fa9, type: 3}
       propertyPath: cost
-      value: 10
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 3522160093811696820, guid: 2ef4fab6e44b4a546b04e85dc5ef7fa9, type: 3}
       propertyPath: label

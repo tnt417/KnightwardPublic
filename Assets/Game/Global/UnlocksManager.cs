@@ -2,12 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Newtonsoft.Json;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace TonyDev
 {
@@ -15,7 +17,7 @@ namespace TonyDev
     {
         public static UnlocksManager Instance;
 
-        public Dictionary<string, ItemData> Unlocks = new();
+        [NonSerialized] public HashSet<string> Unlocks = new();
 
         [NonSerialized] public List<ItemData> unlockedItems = new();
         public static List<ItemData> UnlockedItems => Instance.unlockedItems;
@@ -35,22 +37,32 @@ namespace TonyDev
             DontDestroyOnLoad(gameObject);
             Instance = this;
 
-            Unlocks = JsonConvert.DeserializeObject<Dictionary<string, ItemData>>(
-                PlayerPrefs.GetString(UnlocksKey));
+
+            if (PlayerPrefs.HasKey(UnlocksKey))
+            {
+                Unlocks = JsonConvert.DeserializeObject<HashSet<string>>(
+                    PlayerPrefs.GetString(UnlocksKey));
+            }
             
             if (Unlocks == null || Unlocks.Count == 0)
             {
-                Unlocks = new Dictionary<string, ItemData>();
-                
-                foreach (var u in defaultUnlocks)
-                {
-                    Unlocks.Add(u.name, u);
-                }
+                Unlocks = new HashSet<string>();
             }
 
-            foreach (var kv in Unlocks)
+            foreach (var u in defaultUnlocks)
             {
-                unlockedItems.Add(kv.Value);
+                Unlocks.Add(u.item.itemName);
+            }
+
+            GameManager.OnGameManagerAwake += InitItems;
+        }
+
+        private void InitItems()
+        {
+
+            foreach (var s in Unlocks)
+            {
+                unlockedItems.Add(GameManager.AllItems.First(i => i.item.itemName == s));
             }
         }
 
@@ -63,11 +75,11 @@ namespace TonyDev
         
         public void AddUnlock(string itemName)
         {
-            if (Unlocks.ContainsKey(itemName)) return;
+            if (Unlocks.Contains(itemName)) return;
 
             var item = GameManager.AllItems.First(i => i.item.itemName == itemName);
             
-            Unlocks.Add(itemName, item);
+            Unlocks.Add(itemName);
             
             unlockedItems.Add(item);
             
@@ -76,11 +88,36 @@ namespace TonyDev
 
         public void UnlockRandomItem()
         {
-            var item = Tools.SelectRandom(GameManager.AllItems.Where(i => !Unlocks.ContainsKey(i.item.itemName)));
+            var item = GameTools.SelectRandom(GameManager.AllItems.Where(i => !Unlocks.Contains(i.item.itemName)));
+
+            if (item == null) return;
             
             AddUnlock(item.item.itemName);
         }
+
+        [GameCommand(Keyword = "unlockall", PermissionLevel = PermissionLevel.Cheat)]
+        public static void UnlockAllItems()
+        {
+            foreach (var i in GameManager.AllItems)
+            {
+                Instance.AddUnlock(i.item.itemName);
+            }
+        }
         
+        [GameCommand(Keyword = "clearunlocks", PermissionLevel = PermissionLevel.Cheat)]
+        public static void ResetUnlocks()
+        {
+            Instance.Unlocks.Clear();
+            Instance.unlockedItems.Clear();
+            
+            foreach (var u in Instance.defaultUnlocks)
+            {
+                Instance.Unlocks.Add(u.item.itemName);
+            }
+
+            Instance.InitItems();
+        }
+
         private void OnApplicationQuit()
         {
             if(Unlocks is {Count: > 0}) PlayerPrefs.SetString(UnlocksKey, JsonConvert.SerializeObject(Unlocks));

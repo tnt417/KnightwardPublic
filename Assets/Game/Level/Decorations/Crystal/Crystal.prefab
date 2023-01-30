@@ -160,8 +160,14 @@ MonoBehaviour:
   baseStats:
   - statType: 0
     stat: 6
-    strength: 5000
+    strength: 2500
     source: 
+    hidden: 0
+  - statType: 0
+    stat: 9
+    strength: 10
+    source: 
+    hidden: 0
   targetIntangible: 0
   <Team>k__BackingField: 1
 --- !u!50 &8167611084454580651

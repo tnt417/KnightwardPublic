@@ -187,8 +187,8 @@ MonoBehaviour:
   onDestroy:
     m_PersistentCalls:
       m_Calls: []
-  hitsRemaining: 2
-  moneyDrop: 3
+  hitsRemaining: 1
+  moneyDrop: 0
   animator: {fileID: 4270445303707777720}
   hitAnimation: PotHurt
 --- !u!95 &4270445303707777720

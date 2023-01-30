@@ -50,7 +50,7 @@ namespace TonyDev
                     var shootDirection = ((Vector2) Enemy.Targets[0].transform.position - (Vector2) transform.position).normalized;
                     for (var i = 0; i < 6; i++)
                     {
-                        ShootProjectile(sandProjectile, Enemy.transform.position, Tools.Rotate(shootDirection, (i-3) * (9 + Random.Range(-2f, 2f)) * Mathf.Deg2Rad));
+                        ShootProjectile(sandProjectile, Enemy.transform.position, GameTools.Rotate(shootDirection, (i-3) * (9 + Random.Range(-2f, 2f)) * Mathf.Deg2Rad));
                         await UniTask.Delay((int)(25f / Enemy.Stats.GetStat(Stat.AttackSpeed)));
                     }
 

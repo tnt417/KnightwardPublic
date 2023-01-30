@@ -1,7 +1,8 @@
 using System;
+using System.Numerics;
 using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Behavior;
-using UnityEngine;
+using Vector2 = UnityEngine.Vector2;
 
 namespace TonyDev.Game.Core.Entities.Enemies.Books
 {
@@ -26,7 +27,8 @@ namespace TonyDev.Game.Core.Entities.Enemies.Books
                 var directionVector = ((Vector2) Enemy.Targets[0].transform.position - (Vector2) transform.position).normalized;
                 if (!reached)
                 {
-                    await Goto((Vector2)Enemy.Targets[0].transform.position - directionVector * dashRadius, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * dashSpeed * 2, 20f);
+                    var distance = Vector2.Distance(Enemy.Targets[0].transform.position, transform.position);
+                    await Goto((Vector2)Enemy.Targets[0].transform.position - directionVector * dashRadius, () => Enemy.Stats.GetStat(Stat.MoveSpeed) * dashSpeed * 2, distance/(Enemy.Stats.GetStat(Stat.MoveSpeed)*dashSpeed*2));
                     reached = true;
                 }
                 await GotoOverSeconds((Vector2)Enemy.Targets[0].transform.position + directionVector*dashRadius, 1/(Enemy.Stats.GetStat(Stat.MoveSpeed)*dashSpeed));

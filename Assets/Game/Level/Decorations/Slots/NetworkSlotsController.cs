@@ -7,6 +7,7 @@ using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Button;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Decorations.Slots
@@ -72,7 +73,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
         private void RpcRoll(int rollCount)
         {
             buttonInteractable.interactable.enabled = false;
-        
+
             _rolls = 0;
             _maxRolls = rollCount;
             foreach (var s in slots)
@@ -83,27 +84,43 @@ namespace TonyDev.Game.Level.Decorations.Slots
             _rolling = true;
         }
 
+        [SerializeField] private List<GameObject> enemyPossibilities;
+
         [ServerCallback]
         private void GiveReward()
         {
             var validOutcomes = outcomes;
-            
+
             if (slots.Count >= maxSlots)
             {
                 validOutcomes = outcomes.Where(o => o != null && o.outcome != SlotOutcome.ExtraSlot).ToArray();
             }
 
-            var determinedOutcome = Tools.SelectRandom(validOutcomes);
+            var determinedOutcome = GameTools.SelectRandom(validOutcomes);
 
             CmdSetReward(determinedOutcome.outcome);
 
             switch (determinedOutcome.outcome)
             {
-                case SlotOutcome.Chest:
-                    foreach (var s in slots)
-                    {
-                        ObjectSpawner.SpawnChest(0, (Vector2) s.transform.position - new Vector2(0, 1f), netIdentity);
-                    }
+                case SlotOutcome.Armor:
+                    ObjectSpawner.SpawnGroundItem(
+                        ItemGenerator.GenerateItemOfType(ItemType.Armor, Item.RandomRarity(slots.Count * 10)), 0,
+                        (Vector2) transform.position - new Vector2(0, 1f), netIdentity);
+                    break;
+                case SlotOutcome.Weapon:
+                    ObjectSpawner.SpawnGroundItem(
+                        ItemGenerator.GenerateItemOfType(ItemType.Weapon, Item.RandomRarity(slots.Count * 10)), 0,
+                        (Vector2) transform.position - new Vector2(0, 1f), netIdentity);
+                    break;
+                case SlotOutcome.Relic:
+                    ObjectSpawner.SpawnGroundItem(
+                        ItemGenerator.GenerateItemOfType(ItemType.Relic, Item.RandomRarity(slots.Count * 10)), 0,
+                        (Vector2) transform.position - new Vector2(0, 1f), netIdentity);
+                    break;
+                case SlotOutcome.Tower:
+                    ObjectSpawner.SpawnGroundItem(
+                        ItemGenerator.GenerateItemOfType(ItemType.Tower, Item.RandomRarity(slots.Count * 10)), 0,
+                        (Vector2) transform.position - new Vector2(0, 1f), netIdentity);
                     break;
                 case SlotOutcome.Coins:
                     foreach (var s in slots)
@@ -111,6 +128,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
                         GameManager.Instance.CmdSpawnMoney((int) (ItemGenerator.DungeonInteractMultiplier * 15),
                             (Vector2) s.transform.position - new Vector2(0, 1f), netIdentity);
                     }
+
                     break;
                 case SlotOutcome.Time:
                     FindObjectOfType<WaveManager>().StallTime(20 * slots.Count);
@@ -118,8 +136,10 @@ namespace TonyDev.Game.Level.Decorations.Slots
                 case SlotOutcome.Enemies:
                     foreach (var s in slots)
                     {
-                        ObjectSpawner.SpawnEnemy(Tools.SelectRandom(ObjectFinder.EnemyPrefabs), (Vector2) s.transform.position - new Vector2(0, 1f), netIdentity);
+                        ObjectSpawner.SpawnEnemy(GameTools.SelectRandom(enemyPossibilities),
+                            (Vector2) s.transform.position - new Vector2(0, 1f), netIdentity);
                     }
+
                     break;
                 case SlotOutcome.ExtraSlot:
                     if (slots.Count < maxSlots) CmdAddSlot();
@@ -148,9 +168,9 @@ namespace TonyDev.Game.Level.Decorations.Slots
         private void RpcSetReward(SlotOutcome outcome)
         {
             var repeatless = outcomes.ToList();
-            
-            SoundManager.PlaySound("die",0.5f, slots[0].transform.position);
-            
+
+            SoundManager.PlaySound("die", 0.5f, slots[0].transform.position);
+
             foreach (var s in slots)
             {
                 if (outcome != SlotOutcome.Nothing)
@@ -159,10 +179,10 @@ namespace TonyDev.Game.Level.Decorations.Slots
                 }
                 else
                 {
-                    var chosen = Tools.SelectRandom(repeatless);
+                    var chosen = GameTools.SelectRandom(repeatless);
 
                     repeatless.Remove(chosen);
-                    
+
                     s.SetEntry(chosen);
                 }
             }
@@ -205,13 +225,13 @@ namespace TonyDev.Game.Level.Decorations.Slots
                 return;
             }
 
-            SoundManager.PlaySound("hit",0.5f, slots[0].transform.position);
+            SoundManager.PlaySound("hit", 0.5f, slots[0].transform.position);
 
             var unusedEntries = outcomes.ToList();
-            
+
             foreach (var s in slots)
             {
-                var outcome = Tools.SelectRandom(unusedEntries);
+                var outcome = GameTools.SelectRandom(unusedEntries);
                 s.SetEntry(outcome);
                 unusedEntries.Remove(outcome);
             }

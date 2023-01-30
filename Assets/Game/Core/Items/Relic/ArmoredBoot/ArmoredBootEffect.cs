@@ -8,7 +8,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
     public class ArmoredBootEffect : GameEffect
     {
         public int armorFlatBase = 20;
-        private float ArmorBonusFlatFinal => armorFlatBase + DungeonFloorUponCreation;
+        private float ArmorBonusFlatFinal => LinearScale(armorFlatBase, armorFlatBase+50, 50);
         public Vector2 armorMultScale;
         private float ArmorBonusMultFinal => DiminishingScale(armorMultScale.x, armorMultScale.y, 50);
         public float moveSpeedPenalty = 0.2f;
@@ -32,7 +32,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Grants {Tools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor and increases player armor by {Tools.WrapColor($"{ArmorBonusMultFinal:P0}", Color.yellow)}.</color>\n<color=red>Lose {Tools.WrapColor($"{moveSpeedPenalty:P0}", Color.yellow)} of movement speed.</color>";
+                $"<color=green>Grants {GameTools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor and increases player armor by {GameTools.WrapColor($"{ArmorBonusMultFinal:P0}", Color.yellow)}.</color>\n<color=red>Lose {GameTools.WrapColor($"{moveSpeedPenalty:P0}", Color.yellow)} of movement speed.</color>";
         }
     }
 }

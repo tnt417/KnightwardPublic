@@ -18,19 +18,29 @@ namespace TonyDev.Game.Core.Entities.Towers.Flamethrower
             attackComponent.SetData(null, tower);
         }
 
+        private float _durabilityTimer = 0f;
+        
         private void FixedUpdate()
         {
-            if (tower.Targets.Count == 0 || tower.Targets[0] == null)
+            if (tower.Targets.Count == 0 || tower.Targets[0] == null || tower.Stats.GetStat(Stat.AttackSpeed) == 0)
             {
                 particles.Stop();
                 flameCollider.enabled = false;
                 return;
             }
-            
+
             if (!particles.isPlaying)
             {
                 particles.Play();
                 flameCollider.enabled = true;
+            }
+
+            _durabilityTimer += Time.fixedDeltaTime;
+
+            if (_durabilityTimer > 1)
+            {
+                tower.SubtractDurability(1);
+                _durabilityTimer = 0;
             }
 
             attackComponent.damageCooldown = 1f / tower.Stats.GetStat(Stat.AttackSpeed);

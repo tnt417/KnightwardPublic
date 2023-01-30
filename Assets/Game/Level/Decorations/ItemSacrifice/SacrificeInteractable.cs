@@ -40,7 +40,7 @@ namespace TonyDev
                 }
             }
 
-            var boostStat = Enum.Parse<Stat>(Tools.SelectRandom(Enum.GetNames(typeof(Stat))));
+            var boostStat = Enum.Parse<Stat>(GameTools.SelectRandom(Enum.GetNames(typeof(Stat))));
             ObjectSpawner.SpawnTextPopup(transform.position, "<color=green>+40% " + PlayerStats.StatLabelKey[boostStat] + "</color>, <color=red>-1 relic.</color>", Color.green, 0.4f);
             Player.LocalInstance.Stats.AddStatBonus(StatType.AdditivePercent, boostStat, 0.4f, "Chalice");
             IsInteractable = false;

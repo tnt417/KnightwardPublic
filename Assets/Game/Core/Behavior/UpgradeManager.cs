@@ -138,6 +138,7 @@ namespace TonyDev.Game.Core.Behavior
                     }, Crystal.Instance);
                 }, UpgradeCategory.Crystal);
 
+            /*
             RegisterLocalUpgrade(50, ObjectFinder.GetSprite("inventoryIcons_3"), "Damage I",
                 "x1.25 to player damage stat",
                 () => true,
@@ -195,8 +196,8 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.HpRegen, 2f, "Better Regen");
                 }, UpgradeCategory.Defensive);
-
-            RegisterLocalUpgrade(1000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics I",
+*/
+            /*RegisterLocalUpgrade(1000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics I",
                 "Gain an extra relic slot.",
                 () => true,
                 (upgrade, entity) =>
@@ -298,7 +299,7 @@ namespace TonyDev.Game.Core.Behavior
                 (upgrade, entity) =>
                 {
                     GameManager.Instance.CmdSetTowerLimit(GameManager.Instance.MaxTowers+1);
-                }, UpgradeCategory.Crystal);
+                }, UpgradeCategory.Crystal);*/
 
             #endregion
         }

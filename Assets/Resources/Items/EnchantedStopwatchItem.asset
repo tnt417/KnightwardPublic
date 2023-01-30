@@ -41,19 +41,4 @@ MonoBehaviour:
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        ScalingStatBonuses:
-        - type: 1
-          stat: 0
-          scalingType: 0
-          valueRange: {x: 0.3, y: 0.5}
-          byFloor: 50
-        - type: 0
-          stat: 4
-          scalingType: 1
-          valueRange: {x: 0.1, y: 0.3}
-          byFloor: 50
-        - type: 0
-          stat: 5
-          scalingType: 1
-          valueRange: {x: 1, y: 3}
-          byFloor: 50
+        ScalingStatBonuses: []

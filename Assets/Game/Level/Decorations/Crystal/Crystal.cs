@@ -23,7 +23,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
 
             if (!EntityOwnership) return;
             
-            CmdAddEffect(new CrystalArmorEffect(), this);
+            //CmdAddEffect(new CrystalArmorEffect(), this);
         }
 
         //Interface code. Only abnormal thing is the game is over when the crystal dies.

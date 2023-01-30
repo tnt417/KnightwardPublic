@@ -4,6 +4,7 @@ using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -58,6 +59,22 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             if (disableDeathHandling) return;
             dead = true;
+
+            var player = gameObject.GetComponent<Player>();
+
+            if (player.CurrentParentIdentity != null)
+            {
+                var room = player.CurrentParentIdentity.GetComponent<Room>();
+
+                if (room.PlayerCount <= 1)
+                {
+                    foreach (var e in room.ContainedEntities.OfType<Enemy>())
+                    {
+                        WaveManager.Instance.MoveEnemyToWave(e);
+                    }
+                }
+            }
+
             RpcDie();
         }
 

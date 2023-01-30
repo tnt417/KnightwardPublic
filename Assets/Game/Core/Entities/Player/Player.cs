@@ -34,6 +34,7 @@ namespace TonyDev.Game.Core.Entities.Player
         public void OnFire(InputValue value)
         {
             if (!isOwned) return;
+            AttackTimer = 0f;
             fireKeyHeld = value.isPressed;
         }
 
@@ -50,7 +51,7 @@ namespace TonyDev.Game.Core.Entities.Player
         public Action<string> OnUsernameChange;
 
         private bool _damageOnCooldown;
-        private const float PlayerDamageCooldown = 0.1f;
+        private const float PlayerDamageCooldown = 0.25f;
 
         protected override void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
         {
@@ -159,7 +160,7 @@ namespace TonyDev.Game.Core.Entities.Player
             //OnDamageOther += (_, _, _) => SoundManager.PlaySoundPitchVariant("hit", transform.position, 0.7f, 1f);
 
             Init();
-
+            
             PlayerInventory.Instance.InsertStarterItems();
 
             TransitionController.Instance.FadeIn();

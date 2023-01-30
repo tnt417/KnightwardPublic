@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 5769312474634298354}
   - component: {fileID: 6938340393128323355}
   - component: {fileID: 2598763644231202126}
-  - component: {fileID: 2021351407557221948}
   - component: {fileID: 647947522727035126}
   - component: {fileID: 330042881028611830}
   m_Layer: 0
@@ -88,6 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609f77bd4fcb4e94db92f5f804f88634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   targetTag: Crystal
@@ -98,15 +98,19 @@ MonoBehaviour:
     stat: 0
     strength: 0.25
     source: 
+    hidden: 0
   - statType: 0
     stat: 3
     strength: 1
     source: 
+    hidden: 0
   - statType: 2
     stat: 1
     strength: -1
     source: 
+    hidden: 0
   targetIntangible: 1
+  <Team>k__BackingField: 0
   towerAnimator: {fileID: 6938340393128323355}
   targetRadius: 6
   myItem:
@@ -120,6 +124,7 @@ MonoBehaviour:
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 
+  durability: 0
   rotateToFaceTargetObject: {fileID: 0}
   projectileData:
   - prefabKey: regenShot
@@ -130,6 +135,7 @@ MonoBehaviour:
       hitboxRadius: 0.5
       team: 0
       destroyOnApply: 1
+      destroyOnCollideWall: 0
       lifetime: 5
       spawnOnDestroyKey: regenPool
       ignoreInvincibility: 0
@@ -140,63 +146,12 @@ MonoBehaviour:
     waveLength: 0
     waveDistance: 0
     childOfOwner: 0
+    doNotRotate: 0
     effects: []
   fireSound: dagger
   references:
     version: 2
     RefIds: []
---- !u!212 &2021351407557221948
-SpriteRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1150477889065159250}
-  m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 0
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 0
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 0
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_Sprite: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
-  m_FlipY: 0
-  m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
-  m_AdaptiveModeThreshold: 0.5
-  m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 0
-  m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
 --- !u!58 &647947522727035126
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -226,9 +181,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 3752775367
   serverOnly: 0
   visible: 0
-  m_AssetId: 69391adfe88f19e48b1c95581c20e6f7
   hasSpawned: 0
 --- !u!1 &4032208556319356246
 GameObject:
@@ -282,7 +237,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -366,7 +321,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

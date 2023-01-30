@@ -86,9 +86,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 524850809
   serverOnly: 0
   visible: 0
-  m_AssetId: 04a86c2b88b1d6e47b15de639867daae
   hasSpawned: 0
 --- !u!114 &8637326900115478612
 MonoBehaviour:
@@ -102,6 +102,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff4f85a28fd05947baf5b6067bec941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   targetTag: 
@@ -112,14 +113,17 @@ MonoBehaviour:
     stat: 1
     strength: 0.33333334
     source: 
+    hidden: 0
   - statType: 2
     stat: 0
     strength: 5
     source: 
+    hidden: 0
   - statType: 0
     stat: 3
     strength: 0.5
     source: 
+    hidden: 0
   targetIntangible: 0
   <Team>k__BackingField: 1
   towerAnimator: {fileID: 6938340393128323355}
@@ -135,6 +139,7 @@ MonoBehaviour:
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 
+  durability: 0
   references:
     version: 2
     RefIds: []
@@ -150,6 +155,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b508c08e613e6a44d838bad6785e11d6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   tower: {fileID: 8637326900115478612}
@@ -213,6 +219,7 @@ MonoBehaviour:
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  destroyOnHitWall: 0
   ignoreInvincibility: 0
   inflictBuffs: []
   inflictEffects: []
@@ -5125,7 +5132,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5210,7 +5217,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

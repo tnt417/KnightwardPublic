@@ -43,7 +43,7 @@ MonoBehaviour:
           prefabKey: leafyPool
           projectileSprite: {fileID: 0}
           attackData:
-            damageMultiplier: -0.2
+            damageMultiplier: -0.05
             knockbackMultiplier: 0
             hitboxRadius: 3
             team: 0

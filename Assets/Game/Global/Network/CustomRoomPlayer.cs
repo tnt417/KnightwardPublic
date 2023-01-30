@@ -89,7 +89,7 @@ namespace TonyDev.Game.Global.Network
             CmdSetSteamId(SteamUser.GetSteamID().m_SteamID);
             CmdSetUsername(SteamFriends.GetPersonaName());
 
-            CmdSetUnlockedItems(UnlocksManager.Instance.Unlocks.Keys.ToArray());
+            CmdSetUnlockedItems(UnlocksManager.Instance.Unlocks.ToArray());
 
             if (!UIEnabled) return;
 

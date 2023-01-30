@@ -154,10 +154,10 @@ namespace TonyDev.Game.Level
                 await UniTask.Delay(TimeSpan.FromSeconds(spawningPeriod / spawnCount));
             }
 
-            if (wavesSpawned % 5 == 0)
-            {
-                Crystal.Instance.CmdDamageEntity(-(Crystal.Instance.MaxHealth * 0.33f), false, null, true);
-            }
+            // if (wavesSpawned % 5 == 0)
+            // {
+            //     Crystal.Instance.CmdDamageEntity(-(Crystal.Instance.MaxHealth * 0.33f), false, null, true);
+            // }
         }
 
         //Instantiates enemies from a group of prefabs

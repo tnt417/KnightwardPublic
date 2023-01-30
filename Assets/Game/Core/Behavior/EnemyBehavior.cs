@@ -8,6 +8,7 @@ using TonyDev.Game.Level.Rooms;
 using UniRx;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Behavior
 {
@@ -18,7 +19,7 @@ namespace TonyDev.Game.Core.Behavior
 
         [SerializeField] private SpriteRenderer flipRenderer;
         [SerializeField] private bool flipFlip;
-        
+
         protected Transform FirstEnemyTarget => Enemy.Targets.Count > 0
             ? Enemy.Targets[0] != null ? Enemy.Targets[0].transform : null
             : null;
@@ -34,14 +35,21 @@ namespace TonyDev.Game.Core.Behavior
         {
             await PathfindFollow(followTransform, speed, () => !RaycastForTransform(followTransform.Invoke()));
         }
+        
+        protected async UniTask PathfindFollowUntilWithinTile(Func<Transform> followTransform, Func<float> speed)
+        {
+            await PathfindFollow(followTransform, speed, () => Vector2.Distance(followTransform.Invoke().position, Enemy.transform.position) > 0.5f);
+        }
 
         protected bool RaycastForTransform(Transform target)
         {
             if (target == null) return false;
-            var hit = Physics2D.Raycast(Enemy.transform.position, (FirstEnemyTarget.transform.position - transform.position),Mathf.Infinity, LayerMask.GetMask("Player", "Level", "Crystal"));
+            var hit = Physics2D.Raycast(Enemy.transform.position,
+                (FirstEnemyTarget.transform.position - transform.position), Mathf.Infinity,
+                LayerMask.GetMask("Player", "Level", "Crystal"));
             return hit.transform != null && target != null && hit.transform.root == target;
         }
-        
+
         protected async UniTask PathfindFollow(Func<Transform> followTransform, Func<float> speed, Func<bool> predicate)
         {
             while (Enemy != null)
@@ -52,13 +60,13 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     continue; // Wait for a target
                 }
-                
+
                 if (!predicate.Invoke()) return; // Check our predicate
 
                 // Arena pathfinding or room pathfinding?
-                
+
                 Pathfinding pathfinding;
-                
+
                 if (Enemy.CurrentParentIdentity == null)
                 {
                     pathfinding = Pathfinding.ArenaPathfinding;
@@ -73,26 +81,33 @@ namespace TonyDev.Game.Core.Behavior
                 }
 
                 var t = followTransform.Invoke();
-                
+
                 Vector2 lastTargetPos = t.position;
-                
-                var path = pathfinding.GetPath(Enemy.transform.position,lastTargetPos);
+
+                var path = pathfinding.GetPath(Enemy.transform.position, lastTargetPos);
 
                 var pathLength = path.Count;
-                
+
                 for (var i = 1; i < pathLength; i++)
                 {
                     var point = path[i];
-                    
+
                     if (t == null) break;
-                    
-                    var newTargetPos = (Vector2)t.position;
+
+                    var newTargetPos = (Vector2) t.position;
 
                     if (lastTargetPos != newTargetPos)
                     {
                         break;
                     }
-                    
+
+                    await UniTask.WaitUntil(
+                        () =>
+                        {
+                            return (!GameManager.EntitiesReadonly.Any(e =>
+                                e is Enemy && e != Enemy && Vector2.Distance(e.transform.position, point) < 0.7f)) || Random.Range(0f, 1f) > 0.98f;
+                        }, PlayerLoopTiming.FixedUpdate);
+
                     await Goto(point, speed, 1f / speed.Invoke());
                 }
             }
@@ -189,7 +204,7 @@ namespace TonyDev.Game.Core.Behavior
                 Mathf.Clamp(
                     (Mathf.Pow(strafeDistance, 2f) + Mathf.Pow(dist, 2f) - Mathf.Pow(strafeRadius, 2f)) /
                     (2f * strafeDistance * dist), -1, 1));
-            var final = Tools.Rotate((posB - posA).normalized, angleA);
+            var final = GameTools.Rotate((posB - posA).normalized, angleA);
             return final;
         }
 
@@ -199,7 +214,7 @@ namespace TonyDev.Game.Core.Behavior
             {
                 await UniTask.WaitForFixedUpdate();
                 if (!isActiveAndEnabled || gameObject == null || Enemy == null || Enemy.Targets.Count == 0) continue;
-                
+
                 var flipX = Enemy.Targets[0]?.transform.position.x > transform.position.x;
                 if (flipFlip) flipX = !flipX;
                 flipRenderer.flipX = flipX;
@@ -209,7 +224,7 @@ namespace TonyDev.Game.Core.Behavior
         protected new void Start()
         {
             if (flipRenderer == null) flipRenderer = GetComponentInChildren<SpriteRenderer>();
-            
+
             base.Start();
             DestroyToken.RegisterRaiseCancelOnDestroy(this);
             FlipSpriteToTarget().AttachExternalCancellation(DestroyToken.Token);

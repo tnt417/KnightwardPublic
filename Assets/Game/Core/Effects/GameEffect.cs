@@ -11,7 +11,6 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
 using UnityEngine.Serialization;
-using Tools = TonyDev.Game.Global.Tools;
 
 namespace TonyDev.Game.Core.Effects
 {
@@ -26,6 +25,7 @@ namespace TonyDev.Game.Core.Effects
         //Identifier to hold reference to game effect to allow sending references to GameEffect across the network
         [NonSerialized] public string EffectIdentifier;
 
+        [NonSerialized] public Item Item;
         [NonSerialized] public GameEntity Entity; //The entity affected by the effect
         [NonSerialized] public GameEntity Source; //The entity that inflicted the effect
 
@@ -83,12 +83,14 @@ namespace TonyDev.Game.Core.Effects
 
         static GameEffect()
         {
-            GameEffectTypes = Tools.GetTypes<GameEffect>();
+            GameEffectTypes = GameTools.GetTypes<GameEffect>();
         }
 
-        public static GameEffect CreateEffect<T>() where T : GameEffect
+        public static GameEffect CreateEffect<T>(Item item) where T : GameEffect
         {
-            return Activator.CreateInstance(typeof(T)) as GameEffect;
+            var effect = Activator.CreateInstance(typeof(T)) as GameEffect;
+            RegisterEffect(effect);
+            return effect;
         }
 
         public static GameEffect CreateEffect(string typeName)
@@ -126,12 +128,16 @@ namespace TonyDev.Game.Core.Effects
 
         protected float LinearScale(float baseValue, float approachValue, int byDungeonFloor)
         {
+            return baseValue;
+            
             return Mathf.Lerp(baseValue, approachValue,
                 Mathf.Clamp01((float) DungeonFloorUponCreation / byDungeonFloor));
         }
 
         protected float DiminishingScale(float baseValue, float approachValue, int byDungeonFloor)
         {
+            return baseValue;
+            
             var lerpMagnitude = Mathf.Clamp01(Mathf.Log(DungeonFloorUponCreation, byDungeonFloor));
 
             return Mathf.Lerp(baseValue, approachValue, lerpMagnitude);

@@ -36,10 +36,10 @@ MonoBehaviour:
         - type: 2
           stat: 0
           scalingType: 1
-          valueRange: {x: 1.5, y: 2}
+          valueRange: {x: 1.4, y: 2}
           byFloor: 50
         - type: 2
           stat: 1
           scalingType: 0
-          valueRange: {x: 0.6, y: 0.9}
+          valueRange: {x: 0.7, y: 0.9}
           byFloor: 50

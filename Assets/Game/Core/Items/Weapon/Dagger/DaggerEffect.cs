@@ -26,7 +26,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         protected override void OnAbilityActivate()
         {
             Entity.Stats.AddBuff(new StatBonus(StatType.Flat, Stat.Dodge, 0.5f, "daggerEffect"), Duration);
-            Player.LocalInstance.playerMovement.Dash(3f);
+            Player.LocalInstance.playerMovement.Dash(3f, Vector2.zero);
         }
 
         protected override void OnAbilityDeactivate()

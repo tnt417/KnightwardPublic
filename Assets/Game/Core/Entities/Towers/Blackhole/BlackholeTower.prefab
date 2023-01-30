@@ -87,6 +87,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 609f77bd4fcb4e94db92f5f804f88634, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   targetTag: 
@@ -97,14 +98,17 @@ MonoBehaviour:
     stat: 0
     strength: 0.12
     source: 
+    hidden: 0
   - statType: 0
     stat: 3
     strength: 1
     source: 
+    hidden: 0
   - statType: 2
     stat: 1
     strength: 2
     source: 
+    hidden: 0
   targetIntangible: 0
   <Team>k__BackingField: 0
   towerAnimator: {fileID: 6938340393128323355}
@@ -120,6 +124,7 @@ MonoBehaviour:
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 
+  durability: 0
   rotateToFaceTargetObject: {fileID: 0}
   projectileData:
   - prefabKey: blackholeShot
@@ -130,6 +135,7 @@ MonoBehaviour:
       hitboxRadius: 0
       team: 1
       destroyOnApply: 0
+      destroyOnCollideWall: 0
       lifetime: 4
       spawnOnDestroyKey: blackholePoof
       ignoreInvincibility: 0
@@ -175,9 +181,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2112898354
   serverOnly: 0
   visible: 0
-  m_AssetId: 41c659ef34e009946b6382b8564b208d
   hasSpawned: 0
 --- !u!1 &4032208556319356246
 GameObject:
@@ -231,7 +237,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -315,7 +321,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

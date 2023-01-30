@@ -30,7 +30,7 @@ namespace TonyDev.Game.Core.Effects
         
         public override string GetEffectDescription()
         {
-            return $"<color=green>Gain {Tools.WrapColor($"{LeechPercentFinal:P1}", Color.yellow)} lifesteal.</color>";
+            return $"<color=green>Gain {GameTools.WrapColor($"{LeechPercentFinal:P1}", Color.yellow)} lifesteal.</color>";
         }
     }
 }

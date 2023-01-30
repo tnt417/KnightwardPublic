@@ -18,11 +18,22 @@ MonoBehaviour:
     itemDescription: 
     itemType: 3
     itemRarity: 3
-    statBonuses: []
+    statBonuses:
+    - statType: 0
+      stat: 6
+      strength: 100
+      source: 
+      hidden: 1
     bypassStatGeneration: 0
-    itemEffects: []
+    itemEffects:
+    - rid: 7149687182027128840
     projectiles: []
     spawnablePrefabName: solar
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7149687182027128840
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

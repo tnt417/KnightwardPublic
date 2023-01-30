@@ -11,7 +11,7 @@ namespace TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace
     {
 
         public float ArmorBonusFlat;
-        private float ArmorBonusFlatFinal => ArmorBonusFlat + DungeonFloorUponCreation;
+        private float ArmorBonusFlatFinal => LinearScale(ArmorBonusFlat, ArmorBonusFlat+50, 50);
         
         public override void OnAddServer()
         {
@@ -44,7 +44,7 @@ namespace TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>Gain {Tools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor. The crystal is affected by your total armor bonus.</color>";
+            return $"<color=green>Gain {GameTools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor. The crystal is affected by your total armor bonus.</color>";
         }
     }
 }

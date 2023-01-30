@@ -60,14 +60,17 @@ MonoBehaviour:
     stat: 0
     strength: 5
     source: 
+    hidden: 0
   - statType: 0
     stat: 3
     strength: 1
     source: 
+    hidden: 0
   - statType: 2
     stat: 1
     strength: 1
     source: 
+    hidden: 0
   targetIntangible: 1
   <Team>k__BackingField: 0
   towerAnimator: {fileID: 3454711787081810835}
@@ -83,6 +86,7 @@ MonoBehaviour:
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 
+  durability: 0
   rotateToFaceTargetObject: {fileID: 0}
   projectileData:
   - prefabKey: teslaShot
@@ -229,7 +233,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 049e2483711027843b6c23bfb163e426, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

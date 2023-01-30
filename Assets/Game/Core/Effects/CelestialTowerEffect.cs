@@ -57,7 +57,7 @@ namespace TonyDev.Game.Core.Effects
 
             for (var i = 0; i < StatBonusCount; i++)
             {
-                Buffs[i] = new StatBonus(StatType.AdditivePercent, Tools.SelectRandom(validStatTypes),
+                Buffs[i] = new StatBonus(StatType.AdditivePercent, GameTools.SelectRandom(validStatTypes),
                     LinearScale(baseBonusMagnitude, baseBonusMagnitude * 2f, 50), EffectIdentifier);
             }
         }

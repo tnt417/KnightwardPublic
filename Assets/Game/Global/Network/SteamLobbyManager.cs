@@ -21,6 +21,9 @@ namespace TonyDev
     public class SteamLobbyManager : MonoBehaviour
     {
         public static SteamLobbyManager Singleton;
+
+        private bool _isSteamServer = true;
+        public static bool IsSteamServer => Singleton._isSteamServer;
         
         public const int MaxConnections = 4;
 
@@ -31,11 +34,12 @@ namespace TonyDev
                 Destroy(this);
                 return;
             }
+
             Singleton = this;
         }
 
         public Action OnLobbyCreateSuccessful;
-        
+
         // Callbacks
         protected Callback<LobbyCreated_t> LobbyCreated;
         protected Callback<GameLobbyJoinRequested_t> JoinRequest;
@@ -52,10 +56,8 @@ namespace TonyDev
 
         public string GetLobbyName()
         {
-            return SteamMatchmaking.GetLobbyData(new CSteamID(CurrentLobbyID), "name");
+            return _isSteamServer ? SteamMatchmaking.GetLobbyData(new CSteamID(CurrentLobbyID), "name") : "Lobby";
         }
-        
-        private bool _beenInitialized;
 
         private void Start()
         {
@@ -63,25 +65,25 @@ namespace TonyDev
 
             OnReset();
 
-            if (!SteamManager.Initialized) return;
+            _isSteamServer = SteamUser.BLoggedOn();
+            
+            if (!SteamManager.Initialized || !_isSteamServer) return;
 
             LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
             JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
             LobbyEntered = Callback<LobbyEnter_t>.Create(OnLobbyEntered);
 
-            _beenInitialized = true;
-            
             // Check if we should connect to a lobby
             var args = Environment.GetCommandLineArgs();
-            
+
             for (var i = 0; i < args.Length; i++)
             {
                 if (args[i] != "+connect_lobby") continue;
-                
+
                 var idRaw = args[i + 1];
 
                 var id = ulong.Parse(idRaw);
-                    
+
                 SteamMatchmaking.JoinLobby(new CSteamID(id));
                 break;
             }
@@ -90,11 +92,11 @@ namespace TonyDev
         public void LeaveLobby()
         {
             Debug.Log("Leaving lobby...");
-            
-            SteamMatchmaking.LeaveLobby(new CSteamID(CurrentLobbyID));
-            
+
+            if(_isSteamServer) SteamMatchmaking.LeaveLobby(new CSteamID(CurrentLobbyID));
+
             CurrentLobbyID = default;
-            
+
             OnReset();
         }
 
@@ -104,36 +106,37 @@ namespace TonyDev
             {
                 return;
             }
-            
+
             OnLobbyCreateSuccessful.Invoke();
-            
+
             Debug.Log("Lobby created successfully");
 
-            SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey, SteamUser.GetSteamID().ToString());
+            SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey,
+                SteamUser.GetSteamID().ToString());
             SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name",
                 SteamFriends.GetPersonaName() + "'s Lobby");
         }
-        
+
         private void OnJoinRequest(GameLobbyJoinRequested_t callback)
         {
             SteamMatchmaking.JoinLobby(callback.m_steamIDLobby);
         }
-        
-        private void OnLobbyEntered(LobbyEnter_t callback)
+
+        public void OnLobbyEntered(LobbyEnter_t callback)
         {
-            CurrentLobbyID = callback.m_ulSteamIDLobby;
+            CurrentLobbyID = IsSteamServer ? callback.m_ulSteamIDLobby : default;
 
-            if(SceneManager.GetActiveScene().name != "LobbyScene") SceneManager.LoadScene("LobbyScene");
-            
-            GameConsole.Log("Entered lobby: " + SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name"));
+            if (SceneManager.GetActiveScene().name != "LobbyScene") SceneManager.LoadScene("LobbyScene");
 
-            if (NetworkServer.active) return;
+            GameConsole.Log("Entered lobby: " + (IsSteamServer ? SteamMatchmaking.GetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), "name") : "Lobby"));
+
+            if (NetworkServer.active || !IsSteamServer) return;
 
             var netManager = NetworkManager.singleton as CustomNetworkManager;
-            
-            if(netManager != null) netManager.ConnectToAddress(ConnectAddress);
+
+            if (netManager != null) netManager.ConnectToAddress(ConnectAddress);
         }
-        
+
         public string ConnectAddress => SteamMatchmaking.GetLobbyData(new CSteamID(CurrentLobbyID), HostAddressKey);
 
         public void DisableJoins()
@@ -150,10 +153,10 @@ namespace TonyDev
         {
             SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, MaxConnections);
         }
-        
+
         public void PromptInvite()
         {
             SteamFriends.ActivateGameOverlayInviteDialog(new CSteamID(CurrentLobbyID));
-    }
+        }
     }
 }

@@ -70,6 +70,12 @@ namespace TonyDev.Game.Core.Items
         public GameObject SpawnablePrefab => ObjectFinder.GetPrefab(spawnablePrefabName);
         public string spawnablePrefabName;
 
+        public void AddEffect(GameEffect effect)
+        {
+            itemEffects.Add(effect);
+            effect.Item = this;
+        }
+        
         public void AddInflictEffect(GameEffect effect, bool allProjectiles)
         {
             if (allProjectiles)
@@ -117,10 +123,14 @@ namespace TonyDev.Game.Core.Items
 
             if (!string.IsNullOrEmpty(itemDescription)) stringBuilder.AppendLine(itemDescription);
 
+            stringBuilder.Append(PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true,itemType == ItemType.Tower));
+
             if (itemEffects is {Count: > 0})
             {
                 foreach (var ge in itemEffects.Where(ge => ge != null))
                 {
+                    ge.Item = this;
+                    
                     var desc = ge.GetEffectDescription();
 
                     if (string.IsNullOrEmpty(desc)) continue;
@@ -128,9 +138,7 @@ namespace TonyDev.Game.Core.Items
                     stringBuilder.AppendLine(desc);
                 }
             }
-
-            stringBuilder.Append(PlayerStats.GetStatsTextFromBonuses(statBonuses, true, true,  itemType == ItemType.Tower));
-
+            
             return stringBuilder.ToString(); //Return the string
         }
     }

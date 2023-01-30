@@ -22,7 +22,7 @@ namespace TonyDev.Game.Core.Effects
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>{Tools.WrapColor($"+{FactorFinal:P0}", Color.yellow)} to all incoming healing.</color>";
+            return $"<color=green>{GameTools.WrapColor($"+{FactorFinal:P0}", Color.yellow)} to all incoming healing.</color>";
         }
     }
 }

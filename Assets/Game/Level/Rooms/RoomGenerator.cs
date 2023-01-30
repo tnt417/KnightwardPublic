@@ -201,7 +201,7 @@ namespace TonyDev.Game.Level.Rooms
                     remainingGuaranteed--;
                 }
 
-                var chosenEntry = Tools.SelectRandom(entryList.Where(r => r.tier == tier));
+                var chosenEntry = GameTools.SelectRandom(entryList.Where(r => r.tier == tier));
 
                 entryList.Remove(chosenEntry);
 
@@ -220,7 +220,7 @@ namespace TonyDev.Game.Level.Rooms
                 {
                     if (generateShape[i, j] == 0) continue; //If the shape says not to generate, move on
 
-                    var prefab = Tools.SelectRandom(chosenPrefabs); //Randomly scramble the prefabs across the map
+                    var prefab = GameTools.SelectRandom(chosenPrefabs); //Randomly scramble the prefabs across the map
 
                     if (prefab.CompareTag("StartRoom")) _startingRoomPos = new Vector2Int(i, j);
 
@@ -248,7 +248,7 @@ namespace TonyDev.Game.Level.Rooms
 
             var rooms = new Room[MapSize, MapSize];
             rooms[mapRadius, mapRadius] = GenerateRoom(new Vector2Int(mapRadius, mapRadius),
-                Tools.SelectRandom(theme.roomEntries.Where(re => re.tier == RoomGenerateTier.Boss)).roomPrefab);
+                GameTools.SelectRandom(theme.roomEntries.Where(re => re.tier == RoomGenerateTier.Boss)).roomPrefab);
 
             return new Map(rooms, new Vector2Int(mapRadius, mapRadius));
         }

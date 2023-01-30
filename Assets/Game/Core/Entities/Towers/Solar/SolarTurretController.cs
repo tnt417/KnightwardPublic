@@ -15,12 +15,20 @@ namespace TonyDev.Game.Core.Entities.Towers.Solar
 
         public void Update()
         {
-            animator.speed = tower.Stats.GetStat(Stat.AttackSpeed);
+            var spd = tower.Stats.GetStat(Stat.AttackSpeed);
+            if (spd == 0)
+            {
+                animator.Play("SolarIdle");
+            }
+            
+            animator.speed = spd;
         }
 
         public void DoHarming()
         {
             if (!tower.EntityOwnership) return;
+            
+            tower.SubtractDurability(1);
             
             foreach (var ge in GameManager.EntitiesReadonly.Where(e =>
                 e.Team == Team.Enemy && e.CurrentParentIdentity == tower.CurrentParentIdentity && Vector2.Distance(e.transform.position, tower.transform.position) < harmRadius))

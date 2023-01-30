@@ -154,6 +154,18 @@ namespace TonyDev.Game.Global
             waveProgress = newProgress;
             wave = newWave;
         }
+        
+        [Server]
+        public void SpawnHealthPickupOnEach(Vector2 location, NetworkIdentity parent)
+        {
+            RpcSpawnHealthPickup(location, parent);
+        }
+
+        [ClientRpc]
+        private void RpcSpawnHealthPickup(Vector2 location, NetworkIdentity parent)
+        {
+            ObjectSpawner.SpawnHealthPickupLocal(location, parent);
+        }
 
         [GameCommand(Keyword = "killall", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Cleared all enemies.")]
@@ -236,7 +248,7 @@ namespace TonyDev.Game.Global
 
         public SyncList<Vector2Int> OccupiedTowerSpots = new();
 
-        [SyncVar] private int _maxTowers = 3;
+        [SyncVar] private int _maxTowers = 100;//3;
 
         public int MaxTowers => _maxTowers;
 
@@ -377,6 +389,8 @@ namespace TonyDev.Game.Global
 
         public Tilemap arenaWallTilemap;
 
+        public static Action OnGameManagerAwake;
+        
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -405,6 +419,8 @@ namespace TonyDev.Game.Global
             }
 
             MainCamera = Camera.main;
+            
+            OnGameManagerAwake?.Invoke();
         }
 
         private void Init()

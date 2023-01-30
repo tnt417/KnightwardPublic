@@ -23,10 +23,12 @@ MonoBehaviour:
       stat: 6
       strength: 0.1
       source: Weapon
-    - statType: 1
+      hidden: 0
+    - statType: 0
       stat: 0
       strength: 0.25
       source: Weapon
+      hidden: 0
     bypassStatGeneration: 0
     itemEffects:
     - rid: 8269505085799137282
@@ -42,14 +44,14 @@ MonoBehaviour:
         effectDescription: 
         DungeonFloorUponCreation: 0
         ActivateButton: 113
-        Cooldown: 4
+        Cooldown: 8
         Duration: 0.1
         abilitySprite: {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
         DetachProjectile:
           prefabKey: 
           projectileSprite: {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
           attackData:
-            damageMultiplier: 2
+            damageMultiplier: 1
             knockbackMultiplier: 0.2
             hitboxRadius: 0.2
             team: 1
@@ -71,7 +73,7 @@ MonoBehaviour:
           prefabKey: HammerProjectile
           projectileSprite: {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
           attackData:
-            damageMultiplier: 2
+            damageMultiplier: 0.5
             knockbackMultiplier: 0
             hitboxRadius: 0.3
             team: 1
@@ -90,7 +92,7 @@ MonoBehaviour:
           doNotRotate: 0
           effects: []
         MaxHammers: 4
-        SpinSpeed: 2
+        SpinSpeed: 1
         SpinRadius: 1.5
     - rid: 8269505106771968000
       type: {class: HammerSwingEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
@@ -101,7 +103,7 @@ MonoBehaviour:
           prefabKey: 
           projectileSprite: {fileID: 0}
           attackData:
-            damageMultiplier: 1
+            damageMultiplier: 0.5
             knockbackMultiplier: 1
             hitboxRadius: 0
             team: 1

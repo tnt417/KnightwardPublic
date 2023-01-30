@@ -23,8 +23,8 @@ namespace TonyDev.Game.Core.Items.Relics.BerserkersBrew
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>Upon activation, gain {Tools.WrapColor($"{RegenMultiplier:N1}x", Color.yellow)} " +
-                   $"health regen and {Tools.WrapColor($"{DamageMultiplier:P0}", Color.yellow)} bonus damage for {Tools.WrapColor($"{Duration} seconds", Color.white)}. {Tools.WrapColor($"{Cooldown} second", Color.white)} cooldown.</color>";
+            return $"<color=green>Upon activation, gain {GameTools.WrapColor($"{RegenMultiplier:N1}x", Color.yellow)} " +
+                   $"health regen and {GameTools.WrapColor($"{DamageMultiplier:P0}", Color.yellow)} bonus damage for {GameTools.WrapColor($"{Duration} seconds", Color.white)}. {GameTools.WrapColor($"{Cooldown} second", Color.white)} cooldown.</color>";
         }
     }
 }

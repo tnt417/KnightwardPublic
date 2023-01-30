@@ -19,11 +19,22 @@ MonoBehaviour:
       zone.
     itemType: 3
     itemRarity: 2
-    statBonuses: []
+    statBonuses:
+    - statType: 0
+      stat: 6
+      strength: 80
+      source: 
+      hidden: 1
     bypassStatGeneration: 0
-    itemEffects: []
+    itemEffects:
+    - rid: 7149687182027128838
     projectiles: []
     spawnablePrefabName: ice
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7149687182027128838
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

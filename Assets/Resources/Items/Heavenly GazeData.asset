@@ -49,8 +49,3 @@ MonoBehaviour:
           scalingType: 1
           valueRange: {x: 0.2, y: 0.4}
           byFloor: 50
-        - type: 0
-          stat: 0
-          scalingType: 0
-          valueRange: {x: 0.2, y: 0.5}
-          byFloor: 50

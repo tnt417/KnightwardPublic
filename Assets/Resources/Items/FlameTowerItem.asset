@@ -18,11 +18,22 @@ MonoBehaviour:
     itemDescription: A flame tower.
     itemType: 3
     itemRarity: 2
-    statBonuses: []
+    statBonuses:
+    - statType: 0
+      stat: 6
+      strength: 80
+      source: 
+      hidden: 1
     bypassStatGeneration: 0
-    itemEffects: []
+    itemEffects:
+    - rid: 7149687182027128836
     projectiles: []
     spawnablePrefabName: flame
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7149687182027128836
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

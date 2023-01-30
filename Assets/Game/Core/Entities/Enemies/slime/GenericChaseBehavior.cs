@@ -25,12 +25,12 @@ namespace TonyDev
 
                 Enemy.enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Move);
 
-                await PathfindFollowUntilDirectSight(() => FirstEnemyTarget,
+                await PathfindFollowUntilWithinTile(() => FirstEnemyTarget,
                     () => Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier);
 
                 await FollowUntil(() => FirstEnemyTarget,
                     () => Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier,
-                    () => !RaycastForTransform(FirstEnemyTarget));
+                    () => Vector2.Distance(FirstEnemyTarget.position, Enemy.transform.position) < 0.5f);
             }
         }
     }

@@ -31,8 +31,8 @@ namespace TonyDev.Game.Core.Items.Relics.EmpoweringToxin
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>Upon activation, gain {Tools.WrapColor($"{MoveSpeedStrength:P0}", Color.yellow)} " +
-                   $"move speed, {Tools.WrapColor($"{CritChanceStrength:P0}", Color.yellow)} crit chance, and {Tools.WrapColor($"{AttackSpeedStrength:P0}", Color.yellow)} attack speed for {Tools.WrapColor($"{Duration} seconds", Color.white)}. {Tools.WrapColor($"{Cooldown} second", Color.white)} cooldown.</color>";
+            return $"<color=green>Upon activation, gain {GameTools.WrapColor($"{MoveSpeedStrength:P0}", Color.yellow)} " +
+                   $"move speed, {GameTools.WrapColor($"{CritChanceStrength:P0}", Color.yellow)} crit chance, and {GameTools.WrapColor($"{AttackSpeedStrength:P0}", Color.yellow)} attack speed for {GameTools.WrapColor($"{Duration} seconds", Color.white)}. {GameTools.WrapColor($"{Cooldown} second", Color.white)} cooldown.</color>";
         }
     }
 }

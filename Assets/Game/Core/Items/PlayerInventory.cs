@@ -35,15 +35,17 @@ namespace TonyDev.Game.Core.Items
 
         public Queue<Item> RelicItems { get; private set; } = new();
 
-        public int RelicSlotCount { get; private set; } = 3;
+        public int RelicSlotCount { get; private set; } = 100;
 
         public void AddRelicSlot()
         {
-            RelicSlotCount++;
+            //RelicSlotCount++;
         }
 
         public static Action<Item> OnItemInsertLocal;
 
+        public static Action<Item> OnItemRemoveLocal;
+        
         public void InsertStarterItems()
         {
             var broadswordItem = Object.Instantiate(GameManager.AllItems.FirstOrDefault(i => i.item.itemName == "Broadsword")).item;
@@ -52,21 +54,39 @@ namespace TonyDev.Game.Core.Items
                 itemName = "Starter Sword",
                 bypassStatGeneration = true,
                 itemDescription = "A weak starter sword.",
-                itemEffects = new List<GameEffect>(),
+                itemEffects = broadswordItem.itemEffects,
                 itemRarity = ItemRarity.Common,
                 itemType = ItemType.Weapon, 
                 projectiles = broadswordItem.projectiles,
                 spawnablePrefabName = "",
                 statBonuses = new StatBonus[]
                 {
-                    new StatBonus(StatType.Flat, Stat.Damage, 15, "Starter Sword"),
-                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 1f, "Starter Sword")
+                    new StatBonus(StatType.Flat, Stat.Damage, 25, "Starter Sword"),
+                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 2f, "Starter Sword")
                 },
                 uiSprite = broadswordItem.uiSprite
             });
-            
-            InsertItem(ItemGenerator.GenerateItemOfType(ItemType.Tower,
-                ItemRarity.Common));
+
+            var towerItem = Object.Instantiate(GameManager.AllItems.FirstOrDefault(i => i.item.itemName == "Ballista Tower")).item;
+
+            InsertItem(new Item()
+            {
+                itemName = "Starter Tower",
+                bypassStatGeneration = true,
+                itemDescription = "A tower used to defend your crystal.",
+                itemEffects = towerItem.itemEffects,
+                itemRarity = ItemRarity.Common,
+                itemType = ItemType.Tower, 
+                projectiles = towerItem.projectiles,
+                spawnablePrefabName = "ballista",
+                statBonuses = new []
+                {
+                    new StatBonus(StatType.Flat, Stat.Damage, 33, "Starter Tower"),
+                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 1f, "Starter Tower"),
+                    new StatBonus(StatType.Flat, Stat.Health, 1000000f, "Starter Tower", true)
+                },
+                uiSprite = towerItem.uiSprite
+            });
         }
 
         private static void InsertTower(Item item) //Inserts a tower into the inventory and adds it to the UI
@@ -141,6 +161,8 @@ namespace TonyDev.Game.Core.Items
 
                 PlayerStats.Stats.RemoveStatBonuses(item
                     .itemName); //Remove stat bonuses of the now removed item
+                
+                OnItemRemoveLocal?.Invoke(item);
             }
         }
 

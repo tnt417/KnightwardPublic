@@ -18,11 +18,22 @@ MonoBehaviour:
     itemDescription: Place mutliple to create a web of electricity that zaps enemies.
     itemType: 3
     itemRarity: 3
-    statBonuses: []
+    statBonuses:
+    - statType: 0
+      stat: 6
+      strength: 10000
+      source: 
+      hidden: 1
     bypassStatGeneration: 0
-    itemEffects: []
+    itemEffects:
+    - rid: 7149687182027128842
     projectiles: []
     spawnablePrefabName: tesla
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7149687182027128842
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

@@ -18,10 +18,16 @@ MonoBehaviour:
     itemDescription: 
     itemType: 3
     itemRarity: 2
-    statBonuses: []
+    statBonuses:
+    - statType: 0
+      stat: 6
+      strength: 75
+      source: 
+      hidden: 1
     bypassStatGeneration: 0
     itemEffects:
     - rid: 1191606179873947650
+    - rid: 7149687182027128837
     projectiles: []
     spawnablePrefabName: ghostTower
   references:
@@ -38,3 +44,8 @@ MonoBehaviour:
           scalingType: 1
           valueRange: {x: 0, y: 2}
           byFloor: 50
+    - rid: 7149687182027128837
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

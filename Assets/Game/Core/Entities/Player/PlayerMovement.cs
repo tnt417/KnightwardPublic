@@ -5,6 +5,7 @@ using Mirror;
 using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using Vector2 = UnityEngine.Vector2;
 
 namespace TonyDev.Game.Core.Entities.Player
@@ -39,7 +40,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public Action<Vector2> OnPlayerMove;
 
-        private Vector2 _currentMovementInput;
+        public Vector2 currentMovementInput;
 
         private List<GameForce> _forceVectors = new();
 
@@ -48,9 +49,9 @@ namespace TonyDev.Game.Core.Entities.Player
             if (!DoMovement || !isOwned) return;
 
             //dx and dy are either 1, 0, or -1 depending on keys being pressed
-            var dx = _currentMovementInput.x; //(Input.GetKey(KeyCode.A) && GameManager.GameControlsActive ? -1 : 0) +
+            var dx = currentMovementInput.x; //(Input.GetKey(KeyCode.A) && GameManager.GameControlsActive ? -1 : 0) +
             //(Input.GetKey(KeyCode.D) && GameManager.GameControlsActive ? 1 : 0);
-            var dy = _currentMovementInput.y; //(Input.GetKey(KeyCode.S) && GameManager.GameControlsActive ? -1 : 0) +
+            var dy = currentMovementInput.y; //(Input.GetKey(KeyCode.S) && GameManager.GameControlsActive ? -1 : 0) +
             //(Input.GetKey(KeyCode.W) && GameManager.GameControlsActive ? 1 : 0);
 
             //Dampen forces over time according to a curve. Force has a floor to ensure that it always completes its path. Trim forces with no units remaining.
@@ -92,16 +93,20 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             if (!GameManager.GameControlsActive)
             {
-                _currentMovementInput = Vector2.zero;
+                currentMovementInput = Vector2.zero;
                 return;
             }
             if (!isOwned) return;
-            _currentMovementInput = value.Get<Vector2>();
+            currentMovementInput = value.Get<Vector2>();
         }
 
-        public void Dash(float distance)
+        public void Dash(float distance, Vector2 direction)
         {
-            AddForce(_currentMovementInput.normalized, distance);
+            if (direction == Vector2.zero)
+            {
+                direction = currentMovementInput.normalized;
+            }
+            AddForce(direction, distance);
         }
 
         private void AddForce(Vector2 direction, float units)

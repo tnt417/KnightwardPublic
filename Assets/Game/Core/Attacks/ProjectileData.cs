@@ -8,7 +8,6 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using Tools = TonyDev.Game.Global.Tools;
 using Newtonsoft.Json;
 
 namespace TonyDev.Game.Core.Attacks
@@ -58,7 +57,7 @@ namespace TonyDev.Game.Core.Attacks
             string identifier)
         {
             var rotatedDirection =
-                Tools.Rotate(direction, offsetDegrees * Mathf.Deg2Rad); //Rotates direction vector by our offset
+                GameTools.Rotate(direction, offsetDegrees * Mathf.Deg2Rad); //Rotates direction vector by our offset
 
             var alternatePrefab = ObjectFinder.GetPrefab(prefabKey);
 

@@ -19,9 +19,16 @@ MonoBehaviour:
     itemType: 3
     itemRarity: 0
     statBonuses: []
-    itemEffects: []
+    bypassStatGeneration: 0
+    itemEffects:
+    - rid: 7149687182027128841
     projectiles: []
     spawnablePrefabName: spin
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 7149687182027128841
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

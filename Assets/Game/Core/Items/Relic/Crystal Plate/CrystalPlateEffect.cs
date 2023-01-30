@@ -62,8 +62,8 @@ namespace TonyDev
         public override string GetEffectDescription()
         {
             return
-                $"When armor reduces incoming damage, store the amount. Once this amount reaches {Tools.WrapColor($"{PercentHealthThreshold:P0}", Color.yellow)}" +
-                $" of your maximum health, fire <color=yellow>{Projectiles}</color> homing projectile(s), each dealing {Tools.WrapColor($"{DamageProportion:P0}", Color.yellow)} of this damage amount.";
+                $"When armor reduces incoming damage, store the amount. Once this amount reaches {GameTools.WrapColor($"{PercentHealthThreshold:P0}", Color.yellow)}" +
+                $" of your maximum health, fire <color=yellow>{Projectiles}</color> homing projectile(s), each dealing {GameTools.WrapColor($"{DamageProportion:P0}", Color.yellow)} of this damage amount.";
         }
     }
 }

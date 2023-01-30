@@ -39,7 +39,12 @@ namespace TonyDev.Game.Core.Entities.Towers
                 {
                     ObjectSpawner.SpawnProjectile(this, transform.position, direction, projData);
                 }
-                if(!rpcSent) RpcFire(direction);
+
+                if (!rpcSent)
+                {
+                    SubtractDurability(1);
+                    RpcFire(direction);
+                }
                 rpcSent = true;
             }
         }

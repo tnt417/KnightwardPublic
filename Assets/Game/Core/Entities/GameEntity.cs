@@ -218,7 +218,7 @@ namespace TonyDev.Game.Core.Entities
                 ApplyDamage(-hpRegen, out var success, true); //Regen health by HpRegen per second
             }
 
-            AttackTimer += Time.deltaTime;
+            if(CanAttack) AttackTimer += Time.deltaTime;
             
             if (AttackTimer > AttackTimerMax)
             {

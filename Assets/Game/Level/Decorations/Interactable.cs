@@ -18,7 +18,8 @@ namespace TonyDev.Game.Level.Decorations
         Interact,
         Scrap,
         Purchase,
-        Pickup
+        Pickup,
+        Repair
     }
     public abstract class Interactable : MonoBehaviour
     {
@@ -160,35 +161,42 @@ namespace TonyDev.Game.Level.Decorations
 
         public bool overrideCurrent;
         
-        private static Interactable _current;
+        public static Interactable Current;
         
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (overrideCurrent) return;
+            
+            if (Current != null && Current.overrideCurrent)
+            {
+                Active = false;
+                return;
+            }
+            
             if (!other.isTrigger || !other.CompareTag("Player") || !IsInteractable) return;
         
             var id = other.GetComponent<NetworkIdentity>();
 
             if (id == null || !id.isLocalPlayer) return;
 
-            if (_current == null)
+            if (Current == null)
             {
-                _current = this;
+                Current = this;
                 Active = true;
                 return;
             }
             
-            if (_current != this)
+            if (Current != this)
             {
-                if (Vector2.Distance(other.transform.position, _current.transform.position) <
+                if (Vector2.Distance(other.transform.position, Current.transform.position) <
                     Vector2.Distance(other.transform.position, transform.position)) // If the current one is closer, don't activate.
                 {
                     Active = false;
                 }
                 else
                 {
-                    _current.Active = false;
-                    _current = this;
+                    Current.Active = false;
+                    Current = this;
                     Active = true;   
                 }
             }
@@ -197,12 +205,19 @@ namespace TonyDev.Game.Level.Decorations
         private void OnTriggerStay2D(Collider2D other)
         {
             if (overrideCurrent) return;
+            
+            if (Current != null && Current.overrideCurrent)
+            {
+                Active = false;
+                return;
+            }
+            
             if (!other.isTrigger || !other.CompareTag("Player")) return;
             
             if (!IsInteractable)
             {
                 Active = false;
-                if (_current == this) _current = null;
+                if (Current == this) Current = null;
                 return;
             }
             
@@ -210,29 +225,36 @@ namespace TonyDev.Game.Level.Decorations
 
             if (id == null || !id.isLocalPlayer) return;
 
-            if (_current == null)
+            if (Current == null)
             {
                 Active = true;
-                _current = this;
+                Current = this;
                 return;
             }
             
-            if (Vector2.Distance(other.transform.position, _current.transform.position) <
+            if (Vector2.Distance(other.transform.position, Current.transform.position) <
                 Vector2.Distance(other.transform.position, transform.position)) // If the current one is closer, don't activate.
             {
                 Active = false;
             }
             else
             {
-                _current.Active = false;
+                Current.Active = false;
                 Active = true;
-                _current = this;
+                Current = this;
             }
         }
 
         private void OnTriggerExit2D(Collider2D other)
         {
             if (overrideCurrent) return;
+            
+            if (Current != null && Current.overrideCurrent)
+            {
+                Active = false;
+                return;
+            }
+            
             if (!other.isTrigger || !other.CompareTag("Player")) return;
             
             var id = other.GetComponent<NetworkIdentity>();
@@ -241,9 +263,9 @@ namespace TonyDev.Game.Level.Decorations
 
             Active = false;
 
-            if (_current == this)
+            if (Current == this)
             {
-                _current = null;
+                Current = null;
             }
         }
 

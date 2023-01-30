@@ -35,11 +35,6 @@ MonoBehaviour:
         DungeonFloorUponCreation: 0
         ScalingStatBonuses:
         - type: 0
-          stat: 1
-          scalingType: 0
-          valueRange: {x: 15, y: 80}
-          byFloor: 50
-        - type: 0
           stat: 5
           scalingType: 0
           valueRange: {x: 1, y: 3}
@@ -49,4 +44,4 @@ MonoBehaviour:
       data:
         effectDescription: <color=orange>Leave a trail of fire behind you.</color>
         DungeonFloorUponCreation: 0
-        DamageMultiplier: 0.1
+        DamageMultiplier: 0.05

@@ -168,7 +168,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         private void PlayInAllLayers(string anim, bool attackNormalized = false)
         {
-            playerAnimator.Play(anim, 0, attackNormalized ? Player.LocalInstance.NormalizedAttackTime%1 : 0);
+            playerAnimator.Play(anim, 0, attackNormalized ? ((Player.LocalInstance.NormalizedAttackTime/2)-0.03f)%1f : 0); // Subtracting 0.03f to make the animations feel more in sync
             playerAnimator.Play(anim, 1);
         }
 

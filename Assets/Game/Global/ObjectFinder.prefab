@@ -145,6 +145,12 @@ MonoBehaviour:
     value: {fileID: 3729966057932855519, guid: cb686d0b7df271a40a96d36db568647c, type: 3}
   - key: slowingArmorParticles
     value: {fileID: 987306188816282981, guid: 56908879445b001429f7f7292ded0279, type: 3}
+  - key: enemyDeath
+    value: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
   - key: WallDestroy
     value: {fileID: 75533742422423103, guid: 427ec6cee41840641868d330f6f33e9b, type: 3}
+  - key: BroadswordAttack1
+    value: {fileID: 1746478017707279162, guid: 1f9b4b3f3e643dc40b2b1aa7a53d56be, type: 3}
+  - key: BroadswordAttack2
+    value: {fileID: 1746478017707279162, guid: 963f51ccf6dfa0d47a2ca5a75a4e62dc, type: 3}
   mainSpriteAtlas: {fileID: 4343727234628468602, guid: f72388a137dbf724ea8fdd908e8f3ce8, type: 2}

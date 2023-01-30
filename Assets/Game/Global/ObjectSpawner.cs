@@ -26,18 +26,21 @@ namespace TonyDev.Game.Global
 {
     public class ObjectSpawner : MonoBehaviour
     {
-        private static ObjectSpawner _instance;
-        [SerializeField] private GameObject enemyPrefab;
+        public static ObjectSpawner Instance;
         [SerializeField] private GameObject moneyPrefab;
+        [SerializeField] private GameObject healthPrefab;
+        [SerializeField] private GameObject essencePrefab;
         [SerializeField] private GameObject damageNumberPrefab;
         [SerializeField] private GameObject groundItemPrefab;
         [SerializeField] private GameObject chestPrefab;
         [SerializeField] private int objectPoolSize;
+        public Material outlineMaterial;
+        public Material spriteMaterial;
         private static readonly Queue<GameObject> PopupObjectPool = new();
 
         private void Awake()
         {
-            if (_instance == null) _instance = this;
+            if (Instance == null) Instance = this;
             
             PopupObjectPool.Clear();
         }
@@ -48,11 +51,11 @@ namespace TonyDev.Game.Global
 
         public static void SpawnDmgPopup(Vector2 position, float damage, bool critical)
         {
-            var roundedDamage = Mathf.CeilToInt(damage);
+            var roundedDamage = damage > 0 ? Mathf.CeilToInt(damage) : Mathf.FloorToInt(damage);
 
-            var go = PopupObjectPool.Count >= _instance.objectPoolSize
+            var go = PopupObjectPool.Count >= Instance.objectPoolSize
                 ? PopupObjectPool.Dequeue()
-                : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
+                : Instantiate(Instance.damageNumberPrefab, position, Quaternion.identity);
 
             go.transform.position = position;
 
@@ -92,9 +95,9 @@ namespace TonyDev.Game.Global
 
         public static void SpawnTextPopup(Vector2 position, string text, Color color, float speedMultiplier = 1f)
         {
-            var go = PopupObjectPool.Count >= _instance.objectPoolSize
+            var go = PopupObjectPool.Count >= Instance.objectPoolSize
                 ? PopupObjectPool.Dequeue()
-                : Instantiate(_instance.damageNumberPrefab, position, Quaternion.identity);
+                : Instantiate(Instance.damageNumberPrefab, position, Quaternion.identity);
 
             go.transform.position = position;
 
@@ -122,7 +125,23 @@ namespace TonyDev.Game.Global
                 
                 i += addAmount;
 
-                MoneyObject.SpawnMoney(_instance.moneyPrefab, originPos, addAmount, parentRoom);
+                MoneyObject.SpawnMoney(Instance.moneyPrefab, originPos, addAmount, parentRoom);
+            }
+        }
+        
+        public static void SpawnEssence(int amount, Vector2 originPos, NetworkIdentity parentRoom,
+            bool ignoreModifiers = false)
+        {
+            var modifier = ignoreModifiers ? 1.0f : 1 + GameManager.MoneyDropBonusFactor;
+
+            for (var i = 0; i < amount * modifier; i += 0)
+            {
+                var remEssence = amount - i;
+                var addAmount = remEssence / 5f > 1 ? remEssence / 25f > 1 ? remEssence / 100f > 1 ? 100 : 25 : 5 : 1;
+                
+                i += addAmount;
+
+                EssenceObject.SpawnEssence(Instance.essencePrefab, originPos, addAmount, parentRoom);
             }
         }
 
@@ -180,7 +199,13 @@ namespace TonyDev.Game.Global
         public static GroundItem SpawnGroundItem(Item item, float costMultiplier, Vector2 position,
             NetworkIdentity parent)
         {
-            var groundItemObject = Instantiate(_instance.groundItemPrefab, position, Quaternion.identity);
+            if (item == null)
+            {
+                Debug.LogWarning("Cannot spawn a null item!");
+                return null;
+            }
+            
+            var groundItemObject = Instantiate(Instance.groundItemPrefab, position, Quaternion.identity);
             var gi = groundItemObject.GetComponent<GroundItem>();
 
             if (gi == null)
@@ -218,7 +243,7 @@ namespace TonyDev.Game.Global
         [Server]
         private static Chest SpawnChest(int rarityBoost, Item presetItem, Vector2 position, NetworkIdentity parent)
         {
-            var chestObject = Instantiate(_instance.chestPrefab, position, Quaternion.identity);
+            var chestObject = Instantiate(Instance.chestPrefab, position, Quaternion.identity);
             var chest = chestObject.GetComponent<Chest>();
 
             if (parent != null)
@@ -239,6 +264,21 @@ namespace TonyDev.Game.Global
             NetworkServer.Spawn(chestObject);
 
             return chest;
+        }
+        
+        public static void SpawnHealthPickupLocal(Vector2 location, NetworkIdentity parent)
+        {
+            var obj = Instantiate(Instance.healthPrefab, location, Quaternion.identity, parent.transform);
+            
+            if (parent != null)
+            {
+                var room = RoomManager.Instance.GetRoomFromID(parent.netId);
+
+                if (room != null)
+                {
+                    room.roomChildObjects.Add(obj);
+                }
+            }
         }
     }
 }

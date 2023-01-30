@@ -16,14 +16,57 @@ namespace TonyDev.Game.Global.Network
 {
     public class CustomNetworkManager : NetworkRoomManager
     {
+        private const int Port = 7777;
+        
         public new void Start()
         {
             _lobbyCreated = false;
             maxConnections = SteamLobbyManager.MaxConnections;
+
+            var fizzy = GetComponent<FizzySteamworks>();
+            var telepathy = GetComponent<TelepathyTransport>();
             
+            if (!SteamLobbyManager.IsSteamServer)
+            {
+                if (fizzy != null)
+                {
+                    Destroy(fizzy);
+                }
+                
+                InitTelepathy();
+            }
+            else
+            {
+                if (telepathy != null)
+                {
+                    Destroy(telepathy);
+                }
+                InitFizzy();
+            }
+
             base.Start();
         }
+
+        private void InitTelepathy()
+        {
+            var telepathy = GetComponent<TelepathyTransport>();
+            if (telepathy == null) telepathy = gameObject.AddComponent<TelepathyTransport>();
+
+            telepathy.port = Port;
+
+            transport = telepathy;
+            Transport.active = telepathy;
+        }
         
+        private void InitFizzy()
+        {
+            var fizzy = GetComponent<FizzySteamworks>();
+            if (fizzy == null) fizzy = gameObject.AddComponent<FizzySteamworks>();
+
+            transport = fizzy;
+            Transport.active = fizzy;
+        }
+
         public override void OnClientDisconnect()
         {
             base.OnClientDisconnect();
@@ -35,25 +78,32 @@ namespace TonyDev.Game.Global.Network
         {
             base.OnServerReady(conn);
 
-            if (IsSceneActive(GameplayScene))
+            if (IsSceneActive(GameplayScene) && SteamLobbyManager.IsSteamServer)
             {
                 SteamLobbyManager.Singleton.DisableJoins();
             }
         }
 
         private bool _lobbyCreated = false;
-        
+
         public async UniTask CreateAndHost()
         {
             networkAddress = "localhost";
-            
-            SteamLobbyManager.Singleton.HostLobby();
-            
-            _lobbyCreated = false;
 
-            SteamLobbyManager.Singleton.OnLobbyCreateSuccessful += OnLobbyCreateSuccessful;
+            if (SteamLobbyManager.IsSteamServer)
+            {
+                SteamLobbyManager.Singleton.HostLobby();
 
-            await UniTask.WaitUntil(() => _lobbyCreated);
+                _lobbyCreated = false;
+
+                SteamLobbyManager.Singleton.OnLobbyCreateSuccessful += OnLobbyCreateSuccessful;
+                
+                await UniTask.WaitUntil(() => _lobbyCreated);
+            }
+            else
+            {
+                OnLobbyCreateSuccessful();
+            }
         }
 
         private void OnLobbyCreateSuccessful()
@@ -62,12 +112,11 @@ namespace TonyDev.Game.Global.Network
             Debug.Log("Starting host!");
             StartHost();
 
-            SteamLobbyManager.Singleton.OnLobbyCreateSuccessful -= OnLobbyCreateSuccessful;
+            if(SteamLobbyManager.IsSteamServer) SteamLobbyManager.Singleton.OnLobbyCreateSuccessful -= OnLobbyCreateSuccessful;
         }
 
         public override void OnRoomServerPlayersReady()
         {
-            
         }
 
         [Server]
@@ -87,6 +136,11 @@ namespace TonyDev.Game.Global.Network
         {
             networkAddress = address;
             StartClient();
+        }
+
+        private void OnConnectedToServer()
+        {
+            if(!SteamLobbyManager.IsSteamServer) SteamLobbyManager.Singleton.OnLobbyEntered(default);
         }
     }
 }

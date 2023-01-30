@@ -688,9 +688,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7946368391397325085}
-  - component: {fileID: 7946368391397325074}
   - component: {fileID: 1057266554955491540}
   - component: {fileID: 2062337069869111294}
+  - component: {fileID: 7946368391397325074}
+  - component: {fileID: 984172327396941035}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -714,6 +715,34 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1057266554955491540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7946368391397325072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6e55fca1f4e4844593a3dd65a3ecb39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Channels: 0200000001000000
+  Timeout: 25
+  AllowSteamRelay: 1
+  UseNextGenSteamNetworking: 1
+--- !u!114 &2062337069869111294
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7946368391397325072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb2c8f28a3842994a8b27a89bc52fa75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &7946368391397325074
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,7 +782,7 @@ MonoBehaviour:
   _allPlayersReady: 0
   roomSlots: []
   clientIndex: 0
---- !u!114 &1057266554955491540
+--- !u!114 &984172327396941035
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -762,23 +791,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7946368391397325072}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6e55fca1f4e4844593a3dd65a3ecb39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Channels: 0200000001000000
-  Timeout: 25
-  AllowSteamRelay: 1
-  UseNextGenSteamNetworking: 1
---- !u!114 &2062337069869111294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7946368391397325072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cb2c8f28a3842994a8b27a89bc52fa75, type: 3}
+  m_Script: {fileID: 11500000, guid: 503e05d10675ce943885a71831fb18a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &7946368391477807326
