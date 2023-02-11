@@ -62,7 +62,7 @@ namespace TonyDev.Game.Core.Entities
         {
             return
                 damage * (100f /
-                          (100 + Mathf.Pow(GetStat(Stat.Armor)*2, 0.8f))); //100 armor = 50% reduction, 200 armor = 66% reduction, etc.
+                          (100 + Mathf.Pow(Mathf.Clamp(GetStat(Stat.Armor),0 ,Mathf.Infinity)*2, 0.8f))); //100 armor = 50% reduction, 200 armor = 66% reduction, etc.
         }
 
         #endregion

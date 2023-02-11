@@ -28,7 +28,7 @@ namespace TonyDev.Editor
             _spawnType = serializedObject.FindProperty(nameof(LevelItemSpawner.spawnType));
             _generateSetting = serializedObject.FindProperty(nameof(LevelItemSpawner.generateSetting));
             _randomItemType = serializedObject.FindProperty(nameof(LevelItemSpawner.randomItemType));
-            _generateItemType = serializedObject.FindProperty(nameof(LevelItemSpawner.generateItemType));
+            _generateItemType = serializedObject.FindProperty(nameof(LevelItemSpawner.generateItemTypes));
             _randomRarity = serializedObject.FindProperty(nameof(LevelItemSpawner.randomRarity));
             _generateRarity = serializedObject.FindProperty(nameof(LevelItemSpawner.generateRarity));
             _rarityBoost = serializedObject.FindProperty(nameof(LevelItemSpawner.rarityBoost));

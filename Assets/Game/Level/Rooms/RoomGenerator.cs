@@ -2,12 +2,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using Mirror;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
-using UnityEngine.Rendering;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Rooms
@@ -155,8 +151,6 @@ namespace TonyDev.Game.Level.Rooms
 
             var roomCount = Random.Range(theme.roomAmountRange.x, theme.roomAmountRange.y);
 
-            var generateShape = GetMapShape(roomCount);
-
             var rooms = new Room[MapSize, MapSize];
             var prefabs = new GameObject[MapSize, MapSize];
 
@@ -164,13 +158,37 @@ namespace TonyDev.Game.Level.Rooms
             var remainingSpecial = theme.specialAmount;
             var remainingUncommon = theme.uncommonAmount;
             var remainingCommon = roomCount - remainingGuaranteed - remainingSpecial - remainingUncommon;
+            
+            var generateShape = GetMapShape(roomCount, remainingSpecial + remainingUncommon, out var twigs, out var endPos);
 
             var entryList = theme.roomEntries.ToList();
             var chosenPrefabs = new List<GameObject>();
 
             var genTimeout = Time.time + 2f;
 
-            while (remainingGuaranteed + remainingSpecial + remainingUncommon + remainingCommon > 0 && Time.time < genTimeout)
+            for (var i = 0; i < twigs.Length; i++)
+            {
+                var tier = remainingSpecial == 0 ? RoomGenerateTier.Uncommon : RoomGenerateTier.Special;
+                
+                var entry = GameTools.SelectRandom(entryList.Where(r => r.tier == tier));
+
+                if (tier == RoomGenerateTier.Uncommon)
+                {
+                    remainingUncommon--;
+                }
+
+                if (tier == RoomGenerateTier.Special)
+                {
+                    remainingSpecial--;
+                }
+
+                prefabs[twigs[i].x, twigs[i].y] = entry.roomPrefab;
+
+                entryList.Remove(entry);
+            }
+            
+            while (remainingGuaranteed + remainingSpecial + remainingUncommon + remainingCommon > 0 &&
+                   Time.time < genTimeout)
             {
                 var tier = remainingGuaranteed == 0
                     ? remainingSpecial == 0 ? remainingUncommon == 0 ? RoomGenerateTier.Common :
@@ -201,11 +219,12 @@ namespace TonyDev.Game.Level.Rooms
                     remainingGuaranteed--;
                 }
 
-                var chosenEntry = GameTools.SelectRandom(entryList.Where(r => r.tier == tier));
-
-                entryList.Remove(chosenEntry);
-
-                chosenPrefabs.Add(chosenEntry.roomPrefab); //Otherwise, generate a random prefab from the list
+                if (tier != RoomGenerateTier.Guaranteed)
+                {
+                    var chosenEntry = GameTools.SelectRandom(entryList.Where(r => r.tier == tier));
+                    entryList.Remove(chosenEntry);
+                    chosenPrefabs.Add(chosenEntry.roomPrefab); //Otherwise, generate a random prefab from the list
+                }
             }
 
             if (Time.time > genTimeout)
@@ -218,9 +237,18 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < MapSize; j++)
                 {
-                    if (generateShape[i, j] == 0) continue; //If the shape says not to generate, move on
+                    if (generateShape[i, j] == 0 || twigs.Contains(new Vector2Int(i, j))) continue; //If the shape says not to generate, move on
 
-                    var prefab = GameTools.SelectRandom(chosenPrefabs); //Randomly scramble the prefabs across the map
+                    var prefab = i == mapRadius && j == mapRadius
+                        ? entryList.First(e =>
+                            e.tier == RoomGenerateTier.Guaranteed && e.roomPrefab.CompareTag("StartRoom")).roomPrefab
+                        : GameTools.SelectRandom(chosenPrefabs); //Randomly scramble the prefabs across the map
+
+                    if (i == endPos.x && j == endPos.y)
+                    {
+                        prefab = entryList.First(e =>
+                            e.tier == RoomGenerateTier.Guaranteed && !e.roomPrefab.CompareTag("StartRoom")).roomPrefab;
+                    }
 
                     if (prefab.CompareTag("StartRoom")) _startingRoomPos = new Vector2Int(i, j);
 
@@ -268,115 +296,196 @@ namespace TonyDev.Game.Level.Rooms
             //
         }
 
+        // twigCount, out Vector2Int[] twigs
+
         //based on this website: https://www.boristhebrave.com/2020/09/12/dungeon-generation-in-binding-of-isaac/
-        private int[,] GetMapShape(float roomCount)
+        private int[,] GetMapShape(int roomCount, int twigCount, out Vector2Int[] twigsPos, out Vector2Int endPos)
         {
-            var roomAllowance = roomCount;
+            var roomAllowance = roomCount - twigCount;
 
             var mapShape = new int[MapSize + 2, MapSize + 2];
 
             mapShape[mapRadius, mapRadius] = 1; //Start with the middle room
             roomAllowance--;
 
+            var i = mapRadius;
+            var j = mapRadius;
+
             while (roomAllowance > 0)
             {
                 //Look every room on the map
-                for (var i = 0; i < MapSize; i++)
+                // for (var i = 0; i < MapSize; i++)
+                // {
+                //     for (var j = 0; j < MapSize; j++)
+                //     {
+                //if (mapShape[i, j] != 1) continue;
+                //Keep going if the room exists
+
+                var neighborUp = mapShape[i, j + 1];
+                var neighborDown = mapShape[i, j - 1];
+                var neighborLeft = mapShape[i - 1, j];
+                var neighborRight = mapShape[i + 1, j];
+
+                //Check if a room should be generated up
+                if (j < MapSize + 2 && neighborUp != 1)
                 {
-                    for (var j = 0; j < MapSize; j++)
+                    var neighborAdjacentRoomCount = 0;
+                    if (mapShape[i + 1, j + 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i - 1, j + 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i, j + 2] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
+
+                    if (neighborAdjacentRoomCount <= 1)
                     {
-                        if (mapShape[i, j] != 1) continue;
-                        //Keep going if the room exists
-
-                        var neighborUp = mapShape[i, j + 1];
-                        var neighborDown = mapShape[i, j - 1];
-                        var neighborLeft = mapShape[i - 1, j];
-                        var neighborRight = mapShape[i + 1, j];
-
-                        //Check if a room should be generated up
-                        if (neighborUp != 1)
+                        if (Random.Range(0, 100) < 50) //50% chance to generate
                         {
-                            var neighborAdjacentRoomCount = 0;
-                            if (mapShape[i + 1, j + 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i - 1, j + 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i, j + 2] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
+                            mapShape[i, j + 1] = 1;
 
-                            if (neighborAdjacentRoomCount <= 1)
+                            j += 1;
+
+                            roomAllowance--;
+                            if (roomAllowance <= 0)
                             {
-                                if (Random.Range(0, 100) < 50) //50% chance to generate
-                                {
-                                    mapShape[i, j + 1] = 1;
-                                    roomAllowance--;
-                                    if (roomAllowance <= 0) return mapShape;
-                                }
-                            }
-                        }
-
-                        //Check if a room should be generated down
-                        if (neighborDown != 1)
-                        {
-                            var neighborAdjacentRoomCount = 0;
-                            if (mapShape[i + 1, j - 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i - 1, j - 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i, j - 2] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
-
-                            if (neighborAdjacentRoomCount <= 1)
-                            {
-                                if (Random.Range(0, 100) < 50) //50% chance to generate
-                                {
-                                    mapShape[i, j - 1] = 1;
-                                    roomAllowance--;
-                                    if (roomAllowance <= 0) return mapShape;
-                                }
-                            }
-                        }
-
-                        //Check if a room should be generated left
-                        if (neighborLeft != 1)
-                        {
-                            var neighborAdjacentRoomCount = 0;
-                            if (mapShape[i - 1, j + 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i - 1, j - 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i - 2, j] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
-
-                            if (neighborAdjacentRoomCount <= 1)
-                            {
-                                if (Random.Range(0, 100) < 50) //50% chance to generate
-                                {
-                                    mapShape[i - 1, j] = 1;
-                                    roomAllowance--;
-                                    if (roomAllowance <= 0) return mapShape;
-                                }
-                            }
-                        }
-
-                        //Check if a room should be generated right
-                        if (neighborRight != 1)
-                        {
-                            var neighborAdjacentRoomCount = 0;
-                            if (mapShape[i + 1, j + 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i + 1, j - 1] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i + 2, j] == 1) neighborAdjacentRoomCount++;
-                            if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
-
-                            if (neighborAdjacentRoomCount <= 1)
-                            {
-                                if (Random.Range(0, 100) < 50) //50% chance to generate
-                                {
-                                    mapShape[i + 1, j] = 1;
-                                    roomAllowance--;
-                                    if (roomAllowance <= 0) return mapShape;
-                                }
+                                endPos = new Vector2Int(i, j);
+                                continue; //return mapShape;
                             }
                         }
                     }
                 }
+
+                //Check if a room should be generated down
+                if (j - 2 > 0 && neighborDown != 1)
+                {
+                    var neighborAdjacentRoomCount = 0;
+                    if (mapShape[i + 1, j - 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i - 1, j - 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i, j - 2] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
+
+                    if (neighborAdjacentRoomCount <= 1)
+                    {
+                        if (Random.Range(0, 100) < 50) //50% chance to generate
+                        {
+                            mapShape[i, j - 1] = 1;
+
+                            j -= 1;
+
+                            roomAllowance--;
+                            if (roomAllowance <= 0)
+                            {
+                                endPos = new Vector2Int(i, j);
+                                continue; //return mapShape;
+                            }
+                        }
+                    }
+                }
+
+                //Check if a room should be generated left
+                if (i - 2 > 0 && neighborLeft != 1)
+                {
+                    var neighborAdjacentRoomCount = 0;
+                    if (mapShape[i - 1, j + 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i - 1, j - 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i - 2, j] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
+
+                    if (neighborAdjacentRoomCount <= 1)
+                    {
+                        if (Random.Range(0, 100) < 50) //50% chance to generate
+                        {
+                            mapShape[i - 1, j] = 1;
+
+                            i -= 1;
+
+                            roomAllowance--;
+                            if (roomAllowance <= 0)
+                            {
+                                endPos = new Vector2Int(i, j);
+                                continue; //return mapShape;
+                            }
+                        }
+                    }
+                }
+
+                //Check if a room should be generated right
+                if (i + 2 < MapSize + 2 && neighborRight != 1)
+                {
+                    var neighborAdjacentRoomCount = 0;
+                    if (mapShape[i + 1, j + 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i + 1, j - 1] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i + 2, j] == 1) neighborAdjacentRoomCount++;
+                    if (mapShape[i, j] == 1) neighborAdjacentRoomCount++;
+
+                    if (neighborAdjacentRoomCount <= 1)
+                    {
+                        if (Random.Range(0, 100) < 50) //50% chance to generate
+                        {
+                            mapShape[i + 1, j] = 1;
+
+                            i += 1;
+
+                            roomAllowance--;
+                            if (roomAllowance <= 0)
+                            {
+                                endPos = new Vector2Int(i, j);
+                                continue; //return mapShape;
+                            }
+                        }
+                    }
+                }
+                //     }
+                // }
+            }
+
+            endPos = new Vector2Int(i, j);
+
+            twigsPos = new Vector2Int[twigCount];
+
+            var positions = new List<Vector2Int>();
+
+            for (var x = 0; x < MapSize + 2; x++)
+            {
+                for (var y = 0; y < MapSize + 2; y++)
+                {
+                    if(mapShape[x,y] == 1) positions.Add(new Vector2Int(x, y));
+                }
+            }
+
+            for (var t = 0; t < twigCount; t++)
+            {
+                var pos = GameTools.SelectRandom(positions);
+                twigsPos[t] = GameTools.SelectRandom(GetOpenNeighborPositions(pos, mapShape).Where(e => GetOpenNeighborPositions(e, mapShape).Count == 3));
+                positions.Remove(pos);
             }
 
             return mapShape;
+        }
+
+        private List<Vector2Int> GetOpenNeighborPositions(Vector2Int pos, int[,] shapeMap)
+        {
+            List<Vector2Int> openPositions = new();
+
+            if (pos.x + 1 < shapeMap.GetLength(0) && shapeMap[pos.x + 1, pos.y] == 0) //Right
+            {
+                openPositions.Add(new Vector2Int(pos.x + 1, pos.y));
+            }
+            
+            if (pos.x - 1 > 0 && shapeMap[pos.x - 1, pos.y] == 0) //LEFT
+            {
+                openPositions.Add(new Vector2Int(pos.x - 1, pos.y));
+            }
+            
+            if (pos.y + 1 < shapeMap.GetLength(1) && shapeMap[pos.x, pos.y + 1] == 0) //Up
+            {
+                openPositions.Add(new Vector2Int(pos.x, pos.y + 1));
+            }
+            
+            if (pos.y - 1 > 0 && shapeMap[pos.x, pos.y - 1] == 0) //Down
+            {
+                openPositions.Add(new Vector2Int(pos.x, pos.y - 1));
+            }
+
+            return openPositions;
         }
     }
 }

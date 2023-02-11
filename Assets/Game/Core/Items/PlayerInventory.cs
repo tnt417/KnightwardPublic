@@ -81,7 +81,7 @@ namespace TonyDev.Game.Core.Items
                 spawnablePrefabName = "ballista",
                 statBonuses = new []
                 {
-                    new StatBonus(StatType.Flat, Stat.Damage, 33, "Starter Tower"),
+                    new StatBonus(StatType.Flat, Stat.Damage, 35, "Starter Tower"),
                     new StatBonus(StatType.Flat, Stat.AttackSpeed, 1f, "Starter Tower"),
                     new StatBonus(StatType.Flat, Stat.Health, 1000000f, "Starter Tower", true)
                 },

@@ -204,10 +204,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
-  range: 1
+  baseAllowance: 150
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
+    difficultyRating: 75
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+    difficultyRating: 50
+  range: 1.5
   frequency: 0
-  destroyAfterSpawns: 2
   autoSpawn: 1
 --- !u!1 &4097626103022153011
 GameObject:
@@ -5184,10 +5197,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
-  range: 1
+  baseAllowance: 150
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
+    difficultyRating: 75
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+    difficultyRating: 50
+  range: 1.5
   frequency: 0
-  destroyAfterSpawns: 2
   autoSpawn: 1
 --- !u!1 &6128196076049710238
 GameObject:
@@ -5233,10 +5259,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
-  range: 1
+  baseAllowance: 150
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
+    difficultyRating: 75
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+    difficultyRating: 50
+  range: 1.5
   frequency: 0
-  destroyAfterSpawns: 2
   autoSpawn: 1
 --- !u!1 &6216549045708616769
 GameObject:
@@ -5313,10 +5352,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
-  range: 1
+  baseAllowance: 150
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 669b0f6c2566f1a4f983bcbb06dafcdc, type: 3}
+    difficultyRating: 75
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+    difficultyRating: 50
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+    difficultyRating: 50
+  range: 1.5
   frequency: 0
-  destroyAfterSpawns: 2
   autoSpawn: 1
 --- !u!1 &9130612557604113649
 GameObject:

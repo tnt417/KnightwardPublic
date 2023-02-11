@@ -10,8 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3614620616860559422}
   - component: {fileID: 2539983665722236987}
-  - component: {fileID: 5123669624324386144}
-  - component: {fileID: 1086885552151391856}
   m_Layer: 0
   m_Name: BookSpawner
   m_TagString: Untagged
@@ -46,44 +44,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+  baseAllowance: 25
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
+    difficultyRating: 5
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+    difficultyRating: 5
+  - enemyPrefabs:
+    - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
+    difficultyRating: 5
   range: 3.5
   frequency: 0
-  destroyAfterSpawns: 5
-  autoSpawn: 1
---- !u!114 &5123669624324386144
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4714458739320725815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
-  range: 3.5
-  frequency: 0
-  destroyAfterSpawns: 5
-  autoSpawn: 1
---- !u!114 &1086885552151391856
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4714458739320725815}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
-  range: 3.5
-  frequency: 0
-  destroyAfterSpawns: 5
   autoSpawn: 1
 --- !u!1001 &20873116368869407
 PrefabInstance:

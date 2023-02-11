@@ -3598,10 +3598,12 @@ MonoBehaviour:
     - {fileID: 6888245627200159414, guid: 04c0c5d0ef3b2da499c5c86ae4303dd5, type: 3}
     difficultyRating: 1000
   breakLength: 30
-  breakFrequency: 5
-  regularLength: 15
+  breakFrequency: -1
+  regularLength: 30
   percentageActiveSpawning: 1
   wavesSpawned: 0
+  bigWaveDifficultyMult: 5
+  bigWaveFrequency: 8
 --- !u!4 &1223629565
 Transform:
   m_ObjectHideFlags: 0
@@ -16297,6 +16299,14 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 707228359862067528, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: waveSprite
+      value: 
+      objectReference: {fileID: 11408068, guid: e2dcad627b733474fb898535132debdf, type: 3}
+    - target: {fileID: 707228359862067528, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
+      propertyPath: breakSprite
+      value: 
+      objectReference: {fileID: -2139813484, guid: e2dcad627b733474fb898535132debdf, type: 3}
     - target: {fileID: 1000692734484128106, guid: e32220fcac500b54a8b46caed7f2c8d0, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0

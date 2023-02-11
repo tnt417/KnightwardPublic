@@ -12,6 +12,7 @@ using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.Android;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level
@@ -20,7 +21,7 @@ namespace TonyDev.Game.Level
     public struct EnemySpawn
     {
         public GameObject[] enemyPrefabs;
-        public float difficultyRating;
+        public int difficultyRating;
     }
 
     public class WaveManager : MonoBehaviour
@@ -49,16 +50,17 @@ namespace TonyDev.Game.Level
         private float _waveTimer = 0;
         public int wavesSpawned = 0;
 
-        private bool OnBreak => wavesSpawned % breakFrequency == 0;
+        private bool OnBreak => wavesSpawned > 0 && wavesSpawned % breakFrequency == 0;
 
         private bool _paused;
 
-        [GameCommand(Keyword = "pausewave", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled spawning.")]
+        [GameCommand(Keyword = "pausewave", PermissionLevel = PermissionLevel.Cheat,
+            SuccessMessage = "Toggled spawning.")]
         public static void Pause()
         {
             Instance._paused = !Instance._paused;
         }
-        
+
         private void Awake()
         {
             Instance = this;
@@ -73,7 +75,9 @@ namespace TonyDev.Game.Level
 
         private void Start()
         {
-            _waveCooldown = breakLength;
+            _waveCooldown = OnBreak
+                ? breakLength
+                : regularLength;
         }
 
         [ServerCallback]
@@ -112,14 +116,19 @@ namespace TonyDev.Game.Level
             _waveTimer = 0;
             wavesSpawned++;
 
-            _waveCooldown =
-                wavesSpawned % breakFrequency == 0
-                    ? breakLength
-                    : regularLength;
+            _waveCooldown = OnBreak
+                ? breakLength
+                : regularLength;
 
             SpawnWave().Forget();
         }
 
+        [SerializeField] private float bigWaveDifficultyMult;
+
+        [SerializeField] private int bigWaveFrequency;
+
+        public bool OnBigWave => wavesSpawned % bigWaveFrequency == 0 && wavesSpawned > 0;
+        
         //Spawns a wave of enemies
         [ServerCallback]
         public async UniTask SpawnWave()
@@ -128,19 +137,23 @@ namespace TonyDev.Game.Level
              * Chooses random spawns of enemies to spawn in random locations until it runs out of difficulty allowance.
              */
 
+            var threshold = OnBigWave
+                ? bigWaveDifficultyMult * DifficultyThreshold
+                : DifficultyThreshold;
+
             float difficultyTotal = 0;
 
             List<EnemySpawn> spawns = new();
 
-            while (difficultyTotal <= DifficultyThreshold)
+            while (difficultyTotal <= threshold)
             {
                 var enemySpawn = enemySpawns[Random.Range(0, enemySpawns.Length)];
-                if (enemySpawn.difficultyRating > DifficultyThreshold - difficultyTotal) continue;
+                if (enemySpawn.difficultyRating > threshold - difficultyTotal) continue;
                 spawns.Add(enemySpawn);
                 difficultyTotal += enemySpawn.difficultyRating;
                 if (!enemySpawns.Contains(
                     enemySpawns //If enemySpawns doesn't have any spawns that could use up the remaining difficulty allowance, we're done spawning.
-                        .FirstOrDefault(es => es.difficultyRating <= DifficultyThreshold - difficultyTotal))) break;
+                        .FirstOrDefault(es => es.difficultyRating <= threshold - difficultyTotal))) break;
             }
 
             var spawnCount = spawns.Count;

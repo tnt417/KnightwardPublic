@@ -5,13 +5,13 @@ using UnityEngine;
 
 namespace TonyDev
 {
-    public class DestroyRootOnWallCollide : MonoBehaviour
+    public class DestroyParentOnWallCollide : MonoBehaviour
     {
         public void OnTriggerEnter2D(Collider2D other)
         {
             if (other.gameObject.layer == LayerMask.NameToLayer("Level"))
             {
-                Destroy(gameObject.transform.root.gameObject);
+                Destroy(gameObject.transform.parent.gameObject);
             }
         }
     }

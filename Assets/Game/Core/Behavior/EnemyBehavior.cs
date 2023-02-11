@@ -38,7 +38,7 @@ namespace TonyDev.Game.Core.Behavior
         
         protected async UniTask PathfindFollowUntilWithinTile(Func<Transform> followTransform, Func<float> speed)
         {
-            await PathfindFollow(followTransform, speed, () => Vector2.Distance(followTransform.Invoke().position, Enemy.transform.position) > 0.5f);
+            await PathfindFollow(followTransform, speed, () => Vector2.Distance(followTransform.Invoke().position, Enemy.transform.position) > 0.7f);
         }
 
         protected bool RaycastForTransform(Transform target)

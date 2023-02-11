@@ -332,7 +332,7 @@ namespace TonyDev.Game.Core.Entities
              * 
              */
 
-            var range = 10f;
+            var range = 8f;
             if (this is Tower t) range = t.targetRadius;
 
             var myPos = transform.position;

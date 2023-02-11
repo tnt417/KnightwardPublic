@@ -37,6 +37,8 @@ namespace TonyDev
             {
                 await UniTask.Delay(TimeSpan.FromSeconds(baseDelay / tower.Stats.GetStat(Stat.AttackSpeed)));
 
+                if (tower.durability <= 0) continue;
+                
                 _spawnedEnemies = _spawnedEnemies.Where(ge => ge != null).ToList();
                 
                 if (_spawnedEnemies.Count >= maxSpawns)
@@ -60,15 +62,22 @@ namespace TonyDev
         {
             if (!tower.EntityOwnership) return;
 
+            if (tower.durability > 0)
+            {
+                tower.SubtractDurability(1);
+            }
+            else
+            {
+                return;
+            }
+
             var enemy = ObjectSpawner.SpawnEnemy(ObjectFinder.GetPrefab(enemyName), (Vector2)tower.transform.position + new Vector2(0, 0.5f),
                 tower.CurrentParentIdentity);
 
             enemy.Stats.ReadOnly = false;
             enemy.Stats.AddStatBonus(StatType.Override, Stat.Damage, tower.Stats.GetStat(Stat.Damage), "GhostTower");
             enemy.Stats.AddStatBonus(StatType.Flat, Stat.MoveSpeed, tower.Stats.GetStat(Stat.MoveSpeed), "GhostTower");
-            
-            tower.SubtractDurability(1);
-            
+
             _spawnedEnemies.Add(enemy);
 
             enemy.OnDeathOwner += (_) => _spawnedEnemies.Remove(enemy);

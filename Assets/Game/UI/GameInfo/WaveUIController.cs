@@ -4,6 +4,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace TonyDev.Game.UI.GameInfo
@@ -15,7 +16,7 @@ namespace TonyDev.Game.UI.GameInfo
         [SerializeField] private Image waveFill;
         [SerializeField] private Image currentIcon;
         [SerializeField] private Image nextIcon;
-        [SerializeField] private Sprite breakSprite;
+        [FormerlySerializedAs("breakSprite")] [SerializeField] private Sprite bigWaveSprite;
         [SerializeField] private Sprite waveSprite;
         
         [SerializeField] private Sprite hotFill;
@@ -31,8 +32,8 @@ namespace TonyDev.Game.UI.GameInfo
 
             fillAnimator.speed = WaveManager.BreakPassingMultiplier;
             
-            currentIcon.sprite = GameManager.Instance.wave % 5 == 0 ? breakSprite : waveSprite;
-            nextIcon.sprite = (GameManager.Instance.wave+1) % 5 == 0 ? breakSprite : waveSprite;
+            currentIcon.sprite = GameManager.Instance.wave % 8 == 0 ? bigWaveSprite : waveSprite;
+            nextIcon.sprite = (GameManager.Instance.wave+1) % 8 == 0 ? bigWaveSprite : waveSprite;
 
             waveFill.sprite = GameManager.Instance.wave % 5 == 0 ? WaveManager.BreakPassingMultiplier > 0.5f ? hotFill : coldFill : hostileFill;
             

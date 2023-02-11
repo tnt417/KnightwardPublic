@@ -44,7 +44,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         public bool randomItemType = true;
 
         [Tooltip("The item type to generate.")]
-        public ItemType generateItemType;
+        public ItemType[] generateItemTypes;
 
         [Tooltip("Should the rarity be random or pre-determined?")]
         public bool randomRarity = true;
@@ -95,7 +95,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             {
                 case ItemGenerateSetting.FromGenerated:
 
-                    item = ItemGenerator.GenerateItemOfType(randomItemType ? Item.RandomItemType : generateItemType,
+                    item = ItemGenerator.GenerateItemOfType(randomItemType ? Item.RandomItemType : GameTools.SelectRandom(generateItemTypes),
                         randomRarity
                             ? Item.RandomRarity(rarityBoost)
                             : generateRarity); //Generate a random item of proper specifications

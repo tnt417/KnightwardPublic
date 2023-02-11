@@ -6445,10 +6445,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: de045442abd61b84ea9f2e4fd8947f7e, type: 3}
+  baseAllowance: 5
+  disableAllowanceScaling: 1
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: de045442abd61b84ea9f2e4fd8947f7e, type: 3}
+    difficultyRating: 5
   range: 0
   frequency: 0
-  destroyAfterSpawns: 1
   autoSpawn: 1
 --- !u!1 &9130612557604113649
 GameObject:

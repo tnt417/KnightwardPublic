@@ -2804,11 +2804,11 @@ MonoBehaviour:
   autoSpawn: 1
   spawnType: 1
   generateSetting: 1
-  randomItemType: 1
-  generateItemType: 0
+  randomItemType: 0
+  generateItemTypes: 0300000002000000
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 15
+  rarityBoost: 5
   itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
@@ -2862,11 +2862,11 @@ MonoBehaviour:
   autoSpawn: 1
   spawnType: 1
   generateSetting: 1
-  randomItemType: 1
-  generateItemType: 0
+  randomItemType: 0
+  generateItemTypes: 00000000
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 15
+  rarityBoost: 5
   itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
@@ -3034,11 +3034,11 @@ MonoBehaviour:
   autoSpawn: 1
   spawnType: 1
   generateSetting: 1
-  randomItemType: 1
-  generateItemType: 0
+  randomItemType: 0
+  generateItemTypes: 0200000003000000
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 15
+  rarityBoost: 5
   itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
@@ -3200,11 +3200,11 @@ MonoBehaviour:
   autoSpawn: 1
   spawnType: 1
   generateSetting: 1
-  randomItemType: 1
-  generateItemType: 0
+  randomItemType: 0
+  generateItemTypes: 01000000
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 15
+  rarityBoost: 5
   itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:

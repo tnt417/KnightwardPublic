@@ -24,7 +24,7 @@ namespace TonyDev
         {
             Entity.OnDamageOther += OnHit;
         }
-        
+
         public override void OnRemoveOwner()
         {
             Entity.OnDamageOther -= OnHit;
@@ -33,19 +33,19 @@ namespace TonyDev
         private void OnHit(float damage, GameEntity ge, bool crit)
         {
             if (ge == null) return;
-            
+
             if (_frozenEntities.ContainsKey(ge))
             {
                 ge.CmdRemoveEffect(_frozenEntities[ge]);
                 _frozenEntities.Remove(ge);
-                
+
                 ge.CmdRemoveBonusesFromSource(EffectIdentifier);
                 ge.CmdDamageEntity(damage * BonusDamageMult, crit, null, true);
             }
         }
 
         private float _timer;
-        
+
         public override void OnUpdateServer()
         {
             _timer += Time.deltaTime;
@@ -54,16 +54,20 @@ namespace TonyDev
 
             _timer = 0;
 
-            foreach (var ge in GameManager.GetEntitiesInRange(Entity.transform.position, Range).Where(ge => ge.Team != Entity.Team))
+            foreach (var ge in GameManager.GetEntitiesInRange(Entity.transform.position, Range)
+                .Where(ge => ge.Team != Entity.Team))
             {
                 if (ge.Stats.GetStat(Stat.MoveSpeed) <= 0) continue;
+                if (ge.Stats.GetStatBonuses(Stat.MoveSpeed, false).Count(sb => sb.source == EffectIdentifier) >=
+                    3) continue;
                 ge.Stats.AddStatBonus(StatType.AdditivePercent, Stat.MoveSpeed, -TickStrength, EffectIdentifier);
             }
         }
 
         public override void OnUpdateOwner()
         {
-            foreach (var ge in GameManager.GetEntitiesInRange(Entity.transform.position, Range).Where(ge => ge.Team != Entity.Team))
+            foreach (var ge in GameManager.GetEntitiesInRange(Entity.transform.position, Range)
+                .Where(ge => ge.Team != Entity.Team))
             {
                 if (!_slowedEntities.ContainsKey(ge) && !_frozenEntities.ContainsKey(ge))
                 {
@@ -74,17 +78,18 @@ namespace TonyDev
                     ge.CmdAddEffect(trail, Entity);
                     _slowedEntities.Add(ge, trail);
                 }
-                else if (!_frozenEntities.ContainsKey(ge) && ge.Stats.GetStat(Stat.MoveSpeed) <= 0)
+                else if (!_frozenEntities.ContainsKey(ge) && ge.Stats.GetStatBonuses(Stat.MoveSpeed, false)
+                        .Count(sb => sb.source == EffectIdentifier) >= 3)
                 {
                     ge.CmdRemoveEffect(_slowedEntities[ge]);
-                    
+
                     var trail = new ParticleTrailEffect()
                     {
                         OverridePrefab = FrozenEffectKey
                     };
-                    
+
                     ge.CmdAddEffect(trail, Entity);
-                    
+
                     _slowedEntities.Remove(ge);
                     _frozenEntities.Add(ge, trail);
                 }
@@ -93,7 +98,8 @@ namespace TonyDev
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>Freeze enemies near you over time, slowing them. Deal extra damage to frozen enemies, but unfreeze them in the process.</color>";
+            return
+                $"<color=green>Freeze enemies near you over time, slowing them. Deal extra damage to frozen enemies, but unfreeze them in the process.</color>";
         }
     }
 }

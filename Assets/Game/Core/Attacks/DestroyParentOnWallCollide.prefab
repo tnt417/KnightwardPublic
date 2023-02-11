@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 334700252002380674}
   - component: {fileID: 8365836900363279771}
   m_Layer: 14
-  m_Name: DestroyRootOnWallCollide
+  m_Name: DestroyParentOnWallCollide
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -15,14 +15,13 @@ MonoBehaviour:
   item:
     uiSprite: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
     itemName: Broadsword
-    itemDescription: Shoots mid-speed. Built-in armor. Higher damage. Special ability
-      bashes enemies and slows them.
+    itemDescription: Shoots mid-speed. Built-in armor. Higher damage.
     itemType: 0
     itemRarity: 0
     statBonuses:
-    - statType: 1
+    - statType: 0
       stat: 7
-      strength: 0.1
+      strength: 20
       source: Weapon
       hidden: 0
     - statType: 0
@@ -54,7 +53,7 @@ MonoBehaviour:
           prefabKey: BroadswordAttack1
           projectileSprite: {fileID: 0}
           attackData:
-            damageMultiplier: 0.33
+            damageMultiplier: 0.5
             knockbackMultiplier: 1
             hitboxRadius: 1
             team: 1
@@ -76,7 +75,7 @@ MonoBehaviour:
           prefabKey: BroadswordAttack2
           projectileSprite: {fileID: 0}
           attackData:
-            damageMultiplier: 0.33
+            damageMultiplier: 0.5
             knockbackMultiplier: 1
             hitboxRadius: 1.5
             team: 1
@@ -86,7 +85,7 @@ MonoBehaviour:
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
           disableMovement: 1
-          travelSpeed: 1
+          travelSpeed: 0
           offsetDegrees: 0
           waveAmplitude: 0
           waveLength: 0
@@ -98,7 +97,7 @@ MonoBehaviour:
           prefabKey: 
           projectileSprite: {fileID: 21300000, guid: 347e919bf819dae41ac6d9ddb21ae463, type: 3}
           attackData:
-            damageMultiplier: 2
+            damageMultiplier: 1
             knockbackMultiplier: 1
             hitboxRadius: 0.5
             team: 1
