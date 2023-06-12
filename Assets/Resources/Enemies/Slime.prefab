@@ -40,12 +40,20 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: startingEffects
+      value: 1792215312411131904
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.enemyName
       value: Slime
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.size
-      value: 3
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[-2]
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.hitboxRadius
@@ -54,6 +62,10 @@ PrefabInstance:
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.baseMoneyReward
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: startingEffects.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[0].stat
@@ -66,6 +78,14 @@ PrefabInstance:
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[2].stat
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].stat
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: startingEffects.Array.data[0]
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.size
@@ -84,8 +104,44 @@ PrefabInstance:
       value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].strength
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131904]
+      value: TonyDev TonyDev.Game.Core.Effects.GameEffectList
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909]
+      value: TonyDev TonyDev.StatBuffEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521217]
+      value: TonyDev TonyDev.DurabilityDisplayEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521218]
+      value: TonyDev TonyDev.DurabilityDisplayEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521219]
+      value: TonyDev TonyDev.StatBuffEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521221]
+      value: TonyDev TonyDev.SlowWhileClickingEffect
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: startingEffects.gameEffects.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.contactAttackData.hitboxRadius
       value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: startingEffects.gameEffects.Array.data[0]
+      value: 1792215378608521219
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[0].animation
@@ -100,8 +156,100 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].Duration
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521219].Duration
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[1].enemyAnimationState
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521221].SpeedMultiplier
+      value: 5.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].effectDescription
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521217].effectDescription
+      value: bc
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521218].effectDescription
+      value: abc
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521219].effectDescription
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521221].effectDescription
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131904].gameEffects.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].StatBonuses.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521219].StatBonuses.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].DungeonFloorUponCreation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521217].DungeonFloorUponCreation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521218].DungeonFloorUponCreation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521219].DungeonFloorUponCreation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215378608521221].DungeonFloorUponCreation
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131904].gameEffects.Array.data[0]
+      value: 1792215378608521219
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131904].gameEffects.Array.data[1]
+      value: 1792215378608521221
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].StatBonuses.Array.data[0].stat
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].StatBonuses.Array.data[0].hidden
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].StatBonuses.Array.data[0].source
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].StatBonuses.Array.data[0].statType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: managedReferences[1792215312411131909].StatBonuses.Array.data[0].strength
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754642, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Controller

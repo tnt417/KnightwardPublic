@@ -16,21 +16,13 @@ namespace TonyDev.Game.Core.Items
 {
     public static class ItemGenerator
     {
-        private static Sprite[] _armorSprites; //Possible armor sprites to pick from
-
         private static Dictionary<string, int> _itemCounts = new();
 
         static ItemGenerator()
         {
             GameManager.OnGameManagerAwake += () => _itemCounts = new();
         }
-
-        public static void
-            InitSprites() //Load sprites from SpriteDictionary based on the prefix to be used in randomly generated items.
-        {
-            _armorSprites = ObjectFinder.GetSpritesWithPrefix("ai_");
-        }
-
+        
         public static Item GenerateItem(int rarityBoost)
         {
             return GenerateItemOfType(Item.RandomItemType, Item.RandomRarity(rarityBoost));
@@ -61,7 +53,7 @@ namespace TonyDev.Game.Core.Items
             return item;
         }
 
-        public static int GenerateEssence(Item item, int dungeonFloor = 0)
+        public static int GenerateSellPrice(Item item, int dungeonFloor = 0)
         {
             if (dungeonFloor <= 0) dungeonFloor = GameManager.DungeonFloor;
 

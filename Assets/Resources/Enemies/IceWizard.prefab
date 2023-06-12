@@ -15,6 +15,18 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4143216695699966044, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_CollisionDetection
       value: 1
@@ -57,7 +69,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[0].strength
-      value: 25
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.data[1].strength
@@ -194,6 +206,7 @@ MonoBehaviour:
   strafeDistance: 7
   strafeRadius: 7
   strafeSpeed: 1
+  maxShootDistance: 11
   shootProjectiles:
   - prefabKey: iceWizardShot
     projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
@@ -207,10 +220,12 @@ MonoBehaviour:
       lifetime: 2
       spawnOnDestroyKey: iceWizardShotDeath
       ignoreInvincibility: 0
+      inflictEffects:
+        gameEffects: []
     disableMovement: 0
     travelSpeed: 12
     offsetDegrees: 0
-    waveAmplitude: 0.5
+    waveAmplitude: 0.3
     waveLength: 5
     waveDistance: 24
     childOfOwner: 0

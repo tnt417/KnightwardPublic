@@ -193,8 +193,7 @@ namespace TonyDev.Game.Level.Decorations.Slots
         private async UniTask DelayEnable()
         {
             await UniTask.Delay(TimeSpan.FromSeconds(1.1f));
-            if (buttonInteractable == null) return;
-            buttonInteractable.interactable.enabled = true;
+            if (buttonInteractable != null && buttonInteractable.interactable != null) buttonInteractable.interactable.enabled = true;
         }
 
         [Command(requiresAuthority = false)]

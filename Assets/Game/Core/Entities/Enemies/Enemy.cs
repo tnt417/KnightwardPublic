@@ -59,7 +59,13 @@ namespace TonyDev.Game.Core.Entities.Enemies
         //Sets up the animator to play certain animations on certain events
         private void SubscribeAnimatorEvents()
         {
-            OnLocalHurt += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Hurt);
+            OnHurtOwner += (float a) =>
+            {
+                if (a > 0)
+                {
+                    enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Hurt);
+                }
+            };
             if (!EntityOwnership) return;
             OnDeathOwner += (float value) => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Die);
             //OnAttack += () => enemyAnimator.PlayAnimationGlobal(EnemyAnimationState.Attack);

@@ -13,7 +13,7 @@ namespace TonyDev.Game.Core.Effects
     }
     
     [Serializable]
-    public struct ScalingStatBonus
+    public class ScalingStatBonus
     {
         public StatType type;
         public Stat stat;
@@ -26,7 +26,7 @@ namespace TonyDev.Game.Core.Effects
     {
         public ScalingStatBonus[] ScalingStatBonuses;
 
-        private List<StatBonus> _modifiedBonuses = new();
+        [NonSerialized] private List<StatBonus> _modifiedBonuses = new();
         
         public override void OnAddOwner()
         {

@@ -236,7 +236,7 @@ MonoBehaviour:
   m_StartCorner: 2
   m_StartAxis: 1
   m_CellSize: {x: 100, y: 100}
-  m_Spacing: {x: 0, y: 0}
+  m_Spacing: {x: 10, y: 10}
   m_Constraint: 1
   m_ConstraintCount: 2
 --- !u!222 &8245161763383142387
@@ -388,6 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5801ac10887b28843ae62e6b808835a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
   currentActiveRoom: {fileID: 0}
@@ -407,11 +408,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mapRadius: 5
   roomOffset: {x: 100, y: 100}
-  roomEntries: []
+  config: {fileID: 0}
   roomManager: {fileID: 8245161763792584619}
-  roomAmountRange: {x: 0, y: 0}
-  uncommonAmount: 0
-  specialAmount: 0
 --- !u!114 &8245161763792584621
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -440,7 +438,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 2274867430
   serverOnly: 0
   visible: 2
-  m_AssetId: 1252036d4bd7a6a43af0665d6600076e
   hasSpawned: 0

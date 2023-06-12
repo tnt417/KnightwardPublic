@@ -116,7 +116,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
             var item = ItemGenerator.GenerateItemOfType(GetItemType(), GetRarity());
             _groundItem.CmdSetItem(item);
             _groundItem.CmdSetCost(0);
-            _groundItem.CmdSetEssence(ItemGenerator.GenerateEssence(item, GameManager.DungeonFloor));
+            _groundItem.CmdSetSellPrice(ItemGenerator.GenerateSellPrice(item, GameManager.DungeonFloor));
             RpcGenerated();
         }
 

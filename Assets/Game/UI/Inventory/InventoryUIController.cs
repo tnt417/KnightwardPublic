@@ -53,26 +53,31 @@ namespace TonyDev.Game.UI.Inventory
             gearInventoryObject.SetActive(true);
             statInventoryObject.SetActive(false);
 
-            PlayerInventory.OnItemInsertLocal += (item) =>
-            {
-                if (item.itemType != ItemType.Relic) return;
-                var slot = Instantiate(relicSlotPrefab, relicLayout.transform);
-                var itemSlot = slot.GetComponent<ItemSlot>();
-                itemSlot.Item = item;
-                
-                _relicSlots.Add(item, itemSlot);
-            };
+            PlayerInventory.OnItemInsertLocal += OnInsertItem;
+            PlayerInventory.OnItemRemoveLocal += OnRemoveItem;
+        }
 
-            PlayerInventory.OnItemRemoveLocal += (item) =>
-            {
-                if (item.itemType != ItemType.Relic) return;
-                Destroy(_relicSlots[item].gameObject);
-                _relicSlots.Remove(item);
-            };
+        private void OnInsertItem(Item item)
+        {
+            if (item.itemType != ItemType.Relic) return;
+            var slot = Instantiate(relicSlotPrefab, relicLayout.transform);
+            var itemSlot = slot.GetComponent<ItemSlot>();
+            itemSlot.Item = item;
+                
+            _relicSlots.Add(item, itemSlot);
+        }
+
+        private void OnRemoveItem(Item item)
+        {
+            if (item.itemType != ItemType.Relic) return;
+            Destroy(_relicSlots[item].gameObject);
+            _relicSlots.Remove(item);
         }
 
         private void OnDestroy()
         {
+            PlayerInventory.OnItemInsertLocal -= OnInsertItem;
+            PlayerInventory.OnItemRemoveLocal -= OnRemoveItem;
             Player.OnLocalPlayerCreated -= Init;
         }
 
@@ -126,7 +131,7 @@ namespace TonyDev.Game.UI.Inventory
             // }
             //
 
-            essenceText.text = GameManager.Essence.ToString();
+            //essenceText.text = GameManager.Essence.ToString();
             moneyText.text = GameManager.Money.ToString();
         }
 

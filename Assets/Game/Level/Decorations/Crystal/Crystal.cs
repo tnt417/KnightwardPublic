@@ -26,6 +26,18 @@ namespace TonyDev.Game.Level.Decorations.Crystal
             //CmdAddEffect(new CrystalArmorEffect(), this);
         }
 
+        public Action<bool> OnVisibilityChange;
+        
+        private void OnBecameVisible()
+        {
+            OnVisibilityChange?.Invoke(true);
+        }
+        
+        private void OnBecameInvisible()
+        {
+            OnVisibilityChange?.Invoke(false);
+        }
+
         //Interface code. Only abnormal thing is the game is over when the crystal dies.
         #region IDamageable
         public override Team Team => Team.Player;

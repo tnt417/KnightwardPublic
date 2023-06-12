@@ -44,10 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+  baseAllowance: 500
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+    difficultyRating: 500
   range: 1
   frequency: 0
-  destroyAfterSpawns: 1
   autoSpawn: 1
 --- !u!1 &1120594607041526557
 GameObject:
@@ -3265,10 +3269,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+  baseAllowance: 500
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+    difficultyRating: 500
   range: 1
   frequency: 0
-  destroyAfterSpawns: 1
   autoSpawn: 1
 --- !u!1 &8613150383803694636
 GameObject:
@@ -3314,10 +3322,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+  baseAllowance: 500
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+    difficultyRating: 500
   range: 1
   frequency: 0
-  destroyAfterSpawns: 1
   autoSpawn: 1
 --- !u!1 &8697678704704671923
 GameObject:
@@ -3363,10 +3375,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+  baseAllowance: 500
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
+    difficultyRating: 500
   range: 1
   frequency: 0
-  destroyAfterSpawns: 1
   autoSpawn: 1
 --- !u!1 &9130612557604113649
 GameObject:

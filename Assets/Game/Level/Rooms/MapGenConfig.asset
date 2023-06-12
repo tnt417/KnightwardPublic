@@ -49,6 +49,8 @@ MonoBehaviour:
       roomPrefab: {fileID: 6922258286344746195, guid: 5bf1825f245b8cf4ebe32da1a3e2aeb3, type: 3}
     - tier: 1
       roomPrefab: {fileID: 6922258286344746195, guid: bf4031de7b8ccff4ba923734d524228b, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 4178251165929004475, guid: 2615875424c782d468a0d8b09c10af37, type: 3}
   - startFloor: 11
     zone: 1
     uncommonAmount: 1
@@ -85,6 +87,8 @@ MonoBehaviour:
       roomPrefab: {fileID: 6922258286344746195, guid: 5bf1825f245b8cf4ebe32da1a3e2aeb3, type: 3}
     - tier: 1
       roomPrefab: {fileID: 6922258286344746195, guid: bf4031de7b8ccff4ba923734d524228b, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 1124590283425073302, guid: 4d5e9df81d52a1746be79b029f47f3b9, type: 3}
   - startFloor: 21
     zone: 2
     uncommonAmount: 1
@@ -101,6 +105,18 @@ MonoBehaviour:
       roomPrefab: {fileID: 1124590283425073302, guid: fe9111b670e8b324d946617465a2e7ce, type: 3}
     - tier: 2
       roomPrefab: {fileID: 373691286257917635, guid: c2533c91701f90a48bcb98c293a8fe09, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+    - tier: 0
+      roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
     - tier: 0
       roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
   - startFloor: 0

@@ -47,6 +47,8 @@ MonoBehaviour:
         lifetime: 0.2
         spawnOnDestroyKey: 
         ignoreInvincibility: 0
+        inflictEffects:
+          gameEffects: []
       disableMovement: 0
       travelSpeed: 16
       offsetDegrees: 0

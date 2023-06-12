@@ -98,6 +98,11 @@ namespace TonyDev.Game.Global.Network
 
             actionButtonText.text = "Ready";
 
+            if (isServer)
+            {
+                CmdChangeReadyState(true);
+            }
+
             actionButton.onClick.AddListener(() =>
             {
                 CmdChangeReadyState(!readyToBegin);

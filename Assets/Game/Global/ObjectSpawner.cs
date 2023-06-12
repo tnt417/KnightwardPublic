@@ -65,8 +65,8 @@ namespace TonyDev.Game.Global
             anim.Play("Popup");
 
             tmp.text = damage == 0
-                ? "Dodge"
-                : (-roundedDamage).ToString(); //Negative, so positive damage has a '-' and healing doesn't.
+                ? "<size=1.7><sprite=10></size>Dodge"
+                : (damage > 0 ? (critical ? "<size=1.7><sprite=9></size>" : "<size=1.7><sprite=3></size>") : "<size=1.7><sprite=4></size>") + Mathf.Abs(roundedDamage);
 
             //Yellow = normal damage
             //Red = crit damage
@@ -118,10 +118,12 @@ namespace TonyDev.Game.Global
         {
             var modifier = ignoreModifiers ? 1.0f : 1 + GameManager.MoneyDropBonusFactor;
 
-            for (var i = 0; i < amount * modifier; i += 0)
+            amount = (int)(amount * modifier);
+            
+            for (var i = 0; i < amount; i += 0)
             {
                 var remMoney = amount - i;
-                var addAmount = remMoney / 5f > 1 ? remMoney / 25f > 1 ? remMoney / 100f > 1 ? 100 : 25 : 5 : 1;
+                var addAmount = remMoney / 5f >= 1 ? remMoney / 25f >= 1 ? remMoney / 100f >= 1 ? 100 : 25 : 5 : 1;
                 
                 i += addAmount;
 
@@ -229,7 +231,7 @@ namespace TonyDev.Game.Global
             NetworkServer.Spawn(groundItemObject);
             gi.CmdSetItem(item);
             gi.CmdSetCost((int) (ItemGenerator.GenerateCost(item.itemRarity, GameManager.DungeonFloor) * costMultiplier));
-            gi.CmdSetEssence(ItemGenerator.GenerateEssence(item));
+            gi.CmdSetSellPrice(ItemGenerator.GenerateSellPrice(item));
 
             return gi;
         }

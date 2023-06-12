@@ -22,6 +22,7 @@ using TonyDev.Game.UI.GameInfo;
 using TonyDev.Game.UI.Tower;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -47,7 +48,7 @@ namespace TonyDev.Game.Global
         [SerializeField] private Vector2 arenaSpawnPos;
         public static List<ItemData> AllItems = new();
         public static int Money = 0;
-        public static int Essence = 0;
+        //public static int Essence = 0;
         public static float MoneyDropBonusFactor;
 
         [SyncVar] public int timeSeconds;
@@ -58,11 +59,11 @@ namespace TonyDev.Game.Global
             Money += amount;
         }
 
-        [GameCommand(Keyword = "essence", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Added essence.")]
-        public void AddEssence(int amount)
-        {
-            Essence += amount;
-        }
+        // [GameCommand(Keyword = "essence", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Added essence.")]
+        // public void AddEssence(int amount)
+        // {
+        //     Essence += amount;
+        // }
 
         [GameCommand(Keyword = "insertitem", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Inserted item.")]
@@ -321,6 +322,18 @@ namespace TonyDev.Game.Global
         {
             ObjectSpawner.SpawnMoney(amount, position, parent);
         }
+        
+        [Command(requiresAuthority = false)]
+        public void CmdSpawnEssence(int amount, Vector2 position, NetworkIdentity parent)
+        {
+            RpcSpawnMoney(amount, position, parent);
+        }
+
+        [ClientRpc]
+        private void RpcSpawnEssence(int amount, Vector2 position, NetworkIdentity parent)
+        {
+            ObjectSpawner.SpawnEssence(amount, position, parent);
+        }
 
         [ClientRpc]
         public void RpcSpawnDmgPopup(Vector2 position, float value, bool isCrit, NetworkIdentity exclude)
@@ -390,11 +403,15 @@ namespace TonyDev.Game.Global
         public Tilemap arenaWallTilemap;
 
         public static Action OnGameManagerAwake;
+
+        public static int SessionPlayCount = 0;
         
         private void Awake()
         {
             if (Instance == null) Instance = this;
             else Destroy(this);
+
+            SessionPlayCount++;
 
             AllItems = Resources.LoadAll<ItemData>("Items").Select(Instantiate).ToList();
 
@@ -431,6 +448,8 @@ namespace TonyDev.Game.Global
 
         #endregion
 
+        public AudioMixerGroup mainMixerGroup;
+        
         #region Gamestate Control
 
         public static void ResetGame()
@@ -438,14 +457,16 @@ namespace TonyDev.Game.Global
             if (Crystal.Instance != null) Crystal.Instance.SetHealth(5000f);
 
             Money = 0;
-            Essence = 0;
+            //Essence = 0;
             MoneyDropBonusFactor = 0;
             Timer.GameTimer = 0;
 
             AllItems?.Clear();
             Entities?.Clear();
             EnemySpawners?.Clear();
-
+            
+            if(SessionPlayCount > 0) Player.OnLocalPlayerCreated -= Instance.Init;
+            
             if (PlayerInventory.Instance != null) PlayerInventory.Instance.Clear();
             if (PlayerStats.Stats != null) PlayerStats.Stats.ClearStatBonuses();
         }
@@ -485,7 +506,7 @@ namespace TonyDev.Game.Global
             GamePhase = GamePhase.Arena;
             Player.LocalInstance.gameObject.transform.position = arenaSpawnPos;
             CmdReTargetEnemies();
-            RoomManager.OnActiveRoomChanged.Invoke();
+            RoomManager.Instance.OnActiveRoomChanged.Invoke();
         }
 
         private void GameOver()

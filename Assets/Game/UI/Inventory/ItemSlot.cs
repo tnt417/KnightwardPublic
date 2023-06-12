@@ -72,14 +72,14 @@ namespace TonyDev.Game.UI.Inventory
 
         public void DestroyItem()
         {
-            var essence = ItemGenerator.GenerateEssence(Item, _insertionFloor);
+            var cost = ItemGenerator.GenerateSellPrice(Item, _insertionFloor);
 
             SoundManager.PlaySound("interact", 0.5f, Player.LocalInstance.transform.position, 0.8f);
 
-            GameManager.Essence += essence;
+            GameManager.Money += cost;
 
-            ObjectSpawner.SpawnTextPopup(Player.LocalInstance.transform.position, "+" + essence + " essence",
-                Color.cyan, 0.8f);
+            ObjectSpawner.SpawnTextPopup(Player.LocalInstance.transform.position, "+" + cost + " coins",
+                Color.yellow, 0.8f);
 
             Destroy(gameObject);
         }

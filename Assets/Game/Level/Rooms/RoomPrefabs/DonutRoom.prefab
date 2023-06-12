@@ -5205,13 +5205,9 @@ MonoBehaviour:
     difficultyRating: 75
   - enemyPrefabs:
     - {fileID: 1591561561550776636, guid: a5aa3be549ddf6b4ca6180ad5e2c00bc, type: 3}
-    difficultyRating: 50
-  - enemyPrefabs:
-    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
-    difficultyRating: 50
-  - enemyPrefabs:
     - {fileID: 1591561561550776636, guid: c60f9140a32a033429e8d77ba64c98a2, type: 3}
-    difficultyRating: 50
+    - {fileID: 1591561561550776636, guid: 21fcdc4f9a614964eb7de474c0eeef8f, type: 3}
+    difficultyRating: 150
   range: 1.5
   frequency: 0
   autoSpawn: 1

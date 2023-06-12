@@ -62,7 +62,7 @@ namespace TonyDev.Game.Core.Items
                 statBonuses = new StatBonus[]
                 {
                     new StatBonus(StatType.Flat, Stat.Damage, 25, "Starter Sword"),
-                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 2f, "Starter Sword")
+                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 3f, "Starter Sword")
                 },
                 uiSprite = broadswordItem.uiSprite
             });

@@ -18,7 +18,16 @@ namespace TonyDev.Game.Core.Entities.Player
         public float strength;
         [HideInInspector] public string source;
         public bool hidden;
-
+        
+        public StatBonus(StatType statType, Stat stat, float strength, string source)
+        {
+            this.statType = statType;
+            this.stat = stat;
+            this.strength = strength;
+            this.source = source;
+            this.hidden = false;
+        }
+        
         public StatBonus(StatType statType, Stat stat, float strength, string source, bool hidden = false)
         {
             this.statType = statType;

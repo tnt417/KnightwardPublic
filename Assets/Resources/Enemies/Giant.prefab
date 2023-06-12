@@ -140,6 +140,18 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -0.3
       objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2176687513777532640, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Radius
       value: 0.3
@@ -182,11 +194,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: baseStats.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.hitboxRadius
-      value: 0.3
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.baseMoneyReward
@@ -205,6 +217,10 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].stat
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -221,8 +237,12 @@ PrefabInstance:
       value: 1000
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: baseStats.Array.data[3].strength
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.contactAttackData.hitboxRadius
-      value: 0.3
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: enemyData.animations.Array.data[0].animation

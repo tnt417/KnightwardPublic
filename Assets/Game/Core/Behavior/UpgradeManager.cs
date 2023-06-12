@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
@@ -10,12 +11,34 @@ using TonyDev.Game.Core.Items.Relics.FlamingBoot;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.UI.Tower;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Core.Behavior
 {
+    public class UpgradeData
+    {
+        public Sprite Icon;
+        public string Name;
+        public string Description;
+        public Func<bool> IsPurchasable;
+        public Action<UpgradeEntry, GameEntity, bool> OnPurchase;
+        public UpgradeCategory Category;
+
+        public UpgradeData(Sprite icon, string name, string description, Func<bool> isPurchasable,
+            Action<UpgradeEntry, GameEntity, bool> onPurchase, UpgradeCategory category)
+        {
+            Icon = icon;
+            Name = name;
+            Description = description;
+            IsPurchasable = isPurchasable;
+            OnPurchase = onPurchase;
+            Category = category;
+        }
+    }
+
     public class UpgradeManager : NetworkBehaviour
     {
         // Singleton to allow easy global access. Only one instance of this class should ever exist.
@@ -29,34 +52,39 @@ namespace TonyDev.Game.Core.Behavior
 
         /********************************/
 
-        private readonly Dictionary<int, Action<UpgradeEntry, GameEntity>>
+        private readonly Dictionary<int, Action<UpgradeEntry, GameEntity, bool>>
             _onPurchaseActions = new(); // (id, purchase function): purchase function to
         // be called when an upgrade is purchased
 
         private readonly Dictionary<int, UpgradeEntry>
             _createdEntries = new(); // (id, UpgradeEntry): used to access classes corresponding to IDs
 
+        private List<UpgradeData> _possibleUpgrades = new();
+
         private float _moveSinceActive; // Used to close the UI when the player tries to move
+
+        public Action OnUpgradeLocal;
 
         [FormerlySerializedAs("_filter")] public List<UpgradeCategory> filter;
 
-        public void ToggleUICrystal()
-        {
-            ToggleUI(new List<UpgradeCategory> {UpgradeCategory.Crystal});
-        }
-        
+        // public void ToggleUICrystal()
+        // {
+        //     ToggleUI(new List<UpgradeCategory> {UpgradeCategory.Crystal});
+        // }
+
         public void ToggleUIPlayer()
         {
-            ToggleUI(new List<UpgradeCategory> {UpgradeCategory.Defensive, UpgradeCategory.Offensive, UpgradeCategory.Utility});
+            ToggleUI(new List<UpgradeCategory>
+                {UpgradeCategory.Crystal, UpgradeCategory.Defensive, UpgradeCategory.Offensive, UpgradeCategory.Utility});
         }
-        
+
         // Toggle the UI object. 
         private void ToggleUI(List<UpgradeCategory> newFilter)
         {
             _moveSinceActive = 0f;
-            
+
             filter = newFilter;
-            
+
             uiToggleObject.SetActive(!uiToggleObject.activeSelf);
         }
 
@@ -76,127 +104,174 @@ namespace TonyDev.Game.Core.Behavior
 
             // Register the upgrades on Start
 
+            OnUpgradeLocal += ClearUpgrades;
+
             #region Upgrade Registering
 
-            RegisterGlobalUpgrade(100, ObjectFinder.GetSprite("crystal_0"), "Crystal Health I", "+100% crystal max HP.",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("crystal_0"), "Crystal Health I",
+                "+100% crystal max HP.",
                 () => true,
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    Crystal.Instance.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 1.0f,
-                        "Crystal Health I");
-                    Crystal.Instance.FullHeal();
-                }, UpgradeCategory.Crystal);
+                    if (serverCall)
+                    {
+                        Crystal.Instance.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 1.0f,
+                            "Crystal Health I");
+                        Crystal.Instance.FullHeal();
+                    }
+                }, UpgradeCategory.Crystal));
 
-            RegisterGlobalUpgrade(500, ObjectFinder.GetSprite("crystal_0"), "Crystal Health II",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("crystal_0"), "Crystal Health II",
                 "+200% crystal max HP.", () => _purchasedUpgrades.Contains("Crystal Health I"),
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    Crystal.Instance.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 2.0f,
-                        "Crystal Health II");
-                    Crystal.Instance.FullHeal();
-                }, UpgradeCategory.Crystal);
+                    if (serverCall)
+                    {
+                        Crystal.Instance.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 2.0f,
+                            "Crystal Health II");
+                        Crystal.Instance.FullHeal();
+                    }
+                }, UpgradeCategory.Crystal));
 
-            RegisterGlobalUpgrade(1000, ObjectFinder.GetSprite("crystal_0"), "Crystal Health III",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("crystal_0"), "Crystal Health III",
                 "+400% crystal max HP.",
                 () => _purchasedUpgrades.Contains("Crystal Health I") &&
                       _purchasedUpgrades.Contains("Crystal Health II"),
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    Crystal.Instance.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 4.0f,
-                        "Crystal Health III");
-                    Crystal.Instance.FullHeal();
-                }, UpgradeCategory.Crystal);
+                    if (serverCall)
+                    {
+                        Crystal.Instance.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, 4.0f,
+                            "Crystal Health III");
+                        Crystal.Instance.FullHeal();
+                    }
+                }, UpgradeCategory.Crystal));
 
-            RegisterGlobalUpgrade(200, ObjectFinder.GetSprite("crystal_0"), "Ally Speed Aura I",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("crystal_0"), "Ally Speed Aura I",
                 "Allies within 7 tiles of the crystal gain +25% attack speed, frequency, and move speed.",
                 () => true,
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    Crystal.Instance.CmdAddEffect(new AreaBuffEffect()
+                    if (serverCall)
                     {
-                        Radius = 7f, StatBonuses = new[]
+                        Crystal.Instance.CmdAddEffect(new AreaBuffEffect()
                         {
-                            new StatBonus(StatType.AdditivePercent, Stat.AttackSpeed, 0.25f, "Ally Speed Aura I"),
-                            new StatBonus(StatType.AdditivePercent, Stat.MoveSpeed, 0.25f, "Ally Speed Aura I")
-                        },
-                        targetTeam = Team.Player
-                    }, Crystal.Instance);
-                }, UpgradeCategory.Crystal);
-            
-            RegisterGlobalUpgrade(300, ObjectFinder.GetSprite("crystal_0"), "Ally Strength Aura I",
+                            Radius = 7f, StatBonuses = new[]
+                            {
+                                new StatBonus(StatType.AdditivePercent, Stat.AttackSpeed, 0.25f, "Ally Speed Aura I"),
+                                new StatBonus(StatType.AdditivePercent, Stat.MoveSpeed, 0.25f, "Ally Speed Aura I")
+                            },
+                            targetTeam = Team.Player
+                        }, Crystal.Instance);
+                    }
+                }, UpgradeCategory.Crystal));
+
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("crystal_0"), "Ally Strength Aura I",
                 "Allies within 7 tiles of the crystal gain +40% damage and potency.",
                 () => true,
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    Crystal.Instance.CmdAddEffect(new AreaBuffEffect()
+                    if (serverCall)
                     {
-                        Radius = 7f, StatBonuses = new[]
+                        Crystal.Instance.CmdAddEffect(new AreaBuffEffect()
                         {
-                            new StatBonus(StatType.AdditivePercent, Stat.Damage, 0.4f, "Ally Strength Aura I"),
-                        },
-                        targetTeam = Team.Player
-                    }, Crystal.Instance);
-                }, UpgradeCategory.Crystal);
+                            Radius = 7f, StatBonuses = new[]
+                            {
+                                new StatBonus(StatType.AdditivePercent, Stat.Damage, 0.4f, "Ally Strength Aura I"),
+                            },
+                            targetTeam = Team.Player
+                        }, Crystal.Instance);
+                    }
+                }, UpgradeCategory.Crystal));
 
-            /*
-            RegisterLocalUpgrade(50, ObjectFinder.GetSprite("inventoryIcons_3"), "Damage I",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("RegeneratorTower_0"), "Crystal Regen",
+                "Give the crystal the ability to slowly repair itself over time.",
+                () => true,
+                (upgrade, entity, serverCall) =>
+                {
+                    if (serverCall)
+                    {
+                        Crystal.Instance.CmdAddEffect(new PercentRegenEffect()
+                        {
+                            PercentRegen = 0.002f
+                        }, Crystal.Instance);
+                    }
+                }, UpgradeCategory.Crystal));
+
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("essence"), "Tower Restoration",
+                "The crystal slowly repairs nearby towers.",
+                () => _purchasedUpgrades.Contains("Crystal Regen"),
+                (upgrade, entity, serverCall) =>
+                {
+                    if (serverCall)
+                    {
+                        Crystal.Instance.CmdAddEffect(new AreaRepairEffect()
+                        {
+                            Cooldown = 5,
+                            Percent = 0.05f,
+                            Range = 15f
+                        }, Crystal.Instance);
+                    }
+                }, UpgradeCategory.Crystal));
+            
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("inventoryIcons_3"), "Damage I",
                 "x1.25 to player damage stat",
                 () => true,
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, 1.25f, "Damage I");
-                }, UpgradeCategory.Offensive);
+                    if(!serverCall) entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, 1.25f, "Damage I");
+                }, UpgradeCategory.Offensive));
 
-            RegisterLocalUpgrade(500, ObjectFinder.GetSprite("inventoryIcons_3"), "Damage II",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("inventoryIcons_3"), "Damage II",
                 "x1.25 to player damage stat",
                 () => _purchasedUpgrades.Contains("Damage I"),
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, 1.25f, "Damage II");
-                }, UpgradeCategory.Offensive);
+                    if(!serverCall) entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, 1.25f, "Damage II");
+                }, UpgradeCategory.Offensive));
 
-            RegisterLocalUpgrade(1000, ObjectFinder.GetSprite("inventoryIcons_3"), "Damage III",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("inventoryIcons_3"), "Damage III",
                 "x1.25 to player damage stat",
                 () => _purchasedUpgrades.Contains("Damage I") &&
                       _purchasedUpgrades.Contains("Damage II"),
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, 1.25f, "Damage III");
-                }, UpgradeCategory.Offensive);
+                    if(!serverCall) entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Damage, 1.25f, "Damage III");
+                }, UpgradeCategory.Offensive));
             
-            RegisterLocalUpgrade(50, ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed I",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed I",
                 "x1.15 to player attack speed stat",
                 () => true,
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed I");
-                }, UpgradeCategory.Offensive);
+                    if(!serverCall) entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed I");
+                }, UpgradeCategory.Offensive));
 
-            RegisterLocalUpgrade(300, ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed II",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed II",
                 "x1.15 to player attack speed stat",
                 () => _purchasedUpgrades.Contains("Attack Speed I"),
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed II");
-                }, UpgradeCategory.Offensive);
+                    if(!serverCall) entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed II");
+                }, UpgradeCategory.Offensive));
 
-            RegisterLocalUpgrade(700, ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed III",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("inventoryIcons_11"), "Attack Speed III",
                 "x1.15 to player attack speed stat",
                 () => _purchasedUpgrades.Contains("Attack Speed I") &&
                       _purchasedUpgrades.Contains("Attack Speed II"),
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed III");
-                }, UpgradeCategory.Offensive);
+                    if(!serverCall) entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.AttackSpeed, 1.15f, "Attack Speed III");
+                }, UpgradeCategory.Offensive));
             
-            RegisterLocalUpgrade(250, ObjectFinder.GetSprite("inventoryIcons_5"), "Better Regen",
+            _possibleUpgrades.Add(new UpgradeData(ObjectFinder.GetSprite("inventoryIcons_5"), "Better Regen",
                 "x2 to player regen stat",
                 () => true,
-                (upgrade, entity) =>
+                (upgrade, entity, serverCall) =>
                 {
-                    entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.HpRegen, 2f, "Better Regen");
-                }, UpgradeCategory.Defensive);
-*/
+                    if(!serverCall) entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.HpRegen, 2f, "Better Regen");
+                }, UpgradeCategory.Defensive));
+
             /*RegisterLocalUpgrade(1000, ObjectFinder.GetSprite("inventoryIcons_1"), "More Relics I",
                 "Gain an extra relic slot.",
                 () => true,
@@ -304,6 +379,24 @@ namespace TonyDev.Game.Core.Behavior
             #endregion
         }
 
+        public void RollUpgrades(int count, bool replaceOld)
+        {
+            if (replaceOld) ClearUpgrades();
+
+            for (var i = 0; i < count; i++)
+            {
+                var selected = GameTools.SelectRandom(_possibleUpgrades.Where(upgrade => upgrade != null && upgrade.IsPurchasable.Invoke()));
+                if (selected != null)
+                {
+                    RegisterUpgrade(0, selected.Icon, selected.Name, selected.Description,
+                        selected.IsPurchasable,
+                        selected.OnPurchase, selected.Category, false);
+                }
+
+                _possibleUpgrades.Remove(selected);
+            }
+        }
+
         private int
             _index = 0; // Index to create unique upgrade IDs. Note: This system requires that upgrades are registered in the same order on all clients.
 
@@ -319,6 +412,15 @@ namespace TonyDev.Game.Core.Behavior
             }
         }
 
+        private void ClearUpgrades()
+        {
+            foreach (var entry in _createdEntries.ToList())
+            {
+                entry.Value.PurchasableFunc = () => false;
+                //RemoveUpgrade(entry.Key);
+            }
+        }
+
         [Command(requiresAuthority = false)] // Runs on the server
         public void
             CmdNotifyPurchaseGlobal(int id,
@@ -331,7 +433,8 @@ namespace TonyDev.Game.Core.Behavior
                 return; // Check to prevent upgrades from being attempted to be bought twice or invalid upgrades. Prevent null pointers.
             }
 
-            _onPurchaseActions[id]?.Invoke(_createdEntries[id], localPlayer); // Invoke the purchase method.
+            _onPurchaseActions[id]?.Invoke(_createdEntries[id], localPlayer, true); // Invoke the purchase method.
+
             RpcSetPurchased(
                 id); // Notify to clients that the upgrade has been purchased so it can be removed from the UI
         }
@@ -347,10 +450,17 @@ namespace TonyDev.Game.Core.Behavior
             }
 
             _purchasedUpgrades.Add(_createdEntries[id].UpgradeName);
-            
-            _onPurchaseActions[id]?.Invoke(_createdEntries[id], Player.LocalInstance); // Invoke the purchase method.
 
-            RemoveUpgrade(id); // Remove the upgrade locally
+            _onPurchaseActions[id]?.Invoke(_createdEntries[id], Player.LocalInstance, false); // Invoke the purchase method.
+            OnUpgradeLocal?.Invoke();
+
+            //RemoveUpgrade(id); // Remove the upgrade locally
+        }
+
+        public void NotifyPurchase(int id)
+        {
+            NotifyPurchaseLocal(id);
+            CmdNotifyPurchaseGlobal(id, Player.LocalInstance);
         }
 
         [ClientRpc] // Called by the server and runs on the client
@@ -365,6 +475,8 @@ namespace TonyDev.Game.Core.Behavior
 
         private void RemoveUpgrade(int id) // Handle all upgrade removal for a given id
         {
+            if (!_createdEntries.ContainsKey(id)) return;
+            
             Destroy(_createdEntries[id].gameObject); // Destroy this UI object
 
             // Remove corresponding dictionary entries
@@ -372,6 +484,7 @@ namespace TonyDev.Game.Core.Behavior
             _onPurchaseActions.Remove(id);
         }
 
+        /*
         private void RegisterLocalUpgrade(int scrapCost, Sprite icon, string upgradeName, string description,
             Func<bool> isPurchasable,
             Action<UpgradeEntry, GameEntity> onPurchaseClient, UpgradeCategory category) => RegisterUpgrade(scrapCost,
@@ -384,32 +497,33 @@ namespace TonyDev.Game.Core.Behavior
             Action<UpgradeEntry, GameEntity> onPurchaseServer, UpgradeCategory category) => RegisterUpgrade(scrapCost,
             icon, upgradeName,
             description, isPurchasable, onPurchaseServer, category, false);
+            */
 
         // Handle creation for an upgrade given supplied values
         private void RegisterUpgrade(int scrapCost, Sprite icon, string upgradeName, string description,
             Func<bool> isPurchasable,
-            Action<UpgradeEntry, GameEntity> onPurchaseServer, UpgradeCategory category, bool local)
+            Action<UpgradeEntry, GameEntity, bool> onPurchase, UpgradeCategory category, bool local)
         {
             var id = _index; // Store corresponding ID
             _index++; // Increment to ensure unique ID next time
 
             // Add corresponding dictionary entries
-            _onPurchaseActions.Add(id, onPurchaseServer);
+            _onPurchaseActions.Add(id, onPurchase);
             _createdEntries.Add(id,
                 CreateUIElement(scrapCost, icon, upgradeName, description, isPurchasable, id,
-                    category, local)); // Create the UI element and add it to dictionary
+                    category)); // Create the UI element and add it to dictionary
         }
 
         // Handle instantiation of UI elements
         private UpgradeEntry CreateUIElement(int scrapCost, Sprite icon, string upgradeName, string description,
-            Func<bool> isPurchasable, int callbackId, UpgradeCategory category, bool local)
+            Func<bool> isPurchasable, int callbackId, UpgradeCategory category)
         {
             var go = Instantiate(upgradeEntryPrefab,
                 upgradeEntryParent.transform); // Instantiate UI object under UI transform
 
             var ue = go.GetComponent<UpgradeEntry>();
             ue.Set(scrapCost, icon, upgradeName, description, isPurchasable, callbackId,
-                category, local); // Pass on values to the UpgradeEntry behavior
+                category); // Pass on values to the UpgradeEntry behavior
 
             return ue;
         }

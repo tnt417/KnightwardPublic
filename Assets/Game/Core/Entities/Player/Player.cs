@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Items;
@@ -94,13 +95,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public void UsernameHook(string oldUser, string newUser)
         {
-            OnUsernameChange?.Invoke(username);
-        }
-
-        public override void OnStartServer()
-        {
-            CmdSetUsername(CustomRoomPlayer.Local.username);
-            base.OnStartServer();
+            OnUsernameChange?.Invoke(newUser);
         }
 
         [Command(requiresAuthority = false)]
@@ -117,7 +112,9 @@ namespace TonyDev.Game.Core.Entities.Player
             LocalInstance = this;
             OnLocalPlayerCreated?.Invoke();
 
-            OnParentIdentityChange += (a) => LocalPlayerChangeIdentity?.Invoke(a);
+            OnParentIdentityChange += a => LocalPlayerChangeIdentity?.Invoke(a);
+
+            OnParentIdentityChange += (a) => { LocalInstance.StartCoroutine(PauseDamageForSeconds(1f)); };
 
             OnAttack += () =>
             {
@@ -133,19 +130,18 @@ namespace TonyDev.Game.Core.Entities.Player
                 }
             };
 
-            OnDamageOther += (dmg, ge, _) =>
+            OnDamageOther += (dmg, ge, crit) =>
             {
+                if (dmg <= 0) return;
                 if (ge != null)
                 {
-                    var percentDealt = dmg / ge.Stats.GetStat(Stat.Health);
-                    if (percentDealt > 0.1f)
-                    {
-                        SmoothCameraFollow.Shake(percentDealt * 0.5f, 100f);
-                    }
+                    var percentDealt = dmg / ge.MaxHealth;
+                    var percentMissing = 1 - ge.CurrentHealth / ge.MaxHealth;
+                    SmoothCameraFollow.Shake(Mathf.Log(percentDealt * (1 + percentMissing/5f) * (crit ? 32f : 24f)), crit ? 2f : 1.5f);
                 }
                 else
                 {
-                    SmoothCameraFollow.Shake(0.5f, 100f);
+                    SmoothCameraFollow.Shake(3f, 1.5f);
                 }
             };
 
@@ -160,7 +156,14 @@ namespace TonyDev.Game.Core.Entities.Player
             //OnDamageOther += (_, _, _) => SoundManager.PlaySoundPitchVariant("hit", transform.position, 0.7f, 1f);
 
             Init();
-            
+
+            CmdSetUsername(CustomRoomPlayer.Local.username);
+
+            CmdAddEffect(new PercentRegenEffect
+            {
+                PercentRegen = 0.01f
+            }, this);
+
             PlayerInventory.Instance.InsertStarterItems();
 
             TransitionController.Instance.FadeIn();

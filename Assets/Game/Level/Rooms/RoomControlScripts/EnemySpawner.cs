@@ -4,6 +4,7 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using JetBrains.Annotations;
 using Mirror;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
@@ -20,22 +21,31 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         [SerializeField] private EnemySpawn[] enemySpawns;
         [SerializeField] private float range;
         [SerializeField] private float frequency = 0.5f;
+
         [SerializeField] public bool autoSpawn;
+
         //
         private float _timer;
         public bool InRoom => GetComponentInParent<Room>() != null;
         private Room _parentRoom;
-        public bool CurrentlySpawning => _startedSpawning && _modifiedAllowance - _usedAllowance >= enemySpawns.Min(es => es.difficultyRating);
+
+        public bool CurrentlySpawning => _startedSpawning &&
+                                         _modifiedAllowance - _usedAllowance >=
+                                         enemySpawns.Min(es => es.difficultyRating);
 
         private int _modifiedAllowance;
         private int _usedAllowance;
 
         private bool _startedSpawning;
 
+        //[SerializeReference] public GameEffectList enemyStartingEffects = new();
+
         [ServerCallback]
         private void Start()
         {
-            _modifiedAllowance = disableAllowanceScaling ? baseAllowance : (int)(baseAllowance * GameManager.EnemyDifficultyScale);
+            _modifiedAllowance = disableAllowanceScaling
+                ? baseAllowance
+                : (int) (baseAllowance * Mathf.Clamp(GameManager.EnemyDifficultyScale * 0.1f, 1, Mathf.Infinity));
             GameManager.EnemySpawners.Add(this); //Add this spawner to the GameManager's list
             _parentRoom = GetComponentInParent<Room>();
 
@@ -56,37 +66,48 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         {
             if (_startedSpawning) return;
             _startedSpawning = true;
-            
+
+            await UniTask.WaitUntil(() => _parentRoom == null || _parentRoom.started);
+
             while (true)
             {
-                var spawns = enemySpawns.Where(es => es.difficultyRating <= _modifiedAllowance - _usedAllowance).ToList();
+                var spawns = enemySpawns.Where(es => es.difficultyRating <= _modifiedAllowance - _usedAllowance)
+                    .ToList();
 
                 if (spawns.Count == 0) break;
-                
-                var enemySpawn = GameTools.SelectRandom(spawns);
-                
-                _usedAllowance += enemySpawn.difficultyRating;
-                
-                SpawnEnemies(GetSpawnpoint(), enemySpawn.enemyPrefabs);
 
-                if(frequency > 0) await UniTask.Delay(TimeSpan.FromSeconds(frequency));
+                var enemySpawn = GameTools.SelectRandom(spawns);
+
+                _usedAllowance += enemySpawn.difficultyRating;
+
+                SpawnEnemies(enemySpawn.enemyPrefabs);
+
+                if (frequency > 0) await UniTask.Delay(TimeSpan.FromSeconds(frequency));
             }
-            
+
             GameManager.EnemySpawners.Remove(this);
             Destroy(this);
         }
-        
+
         [ServerCallback]
-        private void SpawnEnemies(Vector3 position, GameObject[] prefabs) //Spawns an enemy at specific position
+        private void SpawnEnemies(GameObject[] prefabs) //Spawns an enemy at specific position
         {
             if (prefabs == null) return;
-            
+
             if (_parentRoom != null && !_parentRoom.isServer) return;
 
             foreach (var prefab in prefabs)
             {
-                GameManager.Instance.CmdSpawnEnemy(ObjectFinder.GetNameOfPrefab(prefab), position,
-                    _parentRoom.netIdentity, 1);
+                var enemy = ObjectSpawner.SpawnEnemy(prefab, GetSpawnpoint(), _parentRoom.netIdentity);
+                
+                // if (enemyStartingEffects is {gameEffects: { }})
+                //     enemy.OnStart += () =>
+                //     {
+                //         foreach (var se in enemyStartingEffects.gameEffects)
+                //         {
+                //             enemy.CmdAddEffect(se, enemy);
+                //         }
+                //     };
                 //var enemy = ObjectSpawner.SpawnEnemy(enemyData, position, _parentRoom.netIdentity); //Instantiate the enemy
 
                 if (_parentRoom != null)

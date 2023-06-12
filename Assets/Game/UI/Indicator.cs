@@ -27,10 +27,10 @@ namespace TonyDev.Game.UI
             labelText.text = label;
         }
 
-        public void SetEssence(int essence)
+        public void SetSellPrice(int sellPrice)
         {
-            essenceObject.SetActive(essence != 0);
-            essenceLabel.text = "+" + essence;
+            essenceObject.SetActive(sellPrice != 0);
+            essenceLabel.text = "+" + sellPrice;
         }
     }
 }

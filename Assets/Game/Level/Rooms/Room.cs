@@ -13,6 +13,7 @@ using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using TonyDev.Game.UI.Minimap;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 using UnityEngine.Profiling;
 using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
@@ -73,13 +74,15 @@ namespace TonyDev.Game.Level.Rooms
         {
             writer.WriteRoomArray(value.Rooms);
             writer.WriteVector2Int(value.StartingRoomPos);
+            writer.Write(value.RoomConnections);
         }
 
         public static Map ReadMap(this NetworkReader reader, Map value)
         {
             var rooms = reader.ReadRoomArray();
             var startingRoomPos = reader.ReadVector2Int();
-            return new Map(rooms, startingRoomPos);
+            var roomConnections = reader.Read<RoomConnection[]>();
+            return new Map(rooms, startingRoomPos, roomConnections);
         }
     }
 
@@ -160,10 +163,26 @@ namespace TonyDev.Game.Level.Rooms
 
         public override void OnStartServer()
         {
-            GameManager.OnEnemyAdd += OnEntityChange;
+            started = true;
+            
             GameManager.OnEnemyAdd += RegisterEntityTeamListener;
-            GameManager.OnEnemyRemove += OnEntityChange;
+            
+            RoomLockCheckTask().Forget();
+            
             CheckShouldLockDoors();
+        }
+
+        public int EnemyCount =>
+            GameManager.EntitiesReadonly.Count(ge => ge is Enemy && ge.CurrentParentIdentity == netIdentity && ge.Team == Team.Enemy);
+        
+        private async UniTask RoomLockCheckTask()
+        {
+            while (this != null)
+            {
+                await UniTask.WaitUntil(() => this == null || this != null && PlayerCount > 0);
+                if(this != null) CheckShouldLockDoors();
+                await UniTask.WaitForFixedUpdate();
+            }
         }
         
         public override void OnStartClient()
@@ -171,6 +190,7 @@ namespace TonyDev.Game.Level.Rooms
             _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
             Player.LocalPlayerChangeIdentity += CheckRoomVisibility;
         }
+        
 
         private bool _initialized;
         
@@ -181,19 +201,11 @@ namespace TonyDev.Game.Level.Rooms
                 RoomManager.Instance.RoomIdentities[netId] = this;
                 _initialized = true;
             }
-            
-            if (_checkLockDoors)
-            {
-                CheckShouldLockDoors();
-                _checkLockDoors = false;
-            }
         }
 
         private void RegisterEntityTeamListener(GameEntity ge)
         {
             if (ge.CurrentParentIdentity != netIdentity) return;
-
-            ge.OnTeamChange += (_) => OnEntityChange(ge);
         }
 
         private bool _destroyed;
@@ -201,9 +213,8 @@ namespace TonyDev.Game.Level.Rooms
         private void OnDestroy()
         {
             _destroyed = true;
-            GameManager.OnEnemyAdd -= OnEntityChange;
             GameManager.OnEnemyAdd -= RegisterEntityTeamListener;
-            GameManager.OnEnemyRemove -= OnEntityChange;
+            Player.LocalPlayerChangeIdentity -= CheckRoomVisibility;
         }
 
         //Returns a rect, representing the room's position and shape in the world based on its tilemaps
@@ -253,6 +264,13 @@ namespace TonyDev.Game.Level.Rooms
             }
         }
 
+        public Vector2 GetLocalPlayerPositionNormalized()
+        {
+            var playerPos = Player.LocalInstance.transform.position;
+            var roomRect = RoomRect;
+            return new Vector2((playerPos.x-roomRect.xMin) / roomRect.width, (playerPos.y-roomRect.yMin) / roomRect.height);
+        }
+
         public List<Direction> GetDoorDirections()
         {
             return roomDoors.Select(rd => rd.direction).ToList();
@@ -265,15 +283,10 @@ namespace TonyDev.Game.Level.Rooms
         {
             if (this == null) return;
 
-            var enemySpawner = GetComponentInChildren<EnemySpawner>();
+            var enemySpawners = GetComponentsInChildren<EnemySpawner>();
 
-            var enemies = GameManager.EntitiesReadonly.Where(entity =>
-                entity is Enemy && entity.CurrentParentIdentity == netIdentity && entity.Team != Team.Player);
-
-            var shouldLock = enemies.Any()
-                             || enemySpawner != null &&
-                             enemySpawner
-                                 .CurrentlySpawning; //Check if there are any alive enemies in our room or if our spawner is spawning.
+            var shouldLock = EnemyCount > 0
+                             || enemySpawners.Any(es => es != null && es.CurrentlySpawning); //Check if there are any alive enemies in our room or if our spawner is spawning.
 
             if (shouldLock)
             {
@@ -289,15 +302,6 @@ namespace TonyDev.Game.Level.Rooms
         public void OnEnemySpawn()
         {
             LockAllDoors();
-        }
-
-        private bool _checkLockDoors = false;
-
-        private void OnEntityChange(GameEntity entity)
-        {
-            if (this == null || !enabled) return;
-
-            _checkLockDoors = true;
         }
 
         [Command(requiresAuthority = false)]

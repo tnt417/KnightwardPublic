@@ -9,20 +9,41 @@ using Random = UnityEngine.Random;
 namespace TonyDev.Game.Level.Rooms
 {
     [Serializable]
+    public struct RoomConnection
+    {
+        public RoomConnection(Vector2Int posA, Vector2Int posB)
+        {
+            a = posA;
+            b = posB;
+        }
+
+        public bool HasRoom(int x, int y)
+        {
+            var v2i = new Vector2Int(x, y);
+            return a == v2i || b == v2i;
+        }
+
+        public Vector2Int a;
+        public Vector2Int b;
+    }
+
+    [Serializable]
     public struct SerializableMap
     {
-        public SerializableMap(uint[,] rooms, Vector2Int startingRoomPos)
+        public SerializableMap(uint[,] rooms, Vector2Int startingRoomPos, RoomConnection[] roomConnections)
         {
             Rooms = rooms;
             StartingRoomPos = startingRoomPos;
+            RoomConnections = roomConnections;
         }
 
         public readonly uint[,] Rooms;
+        public readonly RoomConnection[] RoomConnections;
         public readonly Vector2Int StartingRoomPos;
 
         public static SerializableMap FromMap(Map map)
         {
-            if (map.Rooms == null) return new SerializableMap(null, Vector2Int.zero);
+            if (map.Rooms == null) return new SerializableMap(null, Vector2Int.zero, null);
 
             var width = map.Rooms.GetLength(0);
             var height = map.Rooms.GetLength(1);
@@ -40,7 +61,7 @@ namespace TonyDev.Game.Level.Rooms
                 }
             }
 
-            return new SerializableMap(ids, map.StartingRoomPos);
+            return new SerializableMap(ids, map.StartingRoomPos, map.RoomConnections);
         }
     }
 
@@ -48,7 +69,7 @@ namespace TonyDev.Game.Level.Rooms
     {
         public static Map FromSerializable(SerializableMap serializableMap)
         {
-            if (serializableMap.Rooms == null) return new Map(null, Vector2Int.zero);
+            if (serializableMap.Rooms == null) return new Map(null, Vector2Int.zero, null);
 
             var width = serializableMap.Rooms.GetLength(0);
             var height = serializableMap.Rooms.GetLength(1);
@@ -62,17 +83,19 @@ namespace TonyDev.Game.Level.Rooms
                 }
             }
 
-            return new Map(rooms, serializableMap.StartingRoomPos);
+            return new Map(rooms, serializableMap.StartingRoomPos, serializableMap.RoomConnections);
         }
 
-        public Map(Room[,] rooms, Vector2Int startingRoomPos)
+        public Map(Room[,] rooms, Vector2Int startingRoomPos, RoomConnection[] roomConnections)
         {
             Rooms = rooms;
             StartingRoomPos = startingRoomPos;
+            RoomConnections = roomConnections;
         }
 
         public readonly Room[,] Rooms;
         public readonly Vector2Int StartingRoomPos;
+        public readonly RoomConnection[] RoomConnections;
         public Room StartingRoom => Rooms[StartingRoomPos.x, StartingRoomPos.y];
 
         public Vector2Int GetRoomPos(Room room)
@@ -99,7 +122,7 @@ namespace TonyDev.Game.Level.Rooms
     }
 
     [Serializable]
-    public struct RoomEntry
+    public class RoomEntry
     {
         public RoomGenerateTier tier;
         public GameObject roomPrefab;
@@ -137,6 +160,133 @@ namespace TonyDev.Game.Level.Rooms
         }
 
         [Server]
+        public Map Generate(int floor)
+        {
+            if (!GameManager.Instance.isServer) return default;
+
+            if (_generated) return roomManager.Map;
+
+            var theme = config.mapZones.Where(z => floor % config.loopPoint >= z.startFloor)
+                .OrderByDescending(z => z.startFloor).FirstOrDefault();
+
+            var remainingEntries = theme.roomEntries.ToList();
+
+            var rooms = new Room[MapSize, MapSize];
+
+            var roomConnections = new List<RoomConnection>();
+
+            var roomCount = Random.Range(theme.roomAmountRange.x, theme.roomAmountRange.y);
+
+            var i = mapRadius;
+            var j = mapRadius;
+
+            var remainingGuaranteed = remainingEntries.Count(re => re.tier == RoomGenerateTier.Guaranteed);
+            var remainingSpecial = theme.specialAmount;
+            var remainingUncommon = theme.uncommonAmount;
+            var remainingCommon = roomCount - remainingGuaranteed - remainingSpecial - remainingUncommon;
+
+            var startPos = Vector2Int.zero;
+
+            for (var r = 0; r < roomCount - remainingSpecial; r++)
+            {
+                var curPos = new Vector2Int(i, j);
+                var validNeighbors = GetOpenNeighborPositions(curPos, rooms)
+                    .Where(nb => GetOpenNeighborPositions(nb, rooms).Count == (r == 0 ? 4 : 3));
+
+                var chosenNeighbor = GameTools.SelectRandom(validNeighbors);
+
+                roomConnections.Add(new RoomConnection(curPos,
+                    chosenNeighbor));
+
+                i = chosenNeighbor.x;
+                j = chosenNeighbor.y;
+
+                if (r == 0)
+                {
+                    var entry = remainingEntries.FirstOrDefault(re => re.roomPrefab.CompareTag("StartRoom"));
+                    rooms[i, j] = GenerateRoom(new Vector2Int(i, j), entry.roomPrefab);
+                    remainingGuaranteed--;
+                    remainingEntries.Remove(entry);
+                    startPos = new Vector2Int(i, j);
+                }
+                else if (r == roomCount - remainingSpecial - 1)
+                {
+                    var entry = remainingEntries.FirstOrDefault(re =>
+                        re.tier == RoomGenerateTier.Guaranteed && !re.roomPrefab.CompareTag("StartRoom"));
+                    rooms[i, j] = GenerateRoom(new Vector2Int(i, j), entry.roomPrefab);
+                    remainingGuaranteed--;
+                    remainingEntries.Remove(entry);
+                }
+                // else if (remainingGuaranteed > 0)
+                // {
+                //     var entry =
+                //         GameTools.SelectRandom(remainingEntries.Where(re => re.tier == RoomGenerateTier.Guaranteed));
+                //     rooms[i,j] = GenerateRoom(new Vector2Int(i, j), entry.roomPrefab);
+                //     remainingGuaranteed--;
+                //     remainingEntries.Remove(entry);
+                // }
+                else
+                {
+                    var entry =
+                        GameTools.SelectRandom(remainingEntries.Where(re => re.tier == RoomGenerateTier.Common));
+
+                    rooms[i, j] = GenerateRoom(new Vector2Int(i, j), entry.roomPrefab);
+                    remainingCommon--;
+                    remainingEntries.Remove(entry);
+                }
+            }
+
+            var positions = new List<Vector2Int>();
+
+            for (var x = 0; x < MapSize; x++)
+            {
+                for (var y = 0; y < MapSize; y++)
+                {
+                    if (rooms[x, y] != null) positions.Add(new Vector2Int(x, y));
+                }
+            }
+
+            for (var t = 0; t < remainingSpecial; t++)
+            {
+                var entry =
+                    GameTools.SelectRandom(remainingEntries.Where(re => re.tier == RoomGenerateTier.Special));
+
+                var trunk = GameTools.SelectRandom(positions.Where(pos =>
+                    GetOpenNeighborPositions(pos, rooms).Count == 2));
+
+                var validRoomPos = GameTools.SelectRandom(GetOpenNeighborPositions(
+                    trunk,
+                    rooms)); // A random room with 2 bordering rooms (not start or end room) and a random open pos next to it.
+
+                roomConnections.Add(new RoomConnection(trunk, validRoomPos));
+
+                rooms[validRoomPos.x, validRoomPos.y] = GenerateRoom(validRoomPos, entry.roomPrefab);
+                remainingEntries.Remove(entry);
+            }
+
+            for (var t = 0; t < remainingUncommon; t++)
+            {
+                var entry =
+                    GameTools.SelectRandom(remainingEntries.Where(re => re.tier == RoomGenerateTier.Uncommon));
+
+                var trunk = GameTools.SelectRandom(positions.Where(pos =>
+                    GetOpenNeighborPositions(pos, rooms).Count == 2));
+
+                var validRoomPos = GameTools.SelectRandom(GetOpenNeighborPositions(
+                    trunk,
+                    rooms)); // A random room with 2 bordering rooms (not start or end room) and a random open pos next to it.
+
+                roomConnections.Add(new RoomConnection(trunk, validRoomPos));
+                
+                rooms[validRoomPos.x, validRoomPos.y] = GenerateRoom(validRoomPos, entry.roomPrefab);
+                remainingEntries.Remove(entry);
+            }
+
+            return new Map(rooms, startPos, roomConnections.ToArray());
+        }
+
+        /*
+        [Server]
         public Map Generate(int floor) //Returns an array of randomly generated rooms
         {
             if (!GameManager.Instance.isServer) return default;
@@ -158,8 +308,9 @@ namespace TonyDev.Game.Level.Rooms
             var remainingSpecial = theme.specialAmount;
             var remainingUncommon = theme.uncommonAmount;
             var remainingCommon = roomCount - remainingGuaranteed - remainingSpecial - remainingUncommon;
-            
-            var generateShape = GetMapShape(roomCount, remainingSpecial + remainingUncommon, out var twigs, out var endPos);
+
+            var generateShape = GetMapShape(roomCount, remainingSpecial + remainingUncommon, out var twigs,
+                out var endPos);
 
             var entryList = theme.roomEntries.ToList();
             var chosenPrefabs = new List<GameObject>();
@@ -169,7 +320,7 @@ namespace TonyDev.Game.Level.Rooms
             for (var i = 0; i < twigs.Length; i++)
             {
                 var tier = remainingSpecial == 0 ? RoomGenerateTier.Uncommon : RoomGenerateTier.Special;
-                
+
                 var entry = GameTools.SelectRandom(entryList.Where(r => r.tier == tier));
 
                 if (tier == RoomGenerateTier.Uncommon)
@@ -186,7 +337,7 @@ namespace TonyDev.Game.Level.Rooms
 
                 entryList.Remove(entry);
             }
-            
+
             while (remainingGuaranteed + remainingSpecial + remainingUncommon + remainingCommon > 0 &&
                    Time.time < genTimeout)
             {
@@ -237,7 +388,8 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var j = 0; j < MapSize; j++)
                 {
-                    if (generateShape[i, j] == 0 || twigs.Contains(new Vector2Int(i, j))) continue; //If the shape says not to generate, move on
+                    if (generateShape[i, j] == 0 || twigs.Contains(new Vector2Int(i, j)))
+                        continue; //If the shape says not to generate, move on
 
                     var prefab = i == mapRadius && j == mapRadius
                         ? entryList.First(e =>
@@ -267,7 +419,7 @@ namespace TonyDev.Game.Level.Rooms
             _generated = true;
             return new Map(rooms, _startingRoomPos);
         }
-
+*/
         [Server]
         public Map GenerateBossMap(int floor)
         {
@@ -278,7 +430,7 @@ namespace TonyDev.Game.Level.Rooms
             rooms[mapRadius, mapRadius] = GenerateRoom(new Vector2Int(mapRadius, mapRadius),
                 GameTools.SelectRandom(theme.roomEntries.Where(re => re.tier == RoomGenerateTier.Boss)).roomPrefab);
 
-            return new Map(rooms, new Vector2Int(mapRadius, mapRadius));
+            return new Map(rooms, new Vector2Int(mapRadius, mapRadius), new RoomConnection[]{});
         }
 
         private Room GenerateRoom(Vector2Int index, GameObject prefab)
@@ -299,7 +451,7 @@ namespace TonyDev.Game.Level.Rooms
         // twigCount, out Vector2Int[] twigs
 
         //based on this website: https://www.boristhebrave.com/2020/09/12/dungeon-generation-in-binding-of-isaac/
-        private int[,] GetMapShape(int roomCount, int twigCount, out Vector2Int[] twigsPos, out Vector2Int endPos)
+        /*private int[,] GetMapShape(int roomCount, int twigCount, out Vector2Int[] twigsPos, out Vector2Int endPos)
         {
             var roomAllowance = roomCount - twigCount;
 
@@ -447,40 +599,41 @@ namespace TonyDev.Game.Level.Rooms
             {
                 for (var y = 0; y < MapSize + 2; y++)
                 {
-                    if(mapShape[x,y] == 1) positions.Add(new Vector2Int(x, y));
+                    if (mapShape[x, y] == 1) positions.Add(new Vector2Int(x, y));
                 }
             }
 
             for (var t = 0; t < twigCount; t++)
             {
                 var pos = GameTools.SelectRandom(positions);
-                twigsPos[t] = GameTools.SelectRandom(GetOpenNeighborPositions(pos, mapShape).Where(e => GetOpenNeighborPositions(e, mapShape).Count == 3));
+                twigsPos[t] = GameTools.SelectRandom(GetOpenNeighborPositions(pos, mapShape)
+                    .Where(e => GetOpenNeighborPositions(e, mapShape).Count == 3));
                 positions.Remove(pos);
             }
 
             return mapShape;
-        }
+        }*/
 
-        private List<Vector2Int> GetOpenNeighborPositions(Vector2Int pos, int[,] shapeMap)
+        private List<Vector2Int> GetOpenNeighborPositions(Vector2Int pos, Room[,] shapeMap)
         {
             List<Vector2Int> openPositions = new();
 
-            if (pos.x + 1 < shapeMap.GetLength(0) && shapeMap[pos.x + 1, pos.y] == 0) //Right
+            if (pos.x + 1 < shapeMap.GetLength(0) && shapeMap[pos.x + 1, pos.y] == null) //Right
             {
                 openPositions.Add(new Vector2Int(pos.x + 1, pos.y));
             }
-            
-            if (pos.x - 1 > 0 && shapeMap[pos.x - 1, pos.y] == 0) //LEFT
+
+            if (pos.x - 1 > 0 && shapeMap[pos.x - 1, pos.y] == null) //LEFT
             {
                 openPositions.Add(new Vector2Int(pos.x - 1, pos.y));
             }
-            
-            if (pos.y + 1 < shapeMap.GetLength(1) && shapeMap[pos.x, pos.y + 1] == 0) //Up
+
+            if (pos.y + 1 < shapeMap.GetLength(1) && shapeMap[pos.x, pos.y + 1] == null) //Up
             {
                 openPositions.Add(new Vector2Int(pos.x, pos.y + 1));
             }
-            
-            if (pos.y - 1 > 0 && shapeMap[pos.x, pos.y - 1] == 0) //Down
+
+            if (pos.y - 1 > 0 && shapeMap[pos.x, pos.y - 1] == null) //Down
             {
                 openPositions.Add(new Vector2Int(pos.x, pos.y - 1));
             }

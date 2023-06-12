@@ -49,7 +49,7 @@ namespace TonyDev.Game.Core.Items.Money
         {
             SoundManager.PlayRampingPitchSound("moneyPickup", transform.position);
             ObjectSpawner.SpawnTextPopup(transform.position, "+" + amount, Color.cyan);
-            GameManager.Essence += amount;
+            GameManager.Money += amount;
 
             gameObject.SetActive(false);
         }

@@ -1,13 +1,14 @@
 using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Level.Decorations.Crystal;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
 {
@@ -16,6 +17,7 @@ namespace TonyDev.Game.Global
         //Editor variables
         [SerializeField] private Animator animator;
         [SerializeField] private float followSpeed;
+        [SerializeField] private AudioSource shakeSound;
 
         [FormerlySerializedAs("camera")] [SerializeField]
         private Camera cam;
@@ -114,71 +116,19 @@ namespace TonyDev.Game.Global
 
         private bool _viewedCrystalLast;
 
-        private CancellationTokenSource _source = new CancellationTokenSource();
-        
         public static void Shake(float intensity, float speed)
         {
+            _instance.animator.speed = speed;
+            _instance.animator.transform.localScale = intensity * Vector3.one;
             _instance.animator.Play("CameraShake");
-            return;
-            _instance._source.Cancel();
-            _instance.ShakeTask(intensity, speed).AttachExternalCancellation(_instance._source.Token);
+            _instance.shakeSound.volume = intensity / 50 + Random.Range(0f, 0.1f);
+            _instance.shakeSound.pitch = Mathf.Clamp01(speed / 4f) + 0.8f + Random.Range(-0.1f, 0.1f);
+            _instance.shakeSound.Play();
         }
 
         private Vector3 _cameraOffset = Vector2.zero;
 
-        private async UniTask ShakeTask(float intensity, float speed)
-        {
-            var origPos = Vector3.zero;
-            _cameraOffset = origPos;
-
-            Debug.Log("A");
-
-            var topRightTarget = origPos + new Vector3(intensity, intensity);
-            while (_cameraOffset != topRightTarget)
-            {
-                _cameraOffset = Vector3.MoveTowards(_cameraOffset, topRightTarget,
-                    speed * Time.deltaTime * intensity);
-                await UniTask.DelayFrame(1);
-            }
-
-            Debug.Log("B");
-
-            var botRightTarget = origPos + new Vector3(intensity, -intensity);
-            while (_cameraOffset != botRightTarget)
-            {
-                _cameraOffset = Vector3.MoveTowards(_cameraOffset, botRightTarget,
-                    speed * Time.deltaTime * intensity);
-                await UniTask.DelayFrame(1);
-            }
-
-            Debug.Log("C");
-
-            var botLeftTarget = origPos + new Vector3(-intensity, -intensity);
-            while (_cameraOffset != botLeftTarget)
-            {
-                _cameraOffset = Vector3.MoveTowards(_cameraOffset, botLeftTarget,
-                    speed * Time.deltaTime * intensity);
-                await UniTask.DelayFrame(1);
-            }
-
-            Debug.Log("D");
-
-            var topLeftTarget = origPos + new Vector3(-intensity, intensity);
-            while (_cameraOffset != topLeftTarget)
-            {
-                _cameraOffset = Vector3.MoveTowards(_cameraOffset, topLeftTarget,
-                    speed * Time.deltaTime * intensity);
-                await UniTask.DelayFrame(1);
-            }
-
-            Debug.Log("E");
-
-            while (_cameraOffset != origPos)
-            {
-                _cameraOffset = Vector3.MoveTowards(_cameraOffset, origPos, speed * Time.deltaTime * intensity);
-                await UniTask.DelayFrame(1);
-            }
-        }
+        private Vector2 _lagBehind = Vector2.zero;
 
         private void Update()
         {
@@ -186,9 +136,21 @@ namespace TonyDev.Game.Global
 
             if (_crystalPos == default && Crystal.Instance != null) _crystalPos = Crystal.Instance.transform.position;
 
+            var playerSpeed = Player.LocalInstance.Stats.GetStat(Stat.MoveSpeed);
+
+            var playerInput = Player.LocalInstance.playerMovement.currentMovementInput;
+
+            _lagBehind += playerInput * Time.deltaTime * playerSpeed + GameManager.MouseDirection.normalized * Time.deltaTime;
+
+            _lagBehind = Vector2.ClampMagnitude(_lagBehind, 0.1f * playerSpeed);
+
+            var playerPos = (Vector2) PlayerTransform.position + _lagBehind;
+
             if (_fixateNext)
             {
-                var fixatePos = new Vector3(PlayerTransform.position.x, PlayerTransform.position.y, _z);
+                var fixatePos = new Vector3(
+                    playerPos.x,
+                    playerPos.y, _z);
                 transform.position = fixatePos;
                 _fixateNext = false;
                 return;
@@ -203,13 +165,14 @@ namespace TonyDev.Game.Global
             }
             else
                 newPos = Vector2.Lerp(transform.position - _cameraOffset,
-                    trackCrystal ? _crystalPos : PlayerTransform.position
-                    , followSpeed * Time.deltaTime); //Lerp towards the player's position. Or the crystal's if the key is held.
+                    trackCrystal
+                        ? _crystalPos
+                        : playerPos, followSpeed * Time.deltaTime); //Lerp towards the player's position. Or the crystal's if the key is held.
 
             if (GameManager.GamePhase == GamePhase.Dungeon && _viewedCrystalLast &&
                 !trackCrystal) //This is done to prevent me from being dizzy.
             {
-                newPos = PlayerTransform.position;
+                newPos = playerPos;
             }
 
             _viewedCrystalLast = trackCrystal;

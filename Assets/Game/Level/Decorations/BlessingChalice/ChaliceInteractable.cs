@@ -33,7 +33,7 @@ namespace TonyDev.Game.Level.Decorations.BlessingChalice
             ObjectSpawner.SpawnTextPopup(transform.position, PlayerStats.StatLabelKey[bonus.stat] + " up!", Color.green,
                 0.4f);
             Player.LocalInstance.Stats.AddStatBonus(bonus.statType, bonus.stat, bonus.strength, bonus.source);
-            IsInteractable = false;
+            isInteractable = false;
             PlayInteractSound();
         }
     }

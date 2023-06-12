@@ -49,10 +49,12 @@ namespace TonyDev
                 Unlocks = new HashSet<string>();
             }
 
-            foreach (var u in defaultUnlocks)
-            {
-                Unlocks.Add(u.item.itemName);
-            }
+            UnlockAllItems(); //TODO: Comment this out if adding item unlocking
+            
+            // foreach (var u in defaultUnlocks)
+            // {
+            //     Unlocks.Add(u.item.itemName);
+            // }
 
             GameManager.OnGameManagerAwake += InitItems;
         }

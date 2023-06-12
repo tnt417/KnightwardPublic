@@ -107,7 +107,7 @@ namespace TonyDev
                 return;
             }
 
-            OnLobbyCreateSuccessful.Invoke();
+            OnLobbyCreateSuccessful?.Invoke();
 
             Debug.Log("Lobby created successfully");
 

@@ -44,10 +44,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bfdb58974f47a84eac6ab390161dd3c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyPrefab: {fileID: 8527089446520657152, guid: 14983a18b011814489321b49e3460803, type: 3}
+  baseAllowance: 500
+  disableAllowanceScaling: 0
+  enemySpawns:
+  - enemyPrefabs:
+    - {fileID: 8527089446520657152, guid: 14983a18b011814489321b49e3460803, type: 3}
+    difficultyRating: 250
   range: 3
   frequency: 0
-  destroyAfterSpawns: 2
   autoSpawn: 1
 --- !u!1 &1120594607041526557
 GameObject:

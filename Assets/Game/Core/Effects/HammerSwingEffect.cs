@@ -27,6 +27,8 @@ namespace TonyDev.Game.Core.Effects
                 go.SetActive(false);
                 _indicators.Add(go);
             }
+            
+            Player.LocalInstance.playerAnimator.attackAnimationName = "Attack";
         }
 
         public override void OnRemoveOwner()

@@ -20,6 +20,23 @@ namespace TonyDev.Game.Global
             return array[index];
         }
         
+        public static Vector3 GetMeanVector(List<Vector3> positions)
+        {
+            if(positions.Count == 0)
+            {
+                return Vector3.zero;
+            }
+ 
+            Vector3 meanVector = Vector3.zero;
+ 
+            foreach(Vector3 pos in positions)
+            {
+                meanVector += pos;
+            }
+ 
+            return (meanVector / positions.Count);
+        }
+        
         public static Dictionary<T, int> SelectRandomNoRepeats<T>(Dictionary<T, int> iEnumerable, out T obj)
         {
             obj = default;

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global.Console;
@@ -61,10 +62,11 @@ namespace TonyDev.Game.UI.Minimap
                 for (var j = 0; j < _roomManager.MapSize; j++)
                 {
                     if (_rooms[i, j] == null) continue;
-                    
+
                     var go = Instantiate(minimapRoomPrefab, uiRoomGridLayout.transform);
-                    var rectTransform = (RectTransform)go.transform;
-                    rectTransform.localPosition = new Vector2((i-_roomManager.MapSize/2) * 100, (j-_roomManager.MapSize/2) * 100);
+                    var rectTransform = (RectTransform) go.transform;
+                    rectTransform.localPosition = new Vector2((i - _roomManager.MapSize / 2) * 110,
+                        (j - _roomManager.MapSize / 2) * 110);
                     _uiRoomObjects[i, j] = go;
                     var symbolImage = go.GetComponentsInChildren<Image>()
                         .FirstOrDefault(img => img.CompareTag("MinimapIcon"));
@@ -92,14 +94,28 @@ namespace TonyDev.Game.UI.Minimap
             }
         }
 
+        public void UpdateOpenDirections(Vector2Int pos, List<Direction> openDirections)
+        {
+            var connectImages = _uiRoomObjects[pos.x, pos.y].GetComponentsInChildren<Image>()
+                .Where(img => img.transform.parent.name == "Connections");
+
+            foreach (var t in connectImages)
+            {
+                t.enabled = t.name == "Left" && openDirections.Contains(Direction.Left)
+                            || t.name == "Up" && openDirections.Contains(Direction.Up)
+                            || t.name == "Right" && openDirections.Contains(Direction.Right)
+                            || t.name == "Down" && openDirections.Contains(Direction.Down);
+            }
+        }
+
         public void UncoverRoom(Vector2Int position)
         {
             _discoveredRooms[position.x, position.y] = 1;
 
             var roomObj = _uiRoomObjects[position.x, position.y];
-            
+
             if (roomObj == null) return;
-            
+
             var symbolImage = roomObj.GetComponentsInChildren<Image>()
                 .FirstOrDefault(img => img.CompareTag("MinimapIcon"));
 
@@ -108,7 +124,7 @@ namespace TonyDev.Game.UI.Minimap
                 Debug.LogWarning("Room image missing!");
                 return;
             }
-            
+
             symbolImage.sprite = _rooms[position.x, position.y].minimapIcon;
         }
 
@@ -131,7 +147,7 @@ namespace TonyDev.Game.UI.Minimap
                 for (var j = 0; j < _roomManager.MapSize; j++)
                 {
                     if (_uiRoomObjects[i, j] == null) continue;
-                    
+
                     var symbolImage = _uiRoomObjects[i, j].GetComponentsInChildren<Image>()
                         .FirstOrDefault(img => img.CompareTag("MinimapIcon")); //Get the symbol image
 
@@ -151,13 +167,11 @@ namespace TonyDev.Game.UI.Minimap
             }
         }
 
-        public void SetPlayerPosition(Vector2 playerPos, Vector2 roomOffset)
+        public void SetPlayerPosition(Vector2 playerPosNormalized)
         {
-            //MATH EXPLANATION: Each room grid is 100x100 in the UI. playerPos divided by roomOffset gets the player's position in terms of
-            //                  room coordinates. Just multiply that by 100px to convert it to the UI room coordinates, subtracting half of the minimap's dimensions to center it,
-            //                  and it works perfectly. playerPos is negative since it isn't the player moving, it is the world moving around it.
             ((RectTransform) uiRoomGridLayout.transform).localPosition =
-                100f * (-playerPos / roomOffset) - new Vector2(200f, 200f);
+                110 * -playerPosNormalized - new Vector2(110 * _roomManager.currentActiveRoomIndex.x,
+                    110 * _roomManager.currentActiveRoomIndex.y) + new Vector2(950, 955);
         }
     }
 }

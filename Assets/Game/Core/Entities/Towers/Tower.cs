@@ -52,7 +52,7 @@ namespace TonyDev.Game.Core.Entities.Towers
                 if (this != null && type == InteractType.Interact) CmdRequestPickup();
                 if (this != null && type == InteractType.Repair)
                 {
-                    if (GameManager.Essence >= RepairCost)
+                    if (GameManager.Money >= RepairCost)
                     {
                         CmdRequestRepair();
                     }
@@ -77,19 +77,26 @@ namespace TonyDev.Game.Core.Entities.Towers
 
         public const string DurabilityNegationSource = "DurabilityNegated";
 
+        private bool _initialDurabilitySet = false;
+        
         private void DurabilityHook(int oldDur, int newDur)
         {
+            if (_initialDurabilitySet)
+            {
+                var sb = myItem.statBonuses.ToList();
+                sb.Add(new StatBonus(StatType.Flat, Stat.Health, newDur - oldDur, DurabilityNegationSource, true));
+
+                myItem.statBonuses = sb.ToArray();
+            }
+            
+            _initialDurabilitySet = true;
+
             SetBrokenMaterial(durability <= 0);
         }
 
         [Server]
         public void SubtractDurability(int amount)
         {
-            var sb = myItem.statBonuses.ToList();
-            sb.Add(new StatBonus(StatType.Flat, Stat.Health, -amount, DurabilityNegationSource, true));
-            
-            myItem.statBonuses = sb.ToArray();
-
             CmdSetDurability(durability - amount);
         }
 
@@ -116,7 +123,7 @@ namespace TonyDev.Game.Core.Entities.Towers
             foreach (var sr in GetComponentsInChildren<SpriteRenderer>())
             {
                 sr.SetPropertyBlock(broken ? _brokenBlock : _normalBlock);
-                sr.material.mainTexture = sr.sprite.texture;
+                sr.material.mainTexture = sr.sprite != null ? sr.sprite.texture : null;
             }
         }
 
@@ -156,7 +163,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         public override Team Team => Team.Player;
         public override bool IsInvulnerable => true;
         public override bool IsTangible => false;
-        public float MaxDurability => myItem.statBonuses.First(sb => sb.stat == Stat.Health && sb.source != DurabilityNegationSource).strength;
+        public int MaxDurability => (int) myItem.statBonuses.First(sb => sb.stat == Stat.Health && sb.source != DurabilityNegationSource).strength;
         
         [Command(requiresAuthority = false)]
         public void CmdRequestRepair(NetworkConnectionToClient sender = null)
@@ -166,14 +173,14 @@ namespace TonyDev.Game.Core.Entities.Towers
             if (MaxDurability < 1000000 && durability < MaxDurability)
             {
                 TargetConfirmRepair(sender, RepairCost);
-                SubtractDurability((int)-Mathf.Clamp(durability + MaxDurability * 0.25f, 0, MaxDurability-durability));
+                SubtractDurability((int)-Mathf.Clamp(MaxDurability * 0.25f, 0, MaxDurability-durability));
             }
         }
         
         [TargetRpc]
         private void TargetConfirmRepair(NetworkConnection target, int cost)
         {
-            GameManager.Essence -= cost;
+            GameManager.Money -= cost;
             ObjectSpawner.SpawnTextPopup(Player.Player.LocalInstance.transform.position, "Repaired!", Color.white, 0.3f);
         }
         

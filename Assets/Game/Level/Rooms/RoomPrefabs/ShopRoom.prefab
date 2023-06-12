@@ -2866,7 +2866,7 @@ MonoBehaviour:
   generateItemTypes: 00000000
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 5
+  rarityBoost: 15
   itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
@@ -3038,7 +3038,7 @@ MonoBehaviour:
   generateItemTypes: 0200000003000000
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 5
+  rarityBoost: 25
   itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:
@@ -3204,7 +3204,7 @@ MonoBehaviour:
   generateItemTypes: 01000000
   randomRarity: 1
   generateRarity: 0
-  rarityBoost: 5
+  rarityBoost: 15
   itemDataPool: []
   costMultiplier: 1
   onItemInteractServer:

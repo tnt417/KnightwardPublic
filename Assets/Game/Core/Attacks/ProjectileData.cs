@@ -24,6 +24,8 @@ namespace TonyDev.Game.Core.Attacks
         [Tooltip("-1 for infinite")] public float lifetime;
         public string spawnOnDestroyKey;
         public bool ignoreInvincibility = false;
+
+        public GameEffectList inflictEffects = new();
     }
 
     [Serializable]
@@ -48,7 +50,7 @@ namespace TonyDev.Game.Core.Attacks
         public bool doNotRotate;
 
         [Header("Effects")] [SerializeReference] [SerializeField]
-        public List<GameEffect> effects;
+        public List<GameEffect> effects = new();
 
         [NonSerialized] public Action<float, GameEntity, bool> OnHitOther;
 
@@ -66,14 +68,16 @@ namespace TonyDev.Game.Core.Attacks
                 : Object.Instantiate(
                     alternatePrefab); //Generate prefab if not null, otherwise create new empty GameObject.
 
+            if (childOfOwner) projectileObject.transform.parent = owner.transform;
+
             //Add all necessary components for projectile functionality...
             var rb = projectileObject.GetComponent<Rigidbody2D>();
             if (rb == null) rb = projectileObject.AddComponent<Rigidbody2D>();
-            
+
             var col = projectileObject.GetComponent<CircleCollider2D>();
             if (col == null)
                 col = projectileObject.AddComponent<CircleCollider2D>(); //Add collider if one doesn't already exist
-            
+
             var attack = projectileObject.GetComponent<AttackComponent>();
             if (attack == null)
                 attack = projectileObject.AddComponent<AttackComponent>(); //Don't override existing attack components.
@@ -110,10 +114,11 @@ namespace TonyDev.Game.Core.Attacks
             attack.destroyOnHitWall = attackData.destroyOnCollideWall;
 
             //Populate the AttackComponent's inflict effects
-            foreach (var e in effects)
-            {
-                attack.AddInflictEffect(e);
-            }
+            if (attackData.inflictEffects is {gameEffects: { }})
+                foreach (var e in attackData.inflictEffects.gameEffects)
+                {
+                    attack.AddInflictEffect(e);
+                }
 
             //Set sprite and collider configuration...
             sprite.sprite = projectileSprite;
@@ -127,17 +132,15 @@ namespace TonyDev.Game.Core.Attacks
             projectileObject.transform.localScale *= sizeMultiplier;
             projectileObject.layer = LayerMask.NameToLayer("Attacks");
 
-            if (childOfOwner) projectileObject.transform.parent = owner.transform;
-
             if (attackData.destroyOnCollideWall)
             {
                 Object.Instantiate(ObjectFinder.GetPrefab("WallDestroy"), projectileObject.transform);
             }
-            
+
             //Set Rigidbody configuration...
             rb.gravityScale = 0;
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
-            //rb.isKinematic = true;
+            rb.isKinematic = true;
             rb.velocity = projectileObject.transform.up * travelSpeed; //Set the projectile's velocity
 
             GameManager.Instance.projectiles.Add(projectileObject);

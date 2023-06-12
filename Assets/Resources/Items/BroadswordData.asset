@@ -43,7 +43,7 @@ MonoBehaviour:
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        SpeedMultiplier: 0.4
+        SpeedMultiplier: 0.7
     - rid: 7149687186422759424
       type: {class: BroadswordSwingEffect, ns: TonyDev, asm: TonyDev}
       data:
@@ -62,6 +62,8 @@ MonoBehaviour:
             lifetime: 0.5
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
+            inflictEffects:
+              gameEffects: []
           disableMovement: 1
           travelSpeed: 0
           offsetDegrees: 0
@@ -84,6 +86,8 @@ MonoBehaviour:
             lifetime: 0.5
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
+            inflictEffects:
+              gameEffects: []
           disableMovement: 1
           travelSpeed: 0
           offsetDegrees: 0
@@ -106,6 +110,8 @@ MonoBehaviour:
             lifetime: 0.1
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
+            inflictEffects:
+              gameEffects: []
           disableMovement: 0
           travelSpeed: 30
           offsetDegrees: 0

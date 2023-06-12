@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using Steamworks;
 using TonyDev.Game.Core.Entities.Player;
@@ -18,8 +20,9 @@ namespace TonyDev.Game.Core.Items.Money
         [SerializeField] private float attractRange;
         [SerializeField] private float attractSpeed;
 
-        private static readonly Queue<KeyValuePair<GameObject, MoneyObject>> MoneyObjectPool = new();
+        public static readonly Queue<KeyValuePair<GameObject, MoneyObject>> MoneyObjectPool = new();
         private const int MaxMoneyObjects = 500;
+        private const int CombineRange = 5;
 
         public int amount;
 
@@ -30,10 +33,44 @@ namespace TonyDev.Game.Core.Items.Money
 
             var distance = Vector2.Distance(myPos, playerPos);
 
+            DoCombineLogic();
+
             if (distance > attractRange || Player.LocalInstance.CurrentParentIdentity != CurrentParentIdentity) return;
 
             rb2d.transform.Translate((playerPos - myPos).normalized * Mathf.Sqrt(attractRange - distance) *
                                      attractSpeed * Time.fixedDeltaTime);
+        }
+
+        private void DoCombineLogic()
+        {
+            var nearbyMoney = GetCombineable(MoneyObjectPool.Select(kv => kv.Value)
+                .Where(obj => obj != null &&
+                    obj.isActiveAndEnabled && obj.CurrentParentIdentity == CurrentParentIdentity &&
+                    Vector2.Distance(transform.position, obj.transform.position) < CombineRange).ToList());
+
+            if (nearbyMoney.FirstOrDefault() == null) return;
+
+            var nearAmount = nearbyMoney.Sum(money => money.amount);
+
+            foreach (var money in nearbyMoney)
+            {
+                money.gameObject.SetActive(false);
+            }
+
+            ObjectSpawner.SpawnMoney(nearAmount,
+                GameTools.GetMeanVector(nearbyMoney.Select(mon => mon.transform.position).ToList()),
+                nearbyMoney.First().CurrentParentIdentity);
+        }
+
+        private List<MoneyObject> GetCombineable(List<MoneyObject> unfiltered)
+        {
+            var combineto5 = unfiltered.Count(money => money.amount == 1) >= 5;
+            var combineto25 = unfiltered.Count(money => money.amount == 5) >= 5;
+            var combineto100 = unfiltered.Count(money => money.amount == 25) >= 4;
+
+            return unfiltered.Where(money =>
+                money.amount != 100 && ((money.amount == 1 && combineto5) || (money.amount == 5 && combineto25) &&
+                (money.amount == 25 && combineto100))).ToList();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -66,7 +103,7 @@ namespace TonyDev.Game.Core.Items.Money
 
             var go = kvp.Key;
             var money = kvp.Value;
-            
+
             var moneyObject = takeFromPool && go != null
                 ? go
                 : Instantiate(prefab);
@@ -81,7 +118,7 @@ namespace TonyDev.Game.Core.Items.Money
             kvp = new KeyValuePair<GameObject, MoneyObject>(moneyObject, money);
 
             // Money
-            
+
             money.amount = amount;
 
             if (parentIdentity != null)
@@ -95,11 +132,11 @@ namespace TonyDev.Game.Core.Items.Money
                     room.roomChildObjects.Add(moneyObject);
                 }
             }
-            
+
             // Transform
-            
+
             moneyObject.transform.position = position;
-            
+
             moneyObject.transform.localScale = amount switch
             {
                 1 => Vector3.one,
@@ -108,11 +145,11 @@ namespace TonyDev.Game.Core.Items.Money
                 100 => Vector3.one * 1.6f,
                 _ => throw new ArgumentOutOfRangeException()
             };
-            
+
             moneyObject.SetActive(true);
-            
+
             // Outward movement
-            
+
             var angle = Random.Range(0, 360);
 
             var radAngle = angle * Mathf.Deg2Rad;

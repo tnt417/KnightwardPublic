@@ -52,7 +52,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         [ClientRpc]
         private void RpcFire(Vector2 direction)
         {
-            if(!string.IsNullOrEmpty(fireSound)) SoundManager.PlaySound(fireSound,0.5f, transform.position);
+            if(!string.IsNullOrEmpty(fireSound)) SoundManager.PlaySound(fireSound,0.2f, transform.position, Random.Range(0.95f, 1.05f));
             towerAnimator.PlayAnimation(TowerAnimationState.Fire);
             if (rotateToFaceTargetObject != null) rotateToFaceTargetObject.transform.right = direction;
         }

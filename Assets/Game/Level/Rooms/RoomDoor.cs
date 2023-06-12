@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.NetworkInformation;
 using Mirror;
 using TonyDev.Game.Core.Entities.Player;
@@ -10,13 +11,18 @@ namespace TonyDev.Game.Level.Rooms
 {
     public enum Direction
     {
-        Up, Down, Left, Right
+        Up,
+        Down,
+        Left,
+        Right
     }
+
     public class RoomDoor : MonoBehaviour
     {
         //Editor variables
         public Tilemap wallTilemap;
         public Direction direction;
+        private BoxCollider2D _trigger;
         private BoxCollider2D _collider;
 
         [SerializeField] private Animator animator;
@@ -25,10 +31,11 @@ namespace TonyDev.Game.Level.Rooms
         //
 
         public bool IsOpen { get; private set; }
-        
+
         public void Awake()
         {
-            _collider = GetComponent<BoxCollider2D>();
+            _collider = GetComponents<BoxCollider2D>().FirstOrDefault(bc => !bc.isTrigger);
+            _trigger = GetComponents<BoxCollider2D>().FirstOrDefault(bc => bc.isTrigger);
         }
 
         public void SetOpen(bool open)
@@ -37,22 +44,24 @@ namespace TonyDev.Game.Level.Rooms
             // {
             //     wallTilemap.SetTile((Vector3Int) pos, open ? null : doorTile);
             // }
-            {
-                
-            }
             animator.Play(open ? "GateOpen" : "GateClose");
-            
+
             //wallTilemap.CompressBounds();
-            
+
             IsOpen = open;
-            _collider.enabled = open;
+            _collider.enabled = !open;
+            _trigger.enabled = open;
         }
 
         private void OnTriggerEnter2D(Collider2D other)
         {
             if (!_hostInterestVisibility && NetworkClient.isHostClient) return;
             var player = other.GetComponent<Player>();
-            if(player == Player.LocalInstance && other.isTrigger && IsOpen && player.CurrentParentIdentity == GetComponentInParent<NetworkIdentity>()) RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
+            if (player != null && player == Player.LocalInstance && other.isTrigger && IsOpen &&
+                player.CurrentParentIdentity == GetComponentInParent<NetworkIdentity>())
+            {
+                RoomManager.Instance.ShiftActiveRoom(direction); //Shift room when stepped on.
+            }
         }
 
         private bool _hostInterestVisibility;

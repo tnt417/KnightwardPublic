@@ -41,7 +41,7 @@ namespace TonyDev.Game.UI.Tower
 
             _mainCamera = Camera.main;
 
-            RoomManager.OnActiveRoomChanged += () =>
+            RoomManager.Instance.OnActiveRoomChanged += () =>
             {
                 foreach (var t in FindObjectsOfType<Core.Entities.Towers.Tower>())
                 {
@@ -63,7 +63,9 @@ namespace TonyDev.Game.UI.Tower
                 new Vector3(Mathf.Ceil(mousePos.x), Mathf.Ceil(mousePos.y), 0) -
                 new Vector3(0.5f, 0.5f, 0); //Set the indicator position, snapping to a grid
 
-            if (Mouse.current.leftButton.wasPressedThisFrame) SpawnTower().Forget(); //Spawn a tower if placing and click
+            if (Mouse.current.leftButton.wasPressedThisFrame)
+                SpawnTower().Forget(); //Spawn a tower if placing and click
+            if (Mouse.current.rightButton.wasPressedThisFrame) TogglePlacing(null);
         }
 
         private void FixedUpdate()
@@ -83,6 +85,9 @@ namespace TonyDev.Game.UI.Tower
             towerPlacementIndicator.SetActive(!Placing); //Toggle the placement indicator activeness
 
             _selectedTowerItem = item; //Update selected prefab
+
+            if (_selectedTowerItem == null) return;
+
             var tower = _selectedTowerItem.SpawnablePrefab
                 .GetComponent<Core.Entities.Towers.Tower>(); //Get a reference to the tower of the prefab...
 
@@ -93,7 +98,7 @@ namespace TonyDev.Game.UI.Tower
             _indicatorSprite =
                 towerPlacementIndicator.GetComponent<SpriteRenderer>(); //Get the indicator's SpriteRenderer
             _indicatorCollider = towerPlacementIndicator.GetComponent<Collider2D>();
-            
+
             _indicatorSprite.sprite = item.uiSprite; //Update the indicator's sprite to be the tower's ui sprite
         }
 
@@ -109,9 +114,9 @@ namespace TonyDev.Game.UI.Tower
             if (!floorAtSpot) return false;
 
             //Can't place if stuck in crystal or other non-trigger collider
-             var contacts = new Collider2D[100];
+            var contacts = new Collider2D[100];
             _indicatorCollider.GetContacts(contacts);
-            
+
             if (contacts.Any(c => c != null && !c.isTrigger)) return false;
 
             return true;
@@ -126,9 +131,9 @@ namespace TonyDev.Game.UI.Tower
 
             var success = await GameManager.Instance.SpawnTowerTask(_selectedTowerItem,
                 towerPlacementIndicator.transform.position, Player.LocalInstance.CurrentParentIdentity).Preserve();
-            
+
             SoundManager.PlaySound("interact", 0.5f, pos);
-            
+
             if (!success) return;
 
             TowerUIController.Instance.ConfirmPlace();

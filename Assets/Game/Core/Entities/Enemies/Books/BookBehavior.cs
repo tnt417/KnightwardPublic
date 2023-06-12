@@ -11,6 +11,9 @@ namespace TonyDev.Game.Core.Entities.Enemies.Books
         public float dashSpeed;
         public float waitTimeSeconds;
         public float dashRadius;
+
+        private int _dashes;
+        
         protected override async UniTask ExecuteBehavior()
         {
             bool reached = false;
@@ -32,6 +35,13 @@ namespace TonyDev.Game.Core.Entities.Enemies.Books
                     reached = true;
                 }
                 await GotoOverSeconds((Vector2)Enemy.Targets[0].transform.position + directionVector*dashRadius, 1/(Enemy.Stats.GetStat(Stat.MoveSpeed)*dashSpeed));
+
+                _dashes++;
+
+                if (_dashes % 3 == 0)
+                {
+                    await UniTask.Delay(TimeSpan.FromSeconds(1f));
+                }
                 
                 await UniTask.Delay(TimeSpan.FromSeconds(waitTimeSeconds));
             }

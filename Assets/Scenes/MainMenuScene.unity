@@ -701,7 +701,7 @@ MonoBehaviour:
   m_InstancedGameObject: {fileID: 0}
   m_Flags: 3
   m_ColliderType: 1
---- !u!43 &314314880
+--- !u!43 &377649729
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1917,6 +1917,50 @@ Sprite:
   m_PhysicsShape: []
   m_Bones: []
   m_SpriteID: 
+--- !u!1 &715426866
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 715426868}
+  - component: {fileID: 715426867}
+  m_Layer: 0
+  m_Name: SteamManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &715426867
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715426866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 503e05d10675ce943885a71831fb18a6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &715426868
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 715426866}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!213 &869585917
 Sprite:
   m_ObjectHideFlags: 0
@@ -3599,8 +3643,80 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 984172327396941035, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
+--- !u!1 &2044785517
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2044785519}
+  - component: {fileID: 2044785518}
+  m_Layer: 0
+  m_Name: SoundManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2044785518
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044785517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b3278d54ba617e4fa9448a4b3a34fb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameSounds:
+  - name: moneyPickup
+    audioClip: {fileID: 8300000, guid: 0ac95b0cc4b6dfc43a20dc3efdf02935, type: 3}
+  - name: anvil
+    audioClip: {fileID: 8300000, guid: c7be87970628f0b48b573093d51bd44f, type: 3}
+  - name: button
+    audioClip: {fileID: 8300000, guid: 092a99dd51bfd4c41977f3d2f2abb4da, type: 3}
+  - name: dagger
+    audioClip: {fileID: 8300000, guid: dba4209b444306341ab3896cd3390bc4, type: 3}
+  - name: die
+    audioClip: {fileID: 8300000, guid: e00da5fb117c5c74aa65f91441781c81, type: 3}
+  - name: hit
+    audioClip: {fileID: 8300000, guid: 0564a7238c13fde4682cff031f0824eb, type: 3}
+  - name: interact
+    audioClip: {fileID: 8300000, guid: 12777e3cad839cd45afb9fceba39f70f, type: 3}
+  - name: spear
+    audioClip: {fileID: 8300000, guid: 144d444efbd04bf4b8edd5bca4e15c67, type: 3}
+  - name: ice1
+    audioClip: {fileID: 8300000, guid: 8b984cd17f18b2a43857e6c403ecf8ea, type: 3}
+  - name: ice2
+    audioClip: {fileID: 8300000, guid: 4070c1504e57d0a49b4442dd74e88278, type: 3}
+  - name: ice3
+    audioClip: {fileID: 8300000, guid: c792c3b717224dc4c976ec7f08de1169, type: 3}
+  - name: footstep
+    audioClip: {fileID: 8300000, guid: e71cd2126d9a92641b081f0759e61c3a, type: 3}
+  - name: woosh
+    audioClip: {fileID: 8300000, guid: 84307ee4be4789847bf1297fbadcd95d, type: 3}
+--- !u!4 &2044785519
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044785517}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2051824970
 MonoBehaviour:
   m_ObjectHideFlags: 0

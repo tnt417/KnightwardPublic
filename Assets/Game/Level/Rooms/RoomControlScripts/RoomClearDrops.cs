@@ -5,6 +5,7 @@ using System.Xml.Xsl;
 using Mirror;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
+using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,7 +14,7 @@ namespace TonyDev
 {
     public class RoomClearDrops : MonoBehaviour
     {
-        private const float ChestSpawnChance = 0.1f;
+        private float ChestSpawnChance => 0.1f * NetworkServer.connections.Count;
 
         private Room _parentRoom;
         
@@ -49,7 +50,7 @@ namespace TonyDev
                 ObjectSpawner.SpawnChest(0, originPos, _parentRoom.netIdentity);
             }
 
-            var healthSpawned = Random.Range(2, 4);
+            var healthSpawned = Random.Range(3 + (int)(GameManager.EnemyDifficultyScale / 5), 4 + (int)(GameManager.EnemyDifficultyScale / 5));
             
             for (float i = 0; i < healthSpawned; i++)
             {
@@ -62,11 +63,11 @@ namespace TonyDev
             
             if (essence)
             {
-                ObjectSpawner.SpawnEssence((int)Random.Range(moneyScale/3f, moneyScale/2f), transform.position, _parentRoom.netIdentity);
+                GameManager.Instance.CmdSpawnEssence((int)Random.Range(moneyScale/3f, moneyScale/2f), transform.position, _parentRoom.netIdentity);
             }
             else
             {
-                ObjectSpawner.SpawnMoney((int)Random.Range(moneyScale/5f, moneyScale/4f), transform.position, _parentRoom.netIdentity);
+                GameManager.Instance.CmdSpawnMoney((int)Random.Range(moneyScale/5f, moneyScale/4f), transform.position, _parentRoom.netIdentity);
             }
         }
     }

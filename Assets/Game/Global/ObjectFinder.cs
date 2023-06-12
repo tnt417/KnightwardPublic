@@ -57,7 +57,6 @@ namespace TonyDev.Game.Global
             }
             
             _spriteAtlas = mainSpriteAtlas;
-            ItemGenerator.InitSprites();
         }
 
         public static GameObject GetPrefab(string name)

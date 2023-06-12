@@ -186,6 +186,13 @@ namespace TonyDev.Game.Global.Console
 
             var castedParameters = new object[parameters.Length];
 
+            var gameCommand = (GameCommand) method.GetCustomAttributes(typeof(GameCommand), false).FirstOrDefault();
+
+            if (gameCommand?.PermissionLevel == PermissionLevel.Cheat)
+            {
+                GameObject.FindWithTag("CheatDisclaimer").GetComponent<TextMeshProUGUI>().enabled = true;
+            }
+            
             if (paramText.Length < parameters.Length)
             {
                 Log("<color=red>Insufficient parameters!</color>");
@@ -200,8 +207,7 @@ namespace TonyDev.Game.Global.Console
 
             method.Invoke(obj, castedParameters); // invoke the method
 
-            var successMessage = ((GameCommand) method.GetCustomAttributes(typeof(GameCommand), false).FirstOrDefault())
-                ?.SuccessMessage;
+            var successMessage = gameCommand?.SuccessMessage;
 
             Log(successMessage);
         }

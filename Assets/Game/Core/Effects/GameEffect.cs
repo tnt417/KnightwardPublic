@@ -9,11 +9,19 @@ using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Serialization;
+using Object = UnityEngine.Object;
 
 namespace TonyDev.Game.Core.Effects
 {
+    [Serializable]
+    public class GameEffectList
+    {
+        [SerializeReference] public List<GameEffect> gameEffects = new();
+    }
+    
     [Serializable]
     public class GameEffect
     {
@@ -71,7 +79,7 @@ namespace TonyDev.Game.Core.Effects
         {
             if(DungeonFloorUponCreation <= 0) DungeonFloorUponCreation = GameManager.DungeonFloor;
         }
-
+        
         public virtual string GetEffectDescription()
         {
             return effectDescription;

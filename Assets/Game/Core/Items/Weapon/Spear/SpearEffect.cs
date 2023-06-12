@@ -24,6 +24,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         {
             empoweredProjectile.OnHitOther += InflictPoison;
             Entity.OnAttack += Shoot;
+            Player.LocalInstance.playerAnimator.attackAnimationName = "Throw";
             base.OnAddOwner();
         }
 
@@ -33,7 +34,8 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
             var direction = GameManager.MouseDirection;
 
             SoundManager.PlaySoundPitchVariant("spear", 0.5f,spawnPos, 0.8f, 1.2f);
-
+            SmoothCameraFollow.Shake(1, 3f);
+            
             if (_empowered)
             {
                 //var direction1 = GameTools.Rotate(direction, -10 * Mathf.Deg2Rad);

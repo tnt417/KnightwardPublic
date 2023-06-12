@@ -35,12 +35,42 @@ namespace TonyDev
         {
             PlaySound();
 
+            var dir = GameManager.MouseDirection.normalized;
+
+            var pos = (Vector2) Entity.transform.position;
+            var aoeStat = Entity.Stats.GetStat(Stat.AoeSize);
+            var atkSpdStat = Entity.Stats.GetStat(Stat.AttackSpeed);
+
             var proj = ObjectSpawner.SpawnProjectile(Entity,
-                (Vector2) Entity.transform.position + (_combo == 2 ? Vector2.zero : GameManager.MouseDirection.normalized * 1.5f *
-                Entity.Stats.GetStat(Stat.AoeSize)), GameManager.MouseDirection,
+                pos + (_combo == 2
+                    ? Vector2.zero
+                    : dir * 1.5f *
+                      aoeStat), GameManager.MouseDirection,
                 _combo == 0 ? Attack1 : _combo == 1 ? Attack2 : Attack3);
+
+            SmoothCameraFollow.Shake(_combo == 2 ? 3f : 2f, 2f);
             
-            if(_combo != 2) proj.GetComponent<Animator>().speed = Entity.Stats.GetStat(Stat.AttackSpeed);
+            // if (_combo == 2)
+            // {
+            //     // var playerMovement = Player.LocalInstance.playerMovement.currentMovementInput.normalized;
+            //     //
+            //     // var proj1 = ObjectSpawner.SpawnProjectile(Entity,
+            //     //     pos + playerMovement * 2.5f *
+            //     //     aoeStat, playerMovement,
+            //     //     Attack1);
+            //     //
+            //     // var proj2 = ObjectSpawner.SpawnProjectile(Entity,
+            //     //     pos + playerMovement * 2.5f *
+            //     //     aoeStat, playerMovement,
+            //     //     Attack2);
+            //     //
+            //     // proj1.GetComponent<Animator>().speed = atkSpdStat;
+            //     // proj2.GetComponent<Animator>().speed = atkSpdStat;
+            //
+            //     //Player.LocalInstance.playerMovement.Dash(2f, -dir);
+            // }
+
+            if (_combo != 2) proj.GetComponent<Animator>().speed = atkSpdStat;
             //Player.LocalInstance.playerMovement.Dash(1f, Player.LocalInstance.playerMovement.currentMovementInput);
 
             _combo++;
@@ -49,12 +79,12 @@ namespace TonyDev
 
         private void PlaySound()
         {
-            SoundManager.PlaySoundPitchVariant("dagger", 0.5f, Entity.transform.position, 0.6f, 0.8f);
+            SoundManager.PlaySound("dagger", 0.5f, Entity.transform.position, Random.Range(0.6f, 0.8f));
         }
 
         public override void OnRemoveOwner()
         {
-            Player.LocalInstance.OnAttack -= OnAttack;
+            Entity.OnAttack -= OnAttack;
         }
     }
 }

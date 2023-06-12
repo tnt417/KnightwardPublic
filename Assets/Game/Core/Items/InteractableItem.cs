@@ -6,18 +6,18 @@ namespace TonyDev.Game.Core.Items
 {
     public class InteractableItem : InteractableButton
     {
-        public int essence;
+        public int sellPrice;
 
         private new void Start()
         {
             base.Start();
-            Indicator.SetEssence(essence);
+            Indicator.SetSellPrice(sellPrice);
         }
         
-        public void SetEssence(int newEssence)
+        public void SetSellPrice(int newSellPrice)
         {
-            essence = newEssence;
-            _essenceChanged = true;
+            sellPrice = newSellPrice;
+            _sellPriceChanged = true;
         }
         
         public override void SetCost(int newCost)
@@ -26,15 +26,15 @@ namespace TonyDev.Game.Core.Items
             OverrideInteractKey(Key.E, newCost == 0 ? InteractType.Pickup : InteractType.Purchase);
         }
 
-        private bool _essenceChanged;
+        private bool _sellPriceChanged;
 
         private new void Update()
         {
             base.Update();
-            if (_essenceChanged)
+            if (_sellPriceChanged)
             {
-                Indicator.SetEssence(essence);
-                _essenceChanged = false;
+                Indicator.SetSellPrice(sellPrice);
+                _sellPriceChanged = false;
             }
         }
     }

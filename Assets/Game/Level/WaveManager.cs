@@ -28,6 +28,9 @@ namespace TonyDev.Game.Level
     {
         public static WaveManager Instance;
 
+        public Action<int> OnWaveBegin;
+        public Action<int> OnWaveEnd;
+
         //Editor variables
         [SerializeField] private Transform[] spawnPoints;
         [SerializeField] private float spawnRadius;
@@ -119,6 +122,8 @@ namespace TonyDev.Game.Level
             _waveCooldown = OnBreak
                 ? breakLength
                 : regularLength;
+            
+            OnWaveBegin?.Invoke(wavesSpawned);
 
             SpawnWave().Forget();
         }
@@ -166,6 +171,8 @@ namespace TonyDev.Game.Level
                 spawns.Remove(spawn);
                 await UniTask.Delay(TimeSpan.FromSeconds(spawningPeriod / spawnCount));
             }
+            
+            OnWaveEnd?.Invoke(wavesSpawned);
 
             // if (wavesSpawned % 5 == 0)
             // {

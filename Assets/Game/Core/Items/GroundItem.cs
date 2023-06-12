@@ -43,7 +43,7 @@ namespace TonyDev.Game.Core.Items
 
             _interactable = GetComponent<InteractableItem>();
 
-            _interactable.AddInteractKey(Key.F, InteractType.Scrap);
+            if(cost == 0) _interactable.AddInteractKey(Key.F, InteractType.Scrap);
 
             _interactable.onInteract.AddListener((type) =>
             {
@@ -63,7 +63,7 @@ namespace TonyDev.Game.Core.Items
                 }
                 else if (type == InteractType.Scrap)
                 {
-                    CmdRequestScrap(GameManager.Money);
+                    CmdRequestSell();
                 }
             });
         }
@@ -97,12 +97,12 @@ namespace TonyDev.Game.Core.Items
                 spriteRenderer.sprite = newItem.uiSprite; //Update the sprite
                 UpdateOutlineColor(); //Update the outline color
 
-                _pickupPending = false;
-
                 animator.Play("GroundItemSpawn");
                 await UniTask.Delay(250);
                 return;
             }
+            
+            _pickupPending = false;
 
             spriteRenderer.sprite = newItem.uiSprite; //Update the sprite
             UpdateOutlineColor(); //Update the outline color
@@ -140,17 +140,22 @@ namespace TonyDev.Game.Core.Items
         [SerializeField] [SyncVar(hook = nameof(OnCostChangeHook))]
         private int cost;
 
-        [SerializeField] [SyncVar(hook = nameof(OnEssenceChangeHook))]
-        private int essence;
+        [SerializeField] [SyncVar(hook = nameof(OnSellPriceChangeHook))]
+        private int sellPrice;
 
         private void OnCostChangeHook(int oldCost, int newCost)
         {
+            if (oldCost > 0 && newCost == 0)
+            {
+                _interactable.AddInteractKey(Key.F, InteractType.Scrap);
+            }
+            
             _interactable.SetCost(newCost);
         }
 
-        private void OnEssenceChangeHook(int oldEssence, int newEssence)
+        private void OnSellPriceChangeHook(int oldSellPrice, int newSellPrice)
         {
-            _interactable.SetEssence(newEssence);
+            _interactable.SetSellPrice(newSellPrice);
         }
 
         [Command(requiresAuthority = false)]
@@ -160,9 +165,9 @@ namespace TonyDev.Game.Core.Items
         }
 
         [Command(requiresAuthority = false)]
-        public void CmdSetEssence(int newEssence)
+        public void CmdSetSellPrice(int newSell)
         {
-            essence = newEssence;
+            sellPrice = newSell;
         }
 
         private void UpdateOutlineColor()
@@ -205,12 +210,12 @@ namespace TonyDev.Game.Core.Items
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdRequestScrap(int senderMoney, NetworkConnectionToClient sender = null)
+        private void CmdRequestSell(NetworkConnectionToClient sender = null)
         {
-            if (senderMoney < cost || !_pickupAble) return; //If the item is too expensive, don't allow pickup.
+            if (cost > 0 || !_pickupAble) return; //If the item costs money, don't allow selling it.
 
             RpcNotifyPickup();
-            TargetConfirmScrap(sender, essence, cost);
+            TargetConfirmSell(sender, sellPrice);
 
             onPickupServer.Invoke(); //Invoke the onPickup method
         }
@@ -222,12 +227,11 @@ namespace TonyDev.Game.Core.Items
         }
 
         [TargetRpc]
-        private void TargetConfirmScrap(NetworkConnection target, int confirmedEssence, int confirmedCost)
+        private void TargetConfirmSell(NetworkConnection target, int confirmedCoins)
         {
-            GameManager.Essence += confirmedEssence;
-            GameManager.Money -= confirmedCost;
+            GameManager.Money += confirmedCoins;
 
-            ObjectSpawner.SpawnTextPopup(transform.position, "+" + confirmedEssence + " essence", Color.cyan, 0.8f);
+            ObjectSpawner.SpawnTextPopup(transform.position, "+" + confirmedCoins + " coins", Color.yellow, 0.8f);
 
             CmdNotifyReplacementItem(null);
         }

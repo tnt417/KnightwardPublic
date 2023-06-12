@@ -19,7 +19,7 @@ namespace TonyDev.Game.UI.Lobby
 
         private void SetUsername(string username)
         {
-            usernameLabel.text = _player.hasAuthority ? "" : username;
+            usernameLabel.text = _player.isOwned ? "" : username;
         }
     }
 }

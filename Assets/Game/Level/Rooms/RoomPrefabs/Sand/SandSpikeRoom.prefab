@@ -9873,7 +9873,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
       propertyPath: range
-      value: 4
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
       propertyPath: autoSpawn
@@ -9888,9 +9888,29 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
     - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
+      propertyPath: baseAllowance
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
       propertyPath: destroyAfterSpawns
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
+      propertyPath: enemySpawns.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
+      propertyPath: enemySpawns.Array.data[0].difficultyRating
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
+      propertyPath: enemySpawns.Array.data[0].enemyPrefabs.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8078920094782276406, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
+      propertyPath: enemySpawns.Array.data[0].enemyPrefabs.Array.data[0]
+      value: 
+      objectReference: {fileID: 2329739912400454215, guid: 29d04ac690de74a4db4629939dd617fe, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b78517bad638ea546af75c76b8ecf167, type: 3}
 --- !u!4 &1937147182129789158 stripped

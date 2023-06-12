@@ -10,7 +10,7 @@ namespace TonyDev
 {
     public class SlowWhileClickingEffect : GameEffect
     {
-        public float SpeedMultiplier = 0.7f;
+        public float SpeedMultiplier = 0.9f;
         
         private double _nextUpdateTime;
         

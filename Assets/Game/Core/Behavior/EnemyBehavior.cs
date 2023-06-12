@@ -92,7 +92,7 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     var point = path[i];
 
-                    if (t == null) break;
+                    if (t == null || followTransform.Invoke() != t) break;
 
                     var newTargetPos = (Vector2) t.position;
 
@@ -213,9 +213,9 @@ namespace TonyDev.Game.Core.Behavior
             while (Enemy != null)
             {
                 await UniTask.WaitForFixedUpdate();
-                if (!isActiveAndEnabled || gameObject == null || Enemy == null || Enemy.Targets.Count == 0) continue;
+                if (gameObject == null || !isActiveAndEnabled || Enemy == null || Enemy.Targets is {Count:0}) continue;
 
-                var flipX = Enemy.Targets[0]?.transform.position.x > transform.position.x;
+                var flipX = Enemy.Targets.Count != 0 && Enemy.Targets[0] != null && Enemy.Targets[0]?.transform.position.x > transform.position.x;
                 if (flipFlip) flipX = !flipX;
                 flipRenderer.flipX = flipX;
             }

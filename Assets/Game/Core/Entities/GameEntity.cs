@@ -13,8 +13,10 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities
@@ -24,6 +26,7 @@ namespace TonyDev.Game.Core.Entities
     {
         public event Action OnTargetChangeOwner;
         public SyncList<GameEntity> Targets = new();
+        [SerializeReference]public GameEffectList startingEffects = new();
 
         public const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
@@ -46,6 +49,20 @@ namespace TonyDev.Game.Core.Entities
 
         #region Network
 
+        [Command(requiresAuthority = false)]
+        public void CmdSendEffectInfo(string info)
+        {
+            RpcSendEffectInfo(info);
+        }
+
+        [ClientRpc]
+        private void RpcSendEffectInfo(string info)
+        {
+            OnEffectInfoReceive?.Invoke(info);
+        }
+
+        public Action<string> OnEffectInfoReceive;
+        
         [Command(requiresAuthority = false)]
         public void CmdDamageEntity(float damage, bool isCrit, NetworkIdentity exclude, bool ignoreInvincibility)
         {
@@ -269,7 +286,17 @@ namespace TonyDev.Game.Core.Entities
             CurrentHealth = MaxHealth;
             OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
             OnHealthChangedOwner?.Invoke(CurrentHealth);
+
+            if (startingEffects is {gameEffects: { }})
+            {
+                foreach (var se in startingEffects.gameEffects)
+                {
+                    if(se != null) CmdAddEffect(se, this);
+                }
+            }
         }
+
+        public Action OnStart;
 
         public Action<float, GameEntity, bool>
             OnDamageOther; //TODO: Damage types: Contact, Projectile, DoT, AoE, etc. (Use to better control PoisonInflictEffect)
@@ -284,6 +311,7 @@ namespace TonyDev.Game.Core.Entities
         {
             base.OnStartClient();
             CmdRequestUpdateStats();
+            OnStart?.Invoke();
         }
 
         [Command(requiresAuthority = false)]

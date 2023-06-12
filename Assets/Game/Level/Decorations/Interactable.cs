@@ -9,6 +9,7 @@ using TonyDev.Game.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace TonyDev.Game.Level.Decorations
@@ -28,7 +29,7 @@ namespace TonyDev.Game.Level.Decorations
         [SerializeField] protected bool scaleCost;
         [SerializeField] private string label;
 
-        protected bool IsInteractable = true;
+        [FormerlySerializedAs("IsInteractable")] public bool isInteractable = true;
 
         private GameObject _indicatorObject;
         protected Indicator Indicator;
@@ -109,7 +110,7 @@ namespace TonyDev.Game.Level.Decorations
         {
             if (!Active) return;
             
-            foreach (var (_, value) in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Keyboard.current[kv.Key].wasPressedThisFrame && IsInteractable))
+            foreach (var (_, value) in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Keyboard.current[kv.Key].wasPressedThisFrame && isInteractable))
             {
                 if (value == InteractType.Interact && cost != 0)
                 {
@@ -173,7 +174,7 @@ namespace TonyDev.Game.Level.Decorations
                 return;
             }
             
-            if (!other.isTrigger || !other.CompareTag("Player") || !IsInteractable) return;
+            if (!other.isTrigger || !other.CompareTag("Player") || !isInteractable) return;
         
             var id = other.GetComponent<NetworkIdentity>();
 
@@ -214,7 +215,7 @@ namespace TonyDev.Game.Level.Decorations
             
             if (!other.isTrigger || !other.CompareTag("Player")) return;
             
-            if (!IsInteractable)
+            if (!isInteractable)
             {
                 Active = false;
                 if (Current == this) Current = null;

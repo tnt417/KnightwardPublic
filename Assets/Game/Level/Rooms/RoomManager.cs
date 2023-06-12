@@ -33,7 +33,7 @@ namespace TonyDev.Game.Level.Rooms
 
         //Room-related variables
         public int MapSize => roomGenerator.MapSize; //The shared width/height of the map
-        private Vector2Int _currentActiveRoomIndex;
+        public Vector2Int currentActiveRoomIndex;
 
         [SyncVar(hook = nameof(MapHook))] private SerializableMap _serializableMap;
         public Map Map => Map.FromSerializable(_serializableMap);
@@ -41,15 +41,14 @@ namespace TonyDev.Game.Level.Rooms
         [Command(requiresAuthority = false)]
         private void CmdSetMap(SerializableMap newMap)
         {
-            _serializableMap = new SerializableMap(newMap.Rooms, newMap.StartingRoomPos);
+            _serializableMap = new SerializableMap(newMap.Rooms, newMap.StartingRoomPos, newMap.RoomConnections);
         }
 
         private void Update()
         {
             minimapObject.SetActive(GameManager.GamePhase == GamePhase.Dungeon);
-            if (Player.LocalInstance != null)
-                MinimapManager.Instance.SetPlayerPosition(Player.LocalInstance.transform.position,
-                    roomGenerator.roomOffset);
+            if (Player.LocalInstance != null && currentActiveRoom != null)
+                MinimapManager.Instance.SetPlayerPosition(currentActiveRoom.GetLocalPlayerPositionNormalized());
         }
 
         public Room GetRoomFromID(NetworkIdentity networkIdentity) => GetRoomFromID(networkIdentity.netId);
@@ -92,11 +91,11 @@ namespace TonyDev.Game.Level.Rooms
             }
         }
 
-        private bool InStartingRoom => _currentActiveRoomIndex == Map.StartingRoomPos;
+        private bool InStartingRoom => currentActiveRoomIndex == Map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
-        public event Action OnRoomsChanged;
-        public static Action OnActiveRoomChanged;
-        public static Action<Player, Room> OnActiveRoomChangedGlobal;
+        public Action OnRoomsChanged;
+        public Action OnActiveRoomChanged;
+        public Action<Player, Room> OnActiveRoomChangedGlobal;
         
         private void Awake()
         {
@@ -171,14 +170,20 @@ namespace TonyDev.Game.Level.Rooms
             CmdSetMap(SerializableMap.FromMap(newMap));
         }
 
+        private bool _inRoomTransition = false;
+        
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.
         {
+            if (_inRoomTransition) return;
+            _inRoomTransition = true;
             Player.LocalInstance.playerMovement.DoMovement = false;
             StartCoroutine(MovePlayerToNextRoom(direction));
         }
 
         private IEnumerator MovePlayerToNextRoom(Direction direction) //Moves a player to the next room in a direction.
         {
+            Debug.Log("Moving player to the next room!");
+        
             var dx = 0; //delta x
             var dy = 0; //delta y
 
@@ -198,7 +203,7 @@ namespace TonyDev.Game.Level.Rooms
                     break;
             }
             
-            var room = Map.Rooms[_currentActiveRoomIndex.x + dx, _currentActiveRoomIndex.y + dy];
+            var room = Map.Rooms[currentActiveRoomIndex.x + dx, currentActiveRoomIndex.y + dy];
             
             TransitionController.Instance.FadeInOut(); //Transition to make it less jarring.
             yield return
@@ -207,8 +212,8 @@ namespace TonyDev.Game.Level.Rooms
 
             if (room != null)
             {
-                SetActiveRoom(_currentActiveRoomIndex.x + dx,
-                    _currentActiveRoomIndex.y + dy); //Set the active room to the new room
+                SetActiveRoom(currentActiveRoomIndex.x + dx,
+                    currentActiveRoomIndex.y + dy); //Set the active room to the new room
 
                 //Move the player into the newly activated room
                 var playerTransform = Player.LocalInstance.transform;
@@ -221,6 +226,8 @@ namespace TonyDev.Game.Level.Rooms
                 if(currentActiveRoom != null) Player.LocalInstance.transform.position = currentActiveRoom.transform.position;
                 Player.LocalInstance.playerMovement.DoMovement = true;
             }
+            
+            _inRoomTransition = false;
         }
 
         public void SetActiveRoom(int x, int y)
@@ -241,7 +248,7 @@ namespace TonyDev.Game.Level.Rooms
             
             CmdUncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
             _smoothCameraFollow.SetCameraBounds(currentActiveRoom.RoomRect); //Update the camera bounds
-            _currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
+            currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
 
             Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
             
@@ -251,7 +258,7 @@ namespace TonyDev.Game.Level.Rooms
         //Performs all actions necessary to disable the room phase.
         public void DeactivateRoomPhase()
         {
-            _currentActiveRoomIndex = Vector2Int.zero;
+            currentActiveRoomIndex = Vector2Int.zero;
             if (_smoothCameraFollow != null) _smoothCameraFollow.SetCameraBounds(Rect.zero);
 
             Player.LocalInstance.CmdSetParentIdentity(null);
@@ -275,11 +282,12 @@ namespace TonyDev.Game.Level.Rooms
 
                     //Set open directions based on room adjacency
                     var openDirections = new List<Direction>();
-                    if (CheckIfRoomExistsAndHasDoor(i - 1, j, Direction.Right)) openDirections.Add(Direction.Left);
-                    if (CheckIfRoomExistsAndHasDoor(i + 1, j, Direction.Left)) openDirections.Add(Direction.Right);
-                    if (CheckIfRoomExistsAndHasDoor(i, j - 1, Direction.Up)) openDirections.Add(Direction.Down);
-                    if (CheckIfRoomExistsAndHasDoor(i, j + 1, Direction.Down)) openDirections.Add(Direction.Up);
+                    if (Map.RoomConnections.Any(rc => rc.HasRoom(i,j) && rc.HasRoom(i-1, j)) && CheckIfRoomExistsAndHasDoor(i - 1, j, Direction.Right)) openDirections.Add(Direction.Left);
+                    if (Map.RoomConnections.Any(rc => rc.HasRoom(i,j) && rc.HasRoom(i+1, j)) && CheckIfRoomExistsAndHasDoor(i + 1, j, Direction.Left)) openDirections.Add(Direction.Right);
+                    if (Map.RoomConnections.Any(rc => rc.HasRoom(i,j) && rc.HasRoom(i, j-1)) && CheckIfRoomExistsAndHasDoor(i, j - 1, Direction.Up)) openDirections.Add(Direction.Down);
+                    if (Map.RoomConnections.Any(rc => rc.HasRoom(i,j) && rc.HasRoom(i, j+1)) && CheckIfRoomExistsAndHasDoor(i, j + 1, Direction.Down)) openDirections.Add(Direction.Up);
                     Map.Rooms[i, j].SetOpenDirections(openDirections);
+                    MinimapManager.Instance.UpdateOpenDirections(new Vector2Int(i,j), openDirections);
                     //
                 }
             }
@@ -309,6 +317,14 @@ namespace TonyDev.Game.Level.Rooms
                 foreach (var go in childObjects.ToList())
                 {
                     if (go == null) continue;
+
+                    var money = MoneyObject.MoneyObjectPool.FirstOrDefault(kv => kv.Key == go).Key;
+                    
+                    if (money != null)
+                    {
+                        money.SetActive(false);
+                        continue;
+                    }
                     
                     var e = go.GetComponent<Enemy>();
 

@@ -388,6 +388,7 @@ GameObject:
   - component: {fileID: 2468685822208163573}
   - component: {fileID: 29065221820089324}
   - component: {fileID: 8587305128165645186}
+  - component: {fileID: 3866909779526686036}
   m_Layer: 7
   m_Name: PlayerAnimator
   m_TagString: Untagged
@@ -447,6 +448,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spriteIndex: 0
+--- !u!114 &3866909779526686036
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2904681142340708257}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1a9d13bde8d41e4eae733cf5de11b06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clip: {fileID: 8300000, guid: e71cd2126d9a92641b081f0759e61c3a, type: 3}
+  volume: 0.3
+  pitchRange: {x: 0.9, y: 1.1}
+  playOnAwake: 0
+  global: 0
+  mixerGroup: {fileID: 6986879945568410765, guid: 74d7d4f8523abac48b7ef1506639a1d3, type: 2}
+  cooldown: 0.1
 --- !u!1 &2998517286799482855
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,13 +629,15 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  startingEffects:
+    rid: 6046237046129557504
   targetTag: 
   targetTeam: 0
   maxTargets: 0
   baseStats:
   - statType: 0
     stat: 5
-    strength: 5
+    strength: 7
     source: 
     hidden: 0
   - statType: 0
@@ -626,11 +648,6 @@ MonoBehaviour:
   - statType: 0
     stat: 6
     strength: 100
-    source: 
-    hidden: 0
-  - statType: 0
-    stat: 9
-    strength: 1
     source: 
     hidden: 0
   - statType: 0
@@ -650,6 +667,13 @@ MonoBehaviour:
   playerDeath: {fileID: 1270234476}
   fireKeyHeld: 0
   username: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 6046237046129557504
+      type: {class: GameEffectList, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        gameEffects: []
 --- !u!50 &1277911647
 Rigidbody2D:
   serializedVersion: 4
@@ -1530,7 +1554,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.5
+      scalar: 0.4
       minScalar: 0.25
       maxCurve:
         serializedVersion: 2
@@ -2165,7 +2189,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 3
+      scalar: 1.5
       minScalar: 0
       maxCurve:
         serializedVersion: 2

@@ -5,6 +5,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using TonyDev.Game.Global;
 using UnityEngine;
+using UnityEngine.Audio;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game
@@ -25,7 +26,10 @@ namespace TonyDev.Game
 
         public void Awake()
         {
-            if (_initialized) return;
+            if (_initialized)
+            {
+                return;
+            }
             _initialized = true;
 
             foreach (var s in gameSounds)
@@ -34,10 +38,10 @@ namespace TonyDev.Game
             }
         }
 
-        public static void PlaySound(AudioClip audioClip, float volume, Vector2 position, float pitch = 1, bool global = false) =>
-            PlaySound(AudioClips.FirstOrDefault(kv => kv.Value == audioClip).Key, volume, position, pitch, global);
+        public static void PlaySound(AudioClip audioClip, float volume, Vector2 position, float pitch = 1, bool global = false, AudioMixerGroup mixerGroup = null) =>
+            PlaySound(AudioClips.FirstOrDefault(kv => kv.Value == audioClip).Key, volume, position, pitch, global, mixerGroup);
         
-        public static void PlaySound(string name, float volume, Vector2 position, float pitch = 1, bool global = false)
+        public static void PlaySound(string name, float volume, Vector2 position, float pitch = 1, bool global = false, AudioMixerGroup mixerGroup = null)
         {
             var soundClip = AudioClips[name];
 
@@ -61,6 +65,7 @@ namespace TonyDev.Game
 
             destroy.seconds = soundClip.length * 2f;
 
+            audio.outputAudioMixerGroup = GameManager.Instance == null ? null : mixerGroup == null ? GameManager.Instance.mainMixerGroup : mixerGroup;
             audio.clip = soundClip;
             audio.playOnAwake = false;
             audio.loop = false;

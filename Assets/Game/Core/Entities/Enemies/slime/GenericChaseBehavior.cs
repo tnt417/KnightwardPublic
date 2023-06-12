@@ -30,7 +30,7 @@ namespace TonyDev
 
                 await FollowUntil(() => FirstEnemyTarget,
                     () => Enemy.Stats.GetStat(Stat.MoveSpeed) * chaseSpeedMultiplier,
-                    () => Vector2.Distance(FirstEnemyTarget.position, Enemy.transform.position) < 0.5f);
+                    () => FirstEnemyTarget != null && Vector2.Distance(FirstEnemyTarget.position, Enemy.transform.position) < 0.5f);
             }
         }
     }

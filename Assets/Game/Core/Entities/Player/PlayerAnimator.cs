@@ -114,6 +114,8 @@ namespace TonyDev.Game.Core.Entities.Player
         [SerializeField] private ParticleSystem playerWalkParticles;
         //
 
+        [NonSerialized] public string attackAnimationName = "Attack";
+
         private int PlayerSpriteIndex => playerAnimationValues.spriteIndex;
 
         //Custom setter to allow controlling of walk particles without spamming Play and Stop on the particle system.
@@ -168,12 +170,20 @@ namespace TonyDev.Game.Core.Entities.Player
 
         private void PlayInAllLayers(string anim, bool attackNormalized = false)
         {
-            playerAnimator.Play(anim, 0, attackNormalized ? ((Player.LocalInstance.NormalizedAttackTime/2)-0.03f)%1f : 0); // Subtracting 0.03f to make the animations feel more in sync
-            playerAnimator.Play(anim, 1);
+            if (!isOwned) return;
+            playerAnimator.Play(anim, 0,
+                attackNormalized
+                    ? ((Player.LocalInstance.NormalizedAttackTime / 2) - 0.03f) % 1f
+                    : _playerMovementTime / (21/60f) * playerAnimator.GetFloat("moveSpeed") % 1f); // Subtracting 0.03f to make the animations feel more in sync
+            playerAnimator.Play(anim, 1, (_playerMovementTime / (21/60f) * playerAnimator.GetFloat("moveSpeed")) % 1f);
         }
 
         private PlayerAnimState _lastAnimState = PlayerAnimState.Dead;
+        private PlayerAnimState _lastDirectionState = PlayerAnimState.Down;
         private bool _lastAttack = false;
+
+        private float _playerMovementTime;
+        private float _lastPlayerMoveTime;
         
         private void Update()
         {
@@ -185,36 +195,60 @@ namespace TonyDev.Game.Core.Entities.Player
             if (PlayerAnimState == _lastAnimState && _lastAttack == Player.LocalInstance.CanAttack) return;
             _lastAnimState = PlayerAnimState;
             _lastAttack = Player.LocalInstance.CanAttack;
-            
-            //Plays different animations depending on the animation state
-            switch (_playerAnimState)
+
+            if (Player.LocalInstance.playerMovement.currentMovementInput != Vector2.zero)
             {
-                case PlayerAnimState.Up:
-                    SetFlip(false);
-                    PlayInAllLayers(Player.LocalInstance.CanAttack ? "PlayerAttackBackMove" : "WalkUp", Player.LocalInstance.CanAttack);
-                    break;
-                case PlayerAnimState.Down:
-                    SetFlip(false);
-                    PlayInAllLayers(Player.LocalInstance.CanAttack ? "PlayerAttackDownMove" : "WalkDown", Player.LocalInstance.CanAttack);
-                    break;
-                case PlayerAnimState.Left:
-                    SetFlip(true);
-                    PlayInAllLayers(Player.LocalInstance.CanAttack ? "PlayerAttackSideMove" : "WalkLeft", Player.LocalInstance.CanAttack);
-                    break;
-                case PlayerAnimState.Right:
-                    SetFlip(false);
-                    PlayInAllLayers(Player.LocalInstance.CanAttack ? "PlayerAttackSideMove" : "WalkRight", Player.LocalInstance.CanAttack);
-                    break;
-                case PlayerAnimState.Idle:
-                    SetFlip(false);
-                    PlayInAllLayers(Player.LocalInstance.CanAttack ? "PlayerAttackDownIdle" : "Idle", Player.LocalInstance.CanAttack);
-                    break;
-                case PlayerAnimState.Dead:
-                    SetFlip(false);
-                    PlayInAllLayers("PlayerDead");
-                    break;
+                _lastPlayerMoveTime = Time.time;
             }
-            //
+
+            if (Time.time - _lastPlayerMoveTime > 0.25f)
+            {
+                _playerMovementTime = 0;
+            }
+            else
+            {
+                _playerMovementTime += Time.deltaTime;
+            }
+
+            if (_playerAnimState == PlayerAnimState.Dead)
+            {
+                PlayInAllLayers("PlayerDead");
+                return;
+            }
+
+            if (PlayerAnimState != PlayerAnimState.Idle && PlayerAnimState != PlayerAnimState.Dead)
+            {
+                _lastDirectionState = PlayerAnimState;
+            }
+            
+            SetFlip(_lastDirectionState == PlayerAnimState.Left);
+
+            if (Player.LocalInstance.CanAttack)
+            {
+                var directionNameAddon = _lastDirectionState switch
+                {
+                    PlayerAnimState.Left => "Side",
+                    PlayerAnimState.Right => "Side",
+                    PlayerAnimState.Up => "Back",
+                    PlayerAnimState.Down => "Down"
+                };
+                var animName = "Player" + attackAnimationName + directionNameAddon +
+                               (_playerAnimState == PlayerAnimState.Idle ? "Idle" : "Move");
+                
+                PlayInAllLayers(animName, true);
+            }
+            else
+            {
+                PlayInAllLayers(_playerAnimState switch
+                    {
+                        PlayerAnimState.Left => "WalkLeft",
+                        PlayerAnimState.Right => "WalkRight",
+                        PlayerAnimState.Up => "WalkUp",
+                        PlayerAnimState.Down => "WalkDown",
+                        PlayerAnimState.Idle => "Idle" + Enum.GetName(typeof(PlayerAnimState), _lastDirectionState)
+                    },
+                    false);
+            }
         }
 
         private void SetFlip(bool flip)

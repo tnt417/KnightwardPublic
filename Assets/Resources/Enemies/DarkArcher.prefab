@@ -7,6 +7,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4143216695699966044, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_CollisionDetection
       value: 1
@@ -168,6 +180,7 @@ MonoBehaviour:
   strafeDistance: 4
   strafeRadius: 5
   strafeSpeed: 3
+  maxShootDistance: 8
   shootProjectiles:
   - prefabKey: 
     projectileSprite: {fileID: 21300000, guid: 29dc1ac709c75eb4c8ea3ba8defaf8ae, type: 3}
@@ -181,6 +194,8 @@ MonoBehaviour:
       lifetime: 2
       spawnOnDestroyKey: 
       ignoreInvincibility: 0
+      inflictEffects:
+        gameEffects: []
     disableMovement: 0
     travelSpeed: 15
     offsetDegrees: 0

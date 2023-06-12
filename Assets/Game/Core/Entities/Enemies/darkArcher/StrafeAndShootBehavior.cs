@@ -13,6 +13,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.darkArcher
         public float strafeDistance;
         public float strafeRadius;
         public float strafeSpeed;
+        public float maxShootDistance;
         public ProjectileData[] shootProjectiles;
         
         private Subject<bool> m_ShootAnimation = new();
@@ -36,9 +37,13 @@ namespace TonyDev.Game.Core.Entities.Enemies.darkArcher
                 
                 await GotoOverSeconds((Vector2)transform.position + FindStrafeDirection(strafeDistance, strafeRadius) * strafeDistance, 1 / (Enemy.Stats.GetStat(Stat.MoveSpeed) * strafeSpeed));
                 PlayAnimation(EnemyAnimationState.Stop);
-                await ShootAnimation().First();
-                ShootProjectileSpread(shootProjectiles, transform.position, GetDirectionToFirstTarget());
-                await UniTask.Delay(TimeSpan.FromSeconds(2));
+                if (FirstEnemyTarget != null &&
+                    Vector2.Distance(FirstEnemyTarget.transform.position, Enemy.transform.position) < maxShootDistance)
+                {
+                    await ShootAnimation().First();
+                    ShootProjectileSpread(shootProjectiles, transform.position, GetDirectionToFirstTarget());
+                    await UniTask.Delay(TimeSpan.FromSeconds(2));
+                }
             }
         }
     }

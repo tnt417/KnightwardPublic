@@ -18,13 +18,15 @@ namespace TonyDev.Game.Level.Decorations.Button
             {
                 Debug.LogWarning("Please set the interactable before awake!");
                 Destroy(this);
+                return;
             }
 
-            interactable.onInteract.AddListener(BroadcastInteract);
+            interactable.onInteract?.AddListener(BroadcastInteract);
         }
 
         public void BroadcastInteract(InteractType type)
         {
+            if (!interactable.isInteractable) return;
             CmdBroadcastInteract(type);
         }
         

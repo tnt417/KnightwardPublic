@@ -75,6 +75,7 @@ MonoBehaviour:
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  destroyOnHitWall: 0
   ignoreInvincibility: 0
   inflictBuffs: []
   inflictEffects: []
@@ -5458,9 +5459,10 @@ MonoBehaviour:
   damageMultiplier: 0.2
   knockbackMultiplier: 0
   damageCooldown: 0.5
-  team: 0
+  team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  destroyOnHitWall: 0
   ignoreInvincibility: 1
   inflictBuffs: []
   inflictEffects: []
