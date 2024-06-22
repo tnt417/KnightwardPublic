@@ -40,6 +40,9 @@ namespace TonyDev.Game.Core.Attacks
 
         [Tooltip("The base damage of the attack. May be altered based on the owner entity's stats.")] [SerializeField]
         public float damage;
+        
+        [Tooltip("The type of the attack.")] [SerializeField]
+        public DamageType damageType;
 
         private float Damage => _owner != null ? _owner.Stats.GetStat(Stat.Damage) : damage;
 
@@ -165,7 +168,7 @@ namespace TonyDev.Game.Core.Attacks
                 TryDamage(otherTrigger);
         }
 
-        public Action<float, GameEntity, bool> OnDamageDealt;
+        public Action<float, GameEntity, bool, DamageType> OnDamageDealt;
         
         private void TryDamage(Collider2D other)
         {
@@ -210,8 +213,8 @@ namespace TonyDev.Game.Core.Attacks
                     : modifiedDamage; //Do damage before command if hitting player
                 if (!success) return;
                 if(ge is Enemy && !NetworkServer.active) ge.ClientHealthDisparity -= damageDealt;
-                ge.LocalHurt(damageDealt, crit);
-                ge.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer, ignoreInvincibility);
+                ge.LocalHurt(damageDealt, crit, damageType);
+                ge.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer, ignoreInvincibility, damageType);
                 
                 if (inflictEffects != null) //Inflict effects...
                     foreach (var e in inflictEffects)
@@ -225,11 +228,11 @@ namespace TonyDev.Game.Core.Attacks
                     damageable.ApplyDamage(modifiedDamage, out var success, ignoreInvincibility); //Apply the damage. Critical hits deal double.
                 if (damageDealt > 0 && success)
                     ObjectSpawner.SpawnDmgPopup(other.transform.position, damageDealt,
-                        crit); //Spawn a popup for the damage text if the damage is greater than zero.
+                        crit, damageType); //Spawn a popup for the damage text if the damage is greater than zero.
                 if (!success) return;
             }
 
-            OnDamageDealt?.Invoke(damageDealt, ge, crit);
+            OnDamageDealt?.Invoke(damageDealt, ge, crit, damageType);
 
             var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
 

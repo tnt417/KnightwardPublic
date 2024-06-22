@@ -32,6 +32,8 @@ namespace TonyDev.Game.Global
         private void Awake()
         {
             _instance = this;
+            
+            ShakeMultiplier = PlayerPrefs.GetFloat("shake", 0.5f);
         }
 
         private void Start()
@@ -116,10 +118,18 @@ namespace TonyDev.Game.Global
 
         private bool _viewedCrystalLast;
 
+        public static float ShakeMultiplier = 0.5f;
+
+        public static void SetShakeMultiplier(float newValue)
+        {
+            ShakeMultiplier = newValue;
+            PlayerPrefs.SetFloat("shake", newValue);
+        }
+            
         public static void Shake(float intensity, float speed)
         {
             _instance.animator.speed = speed;
-            _instance.animator.transform.localScale = intensity * Vector3.one;
+            _instance.animator.transform.localScale = intensity * Vector3.one * ShakeMultiplier;
             _instance.animator.Play("CameraShake");
             _instance.shakeSound.volume = intensity / 50 + Random.Range(0f, 0.1f);
             _instance.shakeSound.pitch = Mathf.Clamp01(speed / 4f) + 0.8f + Random.Range(-0.1f, 0.1f);

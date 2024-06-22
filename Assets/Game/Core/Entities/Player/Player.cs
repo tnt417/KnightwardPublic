@@ -3,6 +3,8 @@ using System.Collections;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Behavior;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
@@ -13,6 +15,7 @@ using TonyDev.Game.UI.Minimap;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
@@ -31,6 +34,11 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public bool fireKeyHeld = false;
         public override bool CanAttack => fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused;
+
+        public void SetAttackProgress(float normalized)
+        {
+            AttackTimer = normalized * AttackTimerMax;
+        }
 
         public void OnFire(InputValue value)
         {
@@ -126,18 +134,28 @@ namespace TonyDev.Game.Core.Entities.Player
                 {
                     var pos = transform.position;
 
-                    ObjectSpawner.SpawnProjectile(this, pos, GameManager.MouseDirection, proj);
+                    ObjectSpawner.SpawnProjectile(this, (Vector2) pos - new Vector2(0, 0.4f),
+                        GameManager.MouseDirectionLow, proj);
                 }
             };
 
-            OnDamageOther += (dmg, ge, crit) =>
+            OnDamageOther += (dmg, ge, crit, dt) =>
             {
                 if (dmg <= 0) return;
                 if (ge != null)
                 {
                     var percentDealt = dmg / ge.MaxHealth;
                     var percentMissing = 1 - ge.CurrentHealth / ge.MaxHealth;
-                    SmoothCameraFollow.Shake(Mathf.Log(percentDealt * (1 + percentMissing/5f) * (crit ? 32f : 24f)), crit ? 2f : 1.5f);
+                    SmoothCameraFollow.Shake(Mathf.Log(percentDealt * (1 + percentMissing / 5f) * (crit ? 32f : 24f)),
+                        crit ? 2f : 1.5f);
+                    var eb = ge.GetComponent<EnemyBehavior>();
+                    if (eb != null)
+                    {
+                        eb.PauseMovement(0.2f);
+                        eb.Dash(Random.Range(0.5f, 0.7f) + percentDealt * 0.5f,
+                            GameTools.Rotate(ge.transform.position - transform.position, Random.Range(-0.2f, 0.2f))
+                                .normalized);
+                    }
                 }
                 else
                 {
@@ -163,6 +181,10 @@ namespace TonyDev.Game.Core.Entities.Player
             {
                 PercentRegen = 0.01f
             }, this);
+
+            var fxString = CustomRoomPlayer.Local.classEffectName;
+            
+            if(!string.IsNullOrEmpty(fxString)) CmdAddEffect(GameEffect.CreateEffect(fxString), this);
 
             PlayerInventory.Instance.InsertStarterItems();
 

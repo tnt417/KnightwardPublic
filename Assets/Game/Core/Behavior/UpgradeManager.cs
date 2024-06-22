@@ -63,7 +63,7 @@ namespace TonyDev.Game.Core.Behavior
 
         private float _moveSinceActive; // Used to close the UI when the player tries to move
 
-        public Action OnUpgradeLocal;
+        public static Action OnUpgradeLocal;
 
         [FormerlySerializedAs("_filter")] public List<UpgradeCategory> filter;
 
@@ -104,7 +104,7 @@ namespace TonyDev.Game.Core.Behavior
 
             // Register the upgrades on Start
 
-            OnUpgradeLocal += ClearUpgrades;
+            OnUpgradeLocal += QuickHideUpgrades;
 
             #region Upgrade Registering
 
@@ -390,7 +390,7 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     RegisterUpgrade(0, selected.Icon, selected.Name, selected.Description,
                         selected.IsPurchasable,
-                        selected.OnPurchase, selected.Category, false);
+                        selected.OnPurchase, selected.Category, false, selected);
                 }
 
                 _possibleUpgrades.Remove(selected);
@@ -412,12 +412,21 @@ namespace TonyDev.Game.Core.Behavior
             }
         }
 
+        private void QuickHideUpgrades()
+        {
+            foreach (var (_, value) in _createdEntries.ToList())
+            {
+                value.PurchasableFunc = () => false;
+                //RemoveUpgrade(entry.Key);
+            }
+        }
+
         private void ClearUpgrades()
         {
             foreach (var entry in _createdEntries.ToList())
             {
-                entry.Value.PurchasableFunc = () => false;
-                //RemoveUpgrade(entry.Key);
+                _possibleUpgrades.Add(entry.Value.OriginalData);
+                RemoveUpgrade(entry.Key);
             }
         }
 
@@ -466,11 +475,16 @@ namespace TonyDev.Game.Core.Behavior
         [ClientRpc] // Called by the server and runs on the client
         public void RpcSetPurchased(int id)
         {
-            _purchasedUpgrades.Add(_createdEntries[id]
-                .UpgradeName); // Add the upgrade's name to the list of purchased upgrades
+            if (_createdEntries.ContainsKey(id))
+            {
+                _purchasedUpgrades.Add(_createdEntries[id]
+                    .UpgradeName); // Add the upgrade's name to the list of purchased upgrades
 
-            RemoveUpgrade(
-                id); // Remove the upgrade on purchase, TODO: May allow certain upgrades to be bought multiple times in the future
+                RemoveUpgrade(
+                    id); // Remove the upgrade on purchase, TODO: May allow certain upgrades to be bought multiple times in the future
+            }
+
+            ClearUpgrades();
         }
 
         private void RemoveUpgrade(int id) // Handle all upgrade removal for a given id
@@ -502,7 +516,7 @@ namespace TonyDev.Game.Core.Behavior
         // Handle creation for an upgrade given supplied values
         private void RegisterUpgrade(int scrapCost, Sprite icon, string upgradeName, string description,
             Func<bool> isPurchasable,
-            Action<UpgradeEntry, GameEntity, bool> onPurchase, UpgradeCategory category, bool local)
+            Action<UpgradeEntry, GameEntity, bool> onPurchase, UpgradeCategory category, bool local, UpgradeData data)
         {
             var id = _index; // Store corresponding ID
             _index++; // Increment to ensure unique ID next time
@@ -511,19 +525,19 @@ namespace TonyDev.Game.Core.Behavior
             _onPurchaseActions.Add(id, onPurchase);
             _createdEntries.Add(id,
                 CreateUIElement(scrapCost, icon, upgradeName, description, isPurchasable, id,
-                    category)); // Create the UI element and add it to dictionary
+                    category, data)); // Create the UI element and add it to dictionary
         }
 
         // Handle instantiation of UI elements
         private UpgradeEntry CreateUIElement(int scrapCost, Sprite icon, string upgradeName, string description,
-            Func<bool> isPurchasable, int callbackId, UpgradeCategory category)
+            Func<bool> isPurchasable, int callbackId, UpgradeCategory category, UpgradeData data)
         {
             var go = Instantiate(upgradeEntryPrefab,
                 upgradeEntryParent.transform); // Instantiate UI object under UI transform
 
             var ue = go.GetComponent<UpgradeEntry>();
             ue.Set(scrapCost, icon, upgradeName, description, isPurchasable, callbackId,
-                category); // Pass on values to the UpgradeEntry behavior
+                category, data); // Pass on values to the UpgradeEntry behavior
 
             return ue;
         }

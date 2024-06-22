@@ -135,6 +135,9 @@ namespace TonyDev.Game.Level.Rooms
         [SerializeField] public Vector2 roomOffset;
         [SerializeField] public MapGenConfig config;
 
+        // Static accessor to use in PhaseInformationUIController.cs
+        public static MapGenConfig Config => RoomManager.Instance.roomGenerator.config;
+
         [SerializeField] private RoomManager roomManager;
         //
 
@@ -165,6 +168,8 @@ namespace TonyDev.Game.Level.Rooms
             if (!GameManager.Instance.isServer) return default;
 
             if (_generated) return roomManager.Map;
+
+            floor += config.floorAtLaunchOffset;
 
             var theme = config.mapZones.Where(z => floor % config.loopPoint >= z.startFloor)
                 .OrderByDescending(z => z.startFloor).FirstOrDefault();
@@ -420,7 +425,8 @@ namespace TonyDev.Game.Level.Rooms
             return new Map(rooms, _startingRoomPos);
         }
 */
-        [Server]
+        
+        [Server][Obsolete("Bosses are no longer implemented.")]
         public Map GenerateBossMap(int floor)
         {
             var theme = config.mapZones.Where(z => (floor - 1) % config.loopPoint + 1 >= z.startFloor)

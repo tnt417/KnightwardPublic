@@ -19,11 +19,11 @@ namespace TonyDev.Game.Core.Effects
             Entity.OnDamageOther -= Lifesteal;
         }
 
-        private void Lifesteal(float dmg, GameEntity other, bool isCrit)
+        private void Lifesteal(float dmg, GameEntity other, bool isCrit, DamageType dt)
         {
             var leech = -dmg * LeechPercentFinal;
 
-            ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
+            ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit, DamageType.Heal);
 
             Entity.ApplyDamage(leech, out var success);
         }

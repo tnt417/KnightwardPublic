@@ -370,7 +370,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: c7be87970628f0b48b573093d51bd44f, type: 3}
-  volume: 0.2
+  volume: 0.1
+  pitchRange: {x: 1, y: 1}
+  playOnAwake: 0
+  global: 0
+  mixerGroup: {fileID: 24300002, guid: 74d7d4f8523abac48b7ef1506639a1d3, type: 2}
+  cooldown: 0
 --- !u!114 &5843343471395541628
 MonoBehaviour:
   m_ObjectHideFlags: 0

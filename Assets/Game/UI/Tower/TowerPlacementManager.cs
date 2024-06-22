@@ -41,16 +41,23 @@ namespace TonyDev.Game.UI.Tower
 
             _mainCamera = Camera.main;
 
-            RoomManager.Instance.OnActiveRoomChanged += () =>
+            RoomManager.OnActiveRoomChanged += PickupDungeonTowers;
+        }
+
+        public void PickupDungeonTowers()
+        {
+            foreach (var t in FindObjectsOfType<Core.Entities.Towers.Tower>())
             {
-                foreach (var t in FindObjectsOfType<Core.Entities.Towers.Tower>())
+                if (t.CurrentParentIdentity != null)
                 {
-                    if (t.CurrentParentIdentity != null)
-                    {
-                        t.CmdRequestPickup(); //Pickup all towers that are in the dungeon, whenever rooms are changed
-                    }
+                    t.CmdRequestPickup(); //Pickup all towers that are in the dungeon, whenever rooms are changed
                 }
-            };
+            }
+        }
+
+        private void OnDestroy()
+        {
+            RoomManager.OnActiveRoomChanged -= PickupDungeonTowers;
         }
 
         private void Update()
@@ -92,7 +99,7 @@ namespace TonyDev.Game.UI.Tower
                 .GetComponent<Core.Entities.Towers.Tower>(); //Get a reference to the tower of the prefab...
 
             rangeIndicator.transform.localScale =
-                new Vector3(tower.targetRadius * 2, tower.targetRadius * 2,
+                new Vector3(tower.targetRange * 2, tower.targetRange * 2,
                     1); //...and update the rangeIndicator based on the tower's range.
 
             _indicatorSprite =

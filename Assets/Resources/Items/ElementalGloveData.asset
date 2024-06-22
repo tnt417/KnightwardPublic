@@ -42,16 +42,12 @@ MonoBehaviour:
     - rid: 4292349781139259392
       type: {class: ElementalGloveEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
-        effectDescription: <color=green>Upon activation, gain one of three elemental
-          effects. Active again to cycle chosen element.</color>
+        effectDescription: 
         DungeonFloorUponCreation: 0
-        ActivateButton: 99
-        Cooldown: 1
-        Duration: 10000
-        abilitySprite: {fileID: 21300000, guid: fc0e20655c99aec43b6733b8061e5e43, type: 3}
         SlowAmount: 0.5
         SlowDuration: 3
         BurnDamagePerSecondMultiplier: 0.25
         Frequency: 0.25
         Ticks: 20
         LeechPercent: 0.2
+        CycleCd: 20

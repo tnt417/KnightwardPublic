@@ -21,7 +21,7 @@ namespace TonyDev.Game.Core.Effects
             Entity.OnDamageOther -= HitEffect;
         }
 
-        private void HitEffect(float damage, GameEntity other, bool isCrit)
+        private void HitEffect(float damage, GameEntity other, bool isCrit, DamageType dt)
         {
             if (!isCrit) return;
             

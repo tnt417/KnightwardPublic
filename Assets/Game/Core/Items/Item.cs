@@ -18,7 +18,7 @@ namespace TonyDev.Game.Core.Items
     public enum ItemType
     {
         Weapon,
-        Armor,
+        Armor, // Armors are no longer in the game
         Relic,
         Tower
     }
@@ -41,9 +41,8 @@ namespace TonyDev.Game.Core.Items
                 var roll = Random.Range(0, 100);
                 return roll switch
                 {
-                    >= 75 => ItemType.Armor,
-                    >= 50 => ItemType.Relic,
-                    >= 25 => ItemType.Weapon,
+                    >= 67 => ItemType.Relic,
+                    >= 33 => ItemType.Weapon,
                     >= 0 => ItemType.Tower,
                     _ => throw new ArgumentOutOfRangeException()
                 };
@@ -51,7 +50,7 @@ namespace TonyDev.Game.Core.Items
             }
         }
 
-        public bool IsEquippable => itemType is ItemType.Armor or ItemType.Relic or ItemType.Weapon;
+        public bool IsEquippable => itemType is ItemType.Relic or ItemType.Weapon;
         public bool IsSpawnable => itemType is ItemType.Tower;
 
         //Editor variables

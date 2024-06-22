@@ -313,6 +313,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  startingEffects:
+    rid: 1000
   targetTag: 
   targetTeam: 0
   maxTargets: 1
@@ -321,14 +323,18 @@ MonoBehaviour:
     stat: 5
     strength: 1
     source: 
+    hidden: 0
   - statType: 0
     stat: 3
     strength: 1
     source: 
+    hidden: 0
   - statType: 0
     stat: 6
     strength: 100
     source: 
+    hidden: 0
+  targetRange: 8
   targetIntangible: 0
   <Team>k__BackingField: 1
   enemyData:
@@ -346,7 +352,16 @@ MonoBehaviour:
       lifetime: 0
       spawnOnDestroyKey: 
       ignoreInvincibility: 0
+      inflictEffects:
+        gameEffects: []
   enemyAnimator: {fileID: 7080094185981754640}
+  references:
+    version: 2
+    RefIds:
+    - rid: 1000
+      type: {class: GameEffectList, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        gameEffects: []
 --- !u!95 &7080094185981754642
 Animator:
   serializedVersion: 4
@@ -379,7 +394,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
+  m_Mass: 0.2
   m_LinearDrag: 10
   m_AngularDrag: 0.05
   m_GravityScale: 0

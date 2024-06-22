@@ -19,19 +19,37 @@ namespace TonyDev.Game
 
     public class SoundManager : MonoBehaviour
     {
+        public static SoundManager Instance;
         public List<GameSound> gameSounds = new();
         private static readonly Dictionary<string, AudioClip> AudioClips = new();
 
         private static bool _initialized;
+        public static float MasterVolume = 0.5f;
+
+        public AudioMixerGroup mainMixerGroup;
+        
+        public static void SetMasterVolume(float newVal)
+        {
+            MasterVolume = newVal;
+
+            AudioListener.volume = newVal;
+            
+            PlayerPrefs.SetFloat("volume", newVal);
+        }
 
         public void Awake()
         {
+            Instance = this;
+            
             if (_initialized)
             {
                 return;
             }
+
             _initialized = true;
 
+            MasterVolume = PlayerPrefs.GetFloat("volume", 0.5f);
+            
             foreach (var s in gameSounds)
             {
                 AudioClips.Add(s.name, s.audioClip);
@@ -58,14 +76,18 @@ namespace TonyDev.Game
 
             var token = new CancellationTokenSource();
             token.RegisterRaiseCancelOnDestroy(audio);
-            
-            SetAudioMuteOnPredicate(
-                    () => Vector2.Distance(GameManager.MainCamera.transform.position, position) > 50f && !global, audio)
-                .AttachExternalCancellation(token.Token);
+
+            if (GameManager.Instance != null)
+            {
+                SetAudioMuteOnPredicate(
+                        () => Vector2.Distance(GameManager.MainCamera.transform.position, position) > 50f && !global,
+                        audio)
+                    .AttachExternalCancellation(token.Token);
+            }
 
             destroy.seconds = soundClip.length * 2f;
 
-            audio.outputAudioMixerGroup = GameManager.Instance == null ? null : mixerGroup == null ? GameManager.Instance.mainMixerGroup : mixerGroup;
+            audio.outputAudioMixerGroup = mixerGroup == null ? Instance.mainMixerGroup : mixerGroup;
             audio.clip = soundClip;
             audio.playOnAwake = false;
             audio.loop = false;

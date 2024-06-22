@@ -10,7 +10,7 @@ using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Effects
 {
-    public class ElementalGloveEffect : AbilityEffect
+    public class ElementalGloveEffect : GameEffect
     {
         private enum Effect
         {
@@ -26,12 +26,17 @@ namespace TonyDev.Game.Core.Effects
         public int Ticks;
         public float LeechPercent;
 
+        public float CycleCd;
+        private float _nextCycleTime;
+
         private Effect _activeEffect;
 
         private ParticleTrailEffect _trailEffect;
 
         public override void OnAddOwner()
         {
+            _nextCycleTime = Time.time + CycleCd;
+            
             _trailEffect = new ParticleTrailEffect();
             Entity.CmdAddEffect(_trailEffect, Entity);
             _trailEffect.SetVisible(false);
@@ -39,18 +44,30 @@ namespace TonyDev.Game.Core.Effects
             Entity.OnDamageOther += TryLeech;
 
             base.OnAddOwner();
+            
+            CycleFx();
         }
 
         public override void OnRemoveOwner()
         {
+            _trailEffect.SetVisible(false);
+            ClearEffects();
             Entity.CmdRemoveEffect(_trailEffect);
-            base.OnRemoveOwner();
         }
 
         private SpeedEffect _speedEffect;
         private PoisonEffect _burnEffect;
 
-        protected override void OnAbilityActivate()
+        public override void OnUpdateOwner()
+        {
+            if (Time.time > _nextCycleTime)
+            {
+                CycleFx();
+                _nextCycleTime = Time.time + CycleCd;
+            }
+        }
+        
+        protected void CycleFx()
         {
             _activeEffect = 
                 _activeEffect switch
@@ -89,7 +106,7 @@ namespace TonyDev.Game.Core.Effects
             Entity.OnDamageOther -= TryLeech;
         }
 
-        private void InflictBurn(float dmg, GameEntity other, bool crit)
+        private void InflictBurn(float dmg, GameEntity other, bool crit, DamageType dt)
         {
             _burnEffect = new PoisonEffect
             {
@@ -101,7 +118,7 @@ namespace TonyDev.Game.Core.Effects
             other.CmdAddEffect(_burnEffect, Entity);
         }
 
-        private void InflictSlow(float dmg, GameEntity other, bool crit)
+        private void InflictSlow(float dmg, GameEntity other, bool crit, DamageType dt)
         {
             other.CmdRemoveEffect(_speedEffect);
             
@@ -115,22 +132,22 @@ namespace TonyDev.Game.Core.Effects
             other.CmdAddEffect(_speedEffect, Entity);
         }
 
-        protected void TryLeech(float dmg, GameEntity other, bool isCrit)
+        protected void TryLeech(float dmg, GameEntity other, bool isCrit, DamageType dt)
         {
             if (_activeEffect == Effect.Leech)
             {
                 var leech = -dmg * LeechPercent;
 
-                ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit);
+                ObjectSpawner.SpawnDmgPopup(Entity.transform.position, leech, isCrit, DamageType.Heal);
 
                 Entity.ApplyDamage(leech, out var success);
             }
         }
 
-        protected override void OnAbilityDeactivate()
+        public override string GetEffectDescription()
         {
-            _trailEffect.SetVisible(false);
-            ClearEffects();
+            return
+                $"<color=green>Gain elemental effects that cycle every {GameTools.WrapColor($"{CycleCd:N0}", Color.yellow)} seconds.</color>";
         }
     }
 }

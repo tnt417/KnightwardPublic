@@ -18,9 +18,9 @@ namespace TonyDev.Game.Core.Attacks
 
             foreach (var att in attacks)
             {
-                att.OnDamageDealt += (f, ge, b) =>
+                att.OnDamageDealt += (f, ge, b, dt) =>
                 {
-                    owner.OnDamageOther?.Invoke(f, ge, b);
+                    owner.OnDamageOther?.Invoke(f, ge, b, dt);
                 };
             }
 
@@ -46,7 +46,7 @@ namespace TonyDev.Game.Core.Attacks
 
             var attack = attackObject.AddComponent<AttackComponent>();
             attack.SetData(attackData, owner);
-            attack.OnDamageDealt += (f, ge, b) => owner.OnDamageOther?.Invoke(f, ge, b);
+            attack.OnDamageDealt += (f, ge, b, dt) => owner.OnDamageOther?.Invoke(f, ge, b, dt);
 
             return attackObject;
         }

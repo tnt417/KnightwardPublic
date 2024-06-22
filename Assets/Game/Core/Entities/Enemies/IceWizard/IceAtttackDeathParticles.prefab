@@ -4954,7 +4954,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: 4070c1504e57d0a49b4442dd74e88278, type: 3}
-  volume: 0.244
+  volume: 0.122
+  pitchRange: {x: 1, y: 1}
+  playOnAwake: 1
+  global: 0
+  mixerGroup: {fileID: 0}
+  cooldown: 0
 --- !u!114 &-484498337443474596
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4968,4 +4973,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   clip: {fileID: 8300000, guid: c792c3b717224dc4c976ec7f08de1169, type: 3}
-  volume: 0.127
+  volume: 0.0635
+  pitchRange: {x: 1, y: 1}
+  playOnAwake: 1
+  global: 0
+  mixerGroup: {fileID: 0}
+  cooldown: 0

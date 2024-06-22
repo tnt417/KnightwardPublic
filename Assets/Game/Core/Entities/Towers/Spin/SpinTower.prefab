@@ -109,6 +109,7 @@ MonoBehaviour:
   team: 1
   destroyOnApply: 0
   destroyOnAnyCollide: 0
+  destroyOnHitWall: 0
   ignoreInvincibility: 0
   inflictBuffs: []
   inflictEffects: []
@@ -125,8 +126,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1ff4f85a28fd05947baf5b6067bec941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  startingEffects:
+    rid: 1000
   targetTag: 
   targetTeam: 0
   maxTargets: 1
@@ -135,9 +139,11 @@ MonoBehaviour:
     stat: 3
     strength: 1
     source: 
+    hidden: 0
+  targetRange: 0.5
   targetIntangible: 0
+  <Team>k__BackingField: 0
   towerAnimator: {fileID: 6938340393128323355}
-  targetRadius: 0.5
   myItem:
     uiSprite: {fileID: 0}
     itemName: 
@@ -149,9 +155,14 @@ MonoBehaviour:
     itemEffects: []
     projectiles: []
     spawnablePrefabName: 
+  durability: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1000
+      type: {class: GameEffectList, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        gameEffects: []
 --- !u!114 &330042881028611830
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,9 +176,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
+  _assetId: 1302955654
   serverOnly: 0
   visible: 0
-  m_AssetId: 7591538168fe32242ae5ef4cd358f346
   hasSpawned: 0
 --- !u!1 &4032208556319356246
 GameObject:

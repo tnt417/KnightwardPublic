@@ -31,7 +31,7 @@ namespace TonyDev
 
         private GameEntity _pounceTarget;
         
-        private void ActivatePounce(float dmg, GameEntity ge, bool crit)
+        private void ActivatePounce(float dmg, GameEntity ge, bool crit, DamageType dt)
         {
             _shouldPounce = true;
             _pounceTarget = ge;

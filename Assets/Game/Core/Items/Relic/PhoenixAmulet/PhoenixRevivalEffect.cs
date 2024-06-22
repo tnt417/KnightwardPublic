@@ -8,20 +8,32 @@ using UnityEngine;
 
 namespace TonyDev
 {
-    public class PhoenixRevivalEffect : AbilityEffect
+    public class PhoenixRevivalEffect : GameEffect
     {
         public float RevivalHealthPercentage = 0.25f; // The percentage of maximum health the player is revived with
         public float InvincibilityDuration = 3.0f; // The duration of invincibility after revival
         public float RevivalRange = 5.0f; // The radius of the revival explosion
 
         private Player _player;
+
+        public float Cooldown;
+        private float _nextReviveTime;
+
+        private ParticleTrailEffect _trailEffect;
         
         // Called on the server when the effect is added to a GameEntity
         public override void OnAddOwner()
         {
-            base.OnAddOwner();
-            DiscountCooldown(1, true);
+            _trailEffect = new ParticleTrailEffect();
             
+            Entity.CmdAddEffect(_trailEffect, Entity);
+            
+            _trailEffect.SetColor(Color.yellow);
+            
+            base.OnAddOwner();
+
+            _nextReviveTime = Time.time;
+
             if (Entity is not Player entity)
             {
                 Entity.CmdRemoveEffect(this);
@@ -39,29 +51,26 @@ namespace TonyDev
             Entity.OnDeathOwner -= OnDeath;
         }
 
-        protected override void OnAbilityActivate()
-        {
-        }
-
         public override void OnUpdateOwner()
         {
-            _player.playerDeath.disableDeathHandling = Ready;
+            _trailEffect.SetVisible(Time.time >= _nextReviveTime);
+            _player.playerDeath.disableDeathHandling = Time.time >= _nextReviveTime;
             base.OnUpdateOwner();
         }
 
         // Called on the server when the entity dies
         private void OnDeath(float a)
         {
-            if(!Ready) return;
+            if(Time.time < _nextReviveTime) return;
 
+            _nextReviveTime = Time.time + Cooldown;
+            
             // Calculate the amount of health to revive the player with
             var revivalHealth = Entity.MaxHealth * RevivalHealthPercentage;
 
             // Revive the player
 
             Entity.SetHealth(revivalHealth);
-
-            base.OnAbilityActivate();
 
             Object.Instantiate(ObjectFinder.GetPrefab("phoenix"), Entity.transform.position, Quaternion.identity);
             
@@ -71,7 +80,7 @@ namespace TonyDev
                 if (enemy.Team != Entity.Team)
                 {
                     var crit = Entity.Stats.CritSuccessful;
-                    enemy.CmdDamageEntity(crit ? revivalHealth * 2 : revivalHealth, crit, null, false);
+                    enemy.CmdDamageEntity(crit ? revivalHealth * 2 : revivalHealth, crit, null, false, DamageType.Default);
                 }
             }
             

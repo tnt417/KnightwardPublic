@@ -38,25 +38,27 @@ namespace TonyDev
         }
     }
 
-    public class BloodstoneAbility : AbilityEffect
+    public class BloodstoneAbility : GameEffect
     {
         public int Radius;
-        public float HealthMult;
-        public Vector2 DamageMultRange;
-        public float DamageMult => LinearScale(DamageMultRange.x, DamageMultRange.y, 50);
+        public float DamageMult;
 
-        protected override void OnAbilityActivate()
+        public override void OnAddOwner()
+        {
+            Entity.OnHurtOwner += OnTakeDamage;
+        }
+        
+        private void OnTakeDamage(float dmg)
+        {
+            if (dmg <= 0) return;
+            
+            OnAbilityActivate(dmg);
+        }
+        
+        protected void OnAbilityActivate(float dmgTaken)
         {
             // Sacrifice a portion of the player's current health in exchange for a burst of damage.
-            var damage = Entity.MaxHealth * HealthMult;
-
-            if (Entity.CurrentHealth - damage < 0)
-            {
-                DiscountCooldown(1, true);
-                return;
-            }
-            
-            Entity.SetHealth(Entity.CurrentHealth - damage);
+            var damage = dmgTaken * DamageMult;
 
             Object.Instantiate(ObjectFinder.GetPrefab("bloodstone"), Entity.transform.position, Quaternion.identity);
             
@@ -66,16 +68,14 @@ namespace TonyDev
                     !(Vector2.Distance(ge.transform.position, Entity.transform.position) < Radius)) continue;
 
                 var crit = Entity.Stats.CritSuccessful;
-                ge.CmdDamageEntity((crit ? damage * 2 : damage) * DamageMult, crit, null, false);
+                ge.CmdDamageEntity(crit ? damage * 2 : damage, crit, null, false, DamageType.Default);
             }
-
-            base.OnAbilityActivate();
         }
 
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Sacrifice <color=yellow>{HealthMult:P0}</color> of the player's current health in exchange for a burst of damage within {Radius} tiles equal to <color=yellow>{DamageMult:P0}</color> of the amount of health sacrificed.</color>";
+                $"<color=green>When taking damage, retaliate with <color=yellow>{DamageMult:P0}</color> of the damage within {Radius} tiles.</color>";
         }
     }
 }

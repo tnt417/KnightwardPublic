@@ -23,7 +23,6 @@ namespace TonyDev.Game.Level.Decorations.Slots
         Weapon,
         Relic,
         Tower,
-        Armor,
         Common,
         Uncommon,
         Rare,
@@ -102,11 +101,6 @@ namespace TonyDev.Game.Level.Decorations.Slots
 
             switch (determinedOutcome.outcome)
             {
-                case SlotOutcome.Armor:
-                    ObjectSpawner.SpawnGroundItem(
-                        ItemGenerator.GenerateItemOfType(ItemType.Armor, Item.RandomRarity(slots.Count * 10)), 0,
-                        (Vector2) transform.position - new Vector2(0, 1f), netIdentity);
-                    break;
                 case SlotOutcome.Weapon:
                     ObjectSpawner.SpawnGroundItem(
                         ItemGenerator.GenerateItemOfType(ItemType.Weapon, Item.RandomRarity(slots.Count * 10)), 0,

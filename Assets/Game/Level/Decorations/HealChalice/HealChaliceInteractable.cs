@@ -17,7 +17,7 @@ namespace TonyDev.Game.Level.Decorations.HealChalice
         [Server]
         public void OnInteractServer()
         {
-            Crystal.Crystal.Instance.CmdDamageEntity(-_crystalHeal, false, null, true);
+            Crystal.Crystal.Instance.CmdDamageEntity(-_crystalHeal, false, null, true, DamageType.Heal);
         }
 
         public void OnInteractGlobal()

@@ -37,7 +37,7 @@ namespace TonyDev.Game.Global
                 foreach (var att in attackComponents)
                 {
                     att.SetData(null, _owner);
-                    att.OnDamageDealt += (d, ge, crit) => _owner.OnDamageOther?.Invoke(d, ge, crit);
+                    att.OnDamageDealt += (d, ge, crit, dt) => _owner.OnDamageOther?.Invoke(d, ge, crit, dt);
                 }
                 var destroy = spawned.GetComponent<DestroyAfterSeconds>();
                 if(destroy != null) destroy.SetOwner(_owner);

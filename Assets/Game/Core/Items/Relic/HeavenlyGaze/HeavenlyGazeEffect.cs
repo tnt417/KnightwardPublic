@@ -8,22 +8,44 @@ using UnityEngine;
 
 namespace TonyDev
 {
-    public class HeavenlyGazeEffect : AbilityEffect
+    public class HeavenlyGazeEffect : GameEffect
     {
         public Vector2 DamageMultRange;
         private float DamageMult => LinearScale(DamageMultRange.x, DamageMultRange.y, 50);
+
+        public float HighlightCooldown;
+        private float _nextHighlightTime;
         
         // The GameEntity of the highlighted enemy
         private GameEntity _highlightedEnemy;
 
         private ParticleTrailEffect _vfx;
-        
-        protected override void OnAbilityActivate()
+
+        public override void OnUpdateOwner()
         {
-            if(_highlightedEnemy != null) _highlightedEnemy.CmdRemoveEffect(_vfx);
-            
+            if (Time.time > _nextHighlightTime)
+            {
+                OnAbilityActivate();
+                _nextHighlightTime = Time.time + HighlightCooldown;
+            }
+        }
+        
+        protected void OnAbilityActivate()
+        {
             // Find the nearest enemy and highlight it
-            _highlightedEnemy = GameManager.GetEntitiesInRange(Entity.transform.position, 10f).First(ge => ge.Team != Entity.Team);
+            var newHighlightedEnemy = GameManager.EntitiesReadonly.Where(ge => ge.Team != Entity.Team && ge.CurrentParentIdentity == Entity.CurrentParentIdentity).OrderByDescending(ge => ge.NetworkCurrentHealth).FirstOrDefault();
+
+            if (_highlightedEnemy == newHighlightedEnemy) return;
+
+            if (_highlightedEnemy != null)
+            {
+                _highlightedEnemy.CmdRemoveEffect(_vfx);
+            }
+
+            if (newHighlightedEnemy == null) return;
+
+            _highlightedEnemy = newHighlightedEnemy;
+
             _highlightedEnemy.CmdAddEffect(_vfx = new ParticleTrailEffect(), Entity);
 
             // Increase the player's next attack damage against the highlighted enemy
@@ -39,11 +61,13 @@ namespace TonyDev
         }
 
         // Increase the player's next attack damage against the highlighted enemy
-        private void IncreaseDamage(float damage, GameEntity target, bool wasCrit)
+        private void IncreaseDamage(float damage, GameEntity target, bool wasCrit, DamageType dt)
         {
+            if (dt == DamageType.DoT) return;
+            
             if (target == _highlightedEnemy)
             {
-                target.CmdDamageEntity(damage * (DamageMult-1) * (wasCrit ? 2 : 1), wasCrit, null, false);
+                target.CmdDamageEntity(damage * (DamageMult-1) * (wasCrit ? 2 : 1), wasCrit, null, false, DamageType.Default);
             }
             
             if(_highlightedEnemy != null) _highlightedEnemy.CmdRemoveEffect(_vfx);
@@ -53,7 +77,7 @@ namespace TonyDev
         
         public override string GetEffectDescription()
         {
-            return $"<color=green>Upon activation, highlights one nearby enemy and makes the next attack on that enemy deal <color=yellow>{DamageMult:N0}</color> times as much damage.</color>";
+            return $"<color=green>Every {GameTools.WrapColor($"{HighlightCooldown:N0}", Color.yellow)} seconds, highlight the enemy with the highest health in your instance. Your next attack on the highlighted enemy deals <color=yellow>{DamageMult:N0}</color> times as much damage.</color>";
         }
     }
 }

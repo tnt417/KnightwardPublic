@@ -63,7 +63,7 @@ namespace TonyDev.Game.Core.Items
                 return 0;
             }
 
-            return (int) Mathf.Pow(GenerateCost(item.itemRarity, dungeonFloor) * Random.Range(0.2f, 0.3f), 1.3f);
+            return (int) Mathf.Pow(GenerateCost(item.itemRarity, dungeonFloor) * Random.Range(0.1f, 0.15f), 1.3f);
         }
 
         //Returns a randomly generated item based on input parameters
@@ -74,7 +74,7 @@ namespace TonyDev.Game.Core.Items
 
             var matchingItems = UnlocksManager.UnlockedItems.Where(i =>
                 i.item.itemType == type && (i.item.itemRarity == rarity ||
-                i.item.itemType is ItemType.Armor or ItemType.Weapon)).ToArray();
+                i.item.itemType is ItemType.Weapon)).ToArray();
 
             var filteredItemCounts = new Dictionary<string, int>(_itemCounts.Where(kv =>
                 matchingItems.Any(i => i.item.itemName == kv.Key)));
@@ -102,7 +102,7 @@ namespace TonyDev.Game.Core.Items
             
             switch (type)
             {
-                case ItemType.Weapon or ItemType.Armor or ItemType.Tower:
+                case ItemType.Weapon or ItemType.Tower:
                     item.statBonuses = StatBonus.Combine(GenerateItemStats(type, rarity, item.bypassStatGeneration),
                             item.statBonuses)
                         .ToArray();
@@ -153,7 +153,7 @@ namespace TonyDev.Game.Core.Items
 
         private static StatBonus[] GenerateItemStats(ItemType itemType, ItemRarity itemRarity, bool bypassStatGen)
         {
-            if (itemType is not (ItemType.Armor or ItemType.Weapon or ItemType.Tower) || bypassStatGen) return null;
+            if (itemType is not (ItemType.Weapon or ItemType.Tower) || bypassStatGen) return null;
 
             /*Weapons:
             Common = base dmg, base attack spd
@@ -182,12 +182,6 @@ namespace TonyDev.Game.Core.Items
                 case ItemType.Weapon:
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, source));
                     statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier,
-                        source));
-                    break;
-                case ItemType.Armor:
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Armor, ArmorStrength * multiplier, source));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Health, HealthStrength * multiplier, source));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.HpRegen, HealthStrength * multiplier * 0.01f,
                         source));
                     break;
                 case ItemType.Tower:

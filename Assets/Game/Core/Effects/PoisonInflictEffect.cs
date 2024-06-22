@@ -20,8 +20,9 @@ namespace TonyDev.Game.Core.Effects
 
         private readonly Dictionary<GameEntity, PoisonEffect> _lastInflictedEffects = new();
         
-        public void InflictPoison(float dmg, GameEntity entity, bool crit)
+        public void InflictPoison(float dmg, GameEntity entity, bool crit, DamageType dt)
         {
+            if (dt == DamageType.DoT) return;
             if (entity.Team == Entity.Team) return;
             
             if (DoPoisonStacking || (_lastInflictedEffects.ContainsKey(entity) && _lastInflictedEffects[entity] is null or {Expired: true}) || !_lastInflictedEffects.ContainsKey(entity))

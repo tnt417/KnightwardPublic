@@ -49,7 +49,7 @@ namespace TonyDev.Game.Global
             ProjectileData projectileData, bool localOnly = false) =>
             GameManager.Instance.SpawnProjectile(owner, pos, direction.normalized, projectileData, localOnly);
 
-        public static void SpawnDmgPopup(Vector2 position, float damage, bool critical)
+        public static void SpawnDmgPopup(Vector2 position, float damage, bool critical, DamageType damageType)
         {
             var roundedDamage = damage > 0 ? Mathf.CeilToInt(damage) : Mathf.FloorToInt(damage);
 
@@ -68,11 +68,17 @@ namespace TonyDev.Game.Global
                 ? "<size=1.7><sprite=10></size>Dodge"
                 : (damage > 0 ? (critical ? "<size=1.7><sprite=9></size>" : "<size=1.7><sprite=3></size>") : "<size=1.7><sprite=4></size>") + Mathf.Abs(roundedDamage);
 
+            if (damageType == DamageType.DoT)
+            {
+                tmp.text = Mathf.Abs(roundedDamage).ToString();
+            }
+            
+            //AoE = gray
             //Yellow = normal damage
             //Red = crit damage
             //Green = normal healing
             //Magenta = crit healing
-            tmp.color = damage == 0 ? Color.gray :
+            tmp.color = damageType == DamageType.DoT ? Color.gray : damage == 0 ? Color.gray :
                 damage > 0 ? critical ? Color.red : Color.yellow :
                 critical ? Color.magenta : Color.green;
 

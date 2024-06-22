@@ -19,7 +19,7 @@ namespace TonyDev.Game.Core.Entities.Towers
     {
         //Editor variables
         [SerializeField] protected TowerAnimator towerAnimator;
-        [SerializeField] public float targetRadius;
+        //[SerializeField] public float targetRadius;
         //
 
         [HideInInspector] [SyncVar] public Item myItem;
@@ -48,7 +48,6 @@ namespace TonyDev.Game.Core.Entities.Towers
             _interactableButton.AddInteractKey(Key.R, InteractType.Repair);
             _interactableButton.onInteract.AddListener((type) =>
             {
-                Debug.Log("Inteact");
                 if (this != null && type == InteractType.Interact) CmdRequestPickup();
                 if (this != null && type == InteractType.Repair)
                 {

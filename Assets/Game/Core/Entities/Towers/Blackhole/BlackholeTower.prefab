@@ -90,6 +90,8 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  startingEffects:
+    rid: 1000
   targetTag: 
   targetTeam: 0
   maxTargets: 1
@@ -109,10 +111,10 @@ MonoBehaviour:
     strength: 2
     source: 
     hidden: 0
+  targetRange: 6
   targetIntangible: 0
   <Team>k__BackingField: 0
   towerAnimator: {fileID: 6938340393128323355}
-  targetRadius: 8
   myItem:
     uiSprite: {fileID: 0}
     itemName: 
@@ -139,6 +141,8 @@ MonoBehaviour:
       lifetime: 4
       spawnOnDestroyKey: blackholePoof
       ignoreInvincibility: 0
+      inflictEffects:
+        gameEffects: []
     disableMovement: 0
     travelSpeed: 2
     offsetDegrees: 0
@@ -151,7 +155,11 @@ MonoBehaviour:
   fireSound: dagger
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1000
+      type: {class: GameEffectList, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        gameEffects: []
 --- !u!58 &2378733973540134516
 CircleCollider2D:
   m_ObjectHideFlags: 0

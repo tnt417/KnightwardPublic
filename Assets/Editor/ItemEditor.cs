@@ -95,7 +95,7 @@ namespace TonyDev.Editor
 
             DisplayGeneralInfo(sp); //Show fields that applies to all items
 
-            if (itemType is ItemType.Armor or ItemType.Weapon or ItemType.Relic or ItemType.Tower)
+            if (itemType is ItemType.Weapon or ItemType.Relic or ItemType.Tower)
                 DisplayEquippableInfo(sp); //Show equippable-specific fields
 
             if (itemType is ItemType.Tower) DisplaySpawnableInfo(sp); //Show spawnable-specific fields

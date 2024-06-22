@@ -33,13 +33,10 @@ MonoBehaviour:
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        ActivateButton: 0
-        Cooldown: 30
-        Duration: 0
-        abilitySprite: {fileID: 21300000, guid: 917f334ccc8871e4cb070b3816cb479f, type: 3}
         RevivalHealthPercentage: 0.25
         InvincibilityDuration: 3
         RevivalRange: 5
+        Cooldown: 30
     - rid: 1191606023430078468
       type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:

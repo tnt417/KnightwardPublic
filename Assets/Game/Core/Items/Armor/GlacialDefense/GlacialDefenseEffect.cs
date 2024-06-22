@@ -30,7 +30,7 @@ namespace TonyDev
             Entity.OnDamageOther -= OnHit;
         }
 
-        private void OnHit(float damage, GameEntity ge, bool crit)
+        private void OnHit(float damage, GameEntity ge, bool crit, DamageType dt)
         {
             if (ge == null) return;
 
@@ -40,7 +40,7 @@ namespace TonyDev
                 _frozenEntities.Remove(ge);
 
                 ge.CmdRemoveBonusesFromSource(EffectIdentifier);
-                ge.CmdDamageEntity(damage * BonusDamageMult, crit, null, true);
+                ge.CmdDamageEntity(damage * BonusDamageMult, crit, null, true, DamageType.Default);
             }
         }
 

@@ -2,6 +2,7 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.Core.Effects.ItemEffects
 {
@@ -9,10 +10,21 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
     {
         public override void OnAddOwner()
         {
+            ActivateButton = KeyCode.None;
             base.OnAddOwner();
             Entity.OnAttack += PlaySound;
             
             Player.LocalInstance.playerAnimator.attackAnimationName = "Attack";
+        }
+        
+        public override void OnUpdateOwner()
+        {
+            base.OnUpdateOwner();
+            
+            if (Mouse.current.rightButton.isPressed && Ready)
+            {
+                OnAbilityActivate();
+            }
         }
 
         public override void OnRemoveOwner()
@@ -29,8 +41,9 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         protected override void OnAbilityActivate()
         {
+            base.OnAbilityActivate();
             Entity.Stats.AddBuff(new StatBonus(StatType.Flat, Stat.Dodge, 0.5f, "daggerEffect"), Duration);
-            SoundManager.PlaySound("woosh", 0.5f, Entity.transform.position, Random.Range(0.7f, 0.8f));
+            SoundManager.PlaySound("woosh", 0.5f, Entity.transform.position, Random.Range(1.1f, 1.2f));
             Player.LocalInstance.playerMovement.Dash(3f, Vector2.zero);
         }
 

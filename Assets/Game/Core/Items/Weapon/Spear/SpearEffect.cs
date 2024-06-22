@@ -4,6 +4,7 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.Core.Effects.ItemEffects
 {
@@ -22,16 +23,17 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         public override void OnAddOwner()
         {
+            ActivateButton = KeyCode.None;
+            base.OnAddOwner();
             empoweredProjectile.OnHitOther += InflictPoison;
             Entity.OnAttack += Shoot;
             Player.LocalInstance.playerAnimator.attackAnimationName = "Throw";
-            base.OnAddOwner();
         }
 
         public void Shoot()
         {
-            var spawnPos = Entity.transform.position;
-            var direction = GameManager.MouseDirection;
+            var spawnPos = (Vector2)Entity.transform.position - new Vector2(0, 0.4f);
+            var direction = GameManager.MouseDirectionLow;
 
             SoundManager.PlaySoundPitchVariant("spear", 0.5f,spawnPos, 0.8f, 1.2f);
             SmoothCameraFollow.Shake(1, 3f);
@@ -50,6 +52,16 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
             }
         }
 
+        public override void OnUpdateOwner()
+        {
+            base.OnUpdateOwner();
+            
+            if (Mouse.current.rightButton.isPressed && Ready)
+            {
+                OnAbilityActivate();
+            }
+        }
+
         public override void OnRemoveOwner()
         {
             empoweredProjectile.OnHitOther -= InflictPoison;
@@ -57,7 +69,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
             base.OnRemoveOwner();
         }
 
-        public void InflictPoison(float dmg, GameEntity entity, bool crit)
+        public void InflictPoison(float dmg, GameEntity entity, bool crit, DamageType dt)
         {
             if (entity == null) return;
             
@@ -71,6 +83,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         protected override void OnAbilityActivate()
         {
+            base.OnAbilityActivate();
             OnAbilityDeactivate();
             
             _empowered = true;

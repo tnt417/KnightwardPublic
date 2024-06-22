@@ -26,7 +26,7 @@ namespace TonyDev.Game.Core.Entities
     {
         public event Action OnTargetChangeOwner;
         public SyncList<GameEntity> Targets = new();
-        [SerializeReference]public GameEffectList startingEffects = new();
+        //[SerializeReference]public GameEffectList startingEffects = new();
 
         public const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
@@ -38,7 +38,7 @@ namespace TonyDev.Game.Core.Entities
         [SerializeField] private Team targetTeam;
         [SerializeField] private int maxTargets;
         [SerializeField] protected StatBonus[] baseStats;
-
+        [SerializeField] public float targetRange = 8f;
         [SerializeField] private bool targetIntangible;
         // 
 
@@ -64,7 +64,7 @@ namespace TonyDev.Game.Core.Entities
         public Action<string> OnEffectInfoReceive;
         
         [Command(requiresAuthority = false)]
-        public void CmdDamageEntity(float damage, bool isCrit, NetworkIdentity exclude, bool ignoreInvincibility)
+        public void CmdDamageEntity(float damage, bool isCrit, NetworkIdentity exclude, bool ignoreInvincibility, DamageType dt)
         {
             var successful = true;
 
@@ -72,7 +72,7 @@ namespace TonyDev.Game.Core.Entities
                 ? damage
                 : ApplyDamage(damage, out successful,
                     ignoreInvincibility); //Players should have already been damaged on the client
-            if (successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude);
+            if (successful) GameManager.Instance.RpcSpawnDmgPopup(transform.position, dmg, isCrit, exclude, dt);
         }
 
         [Command(requiresAuthority = false)]
@@ -287,18 +287,18 @@ namespace TonyDev.Game.Core.Entities
             OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
             OnHealthChangedOwner?.Invoke(CurrentHealth);
 
-            if (startingEffects is {gameEffects: { }})
+            /*if (startingEffects is {gameEffects: { }})
             {
                 foreach (var se in startingEffects.gameEffects)
                 {
                     if(se != null) CmdAddEffect(se, this);
                 }
-            }
+            }*/
         }
 
         public Action OnStart;
 
-        public Action<float, GameEntity, bool>
+        public Action<float, GameEntity, bool, DamageType>
             OnDamageOther; //TODO: Damage types: Contact, Projectile, DoT, AoE, etc. (Use to better control PoisonInflictEffect)
 
         private void UpdateStats()
@@ -345,10 +345,10 @@ namespace TonyDev.Game.Core.Entities
 
         public Action OnLocalHurt;
 
-        public void LocalHurt(float damage, bool isCrit)
+        public void LocalHurt(float damage, bool isCrit, DamageType dt)
         {
             if (!IsInvulnerable)
-                ObjectSpawner.SpawnDmgPopup(transform.position, Stats.ModifyIncomingDamage(damage), isCrit);
+                ObjectSpawner.SpawnDmgPopup(transform.position, Stats.ModifyIncomingDamage(damage), isCrit, dt);
             OnLocalHurt?.Invoke();
         }
 
@@ -360,8 +360,7 @@ namespace TonyDev.Game.Core.Entities
              * 
              */
 
-            var range = 8f;
-            if (this is Tower t) range = t.targetRadius;
+            var range = targetRange;
 
             var myPos = transform.position;
 
@@ -586,6 +585,11 @@ namespace TonyDev.Game.Core.Entities
         // {
         //     OnDeathBroadcast?.Invoke();
         // }
+    }
+
+    public enum DamageType
+    {
+        Default, DoT, AoE, Absolute, Contact, Projectile, Heal
     }
 
     public class ByClosest : IComparer<KeyValuePair<float, GameEntity>>

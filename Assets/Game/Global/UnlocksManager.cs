@@ -64,7 +64,11 @@ namespace TonyDev
 
             foreach (var s in Unlocks)
             {
-                unlockedItems.Add(GameManager.AllItems.First(i => i.item.itemName == s));
+                var matchingItem = GameManager.AllItems.FirstOrDefault(i => i != null && i.item.itemName == s);
+                
+                if (matchingItem == null) continue;
+                
+                unlockedItems.Add(GameManager.AllItems.First(i => i != null && i.item.itemName == s));
             }
         }
 

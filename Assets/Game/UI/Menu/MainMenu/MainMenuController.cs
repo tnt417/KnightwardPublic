@@ -21,6 +21,8 @@ namespace TonyDev.Game.UI.Menu.MainMenu
             _originalCameraPos = mainCamera.transform.position;
             
             GameManager.ResetGame();
+
+            Debug.unityLogger.logEnabled = PlayerPrefs.GetInt("errorLog", 1) == 1;
         }
 
         private void Update()
@@ -29,8 +31,13 @@ namespace TonyDev.Game.UI.Menu.MainMenu
                 _originalCameraPos + (Vector3)(Mouse.current.position.ReadValue() - new Vector2(Screen.width / 2f, Screen.height / 2f)) * menuShiftEffectStrength/1000f; //Offset the camera pos based on mouse pos.
         }
 
+        private bool _hostClicked = false;
+        
         public void OnHostClick()
         {
+            if (_hostClicked) return;
+            _hostClicked = true;
+            
             var customNetManager = NetworkManager.singleton as CustomNetworkManager;
             if (customNetManager != null)
             {

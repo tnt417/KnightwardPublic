@@ -10,26 +10,26 @@ using Vector2 = UnityEngine.Vector2;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
-    public class PlayerMovement : NetworkBehaviour
+    public struct GameForce //Custom force implementation to allow more specific control of the player's movement.
     {
-        private struct GameForce //Custom force implementation to allow more specific control of the player's movement.
+        public GameForce(Vector2 direction, float force, float unitsRemaining)
         {
-            public GameForce(Vector2 direction, float force, float unitsRemaining)
-            {
-                InitialUnits = unitsRemaining;
-                UnitsRemaining = unitsRemaining;
-                InitialForce = force;
-                Force = force;
-                Direction = direction;
-            }
-
-            public readonly Vector2 Direction; //Direction of the force
-            public readonly float InitialForce; //The force at the creation of the force
-            public float Force; //The current force
-            public float UnitsRemaining; //The units remaining until the force is removed
-            public readonly float InitialUnits; //The UnitsRemaining at the creation of the force
+            InitialUnits = unitsRemaining;
+            UnitsRemaining = unitsRemaining;
+            InitialForce = force;
+            Force = force;
+            Direction = direction;
         }
 
+        public readonly Vector2 Direction; //Direction of the force
+        public readonly float InitialForce; //The force at the creation of the force
+        public float Force; //The current force
+        public float UnitsRemaining; //The units remaining until the force is removed
+        public readonly float InitialUnits; //The UnitsRemaining at the creation of the force
+    }
+    
+    public class PlayerMovement : NetworkBehaviour
+    {
         //Editor variables
         [SerializeField] private Rigidbody2D rb2D;
 

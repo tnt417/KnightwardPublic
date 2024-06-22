@@ -33,7 +33,7 @@ namespace TonyDev.Game.Core.Entities.Towers.Solar
             foreach (var ge in GameManager.EntitiesReadonly.Where(e =>
                 e.Team == Team.Enemy && e.CurrentParentIdentity == tower.CurrentParentIdentity && Vector2.Distance(e.transform.position, tower.transform.position) < harmRadius))
             {
-                ge.CmdDamageEntity(tower.Stats.GetStat(Stat.Damage), false, null, false);
+                ge.CmdDamageEntity(tower.Stats.GetStat(Stat.Damage), false, null, false, DamageType.AoE);
             }
         }
     }

@@ -48,7 +48,6 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                 SlotOutcome.Weapon => ItemType.Weapon,
                 SlotOutcome.Tower => ItemType.Tower,
                 SlotOutcome.Relic => ItemType.Relic,
-                SlotOutcome.Armor => ItemType.Armor,
                 _ => default
             };
         }

@@ -20,6 +20,10 @@ PrefabInstance:
       value: 1.75
       objectReference: {fileID: 0}
     - target: {fileID: 4143216695699966044, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_Mass
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4143216695699966044, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_CollisionDetection
       value: 1
       objectReference: {fileID: 0}
@@ -205,6 +209,8 @@ MonoBehaviour:
       lifetime: 0.5
       spawnOnDestroyKey: dragonPool
       ignoreInvincibility: 0
+      inflictEffects:
+        gameEffects: []
     disableMovement: 0
     travelSpeed: 10
     offsetDegrees: 0

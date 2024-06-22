@@ -41,7 +41,8 @@ namespace TonyDev.Game.Core.Entities.Enemies.darkArcher
                     Vector2.Distance(FirstEnemyTarget.transform.position, Enemy.transform.position) < maxShootDistance)
                 {
                     await ShootAnimation().First();
-                    ShootProjectileSpread(shootProjectiles, transform.position, GetDirectionToFirstTarget());
+                    var dir = GetDirectionToFirstTarget();
+                    if(dir != Vector2.zero) ShootProjectileSpread(shootProjectiles, transform.position, dir);
                     await UniTask.Delay(TimeSpan.FromSeconds(2));
                 }
             }

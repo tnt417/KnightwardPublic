@@ -1,11 +1,15 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Object = UnityEngine.Object;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Effects
 {
@@ -21,6 +25,12 @@ namespace TonyDev.Game.Core.Effects
 
         private double _hammerRespawnTimer;
 
+        public override void OnAddOwner()
+        {
+            ActivateButton = KeyCode.None;
+            base.OnAddOwner();
+        }
+
         public override void OnRemoveOwner()
         {
             DestroyAllHammers();
@@ -29,6 +39,11 @@ namespace TonyDev.Game.Core.Effects
 
         public override void OnUpdateOwner()
         {
+            if (Mouse.current.rightButton.isPressed && Ready)
+            {
+                OnAbilityActivate();
+            }
+
             base.OnUpdateOwner();
             
             if (Time.time > _hammerRespawnTimer && _hammers.Count < MaxHammers)
@@ -60,6 +75,8 @@ namespace TonyDev.Game.Core.Effects
         {
             base.OnAbilityActivate();
 
+            HammerSfx(_hammers.Count).Forget();
+            
             foreach (var  (go, _) in _hammers)
             {
                 var position = go.transform.position;
@@ -88,13 +105,17 @@ namespace TonyDev.Game.Core.Effects
             _hammers.Clear();
         }
 
-        protected override void OnAbilityDeactivate()
-        {
-            base.OnAbilityDeactivate();
-        }
-
         private readonly Dictionary<GameObject, AttackComponent> _hammers = new();
 
+        private async UniTask HammerSfx(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                SoundManager.PlaySound("woosh", 0.5f, Entity.transform.position, Random.Range(0.6f, 0.8f));
+                await UniTask.Delay(Random.Range(50, 75));
+            }
+        }
+        
         private void SpawnHammer()
         {
             if (_hammers.Count >= MaxHammers) return;
@@ -104,7 +125,7 @@ namespace TonyDev.Game.Core.Effects
 
             var att = hammer.GetComponent<AttackComponent>();
                 
-            att.OnDamageDealt += (dmg, _, _) =>
+            att.OnDamageDealt += (dmg, _, _, _) =>
             {
                 if(dmg > 0) SpawnHammer();
             };

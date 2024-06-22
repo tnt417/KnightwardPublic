@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -30,5 +31,8 @@ namespace TonyDev
     {
         public MapTheme[] mapZones;
         public int loopPoint;
+        
+        [Description("Defaults to 0. Should only be used for debug purposes.")]
+        public int floorAtLaunchOffset = 0;
     }
 }

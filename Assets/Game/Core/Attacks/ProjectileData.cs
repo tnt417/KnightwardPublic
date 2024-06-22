@@ -52,7 +52,7 @@ namespace TonyDev.Game.Core.Attacks
         [Header("Effects")] [SerializeReference] [SerializeField]
         public List<GameEffect> effects = new();
 
-        [NonSerialized] public Action<float, GameEntity, bool> OnHitOther;
+        [NonSerialized] public Action<float, GameEntity, bool, DamageType> OnHitOther;
 
         //The only place that projectiles should be spawned from. Creates a projectile using this instance of the class.
         public GameObject SpawnSelf(Vector2 position, Vector2 direction, GameEntity owner, float sizeMultiplier,
@@ -121,7 +121,7 @@ namespace TonyDev.Game.Core.Attacks
                 }
 
             //Set sprite and collider configuration...
-            sprite.sprite = projectileSprite;
+            if(projectileSprite != null) sprite.sprite = projectileSprite;
             col.radius = attackData.hitboxRadius;
             col.transform.localPosition = Vector3.zero;
             col.isTrigger = true;

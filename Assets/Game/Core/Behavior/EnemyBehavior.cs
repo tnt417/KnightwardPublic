@@ -1,12 +1,17 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
+using Mirror;
 using TonyDev.Game.Core.Attacks;
+using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms;
 using UniRx;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -137,12 +142,12 @@ namespace TonyDev.Game.Core.Behavior
 
                 if (t == null) continue;
 
-                Rb2d.velocity = t != null
+                if(!CancelMovement) Rb2d.velocity = t != null
                     ? (followTransform.Invoke().position - transform.position).normalized * speed.Invoke()
                     : Vector2.zero;
             }
-
-            Rb2d.velocity = Vector2.zero;
+            //TODO: This cancel is iffy?
+            if(!CancelMovement) Rb2d.velocity = Vector2.zero;
         }
 
         protected async UniTask GotoOverSeconds(Vector2 position, float seconds)
@@ -158,7 +163,7 @@ namespace TonyDev.Game.Core.Behavior
             while (Time.time < doneTime)
             {
                 await UniTask.WaitUntil(() => Enemy.Targets.Count > 0);
-                Rb2d.velocity = directionVectorNormalized * (distanceTravelling / seconds);
+                if(!CancelMovement) Rb2d.velocity = directionVectorNormalized * (distanceTravelling / seconds);
                 await UniTask.WaitForFixedUpdate();
             }
         }
@@ -169,7 +174,7 @@ namespace TonyDev.Game.Core.Behavior
 
             while (!((Vector2) transform.position).Equals(position) && Time.time < endTime)
             {
-                transform.position =
+                if(!CancelMovement) transform.position =
                     Vector2.MoveTowards(transform.position, position, speed.Invoke() * Time.fixedDeltaTime);
                 await UniTask.WaitForFixedUpdate();
             }
@@ -221,6 +226,20 @@ namespace TonyDev.Game.Core.Behavior
             }
         }
 
+        protected bool CancelMovement = false;
+        
+        public void PauseMovement(float secs)
+        {
+            PauseMovementForSeconds(secs).AttachExternalCancellation(DestroyToken.Token);
+        }
+        
+        private async UniTask PauseMovementForSeconds(float secs)
+        {
+            CancelMovement = true;
+            await UniTask.Delay(TimeSpan.FromSeconds(secs));
+            CancelMovement = false;
+        }
+        
         protected new void Start()
         {
             if (flipRenderer == null) flipRenderer = GetComponentInChildren<SpriteRenderer>();
@@ -234,6 +253,39 @@ namespace TonyDev.Game.Core.Behavior
         {
             Enemy = transform.GetComponent<Enemy>();
             Rb2d = transform.GetComponent<Rigidbody2D>();
+        }
+
+        private List<GameForce> _forceVectors = new();
+
+        [ServerCallback]
+        private void FixedUpdate()
+        {
+            //Dampen forces over time according to a curve. Force has a floor to ensure that it always completes its path. Trim forces with no units remaining.
+            _forceVectors = _forceVectors.Select(x =>
+            {
+                x.Force = x.InitialForce *
+                          Mathf.Clamp(-Mathf.Pow(4f * (x.UnitsRemaining / x.InitialUnits) - 1f, 16f) + 1f, 0.2f,
+                              x.InitialForce);
+                x.UnitsRemaining -= x.Force * Time.fixedDeltaTime;
+                return x;
+            }).Where(x => x.UnitsRemaining > 0).ToList();
+
+            //Sum force times direction for every force.
+            var forceSum = _forceVectors.Any()
+                ? _forceVectors.Select(x => x.Force * x.Direction).Aggregate((x, y) => x + y)
+                : Vector2.zero;
+
+            Rb2d.AddForce(forceSum);
+        }
+
+        public void Dash(float distance, Vector2 direction)
+        {
+            AddForce(direction, distance);
+        }
+
+        private void AddForce(Vector2 direction, float units)
+        {
+            _forceVectors.Add(new GameForce(direction, 15f, units));
         }
     }
 }

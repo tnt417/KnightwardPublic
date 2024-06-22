@@ -1,6 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mirror;
 using TonyDev.Game.Core.Behavior;
+using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global;
 using TonyDev.Game.Level;
 using UnityEngine;
 
@@ -8,11 +12,11 @@ namespace TonyDev
 {
     public class UpgradeInteractable : InteractableButton
     {
-        public UpgradeInteractable instance;
+        public static UpgradeInteractable Instance;
 
         private void Awake()
         {
-            instance = this;
+            Instance = this;
         }
 
         protected new void Start()
@@ -21,7 +25,7 @@ namespace TonyDev
             
             notificationObject.SetActive(false);
             isInteractable = false;
-            
+
             WaveManager.Instance.OnWaveBegin += wave =>
             {
                 if ((wave - 1) % 8 != 0 || wave <= 1) return;
@@ -30,11 +34,18 @@ namespace TonyDev
                 UpgradeManager.Instance.RollUpgrades(3, true);
             };
 
-            UpgradeManager.Instance.OnUpgradeLocal += () =>
-            {
-                notificationObject.SetActive(false);
-                isInteractable = false;
-            };
+            UpgradeManager.OnUpgradeLocal += Deactivate;
+        }
+
+        private void Deactivate()
+        {
+            notificationObject.SetActive(false);
+            isInteractable = false;
+        }
+
+        private void OnDestroy()
+        {
+            UpgradeManager.OnUpgradeLocal -= Deactivate;
         }
 
         public GameObject notificationObject;

@@ -1,9 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Steamworks;
 using TMPro;
+using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Level;
 using UnityEngine;
@@ -25,6 +27,8 @@ namespace TonyDev.Game.Global.Network
 
         [SyncVar(hook = nameof(OnSkinChanged))]
         public PlayerSkin skin;
+
+        [SyncVar] public string classEffectName;
         
         public readonly SyncList<string> UnlockedItemNames = new();
 
@@ -52,7 +56,13 @@ namespace TonyDev.Game.Global.Network
                 playerImage.material.SetColor("_HighColor", newSkin.HighColor);
             }
         }
-
+        
+        [Command(requiresAuthority = false)]
+        public void CmdSetClassFxName(string newName)
+        {
+            classEffectName = newName;
+        }
+        
         [Command]
         public void CmdSetUnlockedItems(string[] items)
         {

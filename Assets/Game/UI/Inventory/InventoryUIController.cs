@@ -5,6 +5,7 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
+using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -36,6 +37,7 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private TMP_Text critText;
         [SerializeField] private TMP_Text dodgeText;
         [SerializeField] private TMP_Text attackSpeedText;
+        [SerializeField] private TMP_Text noTowersText;
 
         [SerializeField] private TMP_Text cooldownText;
         //
@@ -113,8 +115,9 @@ namespace TonyDev.Game.UI.Inventory
         {
             //Update all the UI elements
             weaponSlot.Item = PlayerInventory.Instance.WeaponItem;
-            armorSlot.Item = PlayerInventory.Instance.ArmorItem;
 
+            noTowersText.gameObject.SetActive(TowerUIController.Instance.towers.Count == 0);
+            
             // var relicArray = PlayerInventory.Instance.RelicItems.ToArray();
             //
             // for (var i = 0; i < _relicSlots.Length; i++)

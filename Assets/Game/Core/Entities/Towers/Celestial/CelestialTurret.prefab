@@ -125,14 +125,16 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
+  startingEffects:
+    rid: 1000
   targetTag: 
   targetTeam: 1
   maxTargets: 20
   baseStats: []
+  targetRange: 4
   targetIntangible: 1
   <Team>k__BackingField: 0
   towerAnimator: {fileID: 6938340393128323355}
-  targetRadius: 3
   myItem:
     uiSprite: {fileID: 0}
     itemName: 
@@ -147,7 +149,11 @@ MonoBehaviour:
   durability: 0
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1000
+      type: {class: GameEffectList, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        gameEffects: []
 --- !u!1 &4032208556319356246
 GameObject:
   m_ObjectHideFlags: 0

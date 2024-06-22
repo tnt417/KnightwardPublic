@@ -24,7 +24,7 @@ namespace TonyDev.Game.Level.Rooms
         public readonly Dictionary<uint, Room> RoomIdentities = new();
 
         //Editor variables
-        [SerializeField] private RoomGenerator roomGenerator;
+        [SerializeField] public RoomGenerator roomGenerator;
 
         [SerializeField] private GameObject minimapObject;
         //
@@ -94,7 +94,7 @@ namespace TonyDev.Game.Level.Rooms
         private bool InStartingRoom => currentActiveRoomIndex == Map.StartingRoomPos;
         public bool CanSwitchPhases => InStartingRoom;
         public Action OnRoomsChanged;
-        public Action OnActiveRoomChanged;
+        public static Action OnActiveRoomChanged;
         public Action<Player, Room> OnActiveRoomChangedGlobal;
         
         private void Awake()
@@ -119,6 +119,12 @@ namespace TonyDev.Game.Level.Rooms
             OnRoomsChanged?.Invoke();
 
             OnActiveRoomChanged += () => CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom);
+        }
+
+        public override void OnStopClient()
+        {
+            base.OnStopClient();
+            OnActiveRoomChanged -= () => CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom);
         }
 
         [Command(requiresAuthority = false)]
@@ -150,9 +156,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             await UniTask.Yield();
             
-            var newMap = GameManager.DungeonFloor != 1 && GameManager.DungeonFloor % 10 == 0
-                ? roomGenerator.GenerateBossMap(GameManager.DungeonFloor)
-                : roomGenerator.Generate(GameManager.DungeonFloor);
+            var newMap = roomGenerator.Generate(GameManager.DungeonFloor);
 
             await UniTask.WaitUntil(() =>
             {

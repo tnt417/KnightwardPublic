@@ -4,6 +4,7 @@ using TMPro;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 
 namespace TonyDev.Game.UI.GameInfo
@@ -14,7 +15,7 @@ namespace TonyDev.Game.UI.GameInfo
 
         private void FixedUpdate()
         {
-            dungeonFloorText.text = "Dungeon Floor: " + GameManager.DungeonFloor;
+            dungeonFloorText.text = "Dungeon Floor: " + GameManager.DungeonFloor + (RoomGenerator.Config.floorAtLaunchOffset != 0 ? " + " + RoomGenerator.Config.floorAtLaunchOffset : "");
         }
     }
 }

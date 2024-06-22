@@ -23,7 +23,6 @@ namespace TonyDev.Game.Core.Items
         public void Clear()
         {
             WeaponItem = null;
-            ArmorItem = null;
             RelicItems.Clear();
         }
 
@@ -31,7 +30,6 @@ namespace TonyDev.Game.Core.Items
 
         //5 item variables, 1 for each inventory slot. A bit inefficient but works for now.
         public Item WeaponItem { get; private set; }
-        public Item ArmorItem { get; private set; }
 
         public Queue<Item> RelicItems { get; private set; } = new();
 
@@ -62,7 +60,7 @@ namespace TonyDev.Game.Core.Items
                 statBonuses = new StatBonus[]
                 {
                     new StatBonus(StatType.Flat, Stat.Damage, 25, "Starter Sword"),
-                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 3f, "Starter Sword")
+                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 2.5f, "Starter Sword")
                 },
                 uiSprite = broadswordItem.uiSprite
             });
@@ -102,9 +100,6 @@ namespace TonyDev.Game.Core.Items
             {
                 case ItemType.Weapon: //If it's a weapon, it goes in the weapon slot.
                     replacement = WeaponItem;
-                    break;
-                case ItemType.Armor: //If it's an armor, it goes in the armor slot.
-                    replacement = ArmorItem;
                     break;
                 case ItemType.Relic: //If it's a relic, it goes in the relic slot.
                     replacement = RelicItems.FirstOrDefault(i => i.itemName == item.itemName);
@@ -174,10 +169,6 @@ namespace TonyDev.Game.Core.Items
                 case ItemType.Weapon: //If it's a weapon, it goes in the weapon slot.
                     replacedItem = WeaponItem;
                     WeaponItem = item;
-                    break;
-                case ItemType.Armor: //If it's an armor, it goes in the armor slot.
-                    replacedItem = ArmorItem;
-                    ArmorItem = item;
                     break;
                 case ItemType.Relic: //If it's a relic, it goes in the relic slot.
                     if (RelicItems.Any(i => i.itemName == item.itemName))

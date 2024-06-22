@@ -13555,6 +13555,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: ObjectFinder
       objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.size
+      value: 59
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[54].key
+      value: ShadowClone
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[55].key
+      value: ShadowSlash
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[56].key
+      value: ShadowShuriken
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[57].key
+      value: PoisonBomb
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[58].key
+      value: DummyEnemy
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[54].value
+      value: 
+      objectReference: {fileID: 7522194765895133831, guid: 79df6fd76a988114cb1c7e5f2f2e1e28, type: 3}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[55].value
+      value: 
+      objectReference: {fileID: 4259484034263103321, guid: bbb9debd402c8d245a4baccc673493ca, type: 3}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[56].value
+      value: 
+      objectReference: {fileID: 5404901476592251585, guid: 8fc64d867ab7f5549b86fbb9237f56da, type: 3}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[57].value
+      value: 
+      objectReference: {fileID: 6958947961261470579, guid: 7a4903ac511fbdb4f869e56a1b52fe7f, type: 3}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[58].value
+      value: 
+      objectReference: {fileID: 7080094185981754644, guid: da63cb15def700848bdcb7ee46185b36, type: 3}
     - target: {fileID: 1649124330393788182, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
       propertyPath: m_RootOrder
       value: 6

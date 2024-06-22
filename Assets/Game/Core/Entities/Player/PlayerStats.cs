@@ -69,7 +69,6 @@ namespace TonyDev.Game.Core.Entities.Player
             return type switch
             {
                 ItemType.Weapon => (Stat) Random.Range(0, 5),
-                ItemType.Armor => (Stat) Random.Range(5, 10),
                 _ => Stat.AttackSpeed //Returns attack speed by default.
             };
         }

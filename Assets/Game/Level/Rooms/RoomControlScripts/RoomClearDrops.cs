@@ -57,18 +57,9 @@ namespace TonyDev
                 GameManager.Instance.SpawnHealthPickupOnEach(new Vector2(originPos.x + 2*Mathf.Cos(i/healthSpawned*2*Mathf.PI), originPos.y + 2*Mathf.Sin(i/healthSpawned*2*Mathf.PI)), _parentRoom.netIdentity);
             }
 
-            var essence = GameTools.RollChance(0.2f);
-
             var moneyScale = ItemGenerator.GenerateCost(ItemRarity.Common, GameManager.DungeonFloor);
             
-            if (essence)
-            {
-                GameManager.Instance.CmdSpawnEssence((int)Random.Range(moneyScale/3f, moneyScale/2f), transform.position, _parentRoom.netIdentity);
-            }
-            else
-            {
-                GameManager.Instance.CmdSpawnMoney((int)Random.Range(moneyScale/5f, moneyScale/4f), transform.position, _parentRoom.netIdentity);
-            }
+            GameManager.Instance.CmdSpawnMoney(Mathf.CeilToInt(Random.Range(moneyScale/7f, moneyScale/6f)), transform.position, _parentRoom.netIdentity);
         }
     }
 }

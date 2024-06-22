@@ -33,11 +33,8 @@ MonoBehaviour:
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        ActivateButton: 103
-        Cooldown: 10
-        Duration: 0
-        abilitySprite: {fileID: 21300000, guid: 6dfc766a45122a34dbc5c4ecfd7a1f6b, type: 3}
         DamageMultRange: {x: 10, y: 20}
+        HighlightCooldown: 10
     - rid: 1191606023430078472
       type: {class: ScalingStatBonusEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:

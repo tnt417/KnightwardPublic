@@ -56,10 +56,5 @@ MonoBehaviour:
       data:
         effectDescription: 
         DungeonFloorUponCreation: 0
-        ActivateButton: 104
-        Cooldown: 0.2
-        Duration: 0
-        abilitySprite: {fileID: 21300000, guid: 3d20df4a97fbf504aaa2839aed7ba042, type: 3}
         Radius: 4
-        HealthMult: 0.2
-        DamageMultRange: {x: 1, y: 5}
+        DamageMult: 1

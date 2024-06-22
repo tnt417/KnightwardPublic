@@ -30,7 +30,9 @@ namespace TonyDev
 
         [SerializeField] private Button purchaseButton;
 
-        /**********************************/        
+        /**********************************/
+
+        [NonSerialized] public UpgradeData OriginalData;
         
         private int _cost; // Cost of the upgrade in essence.
 
@@ -60,7 +62,7 @@ namespace TonyDev
 
         // Called in UpgradeManager
         public void Set(int scrapCost, Sprite icon, string upgradeName, string description, Func<bool> isPurchasable,
-            int id, UpgradeCategory category)
+            int id, UpgradeCategory category, UpgradeData data)
         {
             if (_set) return; // Don't allow to be set twice. New object should be instantiated in that case.
             
@@ -70,6 +72,7 @@ namespace TonyDev
             descriptionText.text = description;
             nameText.text = upgradeName;
             iconImage.sprite = icon;
+            OriginalData = data;
 
             PurchasableFunc = isPurchasable;
 

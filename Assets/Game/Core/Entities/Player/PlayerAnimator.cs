@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
@@ -116,6 +118,12 @@ namespace TonyDev.Game.Core.Entities.Player
 
         [NonSerialized] public string attackAnimationName = "Attack";
 
+        public void SetAttackAnimProgress(float normalized)
+        {
+            Player.LocalInstance.SetAttackProgress(normalized);
+            playerAnimator.Play(playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash, 0, normalized);
+        }
+        
         private int PlayerSpriteIndex => playerAnimationValues.spriteIndex;
 
         //Custom setter to allow controlling of walk particles without spamming Play and Stop on the particle system.
@@ -168,14 +176,29 @@ namespace TonyDev.Game.Core.Entities.Player
             _skin = skin;
         }
 
+        private float _storedNormalizedAttackTime = 0;
+        
         private void PlayInAllLayers(string anim, bool attackNormalized = false)
         {
-            if (!isOwned) return;
+            if (!isOwned || _overriding) return;
+
+            _storedNormalizedAttackTime = Player.LocalInstance.NormalizedAttackTime;
+            
             playerAnimator.Play(anim, 0,
                 attackNormalized
-                    ? ((Player.LocalInstance.NormalizedAttackTime / 2) - 0.03f) % 1f
+                    ? (_storedNormalizedAttackTime / 2 - 0.03f) % 1f
                     : _playerMovementTime / (21/60f) * playerAnimator.GetFloat("moveSpeed") % 1f); // Subtracting 0.03f to make the animations feel more in sync
             playerAnimator.Play(anim, 1, (_playerMovementTime / (21/60f) * playerAnimator.GetFloat("moveSpeed")) % 1f);
+        }
+
+        private bool _overriding = false;
+        
+        public async UniTask PlayOverrideAnim(string animName, int layer, float normalized, float delay)
+        {
+            _overriding = true;
+            playerAnimator.Play(animName, layer, normalized);
+            await UniTask.Delay(TimeSpan.FromSeconds(delay));
+            _overriding = false;
         }
 
         private PlayerAnimState _lastAnimState = PlayerAnimState.Dead;
@@ -184,6 +207,19 @@ namespace TonyDev.Game.Core.Entities.Player
 
         private float _playerMovementTime;
         private float _lastPlayerMoveTime;
+
+        public bool attackingOverride = false;
+
+        public void Shake(float speed)
+        {
+            playerAnimator.SetFloat("shakeSpeed", speed);
+            playerAnimator.Play("Shake", 3);
+        }
+
+        public void UnShake()
+        {
+            playerAnimator.Play("NotShake", 3);
+        }
         
         private void Update()
         {
@@ -192,9 +228,9 @@ namespace TonyDev.Game.Core.Entities.Player
             playerAnimator.SetFloat("moveSpeed", PlayerStats.Stats.GetStat(Stat.MoveSpeed));
             playerAnimator.SetFloat("attackSpeed", PlayerStats.Stats.GetStat(Stat.AttackSpeed));
 
-            if (PlayerAnimState == _lastAnimState && _lastAttack == Player.LocalInstance.CanAttack) return;
+            if (PlayerAnimState == _lastAnimState && _lastAttack == (Player.LocalInstance.CanAttack || attackingOverride)) return;
             _lastAnimState = PlayerAnimState;
-            _lastAttack = Player.LocalInstance.CanAttack;
+            _lastAttack = Player.LocalInstance.CanAttack || attackingOverride;
 
             if (Player.LocalInstance.playerMovement.currentMovementInput != Vector2.zero)
             {
@@ -223,7 +259,7 @@ namespace TonyDev.Game.Core.Entities.Player
             
             SetFlip(_lastDirectionState == PlayerAnimState.Left);
 
-            if (Player.LocalInstance.CanAttack)
+            if (Player.LocalInstance.CanAttack || attackingOverride)
             {
                 var directionNameAddon = _lastDirectionState switch
                 {

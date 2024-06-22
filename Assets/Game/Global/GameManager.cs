@@ -47,7 +47,11 @@ namespace TonyDev.Game.Global
         [SerializeField] private List<ItemData> itemData;
         [SerializeField] private Vector2 arenaSpawnPos;
         public static List<ItemData> AllItems = new();
+
+        public static Vector2 MousePosWorld => MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        
         public static int Money = 0;
+
         //public static int Essence = 0;
         public static float MoneyDropBonusFactor;
 
@@ -155,7 +159,7 @@ namespace TonyDev.Game.Global
             waveProgress = newProgress;
             wave = newWave;
         }
-        
+
         [Server]
         public void SpawnHealthPickupOnEach(Vector2 location, NetworkIdentity parent)
         {
@@ -193,7 +197,11 @@ namespace TonyDev.Game.Global
 
         public static Vector2 MouseDirection =>
             (MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
-             Player.LocalInstance.transform.position).normalized;
+            Player.LocalInstance.transform.position).normalized;
+
+        public static Vector2 MouseDirectionLow =>
+            ((Vector2) MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
+             ((Vector2) Player.LocalInstance.transform.position - new Vector2(0, 0.4f))).normalized;
 
         [Command(requiresAuthority = false)]
         public void CmdWriteChatMessage(string message, CustomRoomPlayer localRoomPlayer)
@@ -249,7 +257,7 @@ namespace TonyDev.Game.Global
 
         public SyncList<Vector2Int> OccupiedTowerSpots = new();
 
-        [SyncVar] private int _maxTowers = 100;//3;
+        [SyncVar] private int _maxTowers = 100; //3;
 
         public int MaxTowers => _maxTowers;
 
@@ -283,12 +291,12 @@ namespace TonyDev.Game.Global
             }
 
             Item pickingUpItem = null;
-            
+
             foreach (var ge in Entities.Where(ge => ge is Tower))
             {
                 var tower = ge as Tower;
 
-                if ((Vector2)tower.transform.position != pos) continue;
+                if ((Vector2) tower.transform.position != pos) continue;
 
                 pickingUpItem = tower.myItem;
 
@@ -297,7 +305,7 @@ namespace TonyDev.Game.Global
             }
 
             await UniTask.WaitUntil(() => TowerUIController.Instance.towers.Contains(pickingUpItem));
-            
+
             return SpawnTower(towerItem, pos, parent);
         }
 
@@ -322,7 +330,7 @@ namespace TonyDev.Game.Global
         {
             ObjectSpawner.SpawnMoney(amount, position, parent);
         }
-        
+
         [Command(requiresAuthority = false)]
         public void CmdSpawnEssence(int amount, Vector2 position, NetworkIdentity parent)
         {
@@ -336,11 +344,11 @@ namespace TonyDev.Game.Global
         }
 
         [ClientRpc]
-        public void RpcSpawnDmgPopup(Vector2 position, float value, bool isCrit, NetworkIdentity exclude)
+        public void RpcSpawnDmgPopup(Vector2 position, float value, bool isCrit, NetworkIdentity exclude, DamageType damageType)
         {
             if (NetworkClient.localPlayer == exclude) return;
 
-            ObjectSpawner.SpawnDmgPopup(position, value, isCrit);
+            ObjectSpawner.SpawnDmgPopup(position, value, isCrit, damageType);
         }
 
         [Command(requiresAuthority = false)]
@@ -405,7 +413,7 @@ namespace TonyDev.Game.Global
         public static Action OnGameManagerAwake;
 
         public static int SessionPlayCount = 0;
-        
+
         private void Awake()
         {
             if (Instance == null) Instance = this;
@@ -423,7 +431,7 @@ namespace TonyDev.Game.Global
                     UnlocksManager.Instance.AddUnlockSessionOnly(itemName);
                 }
             }
-            
+
             Random.InitState((int) DateTime.Now.Ticks);
 
             Player.OnLocalPlayerCreated += Init;
@@ -436,7 +444,7 @@ namespace TonyDev.Game.Global
             }
 
             MainCamera = Camera.main;
-            
+
             OnGameManagerAwake?.Invoke();
         }
 
@@ -444,12 +452,11 @@ namespace TonyDev.Game.Global
         {
             Crystal.Instance.OnDeathOwner += value => GameOver();
             EnterArenaPhase();
+            Player.LocalInstance.transform.position = arenaSpawnPos + new Vector2(13.5f, 0);
         }
 
         #endregion
 
-        public AudioMixerGroup mainMixerGroup;
-        
         #region Gamestate Control
 
         public static void ResetGame()
@@ -464,9 +471,9 @@ namespace TonyDev.Game.Global
             AllItems?.Clear();
             Entities?.Clear();
             EnemySpawners?.Clear();
-            
-            if(SessionPlayCount > 0) Player.OnLocalPlayerCreated -= Instance.Init;
-            
+
+            if (SessionPlayCount > 0) Player.OnLocalPlayerCreated -= Instance.Init;
+
             if (PlayerInventory.Instance != null) PlayerInventory.Instance.Clear();
             if (PlayerStats.Stats != null) PlayerStats.Stats.ClearStatBonuses();
         }
@@ -506,7 +513,7 @@ namespace TonyDev.Game.Global
             GamePhase = GamePhase.Arena;
             Player.LocalInstance.gameObject.transform.position = arenaSpawnPos;
             CmdReTargetEnemies();
-            RoomManager.Instance.OnActiveRoomChanged.Invoke();
+            RoomManager.OnActiveRoomChanged.Invoke();
         }
 
         private void GameOver()
@@ -579,7 +586,7 @@ namespace TonyDev.Game.Global
             RoomManager.Instance.ResetRooms();
             RoomManager.Instance.GenerateTask().Forget();
 
-            if (dungeonFloor > 1 && (dungeonFloor-1) % 10 == 0)
+            if (dungeonFloor > 1 && (dungeonFloor - 1) % 10 == 0)
             {
                 RpcUnlockRandomItem();
             }

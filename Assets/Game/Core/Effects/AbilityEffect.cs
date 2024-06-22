@@ -40,7 +40,7 @@ namespace TonyDev.Game.Core.Effects
         {
             _abilityIndex = AbilityControlManager.Instance.GetOpenIndex();
         
-            if (ActivateButton != KeyCode.None)
+            if (ActivateButton == default)
             {
                 ActivateButton = _abilityIndex switch
                 {
