@@ -16,8 +16,8 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: 8d36cd82cd52bcb43ae05415dfa7fe23, type: 3}
     itemName: Flaming Coat
     itemDescription: 
-    itemType: 1
-    itemRarity: 0
+    itemType: 2
+    itemRarity: 1
     statBonuses: []
     bypassStatGeneration: 0
     itemEffects:
@@ -30,7 +30,8 @@ MonoBehaviour:
     - rid: 7149686571226103809
       type: {class: AttackEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
-        effectDescription: 
+        effectDescription: <color=orange>Surround yourself in a flame aura, burning
+          nearby enemies.</color>
         DungeonFloorUponCreation: 0
         ProjectileData:
           prefabKey: flameArmorPool
@@ -45,6 +46,8 @@ MonoBehaviour:
             lifetime: 0
             spawnOnDestroyKey: 
             ignoreInvincibility: 0
+            inflictEffects:
+              gameEffects: []
           disableMovement: 1
           travelSpeed: 0
           offsetDegrees: 0

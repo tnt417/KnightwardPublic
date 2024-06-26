@@ -16,8 +16,8 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: e27c4c6211681df41a38930130a81ec9, type: 3}
     itemName: Glacial Defense
     itemDescription: 
-    itemType: 1
-    itemRarity: 0
+    itemType: 2
+    itemRarity: 3
     statBonuses: []
     bypassStatGeneration: 0
     itemEffects:
@@ -30,7 +30,8 @@ MonoBehaviour:
     - rid: 7149686571226103810
       type: {class: GlacialDefenseEffect, ns: TonyDev, asm: TonyDev}
       data:
-        effectDescription: 
+        effectDescription: <color=green>Slow nearby enemies until they are fully
+          frozen, then crack them.</color>
         DungeonFloorUponCreation: 0
         SlowEffectKey: slowingArmorParticles
         FrozenEffectKey: frozenParticles
