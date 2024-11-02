@@ -202,6 +202,10 @@ namespace TonyDev.Game.Global
         public static Vector2 MouseDirectionLow =>
             ((Vector2) MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
              ((Vector2) Player.LocalInstance.transform.position - new Vector2(0, 0.4f))).normalized;
+        
+        public static Vector2 MouseDirectionHigh =>
+            ((Vector2) MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
+             ((Vector2) Player.LocalInstance.transform.position + new Vector2(0, 0.4f))).normalized;
 
         [Command(requiresAuthority = false)]
         public void CmdWriteChatMessage(string message, CustomRoomPlayer localRoomPlayer)

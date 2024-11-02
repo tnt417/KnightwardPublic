@@ -187,6 +187,7 @@ SpriteAtlas:
   - {fileID: -9032164202199686955, guid: 04f3b5a37522a7f45a1121132b637e41, type: 3}
   - {fileID: 6205161768357606934, guid: 04f3b5a37522a7f45a1121132b637e41, type: 3}
   - {fileID: 21300000, guid: acf12fa3c673a17488dc5e6c832805cb, type: 3}
+  - {fileID: 21300000, guid: 020e461455117d747a756188845f1c37, type: 3}
   - {fileID: 21300000, guid: 55615c24774c35f45b97c2e417ac4b6f, type: 3}
   - {fileID: 21300000, guid: f1a2bd248410ebc45999b37e2d22bd18, type: 3}
   - {fileID: 21300000, guid: a9180544072f19b4f803fa6675f6e784, type: 3}
@@ -554,6 +555,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 6ece589ed893fe64e9bdebfa53ef887b, type: 3}
   - {fileID: 21300000, guid: 7fb87b9ee17c1ae4d968b40bd23f92bc, type: 3}
   - {fileID: 21300000, guid: d8b67f9e00774da4f8cacb79dcf22edf, type: 3}
+  - {fileID: 21300000, guid: 9d9e9cbe96b8319429e1a6638e44807f, type: 3}
   - {fileID: 618742727, guid: 0f19cace80718c540b3114a7655d6863, type: 3}
   - {fileID: 1628804110, guid: 0f19cace80718c540b3114a7655d6863, type: 3}
   - {fileID: 1766478793, guid: 0f19cace80718c540b3114a7655d6863, type: 3}
@@ -748,6 +750,7 @@ SpriteAtlas:
   - book_blue 1
   - book_blue 0
   - UIBackground1
+  - lasermirror
   - waveprogress3
   - wi_hammer
   - blackholeUI
@@ -1115,6 +1118,7 @@ SpriteAtlas:
   - basicSliderFill
   - ballistaTurretUI
   - slotFail
+  - lasershader
   - RegeneratorTower_3
   - RegeneratorTower_2
   - RegeneratorTower_1

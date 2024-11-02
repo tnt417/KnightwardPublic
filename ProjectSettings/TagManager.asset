@@ -15,6 +15,7 @@ TagManager:
   - Enemy
   - MinimapAlly
   - CheatDisclaimer
+  - StaffMirror
   layers:
   - Default
   - TransparentFX
@@ -31,7 +32,7 @@ TagManager:
   - InFrontOfUI
   - Level
   - WallCollidable
-  - 
+  - GameSystemsCollidableOnly
   - 
   - 
   - 

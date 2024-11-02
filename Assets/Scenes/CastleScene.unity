@@ -13557,7 +13557,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
       propertyPath: prefabEntries.Array.size
-      value: 60
+      value: 61
       objectReference: {fileID: 0}
     - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
       propertyPath: prefabEntries.Array.data[54].key
@@ -13584,6 +13584,10 @@ PrefabInstance:
       value: laserController
       objectReference: {fileID: 0}
     - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[60].key
+      value: staffMirror
+      objectReference: {fileID: 0}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
       propertyPath: prefabEntries.Array.data[54].value
       value: 
       objectReference: {fileID: 7522194765895133831, guid: 79df6fd76a988114cb1c7e5f2f2e1e28, type: 3}
@@ -13607,6 +13611,10 @@ PrefabInstance:
       propertyPath: prefabEntries.Array.data[59].value
       value: 
       objectReference: {fileID: 8033102611187698204, guid: 9fb38cca2dbcfed46864d84857504427, type: 3}
+    - target: {fileID: 1649124330393788177, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
+      propertyPath: prefabEntries.Array.data[60].value
+      value: 
+      objectReference: {fileID: 8269245536949468360, guid: 7a48d13d7a23b8346933e8eba2bfeed6, type: 3}
     - target: {fileID: 1649124330393788182, guid: 85350d5822eacbf469807ca9b70dc860, type: 3}
       propertyPath: m_RootOrder
       value: 6
