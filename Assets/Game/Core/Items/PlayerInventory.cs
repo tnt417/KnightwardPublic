@@ -46,23 +46,23 @@ namespace TonyDev.Game.Core.Items
         
         public void InsertStarterItems()
         {
-            var staffItem = Object.Instantiate(GameManager.AllItems.FirstOrDefault(i => i.item.itemName == "Solar Staff")).item;
+            var swordItem = Object.Instantiate(GameManager.AllItems.FirstOrDefault(i => i.item.itemName == "Broadsword")).item;
             InsertItem(new Item()
             {
-                itemName = "Starter Staff",
+                itemName = "Starter Sword",
                 bypassStatGeneration = false,
-                itemDescription = "A weak starter staff.",
-                itemEffects = staffItem.itemEffects,
+                itemDescription = "A weak starter sword.",
+                itemEffects = swordItem.itemEffects,
                 itemRarity = ItemRarity.Common,
                 itemType = ItemType.Weapon, 
-                projectiles = staffItem.projectiles,
+                projectiles = swordItem.projectiles,
                 spawnablePrefabName = "",
                 statBonuses = new StatBonus[]
                 {
                     new StatBonus(StatType.Flat, Stat.Damage, 10, "Starter Sword"),
-                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 1.0f, "Starter Sword")
+                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 1.5f, "Starter Sword")
                 },
-                uiSprite = staffItem.uiSprite
+                uiSprite = swordItem.uiSprite
             });
 
             var towerItem = Object.Instantiate(GameManager.AllItems.FirstOrDefault(i => i.item.itemName == "Ballista Tower")).item;

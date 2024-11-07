@@ -26,7 +26,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 // Entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.Health, 0.8f, EffectIdentifier);
                 // Entity.Stats.AddStatBonus(StatType.Multiplicative, Stat.MoveSpeed, 1.2f, EffectIdentifier);
                 // ChangeSize(0.5f);
-            }else if (specialScore > 0.78f)
+            }else if (false) //(specialScore > 0.78f)
             {
                 Entity.CmdAddEffect(new AttackEffect()
                 {

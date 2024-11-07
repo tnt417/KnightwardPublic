@@ -37,7 +37,7 @@ namespace TonyDev.Game.UI.Inventory
             image.enabled = image.sprite != null;
         }
 
-        private void Awake()
+        private void Start()
         {
             _insertionFloor = GameManager.DungeonFloor;
         }
