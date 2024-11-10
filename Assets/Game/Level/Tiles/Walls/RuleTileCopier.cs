@@ -1,0 +1,63 @@
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.Tilemaps;
+using System.Collections.Generic;
+
+public class RuleTileCopier : EditorWindow
+{
+    [MenuItem("Tools/Copy Rule Tile Settings with New Sprites")]
+    static void CopyRuleTileSettingsWithNewSprites()
+    {
+        // Load the source Rule Tile and target Rule Tile
+        RuleTile sourceTile = AssetDatabase.LoadAssetAtPath<RuleTile>("Assets/Game/Level/Tiles/Walls/WallWallTile.asset");
+        RuleTile targetTile = AssetDatabase.LoadAssetAtPath<RuleTile>("Assets/Game/Level/Tiles/Walls/FireWallTile.asset");
+
+        // Load the new spritesheet texture
+        Texture2D newSpritesheet = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Level/Tiles/Walls/castleWallFire.png");
+
+        if (sourceTile != null && targetTile != null && newSpritesheet != null)
+        {
+            // Get the new sprites from the spritesheet
+            Sprite[] newSprites = AssetDatabase.LoadAllAssetsAtPath("Assets/Game/Level/Tiles/Walls/castleWallFire.png") as Sprite[];
+
+            if (newSprites.Length == 0)
+            {
+                Debug.LogError("No sprites found in the new spritesheet.");
+                return;
+            }
+
+            // Create a new list of tiling rules for the target tile
+            targetTile.m_TilingRules = new List<RuleTile.TilingRule>();
+
+            // Loop through each rule in the source tile and copy its properties
+            foreach (var rule in sourceTile.m_TilingRules)
+            {
+                RuleTile.TilingRule newRule = new RuleTile.TilingRule
+                {
+                    m_NeighborPositions = rule.m_NeighborPositions,
+                    m_Neighbors = rule.m_Neighbors,
+                    m_Output = rule.m_Output,
+                    m_ColliderType = rule.m_ColliderType,
+                };
+
+                // Replace each sprite in the rule with the corresponding sprite from the new spritesheet
+                List<Sprite> newRuleSprites = new List<Sprite>();
+                foreach (var _ in rule.m_Sprites)
+                {
+                    newRuleSprites.Add(newSprites[0]); // Add matching sprite from new spritesheet
+                }
+
+                newRule.m_Sprites = newRuleSprites.ToArray();
+                targetTile.m_TilingRules.Add(newRule); // Add rule to target tile
+            }
+
+            EditorUtility.SetDirty(targetTile);
+            AssetDatabase.SaveAssets();
+            Debug.Log("Rule Tile settings copied with new sprites successfully.");
+        }
+        else
+        {
+            Debug.LogError("Source tile, target tile, or spritesheet not found.");
+        }
+    }
+}

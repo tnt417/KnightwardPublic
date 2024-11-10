@@ -119,6 +119,16 @@ MonoBehaviour:
       roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
     - tier: 0
       roomPrefab: {fileID: 4178251165929004475, guid: 741f1e5b2d382eb499ac7bb44fe77334, type: 3}
+  - startFloor: 31
+    zone: 0
+    uncommonAmount: 0
+    specialAmount: 0
+    roomAmountRange: {x: 2, y: 2}
+    roomEntries:
+    - tier: 3
+      roomPrefab: {fileID: 6922258286344746195, guid: 0e054633ec5030249af32937e8e7e0a5, type: 3}
+    - tier: 3
+      roomPrefab: {fileID: 1124590283425073302, guid: 52cecb0344bc1134f998bf7ff21fd2c5, type: 3}
   - startFloor: 0
     zone: 0
     uncommonAmount: 0
@@ -127,5 +137,5 @@ MonoBehaviour:
     roomEntries:
     - tier: 3
       roomPrefab: {fileID: 6922258286344746195, guid: 86dc29b3091a0d7469a083c093bdaa11, type: 3}
-  loopPoint: 31
-  floorAtLaunchOffset: 9
+  loopPoint: 41
+  floorAtLaunchOffset: 0
