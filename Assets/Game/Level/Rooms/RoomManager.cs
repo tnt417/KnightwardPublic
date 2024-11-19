@@ -96,6 +96,7 @@ namespace TonyDev.Game.Level.Rooms
         public Action OnRoomsChanged;
         public static Action OnActiveRoomChanged;
         public Action<Player, Room> OnActiveRoomChangedGlobal;
+        public bool stopRoomChange = false;
         
         private void Awake()
         {
@@ -178,9 +179,10 @@ namespace TonyDev.Game.Level.Rooms
         
         public void ShiftActiveRoom(Direction direction) //Moves a player to the next room in a direction.
         {
+            if (stopRoomChange) return;
             if (_inRoomTransition) return;
             _inRoomTransition = true;
-            Player.LocalInstance.playerMovement.DoMovement = false;
+            Player.LocalInstance.playerMovement.BetweenRoomMove(direction);
             StartCoroutine(MovePlayerToNextRoom(direction));
         }
 
@@ -219,9 +221,11 @@ namespace TonyDev.Game.Level.Rooms
                 SetActiveRoom(currentActiveRoomIndex.x + dx,
                     currentActiveRoomIndex.y + dy); //Set the active room to the new room
 
+                var directionVector = new Vector2(dx, dy);
+                
                 //Move the player into the newly activated room
                 var playerTransform = Player.LocalInstance.transform;
-                playerTransform.position = room.GetSpawnpoint(direction);
+                playerTransform.position = room.GetSpawnpoint(direction) - directionVector * 2;
                 Player.LocalInstance.playerMovement.DoMovement = true;
                 //
             }

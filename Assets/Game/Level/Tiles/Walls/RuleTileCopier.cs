@@ -9,8 +9,8 @@ public class RuleTileCopier : EditorWindow
     static void CopyRuleTileSettingsWithNewSprites()
     {
         // Load the source Rule Tile and target Rule Tile
-        RuleTile sourceTile = AssetDatabase.LoadAssetAtPath<RuleTile>("Assets/Game/Level/Tiles/Walls/WallWallTile.asset");
-        RuleTile targetTile = AssetDatabase.LoadAssetAtPath<RuleTile>("Assets/Game/Level/Tiles/Walls/FireWallTile.asset");
+        RuleTile sourceTile = AssetDatabase.LoadAssetAtPath<RuleTile>("Assets/Tilesetter/Sets/fireTile/fireTile_rules_0.asset");
+        RuleTile targetTile = AssetDatabase.LoadAssetAtPath<RuleTile>("Assets/Game/Level/Tiles/Fire/FireBrick.asset");
 
         // Load the new spritesheet texture
         Texture2D newSpritesheet = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Game/Level/Tiles/Walls/castleWallFire.png");
@@ -18,7 +18,7 @@ public class RuleTileCopier : EditorWindow
         if (sourceTile != null && targetTile != null && newSpritesheet != null)
         {
             // Get the new sprites from the spritesheet
-            Sprite[] newSprites = AssetDatabase.LoadAllAssetsAtPath("Assets/Game/Level/Tiles/Walls/castleWallFire.png") as Sprite[];
+            Sprite[] newSprites = AssetDatabase.LoadAllAssetsAtPath("Assets/Tilesetter/Sets/fireTile/fireTile_rules_0.asset") as Sprite[];
 
             if (newSprites.Length == 0)
             {

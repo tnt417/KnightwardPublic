@@ -1,8 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
+using System.Threading.Tasks;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Rooms;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
@@ -49,9 +54,9 @@ namespace TonyDev.Game.Core.Entities.Player
             if (!DoMovement || !isOwned) return;
 
             //dx and dy are either 1, 0, or -1 depending on keys being pressed
-            var dx = currentMovementInput.x; //(Input.GetKey(KeyCode.A) && GameManager.GameControlsActive ? -1 : 0) +
+            var dx = _overrideInput != Vector2.zero ? _overrideInput.x : currentMovementInput.x; //(Input.GetKey(KeyCode.A) && GameManager.GameControlsActive ? -1 : 0) +
             //(Input.GetKey(KeyCode.D) && GameManager.GameControlsActive ? 1 : 0);
-            var dy = currentMovementInput.y; //(Input.GetKey(KeyCode.S) && GameManager.GameControlsActive ? -1 : 0) +
+            var dy = _overrideInput != Vector2.zero ? _overrideInput.y : currentMovementInput.y; //(Input.GetKey(KeyCode.S) && GameManager.GameControlsActive ? -1 : 0) +
             //(Input.GetKey(KeyCode.W) && GameManager.GameControlsActive ? 1 : 0);
 
             //Dampen forces over time according to a curve. Force has a floor to ensure that it always completes its path. Trim forces with no units remaining.
@@ -89,6 +94,8 @@ namespace TonyDev.Game.Core.Entities.Player
             //
         }
 
+        private Vector2 _overrideInput = Vector2.zero;
+        
         public void OnMove(InputValue value)
         {
             if (!GameManager.GameControlsActive)
@@ -107,6 +114,47 @@ namespace TonyDev.Game.Core.Entities.Player
                 direction = currentMovementInput.normalized;
             }
             AddForce(direction, distance);
+        }
+
+        public void BetweenRoomMove(Direction direction)
+        {
+            BetweenRoomMoveTask(direction).Forget();
+        }
+        
+        private async UniTask BetweenRoomMoveTask(Direction direction)
+        {
+            var startRoom = RoomManager.Instance.currentActiveRoom;
+
+            RoomManager.Instance.stopRoomChange = true;
+            
+            _overrideInput = direction switch
+            {
+                Direction.Up => Vector2.up,
+                Direction.Down => Vector2.down,
+                Direction.Left => Vector2.left,
+                Direction.Right => Vector2.right,
+                _ => Vector2.zero
+            };
+
+            await UniTask.WaitUntil(() => RoomManager.Instance.currentActiveRoom != startRoom);
+
+            float dist = 0;
+            Vector2 lastPos = Player.LocalInstance.transform.position;
+
+            await UniTask.WaitUntil(() =>
+            {
+                Vector2 curPos = Player.LocalInstance.transform.position;
+
+                dist += Vector2.Distance(lastPos, curPos);
+
+                lastPos = curPos;
+
+                return dist >= 2.0f;
+            });
+
+            _overrideInput = Vector2.zero;
+
+            RoomManager.Instance.stopRoomChange = false;
         }
 
         private void AddForce(Vector2 direction, float units)

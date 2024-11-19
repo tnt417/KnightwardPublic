@@ -629,8 +629,6 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0.1
-  startingEffects:
-    rid: 6046237046129557504
   targetTag: 
   targetTeam: 0
   maxTargets: 0
@@ -668,13 +666,6 @@ MonoBehaviour:
   playerDeath: {fileID: 1270234476}
   fireKeyHeld: 0
   username: 
-  references:
-    version: 2
-    RefIds:
-    - rid: 6046237046129557504
-      type: {class: GameEffectList, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
-      data:
-        gameEffects: []
 --- !u!50 &1277911647
 Rigidbody2D:
   serializedVersion: 4
@@ -846,6 +837,7 @@ MonoBehaviour:
   playerAnimator: {fileID: 29065221820089324}
   playerAnimationValues: {fileID: 8587305128165645186}
   playerWalkParticles: {fileID: 6009604398360732636}
+  attackingOverride: 0
 --- !u!114 &3678488959114238567
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -13,7 +13,7 @@ namespace TonyDev.Game.Level
         private static string _queuedScene;
         [NonSerialized] public bool OutTransitionDone;
 
-        public const float FadeOutTimeSeconds = 0.5f;
+        public const float FadeOutTimeSeconds = 0.25f;
 
         private void Awake()
         {
