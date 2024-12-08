@@ -136,6 +136,8 @@ namespace TonyDev.Game.Core.Entities.Player
                 _ => Vector2.zero
             };
 
+            Player.LocalInstance.DisableCollisionUntil(() => _overrideInput == Vector2.zero);
+
             await UniTask.WaitUntil(() => RoomManager.Instance.currentActiveRoom != startRoom);
 
             float dist = 0;

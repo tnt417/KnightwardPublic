@@ -564,6 +564,11 @@ namespace TonyDev.Game.Core.Entities
             if (this is not Player.Player) NetworkServer.Destroy(gameObject);
         }
 
+        protected void TriggerDeathOwner()
+        {
+            OnDeathOwner?.Invoke(0);
+        }
+
         public event IDamageable.HealthAction OnTryHurtInvulnerableOwner;
         public event IDamageable.HealthAction OnHealthChangedOwner;
         public event IDamageable.HealthAction OnHealOwner;

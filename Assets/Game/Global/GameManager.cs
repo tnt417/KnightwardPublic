@@ -19,6 +19,7 @@ using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
 using TonyDev.Game.UI.GameInfo;
+using TonyDev.Game.UI.Menu.GameOver;
 using TonyDev.Game.UI.Tower;
 using UnityEditor;
 using UnityEngine;
@@ -463,6 +464,36 @@ namespace TonyDev.Game.Global
 
         #region Gamestate Control
 
+        public void GameWin()
+        {
+            GameWinTask().Forget();
+        }
+
+        private async UniTask GameWinTask()
+        {
+            
+            CmdGameWin();
+
+            await UniTask.Delay(TimeSpan.FromSeconds(2));
+
+            NetworkManager.singleton.StopHost();
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdGameWin()
+        {
+            RpcGameWin();
+        }
+        
+        [ClientRpc]
+        private void RpcGameWin()
+        {
+            PlayStats.GameWon = true;
+            PlayStats.FloorsCompleted = DungeonFloor;
+            PlayStats.GameTimeSeconds = Timer.GameTimer;
+            TransitionGameEnd(1).Forget();
+        }
+
         public static void ResetGame()
         {
             if (Crystal.Instance != null) Crystal.Instance.SetHealth(5000f);
@@ -527,13 +558,39 @@ namespace TonyDev.Game.Global
 
         private async UniTask GameOverTask()
         {
+            
+            CmdGameOver();
             CmdFocusAllCamOnCrystal();
 
-            await UniTask.Delay(TimeSpan.FromSeconds(3));
+            await UniTask.Delay(TimeSpan.FromSeconds(5));
 
             NetworkManager.singleton.StopHost();
         }
 
+        [Command(requiresAuthority = false)]
+        private void CmdGameOver()
+        {
+            RpcGameOver();
+        }
+        
+        [ClientRpc]
+        private void RpcGameOver()
+        {
+            PlayStats.GameWon = false;
+            PlayStats.FloorsCompleted = DungeonFloor;
+            PlayStats.GameTimeSeconds = Timer.GameTimer;
+            TransitionGameEnd(4).Forget();
+        }
+        
+        private async UniTask TransitionGameEnd(float delaySeconds)
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(delaySeconds));
+            TransitionController.Instance.FadeOut();
+            await UniTask.WaitUntil(() => SceneManager.GetActiveScene().name == "GameOver");
+            TransitionController.Instance.FadeIn();
+        }
+        
+        
         public bool doCrystalFocusing = false;
 
         [Command(requiresAuthority = false)]

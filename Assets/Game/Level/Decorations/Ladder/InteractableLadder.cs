@@ -13,9 +13,16 @@ namespace TonyDev.Game.Level.Decorations.Ladder
     public class InteractableLadder : Interactable
     {
         [SerializeField] private bool regen = true;
+        [SerializeField] private bool winGame = false;
 
         protected override void OnInteract(InteractType type)
         {
+            if (winGame)
+            {
+                GameManager.Instance.GameWin();
+                return;
+            }
+            
             if(!regen) GameManager.Instance.TogglePhase();
             else Regen();
             PlayInteractSound();

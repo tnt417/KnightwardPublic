@@ -12,17 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d52663f1e64b4a539cad6cb8f3e65ed, type: 3}
   m_Name: AnimationImporterConfig
   m_EditorClassIdentifier: 
-  _animationNamesThatDoNotLoop:
-  - death
-  - Burrow
+  _animationNamesThatDoNotLoop: []
   _automaticImporting: 0
   _spritePixelsPerUnit: 16
-  _pivotAlignmentType: 0
+  _pivotAlignmentType: 1
   _targetObjectType: 0
   _pathToSpriteRendererComponent: Sprite
   _pathToImageComponent: 
-  _spriteAlignment: 0
-  _spriteAlignmentCustomX: 0
+  _spriteAlignment: 7
+  _spriteAlignmentCustomX: 8
   _spriteAlignmentCustomY: 0
   _spritesTargetLocation:
     _locationType: 1

@@ -134,7 +134,8 @@ namespace TonyDev.Game.Core.Attacks
 
             if (attackData.destroyOnCollideWall)
             {
-                Object.Instantiate(ObjectFinder.GetPrefab("WallDestroy"), projectileObject.transform);
+                var go = Object.Instantiate(ObjectFinder.GetPrefab("WallDestroy"), projectileObject.transform);
+                go.GetComponent<CircleCollider2D>().radius = attackData.hitboxRadius;
             }
 
             //Set Rigidbody configuration...

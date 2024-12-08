@@ -67,6 +67,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   identifier: 
   damage: 10
+  damageType: 0
   damageMultiplier: 0.1
   knockbackMultiplier: 0
   damageCooldown: 0.25
@@ -15425,7 +15426,7 @@ MonoBehaviour:
     attackData:
       damageMultiplier: 1
       knockbackMultiplier: -5
-      hitboxRadius: 0.5
+      hitboxRadius: 0.15
       team: 0
       destroyOnApply: 0
       destroyOnCollideWall: 1

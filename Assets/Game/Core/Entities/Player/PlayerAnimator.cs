@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Global.Network;
@@ -174,6 +175,16 @@ namespace TonyDev.Game.Core.Entities.Player
         public void CmdSetSkin(PlayerSkin skin)
         {
             _skin = skin;
+        }
+
+        public void SetOpacity(float value)
+        {
+            var c = new Color(1.0f, 1.0f, 1.0f, value);
+            
+            for(var i = 0; i < playerSpriteRenderers.Length; i++)
+            {
+                playerSpriteRenderers[i].color = c;
+            }
         }
 
         private float _storedNormalizedAttackTime = 0;

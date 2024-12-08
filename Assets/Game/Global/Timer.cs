@@ -49,7 +49,7 @@ namespace TonyDev.Game.Global
         }
 
         //TODO: Doesn't work for hours yet.
-        private static string FormatTimeFromSeconds(float seconds) //Turns seconds into a readable string in the format MM:SS
+        public static string FormatTimeFromSeconds(float seconds) //Turns seconds into a readable string in the format MM:SS
         {
             var stringBuilder = new StringBuilder();
         

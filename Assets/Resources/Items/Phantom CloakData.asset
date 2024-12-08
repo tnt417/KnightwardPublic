@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: Phantom CloakData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: 21300000, guid: 3d35e092a942241439f82ce83608f444, type: 3}
+    itemName: Phantom Cloak
+    itemDescription: 
+    itemType: 2
+    itemRarity: 3
+    statBonuses: []
+    bypassStatGeneration: 0
+    itemEffects:
+    - rid: 5615765620757889026
+    projectiles: []
+    spawnablePrefabName: 
+  references:
+    version: 2
+    RefIds:
+    - rid: 5615765620757889026
+      type: {class: PhantomCloakEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0
+        StandStillTimer: 3
+        MoveSpeedBonus: 0.5
+        AttackBonus: 1

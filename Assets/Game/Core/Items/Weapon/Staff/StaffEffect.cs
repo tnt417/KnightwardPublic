@@ -4,7 +4,6 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
-using UnityEditor.SceneTemplate;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using Random = UnityEngine.Random;

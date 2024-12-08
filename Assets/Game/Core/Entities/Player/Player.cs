@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
@@ -92,6 +93,31 @@ namespace TonyDev.Game.Core.Entities.Player
             if (!ignoreInvincibility) StartCoroutine(PauseDamageForSeconds(PlayerDamageCooldown));
 
             return base.ApplyDamage(damage, out successful, ignoreInvincibility);
+        }
+
+        public void DisableCollisionUntil(Func<bool> condition)
+        {
+            DisableCollisionTask(condition).Forget();
+        }
+
+        private async UniTask DisableCollisionTask(Func<bool> condition)
+        {
+            var colliders = gameObject.GetComponents<Collider2D>();
+
+            var dictionary = new Dictionary<Collider2D, bool>();
+            
+            foreach (var c in colliders)
+            {
+                dictionary.Add(c, c.enabled);
+                c.enabled = false;
+            }
+
+            await UniTask.WaitUntil(condition);
+            
+            foreach (var c in colliders)
+            {
+                c.enabled = dictionary[c];
+            }
         }
 
         private IEnumerator PauseDamageForSeconds(float seconds)

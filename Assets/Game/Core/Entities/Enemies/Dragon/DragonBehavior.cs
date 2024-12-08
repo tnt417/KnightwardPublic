@@ -29,14 +29,18 @@ namespace TonyDev
         
         protected override async UniTask ExecuteBehavior()
         {
-            while (isActiveAndEnabled && Enemy.Targets[0] != null)
+            while (true)
             {
-                await GotoOverSeconds((Vector2) transform.position + ((Vector2) Enemy.Targets[0].transform.position - (Vector2) transform.position).normalized * strafeRadius * 2, 1 / (Enemy.Stats.GetStat(Stat.MoveSpeed) * dashSpeed));
+                await UniTask.WaitForFixedUpdate();
+                if (!isActiveAndEnabled || Enemy.Targets.Count == 0) continue;
+                
+                var position = transform.position;
+                await GotoOverSeconds((Vector2) position + ((Vector2) Enemy.Targets[0].transform.position - (Vector2) position).normalized * strafeRadius * 2, 1 / (Enemy.Stats.GetStat(Stat.MoveSpeed) * dashSpeed));
                 await UniTask.Delay(TimeSpan.FromSeconds(1));
-                await GotoOverSeconds((Vector2)transform.position + FindStrafeDirection(strafeDistance, strafeRadius) * strafeDistance, 1 / (Enemy.Stats.GetStat(Stat.MoveSpeed) * strafeSpeed));
+                await GotoOverSeconds((Vector2)position + FindStrafeDirection(strafeDistance, strafeRadius) * strafeDistance, 1 / (Enemy.Stats.GetStat(Stat.MoveSpeed) * strafeSpeed));
                 PlayAnimation(EnemyAnimationState.Stop);
                 await ShootAnimation().First();
-                ShootProjectileSpread(shootProjectiles, transform.position, GetDirectionToFirstTarget());
+                ShootProjectileSpread(shootProjectiles, position, GetDirectionToFirstTarget());
                 await UniTask.Delay(TimeSpan.FromSeconds(1));
             }
         }
