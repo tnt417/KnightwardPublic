@@ -80,6 +80,7 @@ SpriteAtlas:
   - {fileID: 235405268, guid: 4b0a3b5019c9d1c48a96720407a5c11e, type: 3}
   - {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
   - {fileID: 21300000, guid: 4b0cd0a0fe4fbd047a3713a8445dc20e, type: 3}
+  - {fileID: 21300000, guid: ba58b0b03a1b4bb4c83333e8c3beb780, type: 3}
   - {fileID: -2413445229882570830, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: -4931394179368020708, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
   - {fileID: -6542794299259627398, guid: b3da83d0dd87c6b4c859db5110118f6b, type: 3}
@@ -725,6 +726,7 @@ SpriteAtlas:
   - ballistaTurret_1
   - coinpile
   - rangeindicator
+  - FireAttackIndicator
   - darkArcher_7
   - darkArcher_6
   - darkArcher_5

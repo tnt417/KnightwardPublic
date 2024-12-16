@@ -174,14 +174,6 @@ namespace TonyDev.Game.Core.Entities.Player
                     var percentMissing = 1 - ge.CurrentHealth / ge.MaxHealth;
                     SmoothCameraFollow.Shake(Mathf.Log(percentDealt * (1 + percentMissing / 5f) * (crit ? 32f : 24f)),
                         crit ? 2f : 1.5f);
-                    var eb = ge.GetComponent<EnemyBehavior>();
-                    if (eb != null)
-                    {
-                        eb.PauseMovement(0.2f);
-                        eb.Dash(Random.Range(0.5f, 0.7f) + percentDealt * 0.5f,
-                            GameTools.Rotate(ge.transform.position - transform.position, Random.Range(-0.2f, 0.2f))
-                                .normalized);
-                    }
                 }
                 else
                 {

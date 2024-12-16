@@ -100,7 +100,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdSetDurability(int dur)
+        protected void CmdSetDurability(int dur)
         {
             durability = Math.Clamp(dur, 0, (int)MaxDurability);
 

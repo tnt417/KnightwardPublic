@@ -23,6 +23,7 @@ namespace TonyDev.Game.Core.Attacks
         public bool destroyOnCollideWall;
         [Tooltip("-1 for infinite")] public float lifetime;
         public string spawnOnDestroyKey;
+        public bool inheritRotationOnSpawn = false;
         public bool ignoreInvincibility = false;
 
         public GameEffectList inflictEffects = new();
@@ -76,7 +77,12 @@ namespace TonyDev.Game.Core.Attacks
 
             var col = projectileObject.GetComponent<CircleCollider2D>();
             if (col == null)
+            {
                 col = projectileObject.AddComponent<CircleCollider2D>(); //Add collider if one doesn't already exist
+                
+                if (attackData.hitboxRadius <= 0) // hitboxRadius of 0 indicates that we don't want to allow collision
+                    col.enabled = false;
+            }
 
             var attack = projectileObject.GetComponent<AttackComponent>();
             if (attack == null)
@@ -105,6 +111,7 @@ namespace TonyDev.Game.Core.Attacks
             //Populate component variables...
             destroy.seconds = attackData.lifetime;
             destroy.spawnPrefabOnDestroy = ObjectFinder.GetPrefab(attackData.spawnOnDestroyKey);
+            destroy.inheritRotation = attackData.inheritRotationOnSpawn;
             destroy.SetOwner(owner);
 
             //Set the AttackComponent's data and owner.

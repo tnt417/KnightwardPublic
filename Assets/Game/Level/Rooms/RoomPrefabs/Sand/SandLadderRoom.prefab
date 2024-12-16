@@ -78,6 +78,7 @@ GameObject:
   - component: {fileID: 413669046422418816}
   - component: {fileID: -2335899176024513081}
   - component: {fileID: 3984026065581872969}
+  - component: {fileID: 6559859873039966726}
   m_Layer: 0
   m_Name: SandLadderRoom
   m_TagString: Room
@@ -109,7 +110,7 @@ Transform:
   - {fileID: 2071299475555076012}
   - {fileID: 1973297087620585977}
   - {fileID: 2929317882978330213}
-  - {fileID: 683456326556985853}
+  - {fileID: 6865703862421467507}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -186,7 +187,7 @@ MonoBehaviour:
   onInteractGlobal:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2217531249787028739}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: TonyDev.Game.Level.Decorations.HealChalice.HealChaliceInteractable,
           TonyDev
         m_MethodName: OnInteractGlobal
@@ -199,7 +200,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 7332980614465100277}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
         m_MethodName: Play
         m_Mode: 5
@@ -214,7 +215,67 @@ MonoBehaviour:
   onInteractServer:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2217531249787028739}
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: TonyDev.Game.Level.Decorations.HealChalice.HealChaliceInteractable,
+          TonyDev
+        m_MethodName: OnInteractServer
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &6559859873039966726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1124590283425073302}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 99fb17303c876704290b981877183438, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0.1
+  interactable: {fileID: 5259569178610163085}
+  onInteractGlobal:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5259569178610163085}
+        m_TargetAssemblyTypeName: TonyDev.Game.Level.Decorations.HealChalice.HealChaliceInteractable,
+          TonyDev
+        m_MethodName: OnInteractGlobal
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3744749297883677051}
+        m_TargetAssemblyTypeName: UnityEngine.Animator, UnityEngine
+        m_MethodName: Play
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: ChaliceEmpty
+          m_BoolArgument: 0
+        m_CallState: 2
+  onInteractServer:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 5259569178610163085}
         m_TargetAssemblyTypeName: TonyDev.Game.Level.Decorations.HealChalice.HealChaliceInteractable,
           TonyDev
         m_MethodName: OnInteractServer
@@ -4851,6 +4912,84 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 2787348605893511017, guid: b7c5f14d62a6fc044a25c5702ad5ff73, type: 3}
   m_PrefabInstance: {fileID: 4493342983920361433}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &4554142270255067266
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1124590283425073301}
+    m_Modifications:
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 3.0683346
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.3275638
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8785263520150055931, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+      propertyPath: m_Name
+      value: HealChalice
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+--- !u!95 &3744749297883677051 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 921995343575708153, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+  m_PrefabInstance: {fileID: 4554142270255067266}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5259569178610163085 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8632888152467582223, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+  m_PrefabInstance: {fileID: 4554142270255067266}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 50585e4e22b4307458adfa9370d829ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &6865703862421467507 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
+  m_PrefabInstance: {fileID: 4554142270255067266}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5001395444752922388
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -5367,84 +5506,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dd81ec3e36c9a284cad1a01b390613a9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1001 &7568421103964547084
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 1124590283425073301}
-    m_Modifications:
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_RootOrder
-      value: 12
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8785263520150055931, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-      propertyPath: m_Name
-      value: HealChalice
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
---- !u!4 &683456326556985853 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6950304427727929841, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-  m_PrefabInstance: {fileID: 7568421103964547084}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2217531249787028739 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8632888152467582223, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-  m_PrefabInstance: {fileID: 7568421103964547084}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 50585e4e22b4307458adfa9370d829ca, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!95 &7332980614465100277 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 921995343575708153, guid: 01a3c6092f8b8ab46a074097f468801c, type: 3}
-  m_PrefabInstance: {fileID: 7568421103964547084}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7883328534450798885
 PrefabInstance:
   m_ObjectHideFlags: 0

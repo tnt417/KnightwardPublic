@@ -111,6 +111,14 @@ PrefabInstance:
       propertyPath: m_AnchorMin.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3978008237020764302, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3978008237020764302, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4143216695699966044, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Mass
       value: 0.2
@@ -277,7 +285,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
---- !u!114 &2913228945482631758
+  inheritRotation: 0
+--- !u!114 &7545073959141495017
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -286,7 +295,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8758389917884597047}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 684736bdc93a664429f636e6fd5d9009, type: 3}
+  m_Script: {fileID: 11500000, guid: a685c780911a5a7439e0649d68900887, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   flipRenderer: {fileID: 7682215758947858299}
@@ -297,26 +306,27 @@ MonoBehaviour:
   strafeSpeed: 1
   maxShootDistance: 11
   shootProjectiles:
-  - prefabKey: iceWizardShot
-    projectileSprite: {fileID: -1498476951, guid: a7c6dab6a1ac67b4190243468072a1a1, type: 3}
+  - prefabKey: fireMageAttackIndicator
+    projectileSprite: {fileID: 0}
     attackData:
-      damageMultiplier: 1
-      knockbackMultiplier: 0.5
-      hitboxRadius: 0.3
+      damageMultiplier: 0
+      knockbackMultiplier: 0
+      hitboxRadius: 0
       team: 0
       destroyOnApply: 0
       destroyOnCollideWall: 0
-      lifetime: 2
-      spawnOnDestroyKey: iceWizardShotDeath
+      lifetime: 0.3
+      spawnOnDestroyKey: fireAttackDamage
+      inheritRotationOnSpawn: 1
       ignoreInvincibility: 0
       inflictEffects:
         gameEffects: []
-    disableMovement: 0
-    travelSpeed: 12
+    disableMovement: 1
+    travelSpeed: 0
     offsetDegrees: 0
-    waveAmplitude: 0.3
-    waveLength: 5
-    waveDistance: 24
+    waveAmplitude: 0
+    waveLength: 0
+    waveDistance: 0
     childOfOwner: 0
     doNotRotate: 0
     effects: []

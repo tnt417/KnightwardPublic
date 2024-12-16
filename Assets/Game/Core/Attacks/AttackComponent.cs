@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Mirror;
+using TonyDev.Game.Core.Behavior;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
@@ -9,6 +10,7 @@ using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Attacks
 {
@@ -234,15 +236,26 @@ namespace TonyDev.Game.Core.Attacks
 
             OnDamageDealt?.Invoke(damageDealt, ge, crit, damageType);
 
-            var kb = GetKnockbackVector(other.transform.position) * KnockbackForce * knockbackMultiplier; //Calculate the knockback
+            // var kb = GetKnockbackVector(other.transform.position) * (KnockbackForce * knockbackMultiplier); //Calculate the knockback
 
             var attSpd = _owner != null ? _owner.Stats.GetStat(Stat.AttackSpeed) : 0;
 
-            if (attSpd > 0) kb /= attSpd;
+            // if (kb.x != 0 || kb.y != 0)
+            // {
+                // if (attSpd > 0) kb /= attSpd;
+                // Debug.Log("Applying kb for: " + gameObject.name);
+                //if(ge != null) ge.ApplyKnockbackGlobal(kb); //Apply the knockback
+            // }
+
+            var percentDealt = damage / ge.NetworkMaxHealth;
             
-            if (kb.x != 0 || kb.y != 0)
+            var eb = ge.GetComponent<EnemyBehavior>();
+            if (eb != null)
             {
-                if(ge != null) ge.ApplyKnockbackGlobal(kb); //Apply the knockback
+                if(percentDealt > 0.05) eb.PauseMovement(0.2f);
+                eb.Dash((Random.Range(0.5f, 0.7f) + percentDealt * 0.5f) * knockbackMultiplier,
+                    GameTools.Rotate(ge.transform.position - transform.position, Random.Range(-0.2f, 0.2f))
+                        .normalized);
             }
 
             //Add inflict buffs and effects
@@ -317,6 +330,8 @@ namespace TonyDev.Game.Core.Attacks
             if(damageCooldown == 0) damageCooldown = 0.5f;
             destroyOnApply = attackData?.destroyOnApply ?? destroyOnApply;
             _owner = owner;
+            
+            Debug.Log("Owner setting to: " + _owner.name + " for " + gameObject.name);
 
             _set = true;
         }

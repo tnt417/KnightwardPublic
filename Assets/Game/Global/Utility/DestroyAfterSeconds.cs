@@ -8,6 +8,7 @@ namespace TonyDev.Game.Global
     {
         public float seconds;
         public GameObject spawnPrefabOnDestroy;
+        public bool inheritRotation;
         private float _timer;
         private GameEntity _owner;
         
@@ -31,7 +32,7 @@ namespace TonyDev.Game.Global
         {
             if (!_isQuitting && spawnPrefabOnDestroy != null)
             {
-                var spawned = Instantiate(spawnPrefabOnDestroy, transform.position, Quaternion.identity);
+                var spawned = Instantiate(spawnPrefabOnDestroy, transform.position, inheritRotation ? transform.rotation : Quaternion.identity);
                 var attackComponents = spawned.GetComponentsInChildren<AttackComponent>();
 
                 foreach (var att in attackComponents)

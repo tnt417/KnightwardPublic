@@ -35,16 +35,21 @@ namespace TonyDev.Game.Level.Decorations.Chests
                 
                 if (id == null || !id.isLocalPlayer) return;
                 
-                CmdDropItems(); //Drop items when player touches the chest
+                CmdStartOpen(); //Drop items when player touches the chest
             }
         }
 
+        public void AnimationEventOpen()
+        {
+            if (!isServer) return;
+            DropItems();
+        }
+
         [Command(requiresAuthority = false)]
-        private void CmdDropItems()
+        private void CmdStartOpen()
         {
             if (opened) return;
             opened = true;
-            DropItems();
             RpcSetOpen();
         }
 

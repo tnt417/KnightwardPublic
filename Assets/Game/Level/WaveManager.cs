@@ -22,6 +22,7 @@ namespace TonyDev.Game.Level
     {
         public GameObject[] enemyPrefabs;
         public int difficultyRating;
+        public int minFloor;
     }
 
     public class WaveManager : MonoBehaviour
@@ -153,7 +154,7 @@ namespace TonyDev.Game.Level
             while (difficultyTotal <= threshold)
             {
                 var enemySpawn = enemySpawns[Random.Range(0, enemySpawns.Length)];
-                if (enemySpawn.difficultyRating > threshold - difficultyTotal) continue;
+                if (enemySpawn.difficultyRating > threshold - difficultyTotal || enemySpawn.minFloor > GameManager.DungeonFloor) continue;
                 spawns.Add(enemySpawn);
                 difficultyTotal += enemySpawn.difficultyRating;
                 if (!enemySpawns.Contains(
