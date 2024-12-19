@@ -15404,6 +15404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
+  inheritRotation: 0
 --- !u!114 &8807311167603712433
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15432,6 +15433,7 @@ MonoBehaviour:
       destroyOnCollideWall: 1
       lifetime: 0.5
       spawnOnDestroyKey: 
+      inheritRotationOnSpawn: 0
       ignoreInvincibility: 0
       inflictEffects:
         gameEffects: []

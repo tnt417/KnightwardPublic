@@ -48,6 +48,7 @@ MonoBehaviour:
             destroyOnCollideWall: 0
             lifetime: 10
             spawnOnDestroyKey: 
+            inheritRotationOnSpawn: 0
             ignoreInvincibility: 0
             inflictEffects:
               gameEffects: []
