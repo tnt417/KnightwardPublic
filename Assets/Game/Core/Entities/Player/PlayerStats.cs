@@ -226,9 +226,9 @@ namespace TonyDev.Game.Core.Entities.Player
 
             var colorTag = type switch
             {
-                StatType.Flat => strength > 0 ? "green" : "red",
-                StatType.Multiplicative => strength > 1 ? "green" : "red",
-                StatType.AdditivePercent => strength > 0 ? "green" : "red",
+                StatType.Flat => strength > 0 ? "#63ab3f" : "#e64539",
+                StatType.Multiplicative => strength > 1 ? "#63ab3f" : "#e64539",
+                StatType.AdditivePercent => strength > 0 ? "#63ab3f" : "#e64539",
                 _ => "white"
             };
 

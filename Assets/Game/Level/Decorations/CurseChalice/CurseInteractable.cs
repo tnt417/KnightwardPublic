@@ -34,7 +34,7 @@ namespace TonyDev
         {
             _possibleBonuses = GameTools.SelectRandomNoRepeats(_possibleBonuses, out var bonus);
             _possibleBonuses = GameTools.SelectRandomNoRepeats(_possibleBonuses, out var curse);
-            ObjectSpawner.SpawnTextPopup(transform.position, "<color=green>" + PlayerStats.StatLabelKey[bonus.stat] +" up</color>, <color=red>" + PlayerStats.StatLabelKey[curse.stat] + " down.</color>", Color.white, 0.2f);
+            ObjectSpawner.SpawnTextPopup(transform.position, "<color=#63ab3f>" + PlayerStats.StatLabelKey[bonus.stat] +" up</color>, <color=red>" + PlayerStats.StatLabelKey[curse.stat] + " down.</color>", Color.white, 0.2f);
             Player.LocalInstance.Stats.AddStatBonus(bonus.statType, bonus.stat, bonus.strength*2, bonus.source);
             Player.LocalInstance.Stats.AddStatBonus(curse.statType, curse.stat, -curse.strength, curse.source);
             isInteractable = false;

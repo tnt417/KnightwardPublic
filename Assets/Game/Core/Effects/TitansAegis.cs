@@ -58,7 +58,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Every <color=yellow>{InvulnTimer:N0}</color> seconds, block the next hit. Upon blocking, knock back nearby enemies.</color>";
+                $"<color=#63ab3f>Every <color=yellow>{InvulnTimer:N0}</color> seconds, block the next hit. Upon blocking, knock back nearby enemies.</color>";
         }
     }
 }

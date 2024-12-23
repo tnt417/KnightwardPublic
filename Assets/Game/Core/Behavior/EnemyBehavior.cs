@@ -142,12 +142,12 @@ namespace TonyDev.Game.Core.Behavior
 
                 if (t == null) continue;
 
-                if(!CancelMovement) Rb2d.velocity = t != null
+                if(!CancelMovement) Rb2d.linearVelocity = t != null
                     ? (followTransform.Invoke().position - transform.position).normalized * speed.Invoke()
                     : Vector2.zero;
             }
             //TODO: This cancel is iffy?
-            if(!CancelMovement) Rb2d.velocity = Vector2.zero;
+            if(!CancelMovement) Rb2d.linearVelocity = Vector2.zero;
         }
 
         protected async UniTask GotoOverSeconds(Vector2 position, float seconds)
@@ -163,7 +163,7 @@ namespace TonyDev.Game.Core.Behavior
             while (Time.time < doneTime)
             {
                 await UniTask.WaitUntil(() => Enemy.Targets.Count > 0);
-                if(!CancelMovement) Rb2d.velocity = directionVectorNormalized * (distanceTravelling / seconds);
+                if(!CancelMovement) Rb2d.linearVelocity = directionVectorNormalized * (distanceTravelling / seconds);
                 await UniTask.WaitForFixedUpdate();
             }
         }

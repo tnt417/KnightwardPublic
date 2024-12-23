@@ -46,7 +46,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>For every nearby enemy, gain <color=yellow>{DamageBonusPerEnemy:P0}</color> extra damage, up to a maximum of <color=yellow>{MaxEnemies*DamageBonusPerEnemy:P0}</color>.</color>";
+                $"<color=#63ab3f>For every nearby enemy, gain <color=yellow>{DamageBonusPerEnemy:P0}</color> extra damage, up to a maximum of <color=yellow>{MaxEnemies*DamageBonusPerEnemy:P0}</color>.</color>";
         }
     }
 }

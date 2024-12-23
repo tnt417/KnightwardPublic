@@ -232,6 +232,21 @@ namespace TonyDev.Game.Core.Entities.Player
             playerAnimator.Play("NotShake", 3);
         }
         
+        private void Start()
+        {
+            PlayerSpawnAnim().Forget();
+        }
+        
+        public async UniTask PlayerSpawnAnim()
+        {
+            _overriding = true;
+            Player.LocalInstance.playerMovement.DoMovement = false;
+            playerAnimator.Play("PlayerSpawnInitial");
+            await UniTask.Delay(TimeSpan.FromSeconds(2.5f));
+            Player.LocalInstance.playerMovement.DoMovement = true;
+            _overriding = false;
+        }
+
         private void Update()
         {
             //playerSpriteRenderers[0].sprite = playerSprites[PlayerSpriteIndex];

@@ -68,7 +68,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Gain <color=yellow>{BonusDamagePerEnemy:P0}</color> damage for each enemy you've slain in the last <color=yellow>{BonusDuration:N0}</color> seconds, resetting if no enemies are killed within <color=yellow>{ExpireTime:N0}</color> seconds. Maximum of <color=yellow>{BonusDamagePerEnemy*MaximumEnemies:P0}</color> damage.</color>";
+                $"<color=#63ab3f>Gain <color=yellow>{BonusDamagePerEnemy:P0}</color> damage for each enemy you've slain in the last <color=yellow>{BonusDuration:N0}</color> seconds, resetting if no enemies are killed within <color=yellow>{ExpireTime:N0}</color> seconds. Maximum of <color=yellow>{BonusDamagePerEnemy*MaximumEnemies:P0}</color> damage.</color>";
         }
     }
 }

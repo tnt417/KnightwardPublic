@@ -86,7 +86,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>After standing still for <color=yellow>{StandStillTimer:N0}</color> seconds, turn invisible and gain move speed and damage until you attack something.</color>";
+                $"<color=#63ab3f>After standing still for <color=yellow>{StandStillTimer:N0}</color> seconds, turn invisible and gain move speed and damage until you attack something.</color>";
         }
     }
 }

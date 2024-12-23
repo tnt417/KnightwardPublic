@@ -44,7 +44,7 @@ namespace TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>Gain {GameTools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor. The crystal is affected by your total armor bonus.</color>";
+            return $"<color=#63ab3f>Gain {GameTools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor. The crystal is affected by your total armor bonus.</color>";
         }
     }
 }

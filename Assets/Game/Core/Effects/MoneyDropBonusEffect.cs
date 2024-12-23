@@ -23,7 +23,7 @@ namespace TonyDev.Game.Core.Effects
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>Enemies and destructables drop {GameTools.WrapColor($"{MoneyBonusFinal:P0}", Color.yellow)} more coins.";
+            return $"<color=#63ab3f>Enemies and destructables drop {GameTools.WrapColor($"{MoneyBonusFinal:P0}", Color.yellow)} more coins.";
         }
     }
 }

@@ -30,7 +30,7 @@ MonoBehaviour:
     - rid: 7149686571226103810
       type: {class: GlacialDefenseEffect, ns: TonyDev, asm: TonyDev}
       data:
-        effectDescription: <color=green>Slow nearby enemies until they are fully
+        effectDescription: <color=#63ab3f>Slow nearby enemies until they are fully
           frozen, then crack them.</color>
         DungeonFloorUponCreation: 0
         SlowEffectKey: slowingArmorParticles

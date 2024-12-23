@@ -18,6 +18,8 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private HorizontalLayoutGroup horizontalLayoutGroup;
         [SerializeField] private GameObject toggleObject;
         [SerializeField] private GameObject compareToggleObject;
+        [SerializeField] private Image toggleObjectPanel;
+        [SerializeField] private Image compareObjectPanel;
         [SerializeField] private TMP_Text descriptionText;
         [SerializeField] private TMP_Text compareDescriptionText;
         private Camera _mainCamera;
@@ -96,7 +98,10 @@ namespace TonyDev.Game.UI.Inventory
 
             var replacement = PlayerInventory.Instance.GetSwap(item);
 
+            toggleObjectPanel.color = GroundItem.RarityToColor(item.itemRarity);
+            
             compareToggleObject.SetActive(replacement != null);
+            if (replacement != null) compareObjectPanel.color = GroundItem.RarityToColor(replacement.itemRarity);
 
             if (!containerTransform.gameObject.activeSelf)
             {
@@ -131,17 +136,8 @@ namespace TonyDev.Game.UI.Inventory
 
         private string GetItemDescriptionText(Item item)
         {
-            var rarityColor = item.itemRarity switch
-            {
-                ItemRarity.Common => "grey",
-                ItemRarity.Uncommon => "green",
-                ItemRarity.Rare => "yellow",
-                ItemRarity.Unique => "red",
-                _ => throw new ArgumentOutOfRangeException()
-            };
-
-            return "<color=white><size=24>" + item.itemName + "</size></color>"
-                   + "  <color=" + rarityColor + ">" +
+            return "<color=white><size=32>" + item.itemName + "</size></color>"
+                   + "  <color=#" + ColorUtility.ToHtmlStringRGBA(GroundItem.RarityToColor(item.itemRarity)) + ">" +
                    Enum.GetName(typeof(ItemRarity), item.itemRarity) + "</color>"
                    + "\n<color=#c0c0c0ff>" + item.GetItemDescription() + "</color>";
         }

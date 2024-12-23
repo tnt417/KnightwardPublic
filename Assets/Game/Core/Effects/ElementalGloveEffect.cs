@@ -147,7 +147,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Gain elemental effects that cycle every {GameTools.WrapColor($"{CycleCd:N0}", Color.yellow)} seconds.</color>";
+                $"<color=#63ab3f>Gain elemental effects that cycle every {GameTools.WrapColor($"{CycleCd:N0}", Color.yellow)} seconds.</color>";
         }
     }
 }

@@ -7,6 +7,7 @@ using Steamworks;
 using TMPro;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Core.Items;
 using TonyDev.Game.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -169,7 +170,7 @@ namespace TonyDev.Game.Global.Network
             if (!UIEnabled) return;
 
             statusText.text = newReadyState ? "Ready" : "Not Ready";
-            statusText.color = newReadyState ? Color.green : Color.red;
+            statusText.color = newReadyState ? GroundItem.UncommonColor : GroundItem.UniqueColor;
 
             if (!isOwned) return;
             

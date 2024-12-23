@@ -32,7 +32,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Grants {GameTools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor and increases player armor by {GameTools.WrapColor($"{ArmorBonusMultFinal:P0}", Color.yellow)}.</color>\n<color=red>Lose {GameTools.WrapColor($"{moveSpeedPenalty:P0}", Color.yellow)} of movement speed.</color>";
+                $"<color=#63ab3f>Grants {GameTools.WrapColor($"{ArmorBonusFlatFinal:N0}", Color.yellow)} armor and increases player armor by {GameTools.WrapColor($"{ArmorBonusMultFinal:P0}", Color.yellow)}.</color>\n<color=red>Lose {GameTools.WrapColor($"{moveSpeedPenalty:P0}", Color.yellow)} of movement speed.</color>";
         }
     }
 }

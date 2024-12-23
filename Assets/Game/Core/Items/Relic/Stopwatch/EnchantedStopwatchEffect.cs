@@ -77,7 +77,7 @@ namespace TonyDev.Game.Core.Items.Relics.Stopwatch
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Steal <color=yellow>{AttackStealAmount:P0}</color> attack and <color=yellow>{MoveStealAmount:P0}</color> move speed from enemies within <color=yellow>{Radius:N1}</color> units, slowing them down while speeding you up.</color>";
+                $"<color=#63ab3f>Steal <color=yellow>{AttackStealAmount:P0}</color> attack and <color=yellow>{MoveStealAmount:P0}</color> move speed from enemies within <color=yellow>{Radius:N1}</color> units, slowing them down while speeding you up.</color>";
         }
     }
 }

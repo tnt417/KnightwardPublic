@@ -50,7 +50,7 @@ namespace TonyDev.Game.Core.Items.Relics.BerserkersBrew
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>When entering a new room or when a wave spawns while you are in the arena, gain {GameTools.WrapColor($"{RegenMultiplier:N1}x", Color.yellow)} " +
+            return $"<color=#63ab3f>When entering a new room or when a wave spawns while you are in the arena, gain {GameTools.WrapColor($"{RegenMultiplier:N1}x", Color.yellow)} " +
                    $"health regen and {GameTools.WrapColor($"{DamageMultiplier:P0}", Color.yellow)} bonus damage for {GameTools.WrapColor($"{_duration} seconds", Color.white)}.</color>";
         }
     }

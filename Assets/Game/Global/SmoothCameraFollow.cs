@@ -148,7 +148,7 @@ namespace TonyDev.Game.Global
 
             var playerSpeed = Player.LocalInstance.Stats.GetStat(Stat.MoveSpeed);
 
-            var playerInput = Player.LocalInstance.playerMovement.currentMovementInput;
+            var playerInput = Player.LocalInstance.playerMovement.DoMovement ? Player.LocalInstance.playerMovement.currentMovementInput : Vector2.zero;
 
             _lagBehind += playerInput * Time.deltaTime * playerSpeed + GameManager.MouseDirection.normalized * Time.deltaTime;
 

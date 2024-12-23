@@ -59,7 +59,7 @@ namespace TonyDev.Game.Core.Items.Relics.EmpoweringToxin
 
         public override string GetEffectDescription()
         {
-            return $"<color=green>When entering a new room or when a wave spawns while you are in the arena, gain {GameTools.WrapColor($"{MoveSpeedStrength:P0}", Color.yellow)} " +
+            return $"<color=#63ab3f>When entering a new room or when a wave spawns while you are in the arena, gain {GameTools.WrapColor($"{MoveSpeedStrength:P0}", Color.yellow)} " +
                    $"move speed, {GameTools.WrapColor($"{CritChanceStrength:P0}", Color.yellow)} crit chance, and {GameTools.WrapColor($"{AttackSpeedStrength:P0}", Color.yellow)} attack speed for {GameTools.WrapColor($"{_duration} seconds", Color.white)}.</color>";
         }
     }

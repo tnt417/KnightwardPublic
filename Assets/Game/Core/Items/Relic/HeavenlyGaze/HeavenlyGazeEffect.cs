@@ -77,7 +77,7 @@ namespace TonyDev
         
         public override string GetEffectDescription()
         {
-            return $"<color=green>Every {GameTools.WrapColor($"{HighlightCooldown:N0}", Color.yellow)} seconds, highlight the enemy with the highest health in your instance. Your next attack on the highlighted enemy deals <color=yellow>{DamageMult:N0}</color> times as much damage.</color>";
+            return $"<color=#63ab3f>Every {GameTools.WrapColor($"{HighlightCooldown:N0}", Color.yellow)} seconds, highlight the enemy with the highest health in your instance. Your next attack on the highlighted enemy deals <color=yellow>{DamageMult:N0}</color> times as much damage.</color>";
         }
     }
 }

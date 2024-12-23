@@ -1,7 +1,7 @@
 using System;
-using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Cysharp.Threading.Tasks;
 
 namespace TonyDev.Game.Level
 {

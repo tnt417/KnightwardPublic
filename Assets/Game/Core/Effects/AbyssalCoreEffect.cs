@@ -21,7 +21,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Suck nearby enemies toward you.</color>";
+                $"<color=#63ab3f>Suck nearby enemies toward you.</color>";
         }
     }
 }

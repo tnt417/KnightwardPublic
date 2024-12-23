@@ -99,7 +99,7 @@ namespace TonyDev
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Freeze enemies near you over time, slowing them. Deal extra damage to frozen enemies, but unfreeze them in the process.</color>";
+                $"<color=#63ab3f>Freeze enemies near you over time, slowing them. Deal extra damage to frozen enemies, but unfreeze them in the process.</color>";
         }
     }
 }

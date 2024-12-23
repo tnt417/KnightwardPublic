@@ -30,7 +30,7 @@ MonoBehaviour:
     - rid: 7149686548530200578
       type: {class: AttackEffect, ns: TonyDev.Game.Core.Effects, asm: TonyDev}
       data:
-        effectDescription: <color=green>Surround yourself in a healing aura.</color>
+        effectDescription: <color=#63ab3f>Surround yourself in a healing aura.</color>
         DungeonFloorUponCreation: 0
         ProjectileData:
           prefabKey: leafyPool

@@ -9,6 +9,7 @@ using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace TonyDev.Game.UI.Inventory
 {
@@ -40,6 +41,10 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private TMP_Text noTowersText;
 
         [SerializeField] private TMP_Text cooldownText;
+
+        [SerializeField] private Button statsButton;
+        [SerializeField] private Button gearButton;
+        [SerializeField] private Button towerButton;
         //
 
         private void Awake()
@@ -153,6 +158,10 @@ namespace TonyDev.Game.UI.Inventory
         {
             SoundManager.PlaySound("button", 0.5f, Player.LocalInstance.transform.position);
 
+            statsButton.enabled = true;
+            towerButton.enabled = true;
+            gearButton.enabled = false;
+            
             if (gearInventoryObject.activeSelf && !Minimized)
             {
                 Minimized = true;
@@ -171,6 +180,10 @@ namespace TonyDev.Game.UI.Inventory
 
         public void SwitchToTowerPanel()
         {
+            statsButton.enabled = true;
+            towerButton.enabled = false;
+            gearButton.enabled = true;
+            
             SoundManager.PlaySound("button", 0.5f, Player.LocalInstance.transform.position);
 
             if (towerInventoryObject.activeSelf && !Minimized)
@@ -191,6 +204,10 @@ namespace TonyDev.Game.UI.Inventory
 
         public void SwitchToStatPanel()
         {
+            statsButton.enabled = false;
+            towerButton.enabled = true;
+            gearButton.enabled = true;
+            
             SoundManager.PlaySound("button", 0.5f, Player.LocalInstance.transform.position);
 
             if (statInventoryObject.activeSelf && !Minimized)

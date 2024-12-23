@@ -34,7 +34,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"{GameTools.WrapColor($"{RedirectMultiplier:P1}", Color.yellow)} <color=green>of your health is added to your damage stat.</color>";
+                $"{GameTools.WrapColor($"{RedirectMultiplier:P1}", Color.yellow)} <color=#63ab3f>of your health is added to your damage stat.</color>";
         }
     }
 }

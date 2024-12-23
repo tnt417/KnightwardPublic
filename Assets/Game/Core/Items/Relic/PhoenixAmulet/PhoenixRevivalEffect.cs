@@ -95,7 +95,7 @@ namespace TonyDev
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Revives the player with <color=yellow>{RevivalHealthPercentage:P0}</color> of their maximum health, deals <color=yellow>{RevivalHealthPercentage:P0}</color> of the player's maximum health as damage to enemies within a <color=yellow>{RevivalRange}</color> unit radius, and grants <color=yellow>{InvincibilityDuration:F1}</color> seconds of invincibility upon revival.</color>";
+                $"<color=#63ab3f>Revives the player with <color=yellow>{RevivalHealthPercentage:P0}</color> of their maximum health, deals <color=yellow>{RevivalHealthPercentage:P0}</color> of the player's maximum health as damage to enemies within a <color=yellow>{RevivalRange}</color> unit radius, and grants <color=yellow>{InvincibilityDuration:F1}</color> seconds of invincibility upon revival.</color>";
         }
     }
     

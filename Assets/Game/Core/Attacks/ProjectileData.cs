@@ -149,7 +149,7 @@ namespace TonyDev.Game.Core.Attacks
             rb.gravityScale = 0;
             rb.interpolation = RigidbodyInterpolation2D.Interpolate;
             rb.isKinematic = true;
-            rb.velocity = projectileObject.transform.up * travelSpeed; //Set the projectile's velocity
+            rb.linearVelocity = projectileObject.transform.up * travelSpeed; //Set the projectile's velocity
 
             GameManager.Instance.projectiles.Add(projectileObject);
             return projectileObject; //Return the GameObject we have created

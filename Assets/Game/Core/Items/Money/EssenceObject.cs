@@ -117,7 +117,7 @@ namespace TonyDev.Game.Core.Items.Money
             var dir = new Vector2(Mathf.Cos(radAngle), Mathf.Sin(radAngle));
 
             var rb2d = essence.rb2d;
-            rb2d.velocity = dir * 15f;
+            rb2d.linearVelocity = dir * 15f;
 
             EssenceObjectPool.Enqueue(kvp);
         }

@@ -43,7 +43,7 @@ namespace TonyDev.Game.Core.Effects
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>Every <color=yellow>third</color> attack deals <color=yellow>{DamageMultiplier:N0}</color>x damage and restores <color=yellow>{PercentMissingHealth:P0}</color> of the player's missing health</color>";
+                $"<color=#63ab3f>Every <color=yellow>third</color> attack deals <color=yellow>{DamageMultiplier:N0}</color>x damage and restores <color=yellow>{PercentMissingHealth:P0}</color> of the player's missing health</color>";
         }
     }
 }

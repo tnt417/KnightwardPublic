@@ -170,24 +170,36 @@ namespace TonyDev.Game.Core.Items
             sellPrice = newSell;
         }
 
-        private void UpdateOutlineColor()
+        public static Color CommonColor = new Color(43f/255f, 43f/255f, 69f/255f);
+        public static Color UncommonColor = new Color(99f/255f, 171f/255f, 63f/255f);
+        public static Color RareColor = new Color(255f/255f, 238f/255f, 131f/255f);
+        public static Color UniqueColor = new Color(230f/255f, 69f/255f, 57f/255f);
+
+        public static Color RarityToColor(ItemRarity rarity)
         {
             switch (
-                Item.itemRarity) //Set the material's outline color based on the rarity. These are hardcoded right now.
+                rarity) //Set the material's outline color based on the rarity. These are hardcoded right now.
             {
                 case ItemRarity.Common:
-                    spriteRenderer.sharedMaterial.SetColor("_OutlineColor", Color.black);
+                    return CommonColor;
                     break;
                 case ItemRarity.Uncommon:
-                    spriteRenderer.sharedMaterial.SetColor("_OutlineColor", Color.green);
+                    return UncommonColor;
                     break;
                 case ItemRarity.Rare:
-                    spriteRenderer.sharedMaterial.SetColor("_OutlineColor", Color.yellow);
+                    return RareColor;
                     break;
                 case ItemRarity.Unique:
-                    spriteRenderer.sharedMaterial.SetColor("_OutlineColor", Color.red);
+                    return UniqueColor;
                     break;
             }
+
+            return Color.white;
+        }
+        
+        private void UpdateOutlineColor()
+        {
+            spriteRenderer.sharedMaterial.SetColor("_OutlineColor", RarityToColor(Item.itemRarity));
         }
 
         private bool _pickupPending = false;

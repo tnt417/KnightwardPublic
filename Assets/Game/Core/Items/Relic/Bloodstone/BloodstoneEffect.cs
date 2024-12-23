@@ -34,7 +34,7 @@ namespace TonyDev
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>The player's damage is increased by <color=yellow>{Percentage:P0}</color> of their missing health.</color>";
+                $"<color=#63ab3f>The player's damage is increased by <color=yellow>{Percentage:P0}</color> of their missing health.</color>";
         }
     }
 
@@ -75,7 +75,7 @@ namespace TonyDev
         public override string GetEffectDescription()
         {
             return
-                $"<color=green>When taking damage, retaliate with <color=yellow>{DamageMult:P0}</color> of the damage within {Radius} tiles.</color>";
+                $"<color=#63ab3f>When taking damage, retaliate with <color=yellow>{DamageMult:P0}</color> of the damage within {Radius} tiles.</color>";
         }
     }
 }
