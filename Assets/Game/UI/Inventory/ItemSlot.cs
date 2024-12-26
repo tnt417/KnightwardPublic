@@ -16,6 +16,8 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] public TMP_Text nameText;
 
         [SerializeField] public TMP_Text descriptionText;
+
+        [SerializeField] public Image slotOutline;
         //
 
         private int _insertionFloor;
@@ -55,6 +57,11 @@ namespace TonyDev.Game.UI.Inventory
 
             if (nameText != null) nameText.text = item?.itemName;
 
+            if (item != null && slotOutline != null)
+            {
+                slotOutline.color = GroundItem.RarityToColor(item.itemRarity);
+            }
+            
             if (item is {itemEffects: { }})
                 foreach (var ge in item.itemEffects)
                 {

@@ -59,7 +59,7 @@ namespace TonyDev.Game.Core.Items
                 spawnablePrefabName = "",
                 statBonuses = new StatBonus[]
                 {
-                    new StatBonus(StatType.Flat, Stat.Damage, 10, "Starter Sword"),
+                    new StatBonus(StatType.Flat, Stat.Damage, 20, "Starter Sword"),
                     new StatBonus(StatType.Flat, Stat.AttackSpeed, 1.5f, "Starter Sword")
                 },
                 uiSprite = swordItem.uiSprite
@@ -84,6 +84,27 @@ namespace TonyDev.Game.Core.Items
                     new StatBonus(StatType.Flat, Stat.Health, 1000000f, "Starter Tower", true)
                 },
                 uiSprite = towerItem.uiSprite
+            });
+            
+            var regenItem = Object.Instantiate(GameManager.AllItems.FirstOrDefault(i => i.item.itemName == "Regeneration Tower")).item;
+
+            InsertItem(new Item()
+            {
+                itemName = "Starter Regenerator",
+                bypassStatGeneration = true,
+                itemDescription = "A tower used to repair your crystal.",
+                itemEffects = regenItem.itemEffects,
+                itemRarity = ItemRarity.Common,
+                itemType = ItemType.Tower, 
+                projectiles = regenItem.projectiles,
+                spawnablePrefabName = "regen",
+                statBonuses = new []
+                {
+                    new StatBonus(StatType.Flat, Stat.Damage, 10, "Starter Regen"),
+                    new StatBonus(StatType.Flat, Stat.AttackSpeed, 0.5f, "Starter Regen"),
+                    new StatBonus(StatType.Flat, Stat.Health, 1000000f, "Starter Regen", true)
+                },
+                uiSprite = regenItem.uiSprite
             });
         }
 

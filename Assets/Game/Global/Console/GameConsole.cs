@@ -134,7 +134,15 @@ namespace TonyDev.Game.Global.Console
                 var rawInput = input.Trim('/').ToLower();
                 foreach (var subCommand in rawInput.Split(","))
                 {
-                    OnSendCommand(subCommand);
+                    var repeat = subCommand.Split(" x");
+                    var repeatNum = 1;
+                    
+                    if (repeat.Length == 2)
+                    {
+                        repeatNum = int.Parse(repeat[1]);
+                    }
+                    
+                    for(var i = 0; i < repeatNum; i++) OnSendCommand(subCommand);
                 }
                 return;
             }

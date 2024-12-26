@@ -16,6 +16,8 @@ TagManager:
   - MinimapAlly
   - CheatDisclaimer
   - StaffMirror
+  - InventoryButton
+  - MainCanvas
   layers:
   - Default
   - TransparentFX
@@ -61,6 +63,9 @@ TagManager:
     locked: 0
   - name: Lava
     uniqueID: 3729782073
+    locked: 0
+  - name: Walls
+    uniqueID: 2845788777
     locked: 0
   m_RenderingLayers:
   - Default

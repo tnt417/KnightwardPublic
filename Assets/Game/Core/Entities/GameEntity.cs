@@ -25,6 +25,7 @@ namespace TonyDev.Game.Core.Entities
     public abstract class GameEntity : NetworkBehaviour, IDamageable, IHideable
     {
         public event Action OnTargetChangeOwner;
+        public event Action OnTargetChangeGlobal;
         public SyncList<GameEntity> Targets = new();
         //[SerializeReference]public GameEffectList startingEffects = new();
 

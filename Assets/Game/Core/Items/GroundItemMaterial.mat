@@ -42,10 +42,10 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_a64232ca8e454a02a41d815cd50355c4: 3
-    - _OutlineGlowIntensity: 1
+    - _OutlineGlowIntensity: 3
     m_Colors:
     - OutlineColor: {r: 1, g: 1, b: 1, a: 0}
-    - _OutlineColor: {r: 1, g: 1, b: 1, a: 0}
+    - _OutlineColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5575257487605937919

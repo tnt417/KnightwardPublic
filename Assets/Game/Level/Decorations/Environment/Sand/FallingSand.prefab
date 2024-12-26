@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2012879613144909825}
   - component: {fileID: 3856145382146783111}
   - component: {fileID: 871035527856929382}
+  - component: {fileID: 4586404349873893796}
   m_Layer: 0
   m_Name: FallingSand
   m_TagString: Untagged
@@ -126,6 +127,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   offsetRange: {x: 0, y: 1}
   randomSpriteFlip: 1
+--- !u!114 &4586404349873893796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2271339295119754444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f5660ae8e43244da40e134cf2b8973, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &3193660719365131187
 GameObject:
   m_ObjectHideFlags: 0

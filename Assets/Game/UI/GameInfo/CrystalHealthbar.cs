@@ -27,8 +27,10 @@ namespace TonyDev
         {
             await UniTask.WaitUntil(() => Crystal.Instance != null);
             AttachedDamageable = Crystal.Instance; //Initialize the IDamageable component
-            Crystal.Instance.OnVisibilityChange += OnVisiblilityChange;
             base.Start();
+
+            await UniTask.WaitForSeconds(1f);
+            Crystal.Instance.OnVisibilityChange += OnVisiblilityChange;
         }
     }
 }

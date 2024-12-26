@@ -143,7 +143,7 @@ namespace TonyDev.Game.Core.Items
             {
                 var bonus = original.statBonuses[i];
 
-                bonus.strength *= Mathf.Pow(0.8f + Mathf.Log(StatStrengthFactor), 2);
+                bonus.strength *= 1;//Mathf.Pow(0.8f + Mathf.Log(StatStrengthFactor), 2);
 
                 original.statBonuses[i] = bonus;
             }

@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
+using TonyDev.Game.Level;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Player
@@ -153,10 +155,14 @@ namespace TonyDev.Game.Core.Entities.Player
 
         [SyncVar(hook = nameof(OnSkinChanged))]
         private PlayerSkin _skin;
+        
+        [SyncVar]
+        private int _playerNum;
 
         public override void OnStartAuthority()
         {
             CmdSetSkin(CustomRoomPlayer.Local.skin);
+            CmdSetPlayerNum(CustomRoomPlayer.Local.playerNumber);
         }
 
         private void OnSkinChanged(PlayerSkin oldSkin, PlayerSkin newSkin)
@@ -176,6 +182,12 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             _skin = skin;
         }
+        
+        [Command(requiresAuthority = false)]
+        public void CmdSetPlayerNum(int num)
+        {
+            _playerNum = num;
+        }
 
         public void SetOpacity(float value)
         {
@@ -185,6 +197,41 @@ namespace TonyDev.Game.Core.Entities.Player
             {
                 playerSpriteRenderers[i].color = c;
             }
+        }
+
+        public bool isInLadderAnim = false;
+        
+        public async UniTask JumpIntoLadderTask(GameObject ladder)
+        {
+            bool goingToArena = GameManager.GamePhase == GamePhase.Dungeon;
+
+            isInLadderAnim = true;
+            
+            if (!goingToArena)
+            {
+                _overriding = true;
+                Player.LocalInstance.playerMovement.DoMovement = false;
+                
+                await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
+                
+                playerAnimator.Play("JumpIntoLadder");
+
+                var initial = Time.time;
+
+                while (Time.time - initial < 0.3333f)
+                {
+                    await UniTask.Yield(PlayerLoopTiming.Update);
+                    Player.LocalInstance.transform.position = Vector2.MoveTowards(
+                        Player.LocalInstance.transform.position,
+                        ladder.transform.position, Time.deltaTime * 5f);
+                }
+            }
+            else
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds * 2));
+            }
+
+            PlayerSpawnAnim().Forget();
         }
 
         private float _storedNormalizedAttackTime = 0;
@@ -234,17 +281,24 @@ namespace TonyDev.Game.Core.Entities.Player
         
         private void Start()
         {
-            PlayerSpawnAnim().Forget();
+            PlayerSpawnAnim(true, true).Forget();
         }
         
-        public async UniTask PlayerSpawnAnim()
+        public async UniTask PlayerSpawnAnim(bool focusCrystal = false, bool scaleDelayWithPlayers = false)
         {
             _overriding = true;
             Player.LocalInstance.playerMovement.DoMovement = false;
+            if(focusCrystal) GameManager.Instance.doCrystalFocusing = true;
+            await UniTask.WaitUntil(() => _playerNum > 0);
+            Debug.Log(_playerNum);
+            if(scaleDelayWithPlayers) await UniTask.Delay(TimeSpan.FromSeconds(0.5f * _playerNum));
             playerAnimator.Play("PlayerSpawnInitial");
             await UniTask.Delay(TimeSpan.FromSeconds(2.5f));
+            if(focusCrystal) GameManager.Instance.doCrystalFocusing = false;
+            _lastAnimState = PlayerAnimState.Dead;
             Player.LocalInstance.playerMovement.DoMovement = true;
             _overriding = false;
+            isInLadderAnim = false;
         }
 
         private void Update()

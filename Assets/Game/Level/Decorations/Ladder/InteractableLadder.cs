@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
@@ -17,15 +18,25 @@ namespace TonyDev.Game.Level.Decorations.Ladder
 
         protected override void OnInteract(InteractType type)
         {
+            if (Player.LocalInstance.playerAnimator.isInLadderAnim) return;
+            
             if (winGame)
             {
                 GameManager.Instance.GameWin();
                 return;
             }
             
+            PlayInteractSound();
+
+            InteractTask().Forget();
+        }
+
+        private async UniTask InteractTask()
+        {
+            await Player.LocalInstance.playerAnimator.JumpIntoLadderTask(gameObject);
+            
             if(!regen) GameManager.Instance.TogglePhase();
             else Regen();
-            PlayInteractSound();
         }
 
         [GameCommand(Keyword = "regen", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Success!")]

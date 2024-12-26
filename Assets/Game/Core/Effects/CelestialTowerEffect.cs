@@ -13,7 +13,9 @@ namespace TonyDev.Game.Core.Effects
 {
     public class CelestialTowerEffect : GameEffect
     {
-        private Dictionary<Tower, ParticleTrailEffect> _trailEffects = new();
+        private HashSet<Tower> _buffedTowers = new();
+        private static Dictionary<Tower, ParticleTrailEffect> _trailEffects = new();
+        private static Dictionary<Tower, CelestialBuffAnim> _trailCbas = new();
 
         public string buffEffectPrefabKey;
         public Stat[] validStatTypes;
@@ -27,11 +29,13 @@ namespace TonyDev.Game.Core.Effects
             Entity.OnTargetChangeOwner += DoBuffing;
             Entity.OnDeathOwner += UndoBuffing;
         }
-
+        
         private void DoBuffing()
         {
             foreach (var t in Entity.Targets.Select(t => t.GetComponent<Tower>()).Where(t => t != null))
             {
+                if (t.myItem?.itemName == "Celestial Tower") continue;
+                
                 foreach (var sb in Buffs)
                 {
                     if (!_trailEffects.ContainsKey(t))
@@ -43,6 +47,18 @@ namespace TonyDev.Game.Core.Effects
                         };
                         t.CmdAddEffect(_trailEffects[t], Entity);
                     }
+                    
+                    if (!_trailCbas.ContainsKey(t))
+                    {
+                        _trailCbas.Add(t, t.GetComponentInChildren<CelestialBuffAnim>());
+                    }
+
+                    if (!_buffedTowers.Contains(t))
+                    {
+                        _trailCbas[t].AlterCount(1);
+                    }
+                    
+                    _buffedTowers.Add(t);
 
                     t.Stats.AddBuff(sb, GameEntity.EntityTargetUpdatingRate);
                 }
@@ -64,13 +80,14 @@ namespace TonyDev.Game.Core.Effects
 
         private void UndoBuffing(float value)
         {
-            foreach (var t in _trailEffects.Keys)
+            foreach (var t in _buffedTowers)
             {
-                t.CmdRemoveEffect(_trailEffects[t]);
                 t.Stats.RemoveStatBonuses(EffectIdentifier);
+                
+                _trailCbas[t].AlterCount(-1);
             }
-
-            _trailEffects.Clear();
+            
+            _buffedTowers.Clear();
         }
 
         public override string GetEffectDescription()

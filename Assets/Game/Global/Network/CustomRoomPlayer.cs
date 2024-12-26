@@ -31,6 +31,8 @@ namespace TonyDev.Game.Global.Network
 
         [SyncVar] public string classEffectName;
         
+        [SyncVar] public int playerNumber;
+        
         public readonly SyncList<string> UnlockedItemNames = new();
 
         [Header("UI")] public Transform uiTransform;
@@ -78,6 +80,12 @@ namespace TonyDev.Game.Global.Network
         {
             skin = newSkin;
         }
+        
+        [Command(requiresAuthority = false)]
+        public void CmdGetPlayerNumber()
+        {
+            playerNumber = NetworkServer.connections.Count;
+        }
 
         public bool UIEnabled => SceneManager.GetActiveScene().name == "LobbyScene";
 
@@ -101,6 +109,7 @@ namespace TonyDev.Game.Global.Network
             CmdSetUsername(SteamFriends.GetPersonaName());
 
             CmdSetUnlockedItems(UnlocksManager.Instance.Unlocks.ToArray());
+            CmdGetPlayerNumber();
 
             if (!UIEnabled) return;
 

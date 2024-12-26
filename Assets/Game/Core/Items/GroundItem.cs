@@ -85,11 +85,13 @@ namespace TonyDev.Game.Core.Items
 
         private void OnItemChangeHook(Item oldItem, Item newItem)
         {
+            Debug.Log("Item change hook called");
             ItemChangeTask(oldItem, newItem).Forget();
         }
 
         private async UniTask ItemChangeTask(Item oldItem, Item newItem)
         {
+            
             if (oldItem != null && Time.time - _birthTime > 0.5f)
             {
                 animator.Play("GroundItemPickup");
@@ -99,6 +101,7 @@ namespace TonyDev.Game.Core.Items
 
                 animator.Play("GroundItemSpawn");
                 await UniTask.Delay(250);
+                _pickupPending = false;
                 return;
             }
             
@@ -117,6 +120,8 @@ namespace TonyDev.Game.Core.Items
                 ItemDestroyTask().Forget();
                 return;
             }
+            
+            Debug.Log("Command setting new non-null item");
 
             Item = newItem; //Update the item
         }
@@ -170,10 +175,10 @@ namespace TonyDev.Game.Core.Items
             sellPrice = newSell;
         }
 
-        public static Color CommonColor = new Color(43f/255f, 43f/255f, 69f/255f);
-        public static Color UncommonColor = new Color(99f/255f, 171f/255f, 63f/255f);
-        public static Color RareColor = new Color(255f/255f, 238f/255f, 131f/255f);
-        public static Color UniqueColor = new Color(230f/255f, 69f/255f, 57f/255f);
+        public static Color CommonColor = Color.black;//new Color(43f/255f, 43f/255f, 69f/255f);
+        public static Color UncommonColor = Color.green;//new Color(99f/255f, 171f/255f, 63f/255f);
+        public static Color RareColor = Color.yellow;//new Color(255f/255f, 238f/255f, 131f/255f);
+        public static Color UniqueColor = Color.red;//new Color(230f/255f, 69f/255f, 57f/255f);
 
         public static Color RarityToColor(ItemRarity rarity)
         {
@@ -210,6 +215,7 @@ namespace TonyDev.Game.Core.Items
             if (senderMoney < cost || !_pickupAble || _pickupPending)
                 return; //If the item is too expensive, don't allow pickup.
 
+            Debug.Log("Requesting pickup");
             _pickupPending = true;
 
             RpcNotifyPickup();
@@ -253,6 +259,11 @@ namespace TonyDev.Game.Core.Items
         {
             GameManager.Money -= confirmedCost;
 
+            var pickupAnimUI = GameObject.Instantiate(ObjectFinder.GetPrefab("pickupAnimUI"), transform.position, Quaternion.identity)
+                .GetComponent<PickupAnimationUI>();
+            
+            pickupAnimUI.Set(transform.position, Item);
+            
             var returnItem = PlayerInventory.Instance.InsertItem(Item);
 
             ObjectSpawner.SpawnTextPopup(transform.position, "Item inserted", Color.green, 0.8f);

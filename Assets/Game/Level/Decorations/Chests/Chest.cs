@@ -16,6 +16,7 @@ namespace TonyDev.Game.Level.Decorations.Chests
     {
         [SerializeField] public int rarityBoost;
         [SerializeField] private Animator chestAnimator;
+        [SerializeField] private ParticleSystem openParticles;
 
         public UnityEvent onOpenServer;
         public UnityEvent onOpenGlobal;
@@ -41,6 +42,7 @@ namespace TonyDev.Game.Level.Decorations.Chests
 
         public void AnimationEventOpen()
         {
+            openParticles.Play();
             if (!isServer) return;
             DropItems();
         }

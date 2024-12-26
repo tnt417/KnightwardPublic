@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
@@ -29,6 +30,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
+using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
@@ -72,13 +74,28 @@ namespace TonyDev.Game.Global
 
         [GameCommand(Keyword = "insertitem", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Inserted item.")]
-        public static void InsertItemCommand(string itemType, string itemRarity)
+        public static void InsertItemCommand(string itemType, string itemRarityOrName)
         {
             var it = Enum.Parse<ItemType>(itemType, true);
-            var ir = Enum.Parse<ItemRarity>(itemRarity, true);
 
-            var item = ItemGenerator.GenerateItemOfType(it, ir);
+            itemRarityOrName = itemRarityOrName.Replace("_", " ");
+            itemRarityOrName = itemRarityOrName.ToLower();
 
+            ItemRarity rarity = ItemRarity.Common;
+
+            string itemName = "";
+            
+            switch (itemRarityOrName)
+            {
+                case "common": rarity = ItemRarity.Common; break;
+                case "uncommon": rarity = ItemRarity.Uncommon; break;
+                case "rare": rarity = ItemRarity.Rare; break;
+                case "unique": rarity = ItemRarity.Unique; break;
+                default: itemName = itemRarityOrName; break;
+            }
+
+            var item = itemName == "" ? ItemGenerator.GenerateItemOfType(it, rarity) : ItemGenerator.GenerateItemFromData(UnlocksManager.UnlockedItems.FirstOrDefault(item => item.item.itemName.ToLower() == itemName));
+            
             if (item.itemEffects != null)
             {
                 foreach (var ge in item.itemEffects)
@@ -457,7 +474,12 @@ namespace TonyDev.Game.Global
         {
             Crystal.Instance.OnDeathOwner += value => GameOver();
             EnterArenaPhase();
-            Player.LocalInstance.transform.position = arenaSpawnPos + new Vector2(13.5f, 0);
+
+            var playerFrac = CustomRoomPlayer.Local.playerNumber / 4;
+            
+            Player.LocalInstance.transform.position = arenaSpawnPos + new Vector2(Mathf.Cos((((float)playerFrac) * 2 * Mathf.PI)) * 2f,
+                Mathf.Sin((((float)playerFrac) * 2 * Mathf.PI)) * 2f);
+            arenaSpawnPos = new Vector2(4980, -6f);
         }
 
         #endregion
