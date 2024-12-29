@@ -108,6 +108,8 @@ namespace TonyDev.Game.Core.Effects
 
         private void InflictBurn(float dmg, GameEntity other, bool crit, DamageType dt)
         {
+            if (dmg <= 0) return;
+            
             _burnEffect = new PoisonEffect
             {
                 Damage = BurnDamagePerSecondMultiplier * Entity.Stats.GetStat(Stat.Damage) * Frequency,
@@ -120,6 +122,8 @@ namespace TonyDev.Game.Core.Effects
 
         private void InflictSlow(float dmg, GameEntity other, bool crit, DamageType dt)
         {
+            if (dmg <= 0) return;
+            
             other.CmdRemoveEffect(_speedEffect);
             
             _speedEffect = new SpeedEffect
@@ -134,6 +138,8 @@ namespace TonyDev.Game.Core.Effects
 
         protected void TryLeech(float dmg, GameEntity other, bool isCrit, DamageType dt)
         {
+            if (dmg <= 0) return;
+            
             if (_activeEffect == Effect.Leech)
             {
                 var leech = -dmg * LeechPercent;

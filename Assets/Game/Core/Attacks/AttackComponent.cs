@@ -243,7 +243,7 @@ namespace TonyDev.Game.Core.Attacks
             // if (kb.x != 0 || kb.y != 0)
             // {
                 // if (attSpd > 0) kb /= attSpd;
-                // Debug.Log("Applying kb for: " + gameObject.name);
+                // //Debug.Log("Applying kb for: " + gameObject.name);
                 //if(ge != null) ge.ApplyKnockbackGlobal(kb); //Apply the knockback
             // }
 
@@ -313,7 +313,7 @@ namespace TonyDev.Game.Core.Attacks
         {
             if (_set)
             {
-                Debug.LogWarning("AttackComponent has been set twice!");
+                //Debug.LogWarning("AttackComponent has been set twice!");
                 return;
             }
             
@@ -331,7 +331,7 @@ namespace TonyDev.Game.Core.Attacks
             destroyOnApply = attackData?.destroyOnApply ?? destroyOnApply;
             _owner = owner;
             
-            Debug.Log("Owner setting to: " + _owner.name + " for " + gameObject.name);
+            //Debug.Log("Owner setting to: " + _owner.name + " for " + gameObject.name);
 
             _set = true;
         }

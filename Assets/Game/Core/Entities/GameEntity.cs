@@ -386,7 +386,7 @@ namespace TonyDev.Game.Core.Entities
 
             var index = 0;
             
-            //Debug.Log("B");
+            ////Debug.Log("B");
 
             foreach (var ge in distances)
             {

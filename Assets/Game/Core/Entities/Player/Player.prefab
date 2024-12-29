@@ -675,6 +675,7 @@ MonoBehaviour:
   playerMovement: {fileID: 1277911643}
   playerAnimator: {fileID: 2453021677114858237}
   playerDeath: {fileID: 1270234476}
+  stopPlayerAttack: 0
   fireKeyHeld: 0
   username: 
 --- !u!50 &1277911647
@@ -894,6 +895,7 @@ MonoBehaviour:
   playerAnimator: {fileID: 29065221820089324}
   playerAnimationValues: {fileID: 8587305128165645186}
   playerWalkParticles: {fileID: 6009604398360732636}
+  isInLadderAnim: 0
   attackingOverride: 0
 --- !u!114 &3678488959114238567
 MonoBehaviour:
@@ -1057,8 +1059,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 96ee164463116094e96ec2f60e17122b, type: 2}
-  m_sharedMaterial: {fileID: -1362008355173825859, guid: 96ee164463116094e96ec2f60e17122b, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: c6481f2d92db4466fa60f57950571c7a, type: 2}
+  m_sharedMaterial: {fileID: 4735722709984551834, guid: c6481f2d92db4466fa60f57950571c7a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1082,8 +1084,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 0.2
-  m_fontSizeBase: 0.2
+  m_fontSize: 0.35
+  m_fontSizeBase: 0.35
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

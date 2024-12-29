@@ -33,7 +33,7 @@ namespace TonyDev
                 await UniTask.Yield(PlayerLoopTiming.Update);
                 dist = Vector2.Distance(transform.position, _inventoryButton.transform.position);
                 transform.position = Vector2.Lerp(transform.position, _inventoryButton.transform.position, Time.deltaTime * 3f);
-                image.color = new Color(image.color.r, image.color.g, image.color.b, dist/startDist);
+                image.color = new Color(image.color.r, image.color.g, image.color.b, (dist/startDist) + 0.3f);
             }
             
             Destroy(gameObject);

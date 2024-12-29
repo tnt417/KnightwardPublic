@@ -209,7 +209,7 @@ namespace TonyDev.Game.Global
         {
             if (item == null)
             {
-                Debug.LogWarning("Cannot spawn a null item!");
+                //Debug.LogWarning("Cannot spawn a null item!");
                 return null;
             }
             
@@ -218,7 +218,7 @@ namespace TonyDev.Game.Global
 
             if (gi == null)
             {
-                Debug.LogWarning("Something went wrong while spawning ground item!");
+                //Debug.LogWarning("Something went wrong while spawning ground item!");
                 return null;
             }
 

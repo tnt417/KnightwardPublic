@@ -91,7 +91,7 @@ namespace TonyDev.Game.Core.Behavior
         // Singleton code.
         public void Awake()
         {
-            if (Instance != null) Debug.LogWarning("Upgrade manager already exists!");
+            if (Instance != null) //Debug.LogWarning("Upgrade manager already exists!");
             Instance = this;
         }
 
@@ -438,7 +438,7 @@ namespace TonyDev.Game.Core.Behavior
             if (!_onPurchaseActions.ContainsKey(id) || _onPurchaseActions[id] == null ||
                 !_createdEntries.ContainsKey(id) || _createdEntries[id] == null)
             {
-                Debug.LogWarning("Trying to purchase an invalid upgrade!");
+                //Debug.LogWarning("Trying to purchase an invalid upgrade!");
                 return; // Check to prevent upgrades from being attempted to be bought twice or invalid upgrades. Prevent null pointers.
             }
 
@@ -454,7 +454,7 @@ namespace TonyDev.Game.Core.Behavior
             if (!_onPurchaseActions.ContainsKey(id) || _onPurchaseActions[id] == null ||
                 !_createdEntries.ContainsKey(id) || _createdEntries[id] == null)
             {
-                Debug.LogWarning("Trying to purchase an invalid upgrade!");
+                //Debug.LogWarning("Trying to purchase an invalid upgrade!");
                 return; // Check to prevent upgrades from being attempted to be bought twice or invalid upgrades. Prevent null pointers.
             }
 

@@ -33,7 +33,7 @@ namespace TonyDev.Game.Level.Decorations.Ladder
 
         private async UniTask InteractTask()
         {
-            await Player.LocalInstance.playerAnimator.JumpIntoLadderTask(gameObject);
+            await Player.LocalInstance.playerAnimator.JumpIntoLadderTask(gameObject, regen);
             
             if(!regen) GameManager.Instance.TogglePhase();
             else Regen();

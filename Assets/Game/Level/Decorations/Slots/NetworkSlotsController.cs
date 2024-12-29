@@ -124,13 +124,12 @@ namespace TonyDev.Game.Level.Decorations.Slots
                     }
 
                     break;
-                case SlotOutcome.Time:
-                    FindObjectOfType<WaveManager>().StallTime(20 * slots.Count);
-                    break;
                 case SlotOutcome.Enemies:
                     foreach (var s in slots)
                     {
                         ObjectSpawner.SpawnEnemy(GameTools.SelectRandom(enemyPossibilities),
+                            (Vector2) s.transform.position - new Vector2(0, 1f), netIdentity);
+                        GameManager.Instance.CmdSpawnMoney((int) (ItemGenerator.DungeonInteractMultiplier * 15),
                             (Vector2) s.transform.position - new Vector2(0, 1f), netIdentity);
                     }
 

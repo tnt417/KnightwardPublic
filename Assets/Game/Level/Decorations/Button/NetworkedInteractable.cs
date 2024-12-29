@@ -16,7 +16,7 @@ namespace TonyDev.Game.Level.Decorations.Button
         {
             if (interactable == null)
             {
-                Debug.LogWarning("Please set the interactable before awake!");
+                //Debug.LogWarning("Please set the interactable before awake!");
                 Destroy(this);
                 return;
             }

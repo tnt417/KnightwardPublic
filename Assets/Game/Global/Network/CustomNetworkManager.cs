@@ -109,7 +109,7 @@ namespace TonyDev.Game.Global.Network
         private void OnLobbyCreateSuccessful()
         {
             _lobbyCreated = true;
-            Debug.Log("Starting host!");
+            //Debug.Log("Starting host!");
             StartHost();
 
             if(SteamLobbyManager.IsSteamServer) SteamLobbyManager.Singleton.OnLobbyCreateSuccessful -= OnLobbyCreateSuccessful;

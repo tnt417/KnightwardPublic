@@ -46,7 +46,7 @@ namespace TonyDev.Game.Core.Effects
 
             _standTimer += Time.deltaTime;
 
-            Debug.Log(_standTimer);
+            //Debug.Log(_standTimer);
             
             if (_standTimer > StandStillTimer)
             {
@@ -65,7 +65,7 @@ namespace TonyDev.Game.Core.Effects
         
         private void OnMove()
         {
-            Debug.Log("Move!");
+            //Debug.Log("Move!");
             
             if (_appliedEffect == null)
             {

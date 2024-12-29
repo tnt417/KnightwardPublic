@@ -59,7 +59,7 @@ namespace TonyDev.Game.Core.Items
 
             if (item == null)
             {
-                Debug.LogWarning("Cannot generate essence for null item!");
+                //Debug.LogWarning("Cannot generate essence for null item!");
                 return 0;
             }
 
@@ -93,8 +93,8 @@ namespace TonyDev.Game.Core.Items
 
             if (item == null)
             {
-                Debug.LogWarning("Failed to generate item! " + Enum.GetName(typeof(ItemType), type) + ", " +
-                                 Enum.GetName(typeof(ItemRarity), rarity));
+                //Debug.LogWarning("Failed to generate item! " + Enum.GetName(typeof(ItemType), type) + ", " +
+                               //  Enum.GetName(typeof(ItemRarity), rarity));
                 return null;
             }
             

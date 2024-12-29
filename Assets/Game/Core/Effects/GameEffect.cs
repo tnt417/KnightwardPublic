@@ -107,7 +107,7 @@ namespace TonyDev.Game.Core.Effects
 
             if (type == null)
             {
-                Debug.LogWarning("Invalid type name!");
+                //Debug.LogWarning("Invalid type name!");
                 return null;
             }
 

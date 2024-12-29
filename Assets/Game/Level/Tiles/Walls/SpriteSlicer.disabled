@@ -21,11 +21,11 @@ public class SpriteSlicer : EditorWindow
             }
 
             AssetDatabase.ImportAsset("Assets/PathToYourTargetSprite.png", ImportAssetOptions.ForceUpdate);
-            Debug.Log("Slicing settings copied successfully.");
+            //Debug.Log("Slicing settings copied successfully.");
         }
         else
         {
-            Debug.LogError("Source or target sprite not found.");
+            //Debug.LogError("Source or target sprite not found.");
         }
     }
 }

@@ -264,7 +264,7 @@ namespace TonyDev.Game.Global
                 var att = p.GetComponent<AttackComponent>();
                 if (att == null)
                 {
-                    Debug.LogWarning("Projectile has no attack component!");
+                    //Debug.LogWarning("Projectile has no attack component!");
                     continue;
                 }
 

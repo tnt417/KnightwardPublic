@@ -83,8 +83,8 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         protected override void OnAbilityActivate()
         {
-            base.OnAbilityActivate();
             OnAbilityDeactivate();
+            base.OnAbilityActivate();
             
             _empowered = true;
 

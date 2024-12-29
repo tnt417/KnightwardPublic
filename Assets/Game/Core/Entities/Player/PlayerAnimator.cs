@@ -201,16 +201,17 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public bool isInLadderAnim = false;
         
-        public async UniTask JumpIntoLadderTask(GameObject ladder)
+        public async UniTask JumpIntoLadderTask(GameObject ladder, bool regen)
         {
-            bool goingToArena = GameManager.GamePhase == GamePhase.Dungeon;
-
+            var goingToArena = GameManager.GamePhase == GamePhase.Dungeon && !regen;
+            
             isInLadderAnim = true;
             
             if (!goingToArena)
             {
                 _overriding = true;
                 Player.LocalInstance.playerMovement.DoMovement = false;
+                Player.LocalInstance.stopPlayerAttack = true;
                 
                 await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
                 
@@ -228,7 +229,7 @@ namespace TonyDev.Game.Core.Entities.Player
             }
             else
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds * 2));
+                await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds * 3));
             }
 
             PlayerSpawnAnim().Forget();
@@ -290,13 +291,13 @@ namespace TonyDev.Game.Core.Entities.Player
             Player.LocalInstance.playerMovement.DoMovement = false;
             if(focusCrystal) GameManager.Instance.doCrystalFocusing = true;
             await UniTask.WaitUntil(() => _playerNum > 0);
-            Debug.Log(_playerNum);
             if(scaleDelayWithPlayers) await UniTask.Delay(TimeSpan.FromSeconds(0.5f * _playerNum));
             playerAnimator.Play("PlayerSpawnInitial");
             await UniTask.Delay(TimeSpan.FromSeconds(2.5f));
             if(focusCrystal) GameManager.Instance.doCrystalFocusing = false;
             _lastAnimState = PlayerAnimState.Dead;
             Player.LocalInstance.playerMovement.DoMovement = true;
+            Player.LocalInstance.stopPlayerAttack = false;
             _overriding = false;
             isInLadderAnim = false;
         }

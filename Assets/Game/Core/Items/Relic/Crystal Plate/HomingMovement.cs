@@ -28,7 +28,7 @@ namespace TonyDev
 
             if (_rb2d == null)
             {
-                Debug.LogWarning("Please add a rigidbody!");
+                //Debug.LogWarning("Please add a rigidbody!");
                 Destroy(this);
                 return;
             }

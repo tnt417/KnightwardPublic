@@ -45,6 +45,7 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private Button statsButton;
         [SerializeField] private Button gearButton;
         [SerializeField] private Button towerButton;
+        [SerializeField] private Sprite[] buttonSprites;
         //
 
         private void Awake()
@@ -112,6 +113,20 @@ namespace TonyDev.Game.UI.Inventory
                 if (animator != null)
                 {
                     animator.SetBool("minimized", value);
+
+                    if (value)
+                    {
+                        var statsRectTransform = statsButton.transform.GetChild(0).GetComponent<RectTransform>();
+                        statsRectTransform.anchoredPosition = new Vector2(statsRectTransform.anchoredPosition.x, 8f);
+                        var towerRectTransform = towerButton.transform.GetChild(0).GetComponent<RectTransform>();
+                        towerRectTransform.anchoredPosition = new Vector2(towerRectTransform.anchoredPosition.x, 8f);
+                        var gearRectTransform = gearButton.transform.GetChild(0).GetComponent<RectTransform>();
+                        gearRectTransform.anchoredPosition = new Vector2(gearRectTransform.anchoredPosition.x, 8f);
+                        
+                        statsButton.GetComponent<Image>().sprite = buttonSprites[0];
+                        towerButton.GetComponent<Image>().sprite = buttonSprites[0];
+                        gearButton.GetComponent<Image>().sprite = buttonSprites[0];
+                    }
                 }
             }
         }
@@ -157,10 +172,17 @@ namespace TonyDev.Game.UI.Inventory
         public void SwitchToGearPanel()
         {
             SoundManager.PlaySound("button", 0.5f, Player.LocalInstance.transform.position);
+            
+            statsButton.GetComponent<Image>().sprite = buttonSprites[0];
+            towerButton.GetComponent<Image>().sprite = buttonSprites[0];
+            gearButton.GetComponent<Image>().sprite = buttonSprites[1];
 
-            statsButton.enabled = true;
-            towerButton.enabled = true;
-            gearButton.enabled = false;
+            var statsRectTransform = statsButton.transform.GetChild(0).GetComponent<RectTransform>();
+            statsRectTransform.anchoredPosition = new Vector2(statsRectTransform.anchoredPosition.x, 8f);
+            var towerRectTransform = towerButton.transform.GetChild(0).GetComponent<RectTransform>();
+            towerRectTransform.anchoredPosition = new Vector2(towerRectTransform.anchoredPosition.x, 8f);
+            var gearRectTransform = gearButton.transform.GetChild(0).GetComponent<RectTransform>();
+            gearRectTransform.anchoredPosition = new Vector2(gearRectTransform.anchoredPosition.x, -8f);
             
             if (gearInventoryObject.activeSelf && !Minimized)
             {
@@ -180,9 +202,16 @@ namespace TonyDev.Game.UI.Inventory
 
         public void SwitchToTowerPanel()
         {
-            statsButton.enabled = true;
-            towerButton.enabled = false;
-            gearButton.enabled = true;
+            statsButton.GetComponent<Image>().sprite = buttonSprites[0];
+            towerButton.GetComponent<Image>().sprite = buttonSprites[1];
+            gearButton.GetComponent<Image>().sprite = buttonSprites[0];
+            
+            var statsRectTransform = statsButton.transform.GetChild(0).GetComponent<RectTransform>();
+            statsRectTransform.anchoredPosition = new Vector2(statsRectTransform.anchoredPosition.x, 8f);
+            var towerRectTransform = towerButton.transform.GetChild(0).GetComponent<RectTransform>();
+            towerRectTransform.anchoredPosition = new Vector2(towerRectTransform.anchoredPosition.x, -8f);
+            var gearRectTransform = gearButton.transform.GetChild(0).GetComponent<RectTransform>();
+            gearRectTransform.anchoredPosition = new Vector2(gearRectTransform.anchoredPosition.x, 8f);
             
             SoundManager.PlaySound("button", 0.5f, Player.LocalInstance.transform.position);
 
@@ -204,9 +233,16 @@ namespace TonyDev.Game.UI.Inventory
 
         public void SwitchToStatPanel()
         {
-            statsButton.enabled = false;
-            towerButton.enabled = true;
-            gearButton.enabled = true;
+            statsButton.GetComponent<Image>().sprite = buttonSprites[1];
+            towerButton.GetComponent<Image>().sprite = buttonSprites[0];
+            gearButton.GetComponent<Image>().sprite = buttonSprites[0];
+            
+            var statsRectTransform = statsButton.transform.GetChild(0).GetComponent<RectTransform>();
+            statsRectTransform.anchoredPosition = new Vector2(statsRectTransform.anchoredPosition.x, -8f);
+            var towerRectTransform = towerButton.transform.GetChild(0).GetComponent<RectTransform>();
+            towerRectTransform.anchoredPosition = new Vector2(towerRectTransform.anchoredPosition.x, 8f);
+            var gearRectTransform = gearButton.transform.GetChild(0).GetComponent<RectTransform>();
+            gearRectTransform.anchoredPosition = new Vector2(gearRectTransform.anchoredPosition.x, 8f);
             
             SoundManager.PlaySound("button", 0.5f, Player.LocalInstance.transform.position);
 

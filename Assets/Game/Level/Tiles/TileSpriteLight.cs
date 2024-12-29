@@ -32,7 +32,7 @@ namespace TonyDev
             }
             else
             {
-                Debug.LogWarning("No tile found at the given position or it's not a Tile type.");
+                //Debug.LogWarning("No tile found at the given position or it's not a Tile type.");
             }
         }
     }

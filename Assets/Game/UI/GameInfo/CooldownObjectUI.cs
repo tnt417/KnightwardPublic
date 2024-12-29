@@ -35,7 +35,7 @@ namespace TonyDev.Game.UI.GameInfo
         {
             if (!_set)
             {
-                Debug.LogWarning("Set method hasn't been called!");
+                //Debug.LogWarning("Set method hasn't been called!");
                 return;
             }
             

@@ -91,7 +91,7 @@ namespace TonyDev
 
         public void LeaveLobby()
         {
-            Debug.Log("Leaving lobby...");
+            //Debug.Log("Leaving lobby...");
 
             if(_isSteamServer) SteamMatchmaking.LeaveLobby(new CSteamID(CurrentLobbyID));
 
@@ -109,7 +109,7 @@ namespace TonyDev
 
             OnLobbyCreateSuccessful?.Invoke();
 
-            Debug.Log("Lobby created successfully");
+            //Debug.Log("Lobby created successfully");
 
             SteamMatchmaking.SetLobbyData(new CSteamID(callback.m_ulSteamIDLobby), HostAddressKey,
                 SteamUser.GetSteamID().ToString());

@@ -121,7 +121,7 @@ namespace TonyDev.Game.UI.Minimap
 
             if (symbolImage == null)
             {
-                Debug.LogWarning("Room image missing!");
+                //Debug.LogWarning("Room image missing!");
                 return;
             }
 

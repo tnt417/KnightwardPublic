@@ -77,7 +77,7 @@ namespace TonyDev
             for (var i = objCount; i < newEnemies.Count; i++)
             {
                 var rt = Instantiate(enemyUiObjectPrefab, transform).GetComponent<RectTransform>();
-                Debug.Log(WorldToPanel(newEnemies[i].transform.position));
+                //Debug.Log(WorldToPanel(newEnemies[i].transform.position));
                 rt.anchoredPosition = WorldToPanel(newEnemies[i].transform.position);
                 _uiObjects.Add(newEnemies[i], rt);
             }

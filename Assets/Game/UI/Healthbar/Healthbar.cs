@@ -26,7 +26,7 @@ namespace TonyDev.Game.UI.Healthbar
             //Destroy the health bar if there is no IDamageable component attached and print a warning.
             if (AttachedDamageable == null)
             {
-                Debug.LogWarning("No attached IDamageable component! Removing healthbar...");
+                //Debug.LogWarning("No attached IDamageable component! Removing healthbar...");
                 Destroy(gameObject);
                 return;
             }

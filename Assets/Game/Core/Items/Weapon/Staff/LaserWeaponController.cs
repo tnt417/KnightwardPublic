@@ -111,7 +111,7 @@ namespace TonyDev
             if (testHit.rigidbody != null)
             {
                 var enemy = testHit.rigidbody.GetComponent<Enemy>();
-                Debug.Log("Hit: " + testHit.transform.gameObject.name + ", Enemy found: " + (enemy != null) );
+                //Debug.Log("Hit: " + testHit.transform.gameObject.name + ", Enemy found: " + (enemy != null) );
             }
             
             linePoints.Add(firePoint);

@@ -62,6 +62,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Staff
         {
             base.OnRemoveOwner();
             Entity.OnAttack -= OnAttack;
+            Player.LocalInstance.playerAnimator.Shake(0);
         }
 
         public override void OnRemoveClient()

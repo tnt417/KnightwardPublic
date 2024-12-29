@@ -29,7 +29,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
         {
             if (!_animationPairs.ContainsKey(state))
             {
-                //Debug.LogWarning("Invalid anim state! " + gameObject + ", " + Enum.GetName(typeof(EnemyAnimationState), state));
+                ////Debug.LogWarning("Invalid anim state! " + gameObject + ", " + Enum.GetName(typeof(EnemyAnimationState), state));
                 return;
             }
             RpcPlayAnimation(state, exclude);

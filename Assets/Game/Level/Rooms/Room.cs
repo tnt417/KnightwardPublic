@@ -361,7 +361,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             if (wallTilemap == null)
             {
-                Debug.LogWarning("No floor tilemap found!");
+                //Debug.LogWarning("No floor tilemap found!");
                 return;
             }
 

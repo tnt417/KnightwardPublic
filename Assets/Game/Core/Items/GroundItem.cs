@@ -85,7 +85,7 @@ namespace TonyDev.Game.Core.Items
 
         private void OnItemChangeHook(Item oldItem, Item newItem)
         {
-            Debug.Log("Item change hook called");
+            //Debug.Log("Item change hook called");
             ItemChangeTask(oldItem, newItem).Forget();
         }
 
@@ -121,7 +121,7 @@ namespace TonyDev.Game.Core.Items
                 return;
             }
             
-            Debug.Log("Command setting new non-null item");
+            //Debug.Log("Command setting new non-null item");
 
             Item = newItem; //Update the item
         }
@@ -215,7 +215,7 @@ namespace TonyDev.Game.Core.Items
             if (senderMoney < cost || !_pickupAble || _pickupPending)
                 return; //If the item is too expensive, don't allow pickup.
 
-            Debug.Log("Requesting pickup");
+            //Debug.Log("Requesting pickup");
             _pickupPending = true;
 
             RpcNotifyPickup();

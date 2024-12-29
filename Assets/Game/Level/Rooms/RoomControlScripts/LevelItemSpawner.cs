@@ -104,7 +104,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
                 case ItemGenerateSetting.FromItemData:
                     if (itemDataPool == null || itemDataPool.Length == 0)
                     {
-                        Debug.LogWarning("Can't spawn null item!");
+                        //Debug.LogWarning("Can't spawn null item!");
                         return;
                     }
 
@@ -114,7 +114,7 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
 
             if (item == null)
             {
-                Debug.LogWarning("Can't spawn null item!");
+                //Debug.LogWarning("Can't spawn null item!");
                 return;
             }
 

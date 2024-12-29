@@ -134,6 +134,12 @@ namespace TonyDev.Game.Level
         [SerializeField] private int bigWaveFrequency;
 
         public bool OnBigWave => wavesSpawned % bigWaveFrequency == 0 && wavesSpawned > 0;
+
+        private async UniTask BigWaveWarning()
+        {
+            await UniTask.Delay(TimeSpan.FromSeconds(regularLength / 2f));
+            WavePopupController.Instance.Play();
+        }
         
         //Spawns a wave of enemies
         [ServerCallback]
@@ -146,6 +152,11 @@ namespace TonyDev.Game.Level
             var threshold = OnBigWave
                 ? bigWaveDifficultyMult * DifficultyThreshold
                 : DifficultyThreshold;
+
+            if ((wavesSpawned + 1) % bigWaveFrequency == 0)
+            {
+                BigWaveWarning().Forget();
+            }
 
             float difficultyTotal = 0;
 

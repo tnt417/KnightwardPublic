@@ -170,7 +170,7 @@ namespace TonyDev.Game.Level.Rooms
                 return true;
             });
 
-            Debug.Log("Generated!");
+            //Debug.Log("Generated!");
 
             CmdSetMap(SerializableMap.FromMap(newMap));
         }
@@ -188,7 +188,7 @@ namespace TonyDev.Game.Level.Rooms
 
         private IEnumerator MovePlayerToNextRoom(Direction direction) //Moves a player to the next room in a direction.
         {
-            Debug.Log("Moving player to the next room!");
+            //Debug.Log("Moving player to the next room!");
         
             var dx = 0; //delta x
             var dy = 0; //delta y
@@ -245,7 +245,7 @@ namespace TonyDev.Game.Level.Rooms
             var newRoom = Map.Rooms[x, y]; //Get the new room from the array
             if (newRoom == null)
             {
-                Debug.LogWarning("New room is null!");
+                //Debug.LogWarning("New room is null!");
                 return; //If it's null, do nothing
             }
 
@@ -278,7 +278,7 @@ namespace TonyDev.Game.Level.Rooms
         {
             if (Map.Rooms == null)
             {
-                Debug.LogWarning("Room array is null!");
+                //Debug.LogWarning("Room array is null!");
                 return;
             }
 
@@ -310,14 +310,14 @@ namespace TonyDev.Game.Level.Rooms
         [Server]
         public void ResetRooms()
         {
-            Debug.Log("Resetting rooms!");
+            //Debug.Log("Resetting rooms!");
         
             foreach (var r in Map.Rooms)
             {
                 //Destroy all rooms and their child objects...
                 if (r == null) continue;
              
-                Debug.Log(r.name);
+                //Debug.Log(r.name);
                 
                 r.enabled = false;
 

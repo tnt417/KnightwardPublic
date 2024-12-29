@@ -22,7 +22,7 @@ public class RuleTileCopier : EditorWindow
 
             if (newSprites.Length == 0)
             {
-                Debug.LogError("No sprites found in the new spritesheet.");
+                //Debug.LogError("No sprites found in the new spritesheet.");
                 return;
             }
 
@@ -53,11 +53,11 @@ public class RuleTileCopier : EditorWindow
 
             EditorUtility.SetDirty(targetTile);
             AssetDatabase.SaveAssets();
-            Debug.Log("Rule Tile settings copied with new sprites successfully.");
+            //Debug.Log("Rule Tile settings copied with new sprites successfully.");
         }
         else
         {
-            Debug.LogError("Source tile, target tile, or spritesheet not found.");
+            //Debug.LogError("Source tile, target tile, or spritesheet not found.");
         }
     }
 }

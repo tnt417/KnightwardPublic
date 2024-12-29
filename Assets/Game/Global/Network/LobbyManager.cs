@@ -63,7 +63,7 @@ namespace TonyDev.Game.Global.Network
                 UsernameDict[key] = value.username;
             }
             
-            Debug.Log("Calling Cmd!");
+            //Debug.Log("Calling Cmd!");
             
             CmdBroadcastUsernames(UsernameDict.Keys.ToArray(), UsernameDict.Values.ToArray());
             
@@ -99,14 +99,14 @@ namespace TonyDev.Game.Global.Network
         [Command(requiresAuthority = false)]
         public void CmdBroadcastUsernames(int[] keys, string[] values)
         {
-            Debug.Log("Cmd!");
+            //Debug.Log("Cmd!");
             RpcSetUsernames(keys, values);
         }
 
         [ClientRpc(includeOwner = true)]
         private void RpcSetUsernames(int[] keys, string[] values)
         {
-            Debug.Log("Rpc!");
+            //Debug.Log("Rpc!");
             var newDict = new Dictionary<int, string>();
             for (var i = 0; i < keys.Length; i++)
             {
