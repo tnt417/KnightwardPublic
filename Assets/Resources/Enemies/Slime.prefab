@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 48320255391279908, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -56,7 +57,7 @@ PrefabInstance:
       value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[-2]
+      propertyPath: 'managedReferences[-2]'
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -88,7 +89,7 @@ PrefabInstance:
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: startingEffects.Array.data[0]
+      propertyPath: 'startingEffects.Array.data[0]'
       value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -112,27 +113,27 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215312411131904]
+      propertyPath: 'managedReferences[1792215312411131904]'
       value: TonyDev TonyDev.Game.Core.Effects.GameEffectList
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215312411131909]
+      propertyPath: 'managedReferences[1792215312411131909]'
       value: TonyDev TonyDev.StatBuffEffect
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215378608521217]
+      propertyPath: 'managedReferences[1792215378608521217]'
       value: TonyDev TonyDev.DurabilityDisplayEffect
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215378608521218]
+      propertyPath: 'managedReferences[1792215378608521218]'
       value: TonyDev TonyDev.DurabilityDisplayEffect
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215378608521219]
+      propertyPath: 'managedReferences[1792215378608521219]'
       value: TonyDev TonyDev.StatBuffEffect
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215378608521221]
+      propertyPath: 'managedReferences[1792215378608521221]'
       value: TonyDev TonyDev.SlowWhileClickingEffect
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -144,7 +145,7 @@ PrefabInstance:
       value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: startingEffects.gameEffects.Array.data[0]
+      propertyPath: 'startingEffects.gameEffects.Array.data[0]'
       value: 1792215378608521219
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -228,11 +229,11 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215312411131904].gameEffects.Array.data[0]
+      propertyPath: 'managedReferences[1792215312411131904].gameEffects.Array.data[0]'
       value: 1792215378608521219
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: managedReferences[1792215312411131904].gameEffects.Array.data[1]
+      propertyPath: 'managedReferences[1792215312411131904].gameEffects.Array.data[1]'
       value: 1792215378608521221
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754641, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -264,7 +265,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754643, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7365463a3c7759b459c8461c58407a41, type: 2}
     - target: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -324,6 +325,15 @@ PrefabInstance:
       value: 669b0f6c2566f1a4f983bcbb06dafcdc
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1695600129202186138}
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 9085286868854646089}
   m_SourcePrefab: {fileID: 100100000, guid: c4673581ac60785459b6805764360ee4, type: 3}
 --- !u!1 &2329739912400454215 stripped
 GameObject:
@@ -359,3 +369,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
+  inheritRotation: 0

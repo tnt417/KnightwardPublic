@@ -57,13 +57,16 @@ namespace TonyDev.Game.UI.Healthbar
                     : new Color(0.3882353f, 0.6705883f, 0.2470588f);
                 
                 var dmg = PoisonEffect.GetPoisonDamage(gameEntity);
-                
-                decaySlider.maxValue = gameEntity.NetworkCurrentHealth;
-                decaySlider.value = dmg;
+
+                if (decaySlider != null)
+                {
+                    decaySlider.maxValue = gameEntity.NetworkCurrentHealth;
+                    decaySlider.value = dmg;
+                }
 
                 var willKill = dmg > gameEntity.NetworkCurrentHealth;
-
-                decayImage.color = willKill ? Color.red : Color.gray;
+                
+                if(decayImage != null) decayImage.color = willKill ? Color.red : Color.gray;
             }
             else
             {

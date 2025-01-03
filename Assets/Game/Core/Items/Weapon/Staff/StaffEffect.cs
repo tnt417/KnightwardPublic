@@ -28,6 +28,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Staff
             ActivateButton = KeyCode.None;
             base.OnAddOwner();
             Entity.OnAttack += OnAttack;
+            Player.LocalInstance.playerAnimator.SetWeaponAnimSprite("staff_anim");
             Player.LocalInstance.playerAnimator.attackAnimationName = "Overhead";
         }
 

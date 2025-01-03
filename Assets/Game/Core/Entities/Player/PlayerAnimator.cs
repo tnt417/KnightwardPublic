@@ -115,16 +115,37 @@ namespace TonyDev.Game.Core.Entities.Player
         [SerializeField] private SpriteRenderer[] playerSpriteRenderers;
         [SerializeField] private Animator playerAnimator;
         [SerializeField] private PlayerAnimationValues playerAnimationValues;
+        [SerializeField] private Transform weaponTransform;
+        [SerializeField] private SpriteRenderer weaponSpriteRenderer;
 
         [SerializeField] private ParticleSystem playerWalkParticles;
         //
 
         [NonSerialized] public string attackAnimationName = "Attack";
 
+        [SyncVar (hook = nameof(WeaponSpriteUpdateHook))] [NonSerialized] private string _weaponSpriteName = "broadsword_hand";
+
         public void SetAttackAnimProgress(float normalized)
         {
             Player.LocalInstance.SetAttackProgress(normalized);
             playerAnimator.Play(playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash, 0, normalized);
+        }
+
+        [Command(requiresAuthority = false)]
+        private void CmdSetWeaponSpriteName(string newName)
+        {
+            _weaponSpriteName = newName;
+        }
+        
+        private void WeaponSpriteUpdateHook(string oldSprite, string newSprite)
+        {
+            weaponSpriteRenderer.sprite = ObjectFinder.GetSprite(newSprite);
+        }
+
+        public void SetWeaponAnimSprite(string spriteName)
+        {
+            weaponSpriteRenderer.sprite = ObjectFinder.GetSprite(spriteName);
+            CmdSetWeaponSpriteName(spriteName);
         }
         
         private int PlayerSpriteIndex => playerAnimationValues.spriteIndex;
@@ -207,29 +228,22 @@ namespace TonyDev.Game.Core.Entities.Player
             
             isInLadderAnim = true;
             
-            if (!goingToArena)
-            {
-                _overriding = true;
-                Player.LocalInstance.playerMovement.DoMovement = false;
-                Player.LocalInstance.stopPlayerAttack = true;
+            _overriding = true;
+            Player.LocalInstance.playerMovement.DoMovement = false;
+            Player.LocalInstance.stopPlayerAttack = true;
                 
-                await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
-                
-                playerAnimator.Play("JumpIntoLadder");
+            await UniTask.Yield(PlayerLoopTiming.PostLateUpdate);
+            
+            playerAnimator.Play(goingToArena ? "LadderClimb" : "JumpIntoLadder");
+            
+            var initial = Time.time;
 
-                var initial = Time.time;
-
-                while (Time.time - initial < 0.3333f)
-                {
-                    await UniTask.Yield(PlayerLoopTiming.Update);
-                    Player.LocalInstance.transform.position = Vector2.MoveTowards(
-                        Player.LocalInstance.transform.position,
-                        ladder.transform.position, Time.deltaTime * 5f);
-                }
-            }
-            else
+            while (Time.time - initial < 0.3333f)
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds * 3));
+                await UniTask.Yield(PlayerLoopTiming.Update);
+                Player.LocalInstance.transform.position = Vector2.MoveTowards(
+                    Player.LocalInstance.transform.position,
+                    ladder.transform.position, Time.deltaTime * 5f);
             }
 
             PlayerSpawnAnim().Forget();
@@ -288,6 +302,7 @@ namespace TonyDev.Game.Core.Entities.Player
         public async UniTask PlayerSpawnAnim(bool focusCrystal = false, bool scaleDelayWithPlayers = false)
         {
             _overriding = true;
+            Player.LocalInstance.stopPlayerAttack = true;
             Player.LocalInstance.playerMovement.DoMovement = false;
             if(focusCrystal) GameManager.Instance.doCrystalFocusing = true;
             await UniTask.WaitUntil(() => _playerNum > 0);
@@ -374,6 +389,7 @@ namespace TonyDev.Game.Core.Entities.Player
             {
                 sr.flipX = flip;
             }
+            weaponTransform.localScale = new Vector2(flip ? -1 : 1, 1);
         }
 
         [Command(requiresAuthority = false)]

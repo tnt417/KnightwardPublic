@@ -29,6 +29,8 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
 
             Entity.OnAttack += PlaySound;
             
+            Player.LocalInstance.playerAnimator.SetWeaponAnimSprite("broadsword_hand");
+            
             //GameEffect.RegisterEffect(_broadswordParticleEffect);
             Player.LocalInstance.playerAnimator.attackAnimationName = "Attack";
             

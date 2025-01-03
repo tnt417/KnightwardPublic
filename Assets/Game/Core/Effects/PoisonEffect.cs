@@ -14,7 +14,7 @@ namespace TonyDev.Game.Core.Effects
         public float Damage = 1f;
 
         private float _timer;
-
+        
         public bool Expired => Ticks <= 0;
 
         public static float GetPoisonDamage(GameEntity gameEntity) => gameEntity.EffectsReadonly.OfType<PoisonEffect>().Sum(pe => pe.RemainingDamage());
@@ -22,16 +22,6 @@ namespace TonyDev.Game.Core.Effects
         public float RemainingDamage()
         {
             return Ticks * Damage;
-        }
-        
-        public override void OnAddOwner()
-        {
-            
-        }
-
-        public override void OnRemoveOwner()
-        {
-            
         }
 
         public override void OnUpdateOwner()

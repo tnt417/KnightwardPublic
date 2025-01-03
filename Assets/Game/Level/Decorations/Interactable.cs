@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Mirror;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.UI;
@@ -174,7 +175,7 @@ namespace TonyDev.Game.Level.Decorations
                 return;
             }
             
-            if (!other.isTrigger || !other.CompareTag("Player") || !isInteractable) return;
+            if (!other.isTrigger || !other.CompareTag("Player") || !isInteractable || !Player.LocalInstance.playerMovement.DoMovement) return;
         
             var id = other.GetComponent<NetworkIdentity>();
 
@@ -213,7 +214,7 @@ namespace TonyDev.Game.Level.Decorations
                 return;
             }
             
-            if (!other.isTrigger || !other.CompareTag("Player")) return;
+            if (!other.isTrigger || !other.CompareTag("Player") || !Player.LocalInstance.playerMovement.DoMovement) return;
             
             if (!isInteractable)
             {

@@ -175,6 +175,7 @@ namespace TonyDev.Game.Core.Entities.Player
                     var percentMissing = 1 - ge.CurrentHealth / ge.MaxHealth;
                     SmoothCameraFollow.Shake(Mathf.Log(percentDealt * (1 + percentMissing / 5f) * (crit ? 32f : 24f)),
                         crit ? 2f : 1.5f);
+                    Instantiate(ObjectFinder.GetPrefab("hitParticles"), ge.transform.position, Quaternion.identity);
                 }
                 else
                 {

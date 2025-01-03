@@ -21,6 +21,8 @@ namespace TonyDev
         public override void OnAddOwner()
         {
             Entity.OnAttack += OnAttack;
+            Player.LocalInstance.playerAnimator.SetWeaponAnimSprite("broadsword_hand");
+            Player.LocalInstance.playerAnimator.attackAnimationName = "Attack";
         }
 
         public override void OnUpdateOwner()

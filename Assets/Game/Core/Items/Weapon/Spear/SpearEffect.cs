@@ -27,6 +27,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
             base.OnAddOwner();
             empoweredProjectile.OnHitOther += InflictPoison;
             Entity.OnAttack += Shoot;
+            Player.LocalInstance.playerAnimator.SetWeaponAnimSprite("spear_anim");
             Player.LocalInstance.playerAnimator.attackAnimationName = "Throw";
         }
 

@@ -29,6 +29,7 @@ namespace TonyDev.Game.Core.Effects
                 _indicators.Add(go);
             }
 
+            Player.LocalInstance.playerAnimator.SetWeaponAnimSprite("hammer_anim");
             Player.LocalInstance.playerAnimator.attackAnimationName = "Overhead";
         }
 
@@ -37,6 +38,9 @@ namespace TonyDev.Game.Core.Effects
             base.OnRemoveOwner();
 
             Player.LocalInstance.playerAnimator.UnShake();
+
+            _charging = false;
+            ((Player) Entity).playerAnimator.attackingOverride = false;
 
             foreach (var ind in _indicators)
             {

@@ -14,6 +14,8 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
             base.OnAddOwner();
             Entity.OnAttack += PlaySound;
             
+            Player.LocalInstance.playerAnimator.SetWeaponAnimSprite("dagger_anim");
+            
             Player.LocalInstance.playerAnimator.attackAnimationName = "Attack";
         }
         
