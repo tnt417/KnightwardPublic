@@ -180,8 +180,8 @@ namespace TonyDev.Game.Core.Items
             switch (itemType)
             {
                 case ItemType.Weapon:
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier, source));
-                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier,
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.Damage, DamageStrength * multiplier * 0.6f, source));
+                    statBonuses.Add(new StatBonus(StatType.Flat, Stat.AttackSpeed, AttackSpeedStrength * multiplier * 0.6f,
                         source));
                     break;
                 case ItemType.Tower:

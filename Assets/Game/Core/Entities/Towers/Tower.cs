@@ -157,19 +157,33 @@ namespace TonyDev.Game.Core.Entities.Towers
             {
                 CmdAddEffect(ge, this);
             }
+
+            OnHealthChangedOwner += HpChangedHook;
+        }
+
+        public override void OnStopAuthority()
+        {
+            OnHealthChangedOwner -= HpChangedHook;
+        }
+
+        private void HpChangedHook(float newHp)
+        {
+            CmdSetDurability((int)newHp);
         }
 
         public override Team Team => Team.Player;
         public override bool IsInvulnerable => true;
         public override bool IsTangible => false;
         public int MaxDurability => (int) myItem.statBonuses.First(sb => sb.stat == Stat.Health && sb.source != DurabilityNegationSource).strength;
+
+        public const int InfiniteDurabilityThreshold = 1000000;
         
         [Command(requiresAuthority = false)]
         public void CmdRequestRepair(NetworkConnectionToClient sender = null)
         {
             if (_pickupPending || this == null) return;
 
-            if (MaxDurability < 1000000 && durability < MaxDurability)
+            if (MaxDurability < InfiniteDurabilityThreshold && durability < MaxDurability)
             {
                 TargetConfirmRepair(sender, RepairCost);
                 SubtractDurability((int)-Mathf.Clamp(MaxDurability * 0.25f, 0, MaxDurability-durability));

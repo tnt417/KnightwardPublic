@@ -86,14 +86,14 @@ namespace TonyDev.Game.Core.Effects
             {
                 case Effect.Burn:
                     Entity.OnDamageOther += InflictBurn;
-                    _trailEffect.SetColor(Color.red);
+                    _trailEffect.SetColor(new Color(230f/255f, 69f/255f, 57f/255f));
                     break;
                 case Effect.Slow:
                     Entity.OnDamageOther += InflictSlow;
-                    _trailEffect.SetColor(Color.cyan);
+                    _trailEffect.SetColor(new Color(146f/255f, 232f/255f, 192f/255f));
                     break;
                 case Effect.Leech:
-                    _trailEffect.SetColor(Color.green);
+                    _trailEffect.SetColor(new Color(200f/255f, 212f/255f, 93f/255f));
                     Entity.OnDamageOther += TryLeech;
                     break;
             }

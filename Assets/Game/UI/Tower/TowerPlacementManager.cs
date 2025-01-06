@@ -103,7 +103,7 @@ namespace TonyDev.Game.UI.Tower
                     1); //...and update the rangeIndicator based on the tower's range.
 
             _indicatorSprite =
-                towerPlacementIndicator.GetComponent<SpriteRenderer>(); //Get the indicator's SpriteRenderer
+                towerPlacementIndicator.GetComponentInChildren<SpriteRenderer>(); //Get the indicator's SpriteRenderer
             _indicatorCollider = towerPlacementIndicator.GetComponent<Collider2D>();
 
             _indicatorSprite.sprite = item.uiSprite; //Update the indicator's sprite to be the tower's ui sprite

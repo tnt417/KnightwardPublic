@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: 48ceef257e82909489b5c795e4e069da, type: 3}
     itemName: Regeneration Tower
     itemDescription: A regeneration tower.
+    stackCount: 1
     itemType: 3
     itemRarity: 1
     statBonuses:

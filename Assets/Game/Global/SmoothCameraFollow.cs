@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Decorations.Crystal;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -144,6 +145,12 @@ namespace TonyDev.Game.Global
         {
             if (Player.LocalInstance == null) return;
 
+            if (_cinematicMode)
+            {
+                transform.position = new Vector3(_storedCameraPos.x, _storedCameraPos.y, _z) + _cameraOffset;
+                return;
+            }
+            
             if (_crystalPos == default && Crystal.Instance != null) _crystalPos = Crystal.Instance.transform.position;
 
             var playerSpeed = Player.LocalInstance.Stats.GetStat(Stat.MoveSpeed);
@@ -165,7 +172,7 @@ namespace TonyDev.Game.Global
                 _fixateNext = false;
                 return;
             }
-
+            
             var trackCrystal = _viewCrystal || GameManager.Instance.doCrystalFocusing;
             Vector2 newPos;
             if (GameManager.GamePhase == GamePhase.Dungeon &&
@@ -207,5 +214,26 @@ namespace TonyDev.Game.Global
 
             transform.position = new Vector3(newPos.x, newPos.y, _z) + _cameraOffset; //Update the position
         }
+        
+        #region Cinematic Mode
+
+        private Vector2 _storedCameraPos;
+        private bool _cinematicMode = false;
+
+        [GameCommand(Keyword = "setframe", PermissionLevel = PermissionLevel.Default,
+            SuccessMessage = "Camera position stored")]
+        public void CameraPosition()
+        {
+            _storedCameraPos = transform.position;
+        }
+        
+        [GameCommand(Keyword = "cinematic", PermissionLevel = PermissionLevel.Default,
+            SuccessMessage = "Cinematic mode enabled")]
+        public void ToggleCinematicMode()
+        {
+            _cinematicMode = !_cinematicMode;
+            GameManager.Instance.SetUi(_cinematicMode ? "off" : "on");
+        }
+        #endregion
     }
 }

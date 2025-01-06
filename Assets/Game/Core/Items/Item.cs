@@ -57,6 +57,7 @@ namespace TonyDev.Game.Core.Items
         public Sprite uiSprite;
         public string itemName;
         [TextArea(3, 3)] public string itemDescription;
+        public int stackCount = 1;
         public ItemType itemType;
         public ItemRarity itemRarity;
         public StatBonus[] statBonuses;

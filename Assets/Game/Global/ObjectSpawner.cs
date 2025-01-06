@@ -198,7 +198,7 @@ namespace TonyDev.Game.Global
 
                 GameManager.Instance.CmdSpawnItem(item, 0,
                     (Vector2) Player.LocalInstance.transform.position +
-                    new Vector2((x - sqrLength / 2) * 2, (y - sqrLength / 2) * 2),
+                    new Vector2((x - sqrLength / 2), (y - sqrLength / 2)),
                     Player.LocalInstance.CurrentParentIdentity);
             }
         }

@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
+  m_Name: Stone Barrier TowerData
+  m_EditorClassIdentifier: 
+  item:
+    uiSprite: {fileID: -3377990474811437296, guid: 2f68fc3057ec64842b922fd776b666ce, type: 3}
+    itemName: Stone Barrier Tower
+    itemDescription: A wall to use as a defense.
+    stackCount: 5
+    itemType: 3
+    itemRarity: 2
+    statBonuses:
+    - statType: 0
+      stat: 6
+      strength: 10000
+      source: 
+      hidden: 1
+    bypassStatGeneration: 1
+    itemEffects:
+    - rid: 5615765830686474240
+    projectiles: []
+    spawnablePrefabName: BarrierTowerStone
+  references:
+    version: 2
+    RefIds:
+    - rid: 5615765830686474240
+      type: {class: DurabilityDisplayEffect, ns: TonyDev, asm: TonyDev}
+      data:
+        effectDescription: 
+        DungeonFloorUponCreation: 0

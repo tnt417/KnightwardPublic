@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
@@ -34,7 +35,7 @@ namespace TonyDev.Game.Core.Effects
         {
             _timer += Time.deltaTime;
 
-            if (_timer >= 5)
+            if (_timer >= 2)
             {
                 _timer = 0;
                 DoRepair();
@@ -45,7 +46,7 @@ namespace TonyDev.Game.Core.Effects
         {
             foreach (var t in Entity.Targets.Select(t => t.GetComponent<Tower>()).Where(t => t != null))
             {
-                    if (t.myItem.itemName == "Repair Tower") continue;
+                    if (t.myItem.itemName == "Repair Tower" || t.MaxDurability >= Tower.InfiniteDurabilityThreshold) continue;
                 
                     if (!_trailEffects.ContainsKey(t))
                     {
@@ -57,20 +58,33 @@ namespace TonyDev.Game.Core.Effects
                         t.CmdAddEffect(_trailEffects[t], Entity);
                     }
                     
+                    DoBuffingTask(t).Forget();
+            
                     if (!_trailRbas.ContainsKey(t))
                     {
                         _trailRbas.Add(t, t.GetComponentInChildren<RepairBuffAnim>());
                     }
-
-                    if (!_buffedTowers.Contains(t))
-                    {
-                        _trailRbas[t].AlterCount(1);
-                    }
                     
-                    t.SubtractDurability(-Mathf.CeilToInt(durabilityPercentPerSecond * t.MaxDurability));
-                    
-                    _buffedTowers.Add(t);
+                    t.ApplyDamage(-Mathf.CeilToInt(durabilityPercentPerSecond * t.MaxDurability), out _);
             }
+        }
+
+        private async UniTask DoBuffingTask(Tower t)
+        {
+            if (t == null) return;
+            
+            float dist = Vector2.Distance(Entity.transform.position, t.transform.position);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(0.25 * dist));
+
+            if (t == null || Entity == null) return;
+
+            if (!_buffedTowers.Contains(t))
+            {
+                _trailRbas[t].AlterCount(1);
+            }
+                    
+            _buffedTowers.Add(t);
         }
 
         private void UndoBuffing(float value)
@@ -85,7 +99,7 @@ namespace TonyDev.Game.Core.Effects
 
         public override string GetEffectDescription()
         {
-            return $"Repairs nearby towers at a rate of {durabilityPercentPerSecond:P0} durability every 5 seconds.";
+            return $"Repairs nearby towers at a rate of {durabilityPercentPerSecond:P0} durability every 2 seconds.";
         }
     }
 }

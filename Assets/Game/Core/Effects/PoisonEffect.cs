@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
 using TonyDev.Game.Core.Effects.ItemEffects;
@@ -17,8 +18,38 @@ namespace TonyDev.Game.Core.Effects
         
         public bool Expired => Ticks <= 0;
 
+        public static Dictionary<GameEntity, ParticleTrailEffect> PoisonTrailEffects = new();
+
+        private ParticleTrailEffect _myParticleTrailEffect;
+        
         public static float GetPoisonDamage(GameEntity gameEntity) => gameEntity.EffectsReadonly.OfType<PoisonEffect>().Sum(pe => pe.RemainingDamage());
 
+        public override void OnAddClient()
+        {
+            _myParticleTrailEffect = new ParticleTrailEffect()
+            {
+                OverridePrefab = "poisonParticles"
+            };
+            
+            if (PoisonTrailEffects.TryAdd(Entity, _myParticleTrailEffect))
+            {
+                Entity.CmdAddEffect(_myParticleTrailEffect, Entity);
+            }
+            else
+            {
+                _myParticleTrailEffect = PoisonTrailEffects[Entity];
+            }
+        }
+        
+        public override void OnRemoveClient()
+        {
+            if (GetPoisonDamage(Entity) <= 0)
+            {
+                Entity.CmdRemoveEffect(PoisonTrailEffects[Entity]);
+                PoisonTrailEffects.Remove(Entity);
+            }
+        }
+        
         public float RemainingDamage()
         {
             return Ticks * Damage;

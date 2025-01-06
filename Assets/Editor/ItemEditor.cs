@@ -117,6 +117,10 @@ namespace TonyDev.Editor
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemRarity)));
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.uiSprite)));
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.itemDescription)));
+            if (itemType == ItemType.Tower)
+            {
+                EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.stackCount)));
+            }
             EditorGUILayout.PropertyField(sp.FindPropertyRelative(nameof(Item.bypassStatGeneration)));
         }
 

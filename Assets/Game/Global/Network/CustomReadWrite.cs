@@ -17,7 +17,7 @@ namespace TonyDev.Game.Global.Network
             var isNull = value == null;
             writer.WriteBool(isNull);
             if (isNull) return;
-
+            
             writer.WriteString(value.name.Split("(")[0]);
         }
 

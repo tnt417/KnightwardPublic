@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: da9d106380415f84f95ebf8753b7a2b7, type: 3}
     itemName: Yellow Belt
     itemDescription: 
+    stackCount: 1
     itemType: 2
     itemRarity: 0
     statBonuses: []
@@ -36,10 +37,10 @@ MonoBehaviour:
         - type: 0
           stat: 5
           scalingType: 0
-          valueRange: {x: 1, y: 4}
+          valueRange: {x: 0.5, y: 1}
           byFloor: 50
         - type: 0
           stat: 0
           scalingType: 1
-          valueRange: {x: 0.4, y: 1}
+          valueRange: {x: 0.3, y: 0.5}
           byFloor: 50

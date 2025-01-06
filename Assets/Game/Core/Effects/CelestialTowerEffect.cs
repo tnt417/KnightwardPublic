@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
@@ -48,21 +50,34 @@ namespace TonyDev.Game.Core.Effects
                         t.CmdAddEffect(_trailEffects[t], Entity);
                     }
                     
+                    DoBuffingTask(t).Forget();
+            
                     if (!_trailCbas.ContainsKey(t))
                     {
                         _trailCbas.Add(t, t.GetComponentInChildren<CelestialBuffAnim>());
                     }
 
-                    if (!_buffedTowers.Contains(t))
-                    {
-                        _trailCbas[t].AlterCount(1);
-                    }
-                    
-                    _buffedTowers.Add(t);
-
                     t.Stats.AddBuff(sb, GameEntity.EntityTargetUpdatingRate);
                 }
             }
+        }
+
+        private async UniTask DoBuffingTask(Tower t)
+        {
+            if (t == null) return;
+            
+            float dist = Vector2.Distance(Entity.transform.position, t.transform.position);
+
+            await UniTask.Delay(TimeSpan.FromSeconds(0.25 * dist));
+
+            if (t == null || Entity == null) return;
+
+            if (!_buffedTowers.Contains(t))
+            {
+                _trailCbas[t].AlterCount(1);
+            }
+                    
+            _buffedTowers.Add(t);
         }
 
         public override void OnRegisterLocal()

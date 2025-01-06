@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: d1b3e9e7f82f95b45ac52f8f5c32b6c8, type: 3}
     itemName: Broadsword
     itemDescription: Shoots mid-speed. Built-in armor. Higher damage.
+    stackCount: 1
     itemType: 0
     itemRarity: 0
     statBonuses:

@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: 8d36cd82cd52bcb43ae05415dfa7fe23, type: 3}
     itemName: Flaming Coat
     itemDescription: 
+    stackCount: 1
     itemType: 2
     itemRarity: 1
     statBonuses: []
@@ -45,6 +46,7 @@ MonoBehaviour:
             destroyOnCollideWall: 0
             lifetime: 0
             spawnOnDestroyKey: 
+            inheritRotationOnSpawn: 0
             ignoreInvincibility: 0
             inflictEffects:
               gameEffects: []

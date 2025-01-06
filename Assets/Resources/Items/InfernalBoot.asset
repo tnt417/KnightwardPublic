@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: 069457371cf7ca54da562f2821a5416e, type: 3}
     itemName: Infernal Boot
     itemDescription: 
+    stackCount: 1
     itemType: 2
     itemRarity: 2
     statBonuses: []
@@ -37,7 +38,7 @@ MonoBehaviour:
         - type: 0
           stat: 5
           scalingType: 0
-          valueRange: {x: 1, y: 3}
+          valueRange: {x: 0.5, y: 2}
           byFloor: 50
     - rid: 8269505155275948032
       type: {class: InfernalBootEffect, ns: TonyDev.Game.Core.Items.Relics.FlamingBoot, asm: TonyDev}

@@ -10,25 +10,26 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2e3bc88270ce3454d832f4372caa9469, type: 3}
-  m_Name: Barrier TowerData
+  m_Name: Wooden Barrier TowerData
   m_EditorClassIdentifier: 
   item:
-    uiSprite: {fileID: 566624296, guid: fe7ea4a16440de7488d81249105a6d6d, type: 3}
-    itemName: Barrier Tower
+    uiSprite: {fileID: 1379410245709311331, guid: af2184a84b6814de18bc715e53609117, type: 3}
+    itemName: Wooden Barrier Tower
     itemDescription: A wall to use as a defense.
+    stackCount: 5
     itemType: 3
     itemRarity: 0
     statBonuses:
     - statType: 0
       stat: 6
-      strength: 1000
+      strength: 2000
       source: 
       hidden: 1
     bypassStatGeneration: 1
     itemEffects:
     - rid: 5615765830686474240
     projectiles: []
-    spawnablePrefabName: BarrierTower
+    spawnablePrefabName: BarrierTowerWood
   references:
     version: 2
     RefIds:

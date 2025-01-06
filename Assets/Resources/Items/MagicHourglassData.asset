@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: c46952db8f208354696791e146805669, type: 3}
     itemName: Magical Hourglass
     itemDescription: 
+    stackCount: 1
     itemType: 2
     itemRarity: 0
     statBonuses: []
@@ -41,5 +42,5 @@ MonoBehaviour:
         - type: 0
           stat: 5
           scalingType: 0
-          valueRange: {x: 1, y: 4}
+          valueRange: {x: 0.5, y: 2}
           byFloor: 50

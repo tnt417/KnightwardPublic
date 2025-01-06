@@ -3,7 +3,7 @@ guid: 6a03fcc1d089be44a9c12bb2a38347ad
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
-  serializedVersion: 11
+  serializedVersion: 13
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -20,11 +20,12 @@ TextureImporter:
     externalNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
-  ignoreMasterTextureLimit: 0
+  ignoreMipmapLimit: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -63,8 +64,10 @@ TextureImporter:
   textureFormatSet: 0
   ignorePngGamma: 0
   applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 1
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -74,9 +77,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -86,9 +90,10 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: Server
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -98,13 +103,27 @@ TextureImporter:
     crunchedCompression: 0
     allowsAlphaSplitting: 0
     overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: castleWallSingle
+      name: castleWallSingleStone
       rect:
         serializedVersion: 2
         x: 0
@@ -114,6 +133,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: 4}
@@ -139,6 +159,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: 0, y: 4}
@@ -164,6 +185,7 @@ TextureImporter:
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -8, y: 4}
@@ -189,6 +211,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: 0.4}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: 15}
@@ -214,6 +237,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: -0.125}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: 8}
@@ -239,6 +263,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: -0.09090909}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: -3}
@@ -264,6 +289,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: 0.33333334}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -9, y: -10}
@@ -293,6 +319,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: 0.17391305}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: 11.5}
@@ -320,6 +347,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: 0.12903225}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: 14.5}
@@ -349,6 +377,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: 0.30769232}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: 18.5}
@@ -378,6 +407,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: 0.375}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: 4, y: 0}
@@ -405,6 +435,7 @@ TextureImporter:
       alignment: 9
       pivot: {x: 0.5, y: 0.33333334}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape:
       - - {x: -4, y: -2}
@@ -422,6 +453,7 @@ TextureImporter:
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
@@ -431,97 +463,98 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
-      castleWallThin_49: -1919573404
-      castleWallThin_69: 1843035190
-      castleWallThin_39: -170309199
-      castleWallThin_75: -1686898489
-      castleWallVerticalEndcapBottom: -1165686597
-      castleWallThin_47: -1223795559
-      castleWallLUp: 1092918605
-      castleWallThin_32: 906283570
-      castleWallThin_51: 1520055425
-      castleWallThin_25: 475038931
-      castleWallThin_37: -1534511970
-      castleWallThin_44: -165839547
-      castleWallThin_8: 1657929689
-      castleWallThin_36: -191864285
-      castleWallThin_61: -1341247375
-      castleWallThin_56: -1693054550
+      castleWallEndCap: 1913358822
       castleWallHorizontalSegment: -269875169
       castleWallIntersect: -1657158624
-      castleWallThin_72: 1991130061
-      castleWallUprightT: 1718273909
-      castleWallSidewaysT: -24833667
-      castleWallThin_38: 113039747
-      castleWallThin_41: 480756557
-      castleWallThin_74: 1245449127
-      castleWallThin_40: -1077459888
-      castleWallThin_62: 435222759
-      castleWallThin_58: -1570555043
-      castleWallThin_42: 320773007
-      castleWallThin_31: -400255561
-      castleWallThin_23: 647609425
-      castleWallThin_34: 691498796
-      castleWallVerticalSegmentTop: -253757356
-      castleWallThin_63: 904340087
-      castleWallThin_9: -1453562864
-      castleWallThin_65: -921467228
-      castleWallThin_3: -161468944
-      castleWallThin_50: 979552542
-      castleWallThin_57: -2515995
-      castleWallThin_17: 1581903456
-      castleWallThin_4: -1027129553
-      castleWallThin_13: -1138567251
-      castleWallThin_21: 2073050008
-      castleWallThin_73: 208550883
-      castleWallThin_20: 825256776
-      castleWallThin_52: 1956561039
-      castleWallThin_28: 502476005
-      castleWallThin_16: 755255402
-      castleWallThin_26: -1621277178
-      castleWallThin_55: -1008270531
-      castleWallThin_64: 927841338
-      castleWallSingle: 566624296
-      castleWallThin_48: -1433820326
-      castleWallVerticalEndcapTop: -16438578
-      castleWallThin_30: -1459056096
-      castleWallThin_12: 1466976276
-      castleWallThin_33: -1270322728
-      castleWallThin_24: 29305167
-      castleWallThin_29: -1886784564
-      castleWallThin_60: -736854188
-      castleWallThin_22: 1973316052
-      castleWallThin_35: 1845114066
-      castleWallThin_66: 1526439380
-      castleWallThin_71: -571245546
-      castleWallThin_53: -2112785082
-      castleWallThin_2: -2069475487
-      castleWallThin_27: -611065409
-      castleWallVerticalSegment: -871850453
       castleWallLDown: -1729492834
-      castleWallThin_45: 801350112
-      castleWallThin_70: 321594711
-      castleWallThin_54: 1435833103
-      castleWallThin_46: -1793915065
-      castleWallThin_68: -996262877
-      castleWallThin_11: -1589924943
+      castleWallLUp: 1092918605
+      castleWallSidewaysT: -24833667
+      castleWallSingleStone: 566624296
       castleWallTInverted: -1469920218
-      castleWallThin_67: 1157798011
-      castleWallThin_59: -643576569
-      castleWallThin_43: -1065268112
-      castleWallThin_6: -794382132
-      castleWallThin_15: -1182571207
-      castleWallEndCap: 1913358822
-      castleWallThin_18: -229738719
       castleWallThin_10: -488982308
+      castleWallThin_11: -1589924943
+      castleWallThin_12: 1466976276
+      castleWallThin_13: -1138567251
       castleWallThin_14: 149738994
+      castleWallThin_15: -1182571207
+      castleWallThin_16: 755255402
+      castleWallThin_17: 1581903456
+      castleWallThin_18: -229738719
       castleWallThin_19: -2002461811
+      castleWallThin_2: -2069475487
+      castleWallThin_20: 825256776
+      castleWallThin_21: 2073050008
+      castleWallThin_22: 1973316052
+      castleWallThin_23: 647609425
+      castleWallThin_24: 29305167
+      castleWallThin_25: 475038931
+      castleWallThin_26: -1621277178
+      castleWallThin_27: -611065409
+      castleWallThin_28: 502476005
+      castleWallThin_29: -1886784564
+      castleWallThin_3: -161468944
+      castleWallThin_30: -1459056096
+      castleWallThin_31: -400255561
+      castleWallThin_32: 906283570
+      castleWallThin_33: -1270322728
+      castleWallThin_34: 691498796
+      castleWallThin_35: 1845114066
+      castleWallThin_36: -191864285
+      castleWallThin_37: -1534511970
+      castleWallThin_38: 113039747
+      castleWallThin_39: -170309199
+      castleWallThin_4: -1027129553
+      castleWallThin_40: -1077459888
+      castleWallThin_41: 480756557
+      castleWallThin_42: 320773007
+      castleWallThin_43: -1065268112
+      castleWallThin_44: -165839547
+      castleWallThin_45: 801350112
+      castleWallThin_46: -1793915065
+      castleWallThin_47: -1223795559
+      castleWallThin_48: -1433820326
+      castleWallThin_49: -1919573404
       castleWallThin_5: 1049460086
+      castleWallThin_50: 979552542
+      castleWallThin_51: 1520055425
+      castleWallThin_52: 1956561039
+      castleWallThin_53: -2112785082
+      castleWallThin_54: 1435833103
+      castleWallThin_55: -1008270531
+      castleWallThin_56: -1693054550
+      castleWallThin_57: -2515995
+      castleWallThin_58: -1570555043
+      castleWallThin_59: -643576569
+      castleWallThin_6: -794382132
+      castleWallThin_60: -736854188
+      castleWallThin_61: -1341247375
+      castleWallThin_62: 435222759
+      castleWallThin_63: 904340087
+      castleWallThin_64: 927841338
+      castleWallThin_65: -921467228
+      castleWallThin_66: 1526439380
+      castleWallThin_67: 1157798011
+      castleWallThin_68: -996262877
+      castleWallThin_69: 1843035190
       castleWallThin_7: 639547786
-  spritePackingTag: 
+      castleWallThin_70: 321594711
+      castleWallThin_71: -571245546
+      castleWallThin_72: 1991130061
+      castleWallThin_73: 208550883
+      castleWallThin_74: 1245449127
+      castleWallThin_75: -1686898489
+      castleWallThin_8: 1657929689
+      castleWallThin_9: -1453562864
+      castleWallUprightT: 1718273909
+      castleWallVerticalEndcapBottom: -1165686597
+      castleWallVerticalEndcapTop: -16438578
+      castleWallVerticalSegment: -871850453
+      castleWallVerticalSegmentTop: -253757356
+  mipmapLimitGroupName: 
   pSDRemoveMatte: 0
-  pSDShowRemoveMatteOption: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 

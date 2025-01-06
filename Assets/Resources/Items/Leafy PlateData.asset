@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: ad60ecdfbd9093a4b939032260dd8ae6, type: 3}
     itemName: Leafy Plate
     itemDescription: 
+    stackCount: 1
     itemType: 2
     itemRarity: 2
     statBonuses: []
@@ -44,6 +45,7 @@ MonoBehaviour:
             destroyOnCollideWall: 0
             lifetime: 0
             spawnOnDestroyKey: 
+            inheritRotationOnSpawn: 0
             ignoreInvincibility: 1
             inflictEffects:
               gameEffects: []

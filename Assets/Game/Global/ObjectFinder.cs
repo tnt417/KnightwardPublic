@@ -55,7 +55,7 @@ namespace TonyDev.Game.Global
                 EnemyPrefabs.Add(enemyObject);
                 NetworkClient.RegisterPrefab(enemyObject);
             }
-            
+
             _spriteAtlas = mainSpriteAtlas;
         }
 

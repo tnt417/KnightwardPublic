@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: -3499401694056176877, guid: 77940d21e68964cd7b5a2300a068144c, type: 3}
     itemName: Repair Tower
     itemDescription: Repairs your towers for you
+    stackCount: 1
     itemType: 3
     itemRarity: 2
     statBonuses:

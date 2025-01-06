@@ -41,7 +41,9 @@ namespace TonyDev
                 
                 _spawnedEnemies = _spawnedEnemies.Where(ge => ge != null).ToList();
                 
-                if (_spawnedEnemies.Count >= maxSpawns)
+                if (_spawnedEnemies.Count == maxSpawns) continue;
+                
+                if (_spawnedEnemies.Count > maxSpawns)
                 {
                     var removing = _spawnedEnemies[maxSpawns-1];
                     if (removing != null)
@@ -53,6 +55,7 @@ namespace TonyDev
                         _spawnedEnemies.Remove(removing);
                     }
                 }
+                
                 animator.Play("GhostSpawn");
             }
         }
@@ -62,6 +65,10 @@ namespace TonyDev
         {
             if (!tower.EntityOwnership) return;
 
+            _spawnedEnemies = _spawnedEnemies.Where(ge => ge != null).ToList();
+            
+            if (_spawnedEnemies.Count == maxSpawns) return;
+            
             if (tower.durability > 0)
             {
                 tower.SubtractDurability(1);

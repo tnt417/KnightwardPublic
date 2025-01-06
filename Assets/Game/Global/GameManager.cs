@@ -168,9 +168,25 @@ namespace TonyDev.Game.Global
         public static int DungeonFloor => Instance.dungeonFloor;
         public static GamePhase GamePhase;
 
+        [SerializeField] private Canvas uiCanvas;
+
         [SyncVar] public float waveProgress;
         [SyncVar] public float wave;
 
+        [GameCommand(Keyword = "ui", PermissionLevel = PermissionLevel.Default, SuccessMessage = "Toggled UI")]
+        public void SetUi(string onoff)
+        {
+            if (onoff == "")
+            {
+                uiCanvas.enabled = !uiCanvas.enabled;
+                return;
+            }
+            
+            var e = onoff == "on";
+
+            uiCanvas.enabled = e;
+        }
+        
         [Command(requiresAuthority = false)]
         public void CmdSetWaveProgress(int newWave, float newProgress)
         {
@@ -475,7 +491,7 @@ namespace TonyDev.Game.Global
             Crystal.Instance.OnDeathOwner += value => GameOver();
             EnterArenaPhase();
 
-            var playerFrac = CustomRoomPlayer.Local.playerNumber / 4;
+            var playerFrac = CustomRoomPlayer.Local.playerNumber / 4f;
             
             Player.LocalInstance.transform.position = arenaSpawnPos + new Vector2(Mathf.Cos((((float)playerFrac) * 2 * Mathf.PI)) * 2f,
                 Mathf.Sin((((float)playerFrac) * 2 * Mathf.PI)) * 2f);

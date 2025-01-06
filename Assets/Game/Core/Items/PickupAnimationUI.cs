@@ -28,7 +28,7 @@ namespace TonyDev
 
             var startDist = dist;
             
-            while (dist > 1f)
+            while (dist > 5f)
             {
                 await UniTask.Yield(PlayerLoopTiming.Update);
                 dist = Vector2.Distance(transform.position, _inventoryButton.transform.position);

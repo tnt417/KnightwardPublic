@@ -87,6 +87,7 @@ namespace TonyDev.Game.Core.Items
         {
             //Debug.Log("Item change hook called");
             ItemChangeTask(oldItem, newItem).Forget();
+            _interactable.SetCount(newItem.stackCount);
         }
 
         private async UniTask ItemChangeTask(Item oldItem, Item newItem)
@@ -265,6 +266,12 @@ namespace TonyDev.Game.Core.Items
             pickupAnimUI.Set(transform.position, Item);
             
             var returnItem = PlayerInventory.Instance.InsertItem(Item);
+
+            // Just insert the other items with no return. Count should only be >1 for towers which have no replacement.
+            for (var i = 1; i < Item.stackCount; i++)
+            {
+                PlayerInventory.Instance.InsertItem(Item);
+            }
 
             ObjectSpawner.SpawnTextPopup(transform.position, "Item inserted", Color.green, 0.8f);
 

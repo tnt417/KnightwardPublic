@@ -16,6 +16,7 @@ MonoBehaviour:
     uiSprite: {fileID: 21300000, guid: 496f3affe307f9448b80a3b80fc68c4b, type: 3}
     itemName: Spectral Step
     itemDescription: <color=#94d1c3>You feel your body become lighter...</color>
+    stackCount: 1
     itemType: 2
     itemRarity: 0
     statBonuses: []
@@ -36,10 +37,10 @@ MonoBehaviour:
         - type: 0
           stat: 8
           scalingType: 1
-          valueRange: {x: 0.2, y: 0.3}
+          valueRange: {x: 0.15, y: 0.2}
           byFloor: 50
         - type: 0
           stat: 5
           scalingType: 0
-          valueRange: {x: 2, y: 6}
+          valueRange: {x: 0.5, y: 1}
           byFloor: 50

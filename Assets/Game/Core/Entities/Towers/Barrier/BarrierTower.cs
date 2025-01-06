@@ -36,25 +36,26 @@ namespace TonyDev.Game.Core.Entities.Towers.Barrier
             base.OnStartAuthority();
             FullHeal();
 
-            OnHealthChangedOwner += OnHpChange;
+            OnHurtOwner += OnHurt;
         }
 
         public override void OnStopAuthority()
         {
             base.OnStopAuthority();
             
-            OnHealthChangedOwner -= OnHpChange;
+            OnHurtOwner -= OnHurt;
         }
 
-        private void OnHpChange(float newHp)
+        private void OnHurt(float damage)
         {
-            if (newHp <= 0)
+            return;
+            if (CurrentHealth <= 0)
             {
                 Die();
             }
             else
             {
-                CmdSetDurability((int)newHp);
+                SubtractDurability((int)damage);
             }
         }
 
