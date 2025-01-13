@@ -138,6 +138,12 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             username = user;
         }
+        
+        [GameCommand (Keyword = "nickname", PermissionLevel = PermissionLevel.Default, SuccessMessage = "Name changed.")]
+        public static void SetUsername(string newUser)
+        {
+            LocalInstance.CmdSetUsername(newUser);
+        }
 
         public static Action<NetworkIdentity> LocalPlayerChangeIdentity;
 
@@ -197,6 +203,8 @@ namespace TonyDev.Game.Core.Entities.Player
 
             CmdSetUsername(CustomRoomPlayer.Local.username);
 
+            UsernameHook("", CustomRoomPlayer.Local.username);
+
             CmdAddEffect(new PercentRegenEffect
             {
                 PercentRegen = 0.01f
@@ -209,13 +217,15 @@ namespace TonyDev.Game.Core.Entities.Player
             PlayerInventory.Instance.InsertStarterItems();
 
             TransitionController.Instance.FadeIn();
+            
+            CmdSetHealth(MaxHealth, MaxHealth);
         }
 
         [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Toggled invulnerability.")]
         public static void ToggleInvulnerable()
         {
-            LocalInstance.IsInvulnerable = !LocalInstance.IsInvulnerable;
+            LocalInstance.CmdSetInvulnerable(!LocalInstance.IsInvulnerable);
         }
     }
 }

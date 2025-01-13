@@ -136,7 +136,12 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             _weaponSpriteName = newName;
         }
-        
+
+        public override void OnStartClient()
+        {
+            weaponSpriteRenderer.sprite = ObjectFinder.GetSprite("broadsword_hand");
+        }
+
         private void WeaponSpriteUpdateHook(string oldSprite, string newSprite)
         {
             weaponSpriteRenderer.sprite = ObjectFinder.GetSprite(newSprite);

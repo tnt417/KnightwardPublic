@@ -185,6 +185,8 @@ namespace TonyDev.Game.Level.Rooms
             var i = mapRadius;
             var j = mapRadius;
 
+            RoomManager.RoomTiers = new RoomGenerateTier[i * 2 + 1, j * 2 + 1];
+
             var remainingGuaranteed = remainingEntries.Count(re => re.tier == RoomGenerateTier.Guaranteed);
             var remainingSpecial = theme.specialAmount;
             var remainingUncommon = theme.uncommonAmount;
@@ -219,6 +221,7 @@ namespace TonyDev.Game.Level.Rooms
                     var entry = remainingEntries.FirstOrDefault(re =>
                         re.tier == RoomGenerateTier.Guaranteed && !re.roomPrefab.CompareTag("StartRoom"));
                     rooms[i, j] = GenerateRoom(new Vector2Int(i, j), entry.roomPrefab);
+                    RoomManager.RoomTiers[i, j] = RoomGenerateTier.Guaranteed;
                     remainingGuaranteed--;
                     remainingEntries.Remove(entry);
                 }
@@ -236,6 +239,7 @@ namespace TonyDev.Game.Level.Rooms
                         GameTools.SelectRandom(remainingEntries.Where(re => re.tier == RoomGenerateTier.Common));
 
                     rooms[i, j] = GenerateRoom(new Vector2Int(i, j), entry.roomPrefab);
+                    RoomManager.RoomTiers[i, j] = RoomGenerateTier.Common;
                     remainingCommon--;
                     remainingEntries.Remove(entry);
                 }
@@ -266,6 +270,9 @@ namespace TonyDev.Game.Level.Rooms
                 roomConnections.Add(new RoomConnection(trunk, validRoomPos));
 
                 rooms[validRoomPos.x, validRoomPos.y] = GenerateRoom(validRoomPos, entry.roomPrefab);
+                
+                RoomManager.RoomTiers[validRoomPos.x, validRoomPos.y] = RoomGenerateTier.Special;
+                
                 remainingEntries.Remove(entry);
             }
 
@@ -280,8 +287,10 @@ namespace TonyDev.Game.Level.Rooms
                 var validRoomPos = GameTools.SelectRandom(GetOpenNeighborPositions(
                     trunk,
                     rooms)); // A random room with 2 bordering rooms (not start or end room) and a random open pos next to it.
-
+                
                 roomConnections.Add(new RoomConnection(trunk, validRoomPos));
+                
+                RoomManager.RoomTiers[validRoomPos.x, validRoomPos.y] = RoomGenerateTier.Uncommon;
                 
                 rooms[validRoomPos.x, validRoomPos.y] = GenerateRoom(validRoomPos, entry.roomPrefab);
                 remainingEntries.Remove(entry);

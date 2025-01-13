@@ -161,6 +161,7 @@ namespace TonyDev.Game.Core.Entities
         {
             if (ReadOnly) return;
             
+            var removed = _activeStatBonuses.Where(s => s.source == source).ToList();
             _activeStatBonuses = _activeStatBonuses.Where(sb => sb.source != source).ToList();
             OnStatsChanged?.Invoke();
         }
@@ -210,6 +211,7 @@ namespace TonyDev.Game.Core.Entities
             if (ReadOnly) return;
             
             _activeStatBonuses.RemoveAll(sb => sb.source.Contains("_BUFF"));
+            
             OnStatsChanged?.Invoke();
         }
 

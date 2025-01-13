@@ -69,12 +69,15 @@ namespace TonyDev.Game.Level.Decorations
         {
             SoundManager.PlaySound("interact",0.5f, transform.position);
         }
-        
-        protected void Start()
+
+        private void Awake()
         {
             _indicatorObject = Instantiate(ObjectFinder.GetPrefab("indicator"), transform);
             Indicator = _indicatorObject.GetComponent<Indicator>();
-            
+        }
+
+        protected void Start()
+        {
             AddInteractKey(Key.E, InteractType.Interact);
 
             SetCost((int)(scaleCost ? cost*ItemGenerator.DungeonInteractMultiplier : cost));

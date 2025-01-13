@@ -8,6 +8,7 @@ using TMPro;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
+using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -48,7 +49,15 @@ namespace TonyDev.Game.Global.Network
         public Button skinRight;
 
         private int _skinIndex = 0;
-        
+
+        private void Awake()
+        {
+            if (isOwned && isServer)
+            {
+                _numPlayersServer = 0;
+            }
+        }
+
         private void OnSkinChanged(PlayerSkin oldSkin, PlayerSkin newSkin)
         {
             foreach (var playerImage in playerImages)
@@ -100,8 +109,11 @@ namespace TonyDev.Game.Global.Network
         {
             Local = this;
 
-            CmdSetSteamId(SteamUser.GetSteamID().m_SteamID);
-            CmdSetUsername(SteamFriends.GetPersonaName());
+            if (SteamLobbyManager.IsSteamServer)
+            {
+                CmdSetSteamId(SteamUser.GetSteamID().m_SteamID);
+                CmdSetUsername(SteamFriends.GetPersonaName());
+            }
 
             CmdSetUnlockedItems(UnlocksManager.Instance.Unlocks.ToArray());
 

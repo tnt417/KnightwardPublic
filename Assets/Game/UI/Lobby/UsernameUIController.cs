@@ -1,6 +1,7 @@
 using System;
 using TMPro;
 using TonyDev.Game.Core.Entities.Player;
+using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
 
@@ -14,6 +15,7 @@ namespace TonyDev.Game.UI.Lobby
         private void Awake()
         {
             _player = GetComponentInParent<Player>();
+            
             _player.OnUsernameChange += SetUsername;
         }
 

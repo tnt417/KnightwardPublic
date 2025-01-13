@@ -1,6 +1,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using Mirror.FizzySteam;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
@@ -13,22 +14,13 @@ namespace TonyDev.Game.UI.Menu.MainMenu
     public class MainMenuController : MonoBehaviour
     {
         [SerializeField] private Camera mainCamera;
-        [SerializeField] private float menuShiftEffectStrength = 1f; //The strength of the moving camera effect
-        private Vector3 _originalCameraPos;
+        private Vector3 _originalShiftPos;
 
         private void Start()
         {
-            _originalCameraPos = mainCamera.transform.position;
-            
             GameManager.ResetGame();
 
             Debug.unityLogger.logEnabled = PlayerPrefs.GetInt("errorLog", 1) == 1;
-        }
-
-        private void Update()
-        {
-            mainCamera.transform.position =
-                _originalCameraPos + (Vector3)(Mouse.current.position.ReadValue() - new Vector2(Screen.width / 2f, Screen.height / 2f)) * menuShiftEffectStrength/1000f; //Offset the camera pos based on mouse pos.
         }
 
         private bool _hostClicked = false;
@@ -56,6 +48,9 @@ namespace TonyDev.Game.UI.Menu.MainMenu
         public void OnJoinClick()
         {
             SteamLobbyManager.Singleton.ActivateJoinOverlay();
+            
+            var cnm = NetworkManager.singleton as CustomNetworkManager;
+            if (cnm != null) cnm.ConnectToAddress("localhost");
         }
         
         public void QuitGame()

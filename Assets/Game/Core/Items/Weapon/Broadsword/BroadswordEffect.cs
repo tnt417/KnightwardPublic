@@ -77,7 +77,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
                 new StatBonus(StatType.AdditivePercent, Stat.MoveSpeed, MoveSpeedBonusMultiplier * _successiveDeflects,
                     "BroadswordEffect"), BonusExpirationTime);
 
-            Entity.IsInvulnerable = false;
+            //Entity.IsInvulnerable = false;
         }
 
         public override void OnUpdateOwner()
@@ -107,12 +107,12 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
 
         protected override void OnAbilityActivate()
         {
-            Entity.IsInvulnerable = true;
+            //Entity.IsInvulnerable = true;
         }
 
         protected override void OnAbilityDeactivate()
         {
-            Entity.IsInvulnerable = false;
+            //Entity.IsInvulnerable = false;
         }
     }
 }

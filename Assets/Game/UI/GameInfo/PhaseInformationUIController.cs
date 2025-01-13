@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Mirror;
 using TMPro;
@@ -16,10 +17,17 @@ namespace TonyDev.Game.UI.GameInfo
         [SerializeField] private TMP_Text dungeonFloorText;
         [SerializeField] private TMP_Text numPlayersText;
 
+        private CustomRoomPlayer[] _Crp;
+        
+        private void Awake()
+        {
+            _Crp = FindObjectsByType<CustomRoomPlayer>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+        }
+
         private void FixedUpdate()
         {
             dungeonFloorText.text = GameManager.DungeonFloor + (RoomGenerator.Config.floorAtLaunchOffset != 0 ? " + " + RoomGenerator.Config.floorAtLaunchOffset : "");
-            numPlayersText.text = NetworkManager.singleton.numPlayers.ToString();
+            numPlayersText.text = _Crp.Where(crp => crp != null).Max(crp => crp.playerNumber).ToString();
         }
     }
 }

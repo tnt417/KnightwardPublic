@@ -71,7 +71,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         public static void ToggleInvulnerable()
         {
                 var crystal = FindObjectOfType<Crystal>();
-                crystal.IsInvulnerable = !crystal.IsInvulnerable;
+                Instance.CmdSetInvulnerable(!Instance.IsInvulnerable);
         }
     }
 }

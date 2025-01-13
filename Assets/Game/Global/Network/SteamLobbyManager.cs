@@ -34,6 +34,11 @@ namespace TonyDev
                 Destroy(this);
                 return;
             }
+            
+            if (NetworkManager.singleton is CustomNetworkManager { TelepathyServer: true })
+            {
+                _isSteamServer = false;
+            }
 
             Singleton = this;
         }
@@ -64,10 +69,8 @@ namespace TonyDev
             //if (_beenInitialized) return;
 
             OnReset();
-
-            _isSteamServer = SteamUser.BLoggedOn();
             
-            if (!SteamManager.Initialized || !_isSteamServer) return;
+            if (!_isSteamServer || !SteamManager.Initialized) return;
 
             LobbyCreated = Callback<LobbyCreated_t>.Create(OnLobbyCreated);
             JoinRequest = Callback<GameLobbyJoinRequested_t>.Create(OnJoinRequest);
@@ -141,22 +144,34 @@ namespace TonyDev
 
         public void DisableJoins()
         {
-            SteamMatchmaking.SetLobbyJoinable(new CSteamID(CurrentLobbyID), false);
+            if (_isSteamServer)
+            {
+                SteamMatchmaking.SetLobbyJoinable(new CSteamID(CurrentLobbyID), false);
+            }
         }
 
         public void ActivateJoinOverlay() //Called when the Join button is pressed
         {
-            SteamFriends.ActivateGameOverlay("Friends");
+            if (_isSteamServer)
+            {
+                SteamFriends.ActivateGameOverlay("Friends");
+            }
         }
 
         public void HostLobby() //Called when the Host button is pressed
         {
-            SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, MaxConnections);
+            if (_isSteamServer)
+            {
+                SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, MaxConnections);
+            }
         }
 
         public void PromptInvite()
         {
-            SteamFriends.ActivateGameOverlayInviteDialog(new CSteamID(CurrentLobbyID));
+            if (_isSteamServer)
+            {
+                SteamFriends.ActivateGameOverlayInviteDialog(new CSteamID(CurrentLobbyID));
+            }
         }
     }
 }

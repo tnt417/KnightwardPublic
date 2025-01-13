@@ -115,11 +115,7 @@ namespace TonyDev.Game.Core.Entities
         {
             if (ClientHealthDisparity == 0 || isServer || this is Player.Player) return;
 
-            if (oldHealth == 0) ClientHealthDisparity = 0;
-            else
-            {
-                ClientHealthDisparity -= newHealth - oldHealth;
-            }
+            ClientHealthDisparity = 0;
         }
 
         #endregion
@@ -190,12 +186,18 @@ namespace TonyDev.Game.Core.Entities
 
         #endregion
 
+        [Command(requiresAuthority = false)]
+        public void CmdSetInvulnerable(bool invuln)
+        {
+            invulnerable = invuln;
+        }
+        
         protected IEnumerator IntangibleForSeconds(float seconds)
         {
-            IsInvulnerable = true;
+            CmdSetInvulnerable(true);
             IsTangible = false;
             yield return new WaitForSeconds(seconds);
-            IsInvulnerable = false;
+            CmdSetInvulnerable(false);
             IsTangible = true;
         }
 
@@ -284,9 +286,8 @@ namespace TonyDev.Game.Core.Entities
 
             CmdUpdateTarget();
             
-            CurrentHealth = MaxHealth;
-            OnHealthChangedOwner += (float value) => CmdSetHealth(CurrentHealth, MaxHealth);
-            OnHealthChangedOwner?.Invoke(CurrentHealth);
+            OnHealthChangedOwner += (value) => CmdSetHealth(value, MaxHealth);
+            OnHealthChangedOwner?.Invoke(MaxHealth);
 
             /*if (startingEffects is {gameEffects: { }})
             {
@@ -349,8 +350,10 @@ namespace TonyDev.Game.Core.Entities
         public void LocalHurt(float damage, bool isCrit, DamageType dt)
         {
             if (!IsInvulnerable)
+            {
                 ObjectSpawner.SpawnDmgPopup(transform.position, Stats.ModifyIncomingDamage(damage), isCrit, dt);
-            OnLocalHurt?.Invoke();
+                OnLocalHurt?.Invoke();
+            }
         }
 
         [Command(requiresAuthority = false)]
@@ -497,8 +500,9 @@ namespace TonyDev.Game.Core.Entities
         public virtual float DamageMultiplier { get; protected set; } = 1f;
         public virtual float HealMultiplier { get; set; } = 1f;
         public virtual int MaxHealth => (int) Stats.GetStat(Stat.Health);
-        public virtual float CurrentHealth { get; protected set; }
-        public virtual bool IsInvulnerable { get; set; }
+        public virtual float CurrentHealth => NetworkCurrentHealth;
+        [SyncVar] public bool invulnerable = false;
+        public virtual bool IsInvulnerable => invulnerable;
         public virtual bool IsTangible { get; set; } = true;
         public bool IsAlive => NetworkCurrentHealth > 0;
 
@@ -521,21 +525,23 @@ namespace TonyDev.Game.Core.Entities
 
             (modifiedDamage > 0 ? OnHurtOwner : OnHealOwner)?.Invoke(modifiedDamage);
 
+            var newHp = CurrentHealth;
+            
             switch (modifiedDamage)
             {
                 case > 0:
-                    CurrentHealth -= modifiedDamage * DamageMultiplier;
+                    newHp -= modifiedDamage * DamageMultiplier;
                     break;
                 case < 0:
-                    CurrentHealth -= modifiedDamage * HealMultiplier;
+                    newHp -= modifiedDamage * HealMultiplier;
                     break;
             }
 
-            CurrentHealth = Mathf.Clamp(CurrentHealth, 0, MaxHealth); //Clamp health
+            newHp = Mathf.Clamp(newHp, 0, MaxHealth); //Clamp health
+            
+            OnHealthChangedOwner?.Invoke(newHp);
 
-            OnHealthChangedOwner?.Invoke(CurrentHealth);
-
-            if (CurrentHealth <= 0 && !IsInvulnerable) Die();
+            if (newHp <= 0 && !IsInvulnerable) Die();
 
             return modifiedDamage;
         }
@@ -544,15 +550,13 @@ namespace TonyDev.Game.Core.Entities
         {
             if (!EntityOwnership) return;
 
-            CurrentHealth = MaxHealth;
-            OnHealthChangedOwner?.Invoke(CurrentHealth);
+            OnHealthChangedOwner?.Invoke(MaxHealth);
         }
         
         public void SetHealth(float newHealth)
         {
             if (!EntityOwnership) return;
 
-            CurrentHealth = newHealth;
             OnHealthChangedOwner?.Invoke(newHealth);
         }
 

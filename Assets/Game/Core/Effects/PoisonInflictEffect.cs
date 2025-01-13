@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using TonyDev.Game.Core.Entities;
 using UnityEngine;
 
@@ -18,14 +19,17 @@ namespace TonyDev.Game.Core.Effects
             Entity.OnDamageOther += InflictPoison;
         }
 
-        private readonly Dictionary<GameEntity, PoisonEffect> _lastInflictedEffects = new();
+        private Dictionary<GameEntity, PoisonEffect> _lastInflictedEffects = new();
         
         public void InflictPoison(float dmg, GameEntity entity, bool crit, DamageType dt)
         {
             if (dt == DamageType.DoT) return;
             if (entity.Team == Entity.Team) return;
+
+            _lastInflictedEffects =
+                _lastInflictedEffects.Where((kvp) => kvp.Value is { Expired: false }).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
             
-            if (DoPoisonStacking || (_lastInflictedEffects.ContainsKey(entity) && _lastInflictedEffects[entity] is null or {Expired: true}) || !_lastInflictedEffects.ContainsKey(entity))
+            if (DoPoisonStacking || !_lastInflictedEffects.ContainsKey(entity))
             {
                 _lastInflictedEffects[entity] = new PoisonEffect()
                 {

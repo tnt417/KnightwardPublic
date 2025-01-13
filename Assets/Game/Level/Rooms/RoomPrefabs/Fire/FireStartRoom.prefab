@@ -1322,7 +1322,7 @@ MonoBehaviour:
   onRoomClearGlobal:
     m_PersistentCalls:
       m_Calls: []
-  minimapIcon: {fileID: 7479642271789056252, guid: df58e7484986be1448443be92533111f, type: 3}
+  minimapIcon: {fileID: 21300000, guid: f5801b9549da24a3ab0bf587e29a8841, type: 3}
   roomChildObjects: []
   cleared: 0
   wallTilemap: {fileID: 6922258286709519191}
@@ -6561,6 +6561,10 @@ PrefabInstance:
     - target: {fileID: 5902723317908624271, guid: 8fdab5f55a0d23b44aa0ce5037ff85ee, type: 3}
       propertyPath: m_RootOrder
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 5902723317908624271, guid: 8fdab5f55a0d23b44aa0ce5037ff85ee, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5902723317908624271, guid: 8fdab5f55a0d23b44aa0ce5037ff85ee, type: 3}
       propertyPath: m_LocalPosition.x

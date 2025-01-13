@@ -108,7 +108,7 @@ namespace TonyDev
         // Called on the server every frame while the effect is applied to a GameEntity
         public override void OnUpdateClient()
         {
-            Entity.IsInvulnerable = true;
+            Entity.CmdSetInvulnerable(true);
             
             // Increment the elapsed time
             _elapsedTime += Time.deltaTime;
@@ -125,7 +125,7 @@ namespace TonyDev
         public override void OnAddClient()
         {
             // Set the entity's invincibility flag to true
-            Entity.IsInvulnerable = true;
+            Entity.CmdSetInvulnerable(true);
 
             // Reset the elapsed time
             _elapsedTime = 0;
@@ -135,7 +135,7 @@ namespace TonyDev
         public override void OnRemoveClient()
         {
             // Set the entity's invincibility flag to false
-            Entity.IsInvulnerable = false;
+            Entity.CmdSetInvulnerable(false);
         }
     }
     

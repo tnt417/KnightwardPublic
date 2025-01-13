@@ -75,8 +75,13 @@ namespace TonyDev
         public void AddUnlockSessionOnly(string itemName)
         {
             if (unlockedItems.Any(i => i.item.itemName == itemName)) return;
-            
-            unlockedItems.Add(GameManager.AllItems.First(i => i.item.itemName == itemName));
+
+            var item = GameManager.AllItems.FirstOrDefault(i => i.item.itemName == itemName);
+
+            if (item != null)
+            {
+                unlockedItems.Add(item);
+            }
         }
         
         public void AddUnlock(string itemName)

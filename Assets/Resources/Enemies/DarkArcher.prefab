@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 438257136108837130, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -160,6 +161,15 @@ PrefabInstance:
       value: 14983a18b011814489321b49e3460803
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7584497710411692448}
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7930074371882215609}
   m_SourcePrefab: {fileID: 100100000, guid: c4673581ac60785459b6805764360ee4, type: 3}
 --- !u!1 &8527089446520657152 stripped
 GameObject:
@@ -180,28 +190,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flipRenderer: {fileID: 0}
   flipFlip: 1
-  pursueSpeed: 3
+  pursueSpeed: 7
   strafeDistance: 4
-  strafeRadius: 5
-  strafeSpeed: 3
-  maxShootDistance: 8
+  strafeRadius: 7
+  strafeSpeed: 4
+  maxShootDistance: 10
   shootProjectiles:
   - prefabKey: 
     projectileSprite: {fileID: 21300000, guid: 29dc1ac709c75eb4c8ea3ba8defaf8ae, type: 3}
     attackData:
       damageMultiplier: 1
       knockbackMultiplier: 0.5
-      hitboxRadius: 0.3
+      hitboxRadius: 0.15
       team: 0
       destroyOnApply: 1
       destroyOnCollideWall: 1
       lifetime: 2
       spawnOnDestroyKey: 
+      inheritRotationOnSpawn: 0
       ignoreInvincibility: 0
       inflictEffects:
         gameEffects: []
     disableMovement: 0
-    travelSpeed: 15
+    travelSpeed: 20
     offsetDegrees: 0
     waveAmplitude: 0
     waveLength: 0
@@ -226,3 +237,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
+  inheritRotation: 0

@@ -214,15 +214,10 @@ namespace TonyDev.Game.Core.Attacks
                     ? ge.ApplyDamage(modifiedDamage, out success, ignoreInvincibility)
                     : modifiedDamage; //Do damage before command if hitting player
                 if (!success) return;
-                if(ge is Enemy && !NetworkServer.active) ge.ClientHealthDisparity -= damageDealt;
+                if (ge is Enemy && !NetworkServer.active && !ge.IsInvulnerable) ge.ClientHealthDisparity -= damageDealt;
                 ge.LocalHurt(damageDealt, crit, damageType);
                 ge.CmdDamageEntity(damageDealt, crit, NetworkClient.localPlayer, ignoreInvincibility, damageType);
-                
-                if (inflictEffects != null) //Inflict effects...
-                    foreach (var e in inflictEffects)
-                    {
-                        ge.CmdAddEffect(e, _owner);
-                    }
+                if(!ge.IsInvulnerable) OnDamageDealt?.Invoke(damageDealt, ge, crit, damageType);
             }
             else
             {
@@ -233,8 +228,6 @@ namespace TonyDev.Game.Core.Attacks
                         crit, damageType); //Spawn a popup for the damage text if the damage is greater than zero.
                 if (!success) return;
             }
-
-            OnDamageDealt?.Invoke(damageDealt, ge, crit, damageType);
 
             // var kb = GetKnockbackVector(other.transform.position) * (KnockbackForce * knockbackMultiplier); //Calculate the knockback
 
@@ -259,7 +252,7 @@ namespace TonyDev.Game.Core.Attacks
             }
 
             //Add inflict buffs and effects
-            if (ge != null)
+            if (ge != null && !ge.IsInvulnerable)
             {
                 if (inflictBuffs != null) //Inflict buffs...
                     foreach (var b in inflictBuffs)

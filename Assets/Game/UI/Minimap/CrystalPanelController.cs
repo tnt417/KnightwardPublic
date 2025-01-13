@@ -38,7 +38,7 @@ namespace TonyDev
 
             var enemies = GameManager.GetEntitiesInRange(Crystal.Instance.transform.position, EnemyRange).Where(e => e is Enemy).ToList();
 
-            foreach (var (k, v) in _uiObjects)
+            foreach (var (k, v) in _uiObjects.ToList())
             {
                 if (enemies.Contains(k))
                 {

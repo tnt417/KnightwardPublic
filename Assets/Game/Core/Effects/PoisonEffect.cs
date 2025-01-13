@@ -24,11 +24,12 @@ namespace TonyDev.Game.Core.Effects
         
         public static float GetPoisonDamage(GameEntity gameEntity) => gameEntity.EffectsReadonly.OfType<PoisonEffect>().Sum(pe => pe.RemainingDamage());
 
-        public override void OnAddClient()
+        public override void OnAddOwner()
         {
             _myParticleTrailEffect = new ParticleTrailEffect()
             {
-                OverridePrefab = "poisonParticles"
+                OverridePrefab = "poisonParticles",
+                VisibleGlobal = true
             };
             
             if (PoisonTrailEffects.TryAdd(Entity, _myParticleTrailEffect))
@@ -40,8 +41,13 @@ namespace TonyDev.Game.Core.Effects
                 _myParticleTrailEffect = PoisonTrailEffects[Entity];
             }
         }
-        
+
         public override void OnRemoveClient()
+        {
+            Ticks = 0;
+        }
+
+        public override void OnRemoveOwner()
         {
             if (GetPoisonDamage(Entity) <= 0)
             {
@@ -55,20 +61,20 @@ namespace TonyDev.Game.Core.Effects
             return Ticks * Damage;
         }
 
-        public override void OnUpdateOwner()
+        public override void OnUpdateClient()
         {
             _timer += Time.deltaTime;
 
             if (_timer > Frequency)
             {
-                Entity.CmdDamageEntity(Damage, false, null, true, DamageType.DoT);
+                if(Entity.isOwned) Entity.CmdDamageEntity(Damage, false, null, true, DamageType.DoT);
                 _timer = 0f;
                 
                 Ticks--;
                 
                 if (Ticks <= 0)
                 {
-                    Entity.CmdRemoveEffect(this);
+                    if(Entity.isOwned) Entity.CmdRemoveEffect(this);
                 }
             }
         }

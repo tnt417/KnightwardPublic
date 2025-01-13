@@ -1014,8 +1014,8 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 16
-      m_TileSpriteIndex: 4
-      m_TileMatrixIndex: 0
+      m_TileSpriteIndex: 0
+      m_TileMatrixIndex: 1
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
@@ -1155,7 +1155,7 @@ Tilemap:
       serializedVersion: 2
       m_TileIndex: 16
       m_TileSpriteIndex: 4
-      m_TileMatrixIndex: 0
+      m_TileMatrixIndex: 1
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
       dummyAlignment: 0
@@ -1164,7 +1164,7 @@ Tilemap:
     second:
       serializedVersion: 2
       m_TileIndex: 16
-      m_TileSpriteIndex: 4
+      m_TileSpriteIndex: 0
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_TileObjectToInstantiateIndex: 65535
@@ -1911,15 +1911,15 @@ Tilemap:
   - m_RefCount: 102
     m_Data: {fileID: 11400000, guid: 7e93f2d17dc72624281312b9bc6c2afc, type: 2}
   m_TileSpriteArray:
-  - m_RefCount: 0
-    m_Data: {fileID: 0}
+  - m_RefCount: 2
+    m_Data: {fileID: 6672437629784242182, guid: f1b9591e0d6d44786986a389885b11b6, type: 3}
   - m_RefCount: 102
     m_Data: {fileID: 21300000, guid: 563b4bde356daaf44a4a6045857632d4, type: 3}
   - m_RefCount: 10
     m_Data: {fileID: 1408051153, guid: ecc8ed38995f1904499fe36292bd50db, type: 3}
   - m_RefCount: 2
     m_Data: {fileID: -372729121, guid: ecc8ed38995f1904499fe36292bd50db, type: 3}
-  - m_RefCount: 4
+  - m_RefCount: 2
     m_Data: {fileID: 497519378, guid: ecc8ed38995f1904499fe36292bd50db, type: 3}
   - m_RefCount: 10
     m_Data: {fileID: -1869680934, guid: ecc8ed38995f1904499fe36292bd50db, type: 3}
@@ -1934,9 +1934,27 @@ Tilemap:
   - m_RefCount: 2
     m_Data: {fileID: -2058904149, guid: ecc8ed38995f1904499fe36292bd50db, type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 154
+  - m_RefCount: 152
     m_Data:
       e00: 1
+      e01: 0
+      e02: 0
+      e03: 0
+      e10: 0
+      e11: 1
+      e12: 0
+      e13: 0
+      e20: 0
+      e21: 0
+      e22: 1
+      e23: 0
+      e30: 0
+      e31: 0
+      e32: 0
+      e33: 1
+  - m_RefCount: 2
+    m_Data:
+      e00: -1
       e01: 0
       e02: 0
       e03: 0

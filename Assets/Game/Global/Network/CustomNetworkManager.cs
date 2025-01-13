@@ -18,6 +18,8 @@ namespace TonyDev.Game.Global.Network
     {
         private const int Port = 7777;
         
+        public bool TelepathyServer => transport is TelepathyTransport;
+        
         public new void Start()
         {
             _lobbyCreated = false;

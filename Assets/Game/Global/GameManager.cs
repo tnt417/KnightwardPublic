@@ -230,8 +230,8 @@ namespace TonyDev.Game.Global
         public static Camera MainCamera;
 
         public static Vector2 MouseDirection =>
-            (MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
-            Player.LocalInstance.transform.position).normalized;
+            MainCamera != null ? (MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
+                      Player.LocalInstance.transform.position).normalized : Vector2.zero;
 
         public static Vector2 MouseDirectionLow =>
             ((Vector2) MainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()) -
@@ -454,6 +454,8 @@ namespace TonyDev.Game.Global
 
         private void Awake()
         {
+            Debug.Log("Game manager awake!");
+            
             if (Instance == null) Instance = this;
             else Destroy(this);
 
@@ -488,13 +490,15 @@ namespace TonyDev.Game.Global
 
         private void Init()
         {
+            Debug.Log("Game manager init!");
+            
             Crystal.Instance.OnDeathOwner += value => GameOver();
             EnterArenaPhase();
 
-            var playerFrac = CustomRoomPlayer.Local.playerNumber / 4f;
+            var playerFrac = (CustomRoomPlayer.Local.playerNumber + 1) / 4f;
             
-            Player.LocalInstance.transform.position = arenaSpawnPos + new Vector2(Mathf.Cos((((float)playerFrac) * 2 * Mathf.PI)) * 2f,
-                Mathf.Sin((((float)playerFrac) * 2 * Mathf.PI)) * 2f);
+            Player.LocalInstance.transform.position = arenaSpawnPos + new Vector2(Mathf.Cos((((float)playerFrac) * 2 * Mathf.PI)) * 3.5f,
+                Mathf.Sin((((float)playerFrac) * 2 * Mathf.PI)) * 2.5f);
             arenaSpawnPos = new Vector2(4980, -6f);
         }
 

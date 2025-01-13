@@ -17,6 +17,9 @@ namespace TonyDev.Game.UI.Minimap
         [SerializeField] private GameObject minimapRoomPrefab;
 
         [SerializeField] private Sprite unknownRoomSprite;
+        [SerializeField] private Sprite commonRoomSprite;
+        [SerializeField] private Sprite uncommonRoomSprite;
+        [SerializeField] private Sprite specialRoomSprite;
         //
 
         public static MinimapManager Instance;
@@ -122,6 +125,12 @@ namespace TonyDev.Game.UI.Minimap
             if (symbolImage == null)
             {
                 //Debug.LogWarning("Room image missing!");
+                return;
+            }
+
+            if (_rooms[position.x,position.y].CompareTag("StartRoom"))
+            {
+                symbolImage.sprite = _rooms[position.x, position.y].minimapIcon;
                 return;
             }
 

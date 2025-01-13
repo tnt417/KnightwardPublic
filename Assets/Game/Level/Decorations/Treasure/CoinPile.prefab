@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5902723317908624271}
   - component: {fileID: 5844936193664742307}
   - component: {fileID: 7477798853768686964}
-  - component: {fileID: 4224289003158028379}
+  - component: {fileID: 8685710689175750706}
   m_Layer: 0
   m_Name: CoinPile
   m_TagString: Untagged
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2f5660ae8e43244da40e134cf2b8973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4224289003158028379
+--- !u!114 &8685710689175750706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,6 +110,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 5907983996696675428}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c2f5660ae8e43244da40e134cf2b8973, type: 3}
+  m_Script: {fileID: 11500000, guid: 8a6a6a6a2bc744138a9f4a1cfa0b8177, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 5844936193664742307}
+  choices:
+  - {fileID: 21300000, guid: 18fe2a803feb9294eb0bb50983540072, type: 3}
+  randomizeFlipX: 1

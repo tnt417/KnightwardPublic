@@ -23,6 +23,8 @@ namespace TonyDev.Game.Level.Rooms
 
         public readonly Dictionary<uint, Room> RoomIdentities = new();
 
+        public static RoomGenerateTier[,] RoomTiers;
+        
         //Editor variables
         [SerializeField] public RoomGenerator roomGenerator;
 
