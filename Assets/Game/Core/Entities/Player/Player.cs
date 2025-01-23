@@ -15,6 +15,7 @@ using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.UI.Minimap;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
@@ -132,19 +133,13 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             OnUsernameChange?.Invoke(newUser);
         }
-
-        [Command(requiresAuthority = false)]
-        private void CmdSetUsername(string user)
-        {
-            username = user;
-        }
         
         [GameCommand (Keyword = "nickname", PermissionLevel = PermissionLevel.Default, SuccessMessage = "Name changed.")]
         public static void SetUsername(string newUser)
         {
-            LocalInstance.CmdSetUsername(newUser);
+            LocalInstance.username = newUser;
         }
-
+        
         public static Action<NetworkIdentity> LocalPlayerChangeIdentity;
 
         public override void OnStartLocalPlayer()
@@ -199,33 +194,31 @@ namespace TonyDev.Game.Core.Entities.Player
 
             //OnDamageOther += (_, _, _) => SoundManager.PlaySoundPitchVariant("hit", transform.position, 0.7f, 1f);
 
-            Init();
-
-            CmdSetUsername(CustomRoomPlayer.Local.username);
+            SetUsername(CustomRoomPlayer.Local.username);
 
             UsernameHook("", CustomRoomPlayer.Local.username);
 
-            CmdAddEffect(new PercentRegenEffect
+            AddEffect(new PercentRegenEffect
             {
                 PercentRegen = 0.01f
             }, this);
 
             var fxString = CustomRoomPlayer.Local.classEffectName;
             
-            if(!string.IsNullOrEmpty(fxString)) CmdAddEffect(GameEffect.CreateEffect(fxString), this);
+            if(!string.IsNullOrEmpty(fxString)) AddEffect(GameEffect.CreateEffect(fxString), this);
 
             PlayerInventory.Instance.InsertStarterItems();
 
             TransitionController.Instance.FadeIn();
             
-            CmdSetHealth(MaxHealth, MaxHealth);
+            //CmdSetHealth(MaxHealth, MaxHealth);
         }
 
         [GameCommand(Keyword = "god", PermissionLevel = PermissionLevel.Cheat,
             SuccessMessage = "Toggled invulnerability.")]
         public static void ToggleInvulnerable()
         {
-            LocalInstance.CmdSetInvulnerable(!LocalInstance.IsInvulnerable);
+            LocalInstance.SetInvulnerable(!LocalInstance.IsInvulnerable);
         }
     }
 }

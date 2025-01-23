@@ -35,7 +35,7 @@ namespace TonyDev.Game.Core.Effects
             if (_timer > InvulnTimer)
             {
                 _timer = 0;
-                Entity.CmdSetInvulnerable(true);
+                Entity.SetInvulnerable(true);
             }
         }
         
@@ -52,7 +52,7 @@ namespace TonyDev.Game.Core.Effects
                 ge.ApplyKnockbackGlobal((ge.transform.position - Entity.transform.position).normalized * KnockbackForce);
             }
 
-            Entity.CmdSetInvulnerable(false);
+            Entity.SetInvulnerable(false);
         }
         
         public override string GetEffectDescription()

@@ -28,7 +28,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 // ChangeSize(0.5f);
             }else if (false) //(specialScore > 0.78f)
             {
-                Entity.CmdAddEffect(new AttackEffect()
+                Entity.AddEffect(new AttackEffect()
                 {
                     ProjectileData = new ProjectileData()
                     {
@@ -49,7 +49,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
                 }, Entity);
             }else if (specialScore > 0.76f)
             {
-                Entity.CmdAddEffect(new AttackEffect()
+                Entity.AddEffect(new AttackEffect()
                 {
                     ProjectileData = new ProjectileData()
                     {

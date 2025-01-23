@@ -91,7 +91,7 @@ namespace TonyDev.Game.UI.Lobby
 
         private void FinishEditUsername(string newUsername)
         {
-            if (hasAuthority)
+            if (authority)
             {
                 CmdUpdateUsername(newUsername);
             }

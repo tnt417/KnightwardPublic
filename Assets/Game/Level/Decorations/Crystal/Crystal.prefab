@@ -122,7 +122,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eced12fa32c2bc1419cc42585fcfb5b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncDirection: 0
+  syncDirection: 1
   syncMode: 0
   syncInterval: 0.1
   targetTag: 
@@ -142,6 +142,7 @@ MonoBehaviour:
   targetRange: 8
   targetIntangible: 0
   <Team>k__BackingField: 1
+  invulnerable: 0
 --- !u!50 &8167611084454580651
 Rigidbody2D:
   serializedVersion: 5
@@ -184,7 +185,7 @@ MonoBehaviour:
   sceneId: 0
   _assetId: 3432245516
   serverOnly: 0
-  visible: 2
+  visibility: 2
   hasSpawned: 0
 --- !u!58 &7676856395648185354
 CircleCollider2D:

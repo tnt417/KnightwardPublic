@@ -136,7 +136,7 @@ namespace TonyDev.Game.UI.Inventory
             //Update all the UI elements
             weaponSlot.Item = PlayerInventory.Instance.WeaponItem;
 
-            noTowersText.gameObject.SetActive(TowerUIController.Instance.towers.Count == 0);
+            noTowersText.gameObject.SetActive(TowerUIController.Instance.Towers.Count == 0);
             
             // var relicArray = PlayerInventory.Instance.RelicItems.ToArray();
             //

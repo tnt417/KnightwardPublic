@@ -47,7 +47,7 @@ namespace TonyDev.Game.Core.Effects
                             OverridePrefab = ObjectFinder.GetNameOfPrefab(ObjectFinder.GetPrefab(buffEffectPrefabKey)),
                             VisibleGlobal = true
                         };
-                        t.CmdAddEffect(_trailEffects[t], Entity);
+                        t.AddEffect(_trailEffects[t], Entity);
                     }
                     
                     DoBuffingTask(t).Forget();

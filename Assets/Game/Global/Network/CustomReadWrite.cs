@@ -87,7 +87,7 @@ namespace TonyDev.Game.Global.Network
             }
             else
             {
-                var id = Player.LocalInstance.netId + "_" + _identifierIndex + effect.GetType().Name;
+                var id = CustomRoomPlayer.Local.playerNumber + "_" + _identifierIndex + effect.GetType().Name;
                 _identifierIndex++;
                 return id;
             }

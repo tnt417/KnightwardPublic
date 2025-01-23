@@ -266,7 +266,14 @@ namespace TonyDev.Game.Core.Attacks
                     //Inflict effects...
                     foreach (var e in inflictEffects)
                     {
-                        ge.CmdAddEffect(e, _owner);
+                        if (ge.isOwned)
+                        {
+                            ge.AddEffect(e, _owner);
+                        }
+                        else
+                        {
+                            ge.CmdAddEffect(e, _owner);
+                        }
                     }
                 }
             }

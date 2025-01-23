@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 48320255391279908, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -123,6 +124,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -3579321863884668319, guid: 85f7a73ead3643844a496e5f1c5a34cc, type: 3}
+    - target: {fileID: 7080094185981754643, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Name
       value: GreenBook
@@ -180,6 +185,15 @@ PrefabInstance:
       value: 21fcdc4f9a614964eb7de474c0eeef8f
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1411625897558713172}
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7747560100134716814}
   m_SourcePrefab: {fileID: 100100000, guid: c4673581ac60785459b6805764360ee4, type: 3}
 --- !u!1 &1591561561550776636 stripped
 GameObject:
@@ -200,6 +214,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
+  inheritRotation: 0
 --- !u!114 &7747560100134716814
 MonoBehaviour:
   m_ObjectHideFlags: 0

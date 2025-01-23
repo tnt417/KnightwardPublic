@@ -74,7 +74,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         {
             if (entity == null) return;
             
-            entity.CmdAddEffect(new PoisonEffect()
+            entity.AddEffect(new PoisonEffect()
             {
                 Damage = PoisonDPSMultiplier * Entity.Stats.GetStat(Stat.Damage),
                 Ticks = 10,

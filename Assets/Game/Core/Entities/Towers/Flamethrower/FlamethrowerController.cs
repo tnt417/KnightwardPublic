@@ -24,8 +24,8 @@ namespace TonyDev.Game.Core.Entities.Towers.Flamethrower
         {
             if (tower.Targets.Count == 0 || tower.Targets[0] == null || tower.Stats.GetStat(Stat.AttackSpeed) == 0)
             {
-                tower.CmdUpdateTarget();
-                if (tower.Targets.Count == 0 || tower.Targets[0] == null)
+                tower.UpdateTargets();
+                if (tower.Targets.Count == 0 || tower.Targets[0] == null || tower.Stats.GetStat(Stat.AttackSpeed) == 0)
                 {
                     particles.Stop();
                     flameCollider.enabled = false;

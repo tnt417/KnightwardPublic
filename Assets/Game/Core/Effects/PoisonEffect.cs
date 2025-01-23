@@ -34,7 +34,7 @@ namespace TonyDev.Game.Core.Effects
             
             if (PoisonTrailEffects.TryAdd(Entity, _myParticleTrailEffect))
             {
-                Entity.CmdAddEffect(_myParticleTrailEffect, Entity);
+                Entity.AddEffect(_myParticleTrailEffect, Entity);
             }
             else
             {
@@ -51,7 +51,7 @@ namespace TonyDev.Game.Core.Effects
         {
             if (GetPoisonDamage(Entity) <= 0)
             {
-                Entity.CmdRemoveEffect(PoisonTrailEffects[Entity]);
+                Entity.RemoveEffect(PoisonTrailEffects[Entity]);
                 PoisonTrailEffects.Remove(Entity);
             }
         }
@@ -74,7 +74,7 @@ namespace TonyDev.Game.Core.Effects
                 
                 if (Ticks <= 0)
                 {
-                    if(Entity.isOwned) Entity.CmdRemoveEffect(this);
+                    if(Entity.isOwned) Entity.RemoveEffect(this);
                 }
             }
         }

@@ -155,7 +155,7 @@ namespace TonyDev.Game.Core.Items
                 if (item.itemEffects != null)
                     foreach (var effect in item.itemEffects)
                     {
-                        Player.LocalInstance.CmdAddEffect(effect, Player.LocalInstance);
+                        Player.LocalInstance.AddEffect(effect, Player.LocalInstance);
                     }
 
                 PlayerStats.AddStatBonusesFromItem(item); //Apply stat bonuses of the new item
@@ -172,7 +172,7 @@ namespace TonyDev.Game.Core.Items
             {
                 if (item.itemEffects != null)
                 {
-                    foreach (var effect in item.itemEffects) Player.LocalInstance.CmdRemoveEffect(effect);
+                    foreach (var effect in item.itemEffects) Player.LocalInstance.RemoveEffect(effect);
                 }
 
                 PlayerStats.Stats.RemoveStatBonuses(item

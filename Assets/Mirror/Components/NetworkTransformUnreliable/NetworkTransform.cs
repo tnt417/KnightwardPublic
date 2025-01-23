@@ -220,7 +220,7 @@ namespace Mirror
             if (!scale.HasValue)    scale    = serverSnapshots.Count > 0 ? serverSnapshots.Values[serverSnapshots.Count - 1].scale    : target.localScale;
 
             // insert transform snapshot
-            SnapshotInterpolation.InsertIfNotExists(serverSnapshots, new TransformSnapshot(
+            SnapshotInterpolation.InsertIfNotExists(serverSnapshots, 1000, new TransformSnapshot(
                 timestamp,         // arrival remote timestamp. NOT remote time.
 #if !UNITY_2020_3_OR_NEWER
                 NetworkTime.localTime, // Unity 2019 doesn't have timeAsDouble yet
@@ -283,7 +283,7 @@ namespace Mirror
             if (!scale.HasValue) scale = clientSnapshots.Count > 0 ? clientSnapshots.Values[clientSnapshots.Count - 1].scale : target.localScale;
 
             // insert snapshot
-            SnapshotInterpolation.InsertIfNotExists(clientSnapshots, new TransformSnapshot(
+            SnapshotInterpolation.InsertIfNotExists(clientSnapshots, 1000, new TransformSnapshot(
                 timestamp,         // arrival remote timestamp. NOT remote time.
 #if !UNITY_2020_3_OR_NEWER
                 NetworkTime.localTime, // Unity 2019 doesn't have timeAsDouble yet

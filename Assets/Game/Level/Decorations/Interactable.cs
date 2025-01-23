@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
@@ -70,14 +71,11 @@ namespace TonyDev.Game.Level.Decorations
             SoundManager.PlaySound("interact",0.5f, transform.position);
         }
 
-        private void Awake()
+        protected void Start()
         {
             _indicatorObject = Instantiate(ObjectFinder.GetPrefab("indicator"), transform);
             Indicator = _indicatorObject.GetComponent<Indicator>();
-        }
-
-        protected void Start()
-        {
+            
             AddInteractKey(Key.E, InteractType.Interact);
 
             SetCost((int)(scaleCost ? cost*ItemGenerator.DungeonInteractMultiplier : cost));
@@ -276,9 +274,21 @@ namespace TonyDev.Game.Level.Decorations
 
         private void SetActive(bool active)
         {
+            if (_indicatorObject == null)
+            {
+                SetActiveOnceIndicator(active).Forget();
+                return;
+            }
+            
             _indicatorObject.SetActive(active);
             foreach (var img in _indicatorObject.GetComponentsInChildren<Image>())
                 img.enabled = active;
+        }
+
+        private async UniTask SetActiveOnceIndicator(bool active)
+        {
+            await UniTask.WaitUntil(() => _indicatorObject != null);
+            SetActive(active);
         }
     }
 }

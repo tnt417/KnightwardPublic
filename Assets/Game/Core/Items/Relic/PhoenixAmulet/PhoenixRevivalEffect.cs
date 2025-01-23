@@ -26,7 +26,7 @@ namespace TonyDev
         {
             _trailEffect = new ParticleTrailEffect();
             
-            Entity.CmdAddEffect(_trailEffect, Entity);
+            Entity.AddEffect(_trailEffect, Entity);
             
             _trailEffect.SetColor(Color.yellow);
             
@@ -36,7 +36,7 @@ namespace TonyDev
 
             if (Entity is not Player entity)
             {
-                Entity.CmdRemoveEffect(this);
+                Entity.RemoveEffect(this);
                 return;
             }
             
@@ -89,7 +89,7 @@ namespace TonyDev
             {
                 Duration = InvincibilityDuration
             };
-            Entity.CmdAddEffect(invincibilityEffect, Entity);
+            Entity.AddEffect(invincibilityEffect, Entity);
         }
 
         public override string GetEffectDescription()
@@ -106,9 +106,9 @@ namespace TonyDev
         private float _elapsedTime; // The elapsed time since the effect was applied
 
         // Called on the server every frame while the effect is applied to a GameEntity
-        public override void OnUpdateClient()
+        public override void OnUpdateOwner()
         {
-            Entity.CmdSetInvulnerable(true);
+            Entity.SetInvulnerable(true);
             
             // Increment the elapsed time
             _elapsedTime += Time.deltaTime;
@@ -117,25 +117,25 @@ namespace TonyDev
             if (_elapsedTime >= Duration && Entity.EntityOwnership)
             {
                 // Remove the effect
-                Entity.CmdRemoveEffect(this);
+                Entity.RemoveEffect(this);
             }
         }
 
         // Called on the server when the effect is added to a GameEntity
-        public override void OnAddClient()
+        public override void OnAddOwner()
         {
             // Set the entity's invincibility flag to true
-            Entity.CmdSetInvulnerable(true);
+            Entity.SetInvulnerable(true);
 
             // Reset the elapsed time
             _elapsedTime = 0;
         }
 
         // Called on the server when the effect is removed from a GameEntity
-        public override void OnRemoveClient()
+        public override void OnRemoveOwner()
         {
             // Set the entity's invincibility flag to false
-            Entity.CmdSetInvulnerable(false);
+            Entity.SetInvulnerable(false);
         }
     }
     

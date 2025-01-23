@@ -10,6 +10,7 @@ using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
@@ -158,6 +159,18 @@ namespace TonyDev.Game.Global.Network
         {
             _numPlayersServer++;
             playerNumber = _numPlayersServer;
+
+            if (!SteamLobbyManager.IsSteamServer)
+            {
+                username = playerNumber switch
+                {
+                    1 => "Host",
+                    2 => "TheGuy42",
+                    3 => "IAmAKnight",
+                    4 => "xXSlimeKillr",
+                    _ => username
+                };
+            }
             
             if (!UIEnabled) return;
 

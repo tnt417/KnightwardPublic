@@ -31,6 +31,7 @@ namespace TonyDev.Game.UI.Menu.MainMenu
             _hostClicked = true;
             
             var customNetManager = NetworkManager.singleton as CustomNetworkManager;
+            
             if (customNetManager != null)
             {
                 TransitionHost(customNetManager).Forget();
@@ -50,7 +51,7 @@ namespace TonyDev.Game.UI.Menu.MainMenu
             SteamLobbyManager.Singleton.ActivateJoinOverlay();
             
             var cnm = NetworkManager.singleton as CustomNetworkManager;
-            if (cnm != null) cnm.ConnectToAddress("localhost");
+            if (cnm != null && cnm.TelepathyServer) cnm.ConnectToAddress("localhost");
         }
         
         public void QuitGame()

@@ -1,12 +1,13 @@
 using System;
 using TonyDev.Game.Core.Entities;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace TonyDev.Game.Level.Decorations.Slots
 {
     public class Slot : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer slotRenderer;
+        [SerializeField] private Image slotRenderer;
 
         private SlotEntry _currentEntry;
         

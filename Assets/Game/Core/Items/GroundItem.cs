@@ -53,13 +53,12 @@ namespace TonyDev.Game.Core.Items
                         Color.red, 0.5f);
                     return;
                 }
+                
+                Debug.Log("On interact!");
 
                 if (type is InteractType.Purchase or InteractType.Pickup)
                 {
                     CmdRequestPickup(GameManager.Money);
-                    StartCoroutine(
-                        DisablePickupForSeconds(
-                            0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
                 }
                 else if (type == InteractType.Scrap)
                 {
@@ -213,6 +212,8 @@ namespace TonyDev.Game.Core.Items
         [Command(requiresAuthority = false)]
         private void CmdRequestPickup(int senderMoney, NetworkConnectionToClient sender = null)
         {
+            Debug.Log("Sender money: " + senderMoney + " Cost: " + cost + " Pickupable: " + _pickupAble + " Pickup pending: " + _pickupPending + " Sender: " + sender);
+            
             if (senderMoney < cost || !_pickupAble || _pickupPending)
                 return; //If the item is too expensive, don't allow pickup.
 
@@ -242,6 +243,8 @@ namespace TonyDev.Game.Core.Items
         [ClientRpc]
         private void RpcNotifyPickup()
         {
+            Debug.Log("Rpc pickup called!");
+            
             onPickupGlobal.Invoke();
         }
 
@@ -258,6 +261,8 @@ namespace TonyDev.Game.Core.Items
         [TargetRpc]
         private void TargetConfirmPickup(NetworkConnection target, int confirmedCost)
         {
+            Debug.Log("Target pickup called!");
+            
             GameManager.Money -= confirmedCost;
 
             var pickupAnimUI = GameObject.Instantiate(ObjectFinder.GetPrefab("pickupAnimUI"), transform.position, Quaternion.identity)

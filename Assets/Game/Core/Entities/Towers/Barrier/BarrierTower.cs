@@ -27,14 +27,13 @@ namespace TonyDev.Game.Core.Entities.Towers.Barrier
                 _wallTilemap = GameManager.Instance.arenaWallTilemap;
                 _compositeCollider = _wallTilemap.GetComponent<TilemapCollider2D>();
             }
-
+            
             _wallTilemap.SetTile(_wallTilemap.WorldToCell(gameObject.transform.position), tile);
         }
 
         public override void OnStartAuthority()
         {
             base.OnStartAuthority();
-            FullHeal();
 
             OnHurtOwner += OnHurt;
         }
@@ -61,7 +60,10 @@ namespace TonyDev.Game.Core.Entities.Towers.Barrier
 
         public void OnDestroy()
         {
-            _wallTilemap.SetTile(_wallTilemap.WorldToCell(gameObject.transform.position), null);
+            var pos = gameObject.transform.position;
+            
+            _wallTilemap.SetTile(_wallTilemap.WorldToCell(pos), null);
+            GameManager.Instance?.OccupiedTowerSpots.Remove(new Vector2Int((int)pos.x, (int)pos.y));
             GameManager.RemoveEntity(this);
         }
 

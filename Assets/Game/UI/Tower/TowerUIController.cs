@@ -3,6 +3,7 @@ using System.Linq;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.UI.Inventory;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.UI.Tower
 {
@@ -16,7 +17,7 @@ namespace TonyDev.Game.UI.Tower
 
         private ItemSlot _selectedTowerSlot;
 
-        public List<Item> towers;
+        public Dictionary<ItemSlot, Item> Towers = new();
         
         private void Awake()
         {
@@ -29,20 +30,32 @@ namespace TonyDev.Game.UI.Tower
         {
             var itemSlot = Instantiate(uiTowerPrefab, uiTowerGrid.transform).GetComponent<ItemSlot>();
             itemSlot.Item = item;
-            towers.Add(item);
-            towers = towers.OrderBy(t => t.itemName).ToList();
+            Towers.Add(itemSlot, item);
+            Towers = Towers.OrderBy(t => t.Value.itemName).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
         }
 
         public void StartPlacingTower(ItemSlot slot, Item item)
         {
-            TowerPlacementManager.Instance.TogglePlacing(item); //Start/stop placing the prefab specified
             _selectedTowerSlot = slot;
+            TowerPlacementManager.Instance.TogglePlacing(item); //Start/stop placing the prefab specified
+        }
+
+        public Sprite GetNextSprite()
+        {
+            return Towers.Count > 1 ? Towers.First(t => t.Key != _selectedTowerSlot).Value.uiSprite : null;
         }
 
         public void ConfirmPlace()
         {
-            towers.Remove(_selectedTowerSlot.Item);
+            var continuous = TowerPlacementManager.PlaceContinuous;
+            
+            Towers.Remove(_selectedTowerSlot);
             Destroy(_selectedTowerSlot.gameObject); //Called when clicking while placing. Destroys the UI tower that was just placed.
+
+            if (Towers.Count <= 0 || !continuous) return;
+            
+            var kvp = Towers.First();
+            StartPlacingTower(kvp.Key, kvp.Value);
         }
     }
 }

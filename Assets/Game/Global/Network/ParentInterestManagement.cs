@@ -15,8 +15,10 @@ namespace TonyDev.Game.Global.Network
     {
         public static ParentInterestManagement Instance;
 
-        private void OnEnable()
+        private new void OnEnable()
         {
+            base.OnEnable();
+            
             Instance = this;
         }
 

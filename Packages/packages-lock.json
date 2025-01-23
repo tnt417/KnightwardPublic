@@ -5,39 +5,37 @@
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "b0d01ca75fc890b76e81202d655d17c1f4214a18"
+      "hash": "8042b29ff87dd5506d7aad72bd6d8d7405985f27"
     },
     "com.heathen.steamworksfoundation": {
       "version": "https://github.com/heathen-engineering/SteamworksFoundation.git?path=Unity/com.heathen.steamworksfoundation",
       "depth": 0,
       "source": "git",
-      "dependencies": {
-        "com.unity.mathematics": "1.2.5"
-      },
-      "hash": "0f0516e9e0ba5842ff6bf9f800378813238d0d8c"
+      "dependencies": {},
+      "hash": "ed182e7482fd8b424dda4354de573afe9d7dc596"
     },
     "com.heathen.systemcore": {
       "version": "https://github.com/heathen-engineering/SystemCore.git?path=/com.heathen.systemcore",
       "depth": 0,
       "source": "git",
       "dependencies": {
-        "com.unity.mathematics": "1.2.5"
+        "com.unity.mathematics": "1.2.6"
       },
-      "hash": "7c126795e8dfef5b599e05cbe9f83dff55978f00"
+      "hash": "a0aa0ca0704c1319b43b661aeb1a9c2e4a4f6db5"
     },
     "com.mirror.steamworks.net": {
       "version": "https://github.com/Chykary/FizzySteamworks.git?path=/com.mirror.steamworks.net",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "f586cc33037326c47c79f388de0bfb762b10e6f8"
+      "hash": "257165926335adcebadfc741a07f1ee0ec04195a"
     },
     "com.rlabrecque.steamworks.net": {
       "version": "https://github.com/rlabrecque/Steamworks.NET.git?path=/com.rlabrecque.steamworks.net",
       "depth": 0,
       "source": "git",
       "dependencies": {},
-      "hash": "6c169a9129de81d2bd836612131617f1be82edd1"
+      "hash": "2ceddb2c35c88f069bbd8927b949a3d4eadb4e58"
     },
     "com.talecrafter.animationimporter": {
       "version": "https://github.com/talecrafter/AnimationImporter.git?path=/Assets",

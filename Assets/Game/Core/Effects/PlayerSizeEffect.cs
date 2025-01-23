@@ -17,7 +17,7 @@ namespace TonyDev.Game.Core.Effects
             }
             else
             {
-                Entity.CmdRemoveEffect(this);
+                Entity.RemoveEffect(this);
             }
         }
 

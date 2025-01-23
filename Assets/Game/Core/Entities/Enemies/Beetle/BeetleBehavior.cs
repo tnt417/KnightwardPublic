@@ -41,6 +41,8 @@ namespace TonyDev
         {
             while (Enemy.IsAlive)
             {
+                await UniTask.WaitUntil(() => FirstEnemyTarget != null);
+                
                 if (FirstEnemyTarget != null)
                 {
                     _shouldPounce = false;

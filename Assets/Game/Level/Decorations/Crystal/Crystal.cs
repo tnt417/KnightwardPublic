@@ -18,15 +18,6 @@ namespace TonyDev.Game.Level.Decorations.Crystal
             base.Awake();
         }
 
-        private void Start()
-        {
-            Init();
-
-            if (!EntityOwnership) return;
-            
-            //CmdAddEffect(new CrystalArmorEffect(), this);
-        }
-
         public Action<bool> OnVisibilityChange;
         
         private void OnBecameVisible()
@@ -67,6 +58,18 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         }
         #endregion
 
+        [Command]
+        public void CmdSetInvulnerable(bool invuln)
+        {
+            if(!isOwned)
+            {
+                Debug.LogWarning("SetInvulnerable called without ownership!");
+                return;
+            }
+            
+            invulnerable = invuln;
+        }
+        
         [GameCommand(Keyword = "ci", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled crystal invulnerability.")]
         public static void ToggleInvulnerable()
         {

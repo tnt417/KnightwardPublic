@@ -19,30 +19,18 @@ namespace TonyDev.Game.Global.Network
         private const int Port = 7777;
         
         public bool TelepathyServer => transport is TelepathyTransport;
-        
+
         public new void Start()
         {
             _lobbyCreated = false;
             maxConnections = SteamLobbyManager.MaxConnections;
 
-            var fizzy = GetComponent<FizzySteamworks>();
-            var telepathy = GetComponent<TelepathyTransport>();
-            
             if (!SteamLobbyManager.IsSteamServer)
             {
-                if (fizzy != null)
-                {
-                    Destroy(fizzy);
-                }
-                
                 InitTelepathy();
             }
             else
             {
-                if (telepathy != null)
-                {
-                    Destroy(telepathy);
-                }
                 InitFizzy();
             }
 
@@ -80,7 +68,7 @@ namespace TonyDev.Game.Global.Network
         {
             base.OnServerReady(conn);
 
-            if (IsSceneActive(GameplayScene) && SteamLobbyManager.IsSteamServer)
+            if (SceneManager.GetActiveScene().name == GameplayScene && SteamLobbyManager.IsSteamServer)
             {
                 SteamLobbyManager.Singleton.DisableJoins();
             }
@@ -90,7 +78,6 @@ namespace TonyDev.Game.Global.Network
 
         public async UniTask CreateAndHost()
         {
-            networkAddress = "localhost";
 
             if (SteamLobbyManager.IsSteamServer)
             {
@@ -104,6 +91,7 @@ namespace TonyDev.Game.Global.Network
             }
             else
             {
+                networkAddress = "localhost";
                 OnLobbyCreateSuccessful();
             }
         }

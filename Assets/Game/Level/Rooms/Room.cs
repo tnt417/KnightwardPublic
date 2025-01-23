@@ -168,8 +168,6 @@ namespace TonyDev.Game.Level.Rooms
             GameManager.OnEnemyAdd += RegisterEntityTeamListener;
             
             RoomLockCheckTask().Forget();
-            
-            CheckShouldLockDoors();
         }
 
         public int EnemyCount =>
@@ -187,7 +185,7 @@ namespace TonyDev.Game.Level.Rooms
         
         public override void OnStartClient()
         {
-            _openDoorsDictionary.Callback += OnOpenDoorsDictionaryChange;
+            _openDoorsDictionary.OnChange += OnOpenDoorsDictionaryChange;
             Player.LocalPlayerChangeIdentity += CheckRoomVisibility;
         }
         

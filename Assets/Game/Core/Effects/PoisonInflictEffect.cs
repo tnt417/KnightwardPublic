@@ -37,8 +37,15 @@ namespace TonyDev.Game.Core.Effects
                     Ticks = TickCount,
                     Frequency = TickFreq
                 };
-                
-                entity.CmdAddEffect(_lastInflictedEffects[entity], Entity);
+
+                if (entity.isOwned)
+                {
+                    entity.AddEffect(_lastInflictedEffects[entity], Entity);
+                }
+                else
+                {
+                    entity.CmdAddEffect(_lastInflictedEffects[entity], Entity);
+                }
             }
             else
             {

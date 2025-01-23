@@ -13,7 +13,6 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Serialization;
@@ -26,7 +25,7 @@ namespace TonyDev.Game.Core.Entities
     {
         public event Action OnTargetChangeOwner;
         public event Action OnTargetChangeGlobal;
-        public SyncList<GameEntity> Targets = new();
+        public readonly SyncList<GameEntity> Targets = new();
         //[SerializeReference]public GameEffectList startingEffects = new();
 
         public const float EntityTargetUpdatingRate = 0.1f;
@@ -81,15 +80,44 @@ namespace TonyDev.Game.Core.Entities
         {
             Stats.RemoveStatBonuses(source);
         }
-
-        public bool EntityOwnership => !(!hasAuthority && !isServer || this is Player.Player && !isLocalPlayer);
-
-        [Command(requiresAuthority = false)]
-        public void CmdSetHealth(float currentHealth, float maxHealth)
+        
+        [Client]
+        protected void SetNetworkHealth(float curHealth, float maxHealth)
         {
-            NetworkCurrentHealth = currentHealth;
+            if (!isOwned)
+            {
+                Debug.LogWarning("SetHealth called by non-owner!");
+                return;
+            }
+
+            NetworkCurrentHealth = curHealth;
             NetworkMaxHealth = maxHealth;
         }
+
+        public bool EntityOwnership => !(!authority && !isServer || this is Player.Player && !isLocalPlayer);
+
+        [ServerCallback]
+        protected void Start()
+        {
+            if (NetworkServer.active && this is not Player.Player)
+            {
+                netIdentity.AssignClientAuthority(NetworkServer.localConnection);
+            }
+            
+            //CmdAddEffect(new CrystalArmorEffect(), this);
+        }
+
+        public override void OnStartAuthority()
+        {
+            Init();
+        }
+        
+        // [Command(requiresAuthority = false)]
+        // public void CmdSetHealth(float currentHealth, float maxHealth)
+        // {
+        //     NetworkCurrentHealth = currentHealth;
+        //     NetworkMaxHealth = maxHealth;
+        // }
 
         public void ApplyKnockbackGlobal(Vector2 force)
         {
@@ -129,7 +157,8 @@ namespace TonyDev.Game.Core.Entities
             set
             {
                 _currentParentIdentity = CurrentParentIdentity;
-                CmdSetParentIdentity(value);
+                if (netId == 0) return;
+                SetParentIdentity(value);
             }
         }
 
@@ -140,9 +169,16 @@ namespace TonyDev.Game.Core.Entities
             OnParentIdentityChange?.Invoke(newIdentity);
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
+        //[Command(requiresAuthority = false)]
+        [Client]
+        public void SetParentIdentity(NetworkIdentity roomIdentity)
         {
+            if (!isOwned)
+            {
+                Debug.LogWarning("Set parent identity called without ownership!");
+                //return;
+            }
+            
             if (_currentParentIdentity != null)
             {
                 var oldRoom = RoomManager.Instance.GetRoomFromID(_currentParentIdentity.netId);
@@ -186,18 +222,25 @@ namespace TonyDev.Game.Core.Entities
 
         #endregion
 
-        [Command(requiresAuthority = false)]
-        public void CmdSetInvulnerable(bool invuln)
+        //[Command(requiresAuthority = false)]
+        [Client]
+        public void SetInvulnerable(bool invuln)
         {
+            if(!isOwned)
+            {
+                Debug.LogWarning("SetInvulnerable called without ownership!");
+                return;
+            }
+            
             invulnerable = invuln;
         }
         
         protected IEnumerator IntangibleForSeconds(float seconds)
         {
-            CmdSetInvulnerable(true);
+            SetInvulnerable(true);
             IsTangible = false;
             yield return new WaitForSeconds(seconds);
-            CmdSetInvulnerable(false);
+            SetInvulnerable(false);
             IsTangible = true;
         }
 
@@ -206,7 +249,7 @@ namespace TonyDev.Game.Core.Entities
             GameManager.AddEntity(this);
 
             OnAttack += () => AttackTimer = 0;
-            _effects.Callback += OnEffectsUpdated;
+            _effects.OnChange += OnEffectsUpdated;
 
             _targetUpdateTimer = Random.Range(0, EntityTargetUpdatingRate);
         }
@@ -245,7 +288,7 @@ namespace TonyDev.Game.Core.Entities
                 Attack();
             }
             
-            if (this is Player.Player) return;
+            if (this is Player.Player || !isOwned) return;
             
             _targetUpdateTimer += Time.deltaTime;
 
@@ -253,12 +296,12 @@ namespace TonyDev.Game.Core.Entities
             {
                 if (CurrentParentIdentity == null)
                 {
-                    CmdUpdateTarget();
+                    UpdateTargets();
                 }
                 else
                 {
                     var room = RoomManager.Instance.GetRoomFromID(CurrentParentIdentity.netId);
-                    if(room != null && room.PlayerCount > 0) CmdUpdateTarget();
+                    if(room != null && room.PlayerCount > 0) UpdateTargets();
                 }
 
                 _targetUpdateTimer -= EntityTargetUpdatingRate;
@@ -268,25 +311,30 @@ namespace TonyDev.Game.Core.Entities
         protected void Init()
         {
             if (!EntityOwnership) return;
-
+            
             Stats.ReadOnly = false;
 
+            Stats.OnStatsChanged += UpdateStats;
+            Stats.OnStatsChanged += () =>
+            {
+                SetNetworkHealth(CurrentHealth, MaxHealth);
+                //CmdSetHealth(CurrentHealth, MaxHealth);
+            };
+            
             foreach (var sb in baseStats)
             {
                 Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, "GameEntity");
             }
 
-            Stats.OnStatsChanged += UpdateStats;
-            Stats.OnStatsChanged += () =>
-            {
-                CmdSetHealth(CurrentHealth, MaxHealth);
-            };
-
             UpdateStats();
 
-            CmdUpdateTarget();
+            UpdateTargets();
             
-            OnHealthChangedOwner += (value) => CmdSetHealth(value, MaxHealth);
+            OnHealthChangedOwner += (value) =>
+            {
+                SetNetworkHealth(value, MaxHealth);
+                //CmdSetHealth(value, MaxHealth);
+            };
             OnHealthChangedOwner?.Invoke(MaxHealth);
 
             /*if (startingEffects is {gameEffects: { }})
@@ -305,7 +353,7 @@ namespace TonyDev.Game.Core.Entities
 
         private void UpdateStats()
         {
-            if (!NetworkClient.active) return;
+            //if (Stats.ReadOnly) return;
             CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
         }
 
@@ -356,14 +404,23 @@ namespace TonyDev.Game.Core.Entities
             }
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdUpdateTarget() //Updates entity's target and returns it.
+        //[Command(requiresAuthority = false)]
+        [Client]
+        public void UpdateTargets() //Updates entity's target and returns it.
         {
             /* Valid targets match our targetTag variable, match our targetTeam variable, do not target invulnerable or dead things (unless this object is a tower),
              * and only attack things within 10 tiles unless it is the crystal
              * 
              */
 
+            if (!isOwned)
+            {
+                Debug.LogWarning("Update targets called from non-owner!");
+                return;
+            }
+
+            if (this is Player.Player) return;
+            
             var range = targetRange;
 
             var myPos = transform.position;
@@ -406,47 +463,62 @@ namespace TonyDev.Game.Core.Entities
 
         #region Effects
 
-        private SyncList<GameEffect> _effects = new();
+        private readonly SyncList<GameEffect> _effects = new();
         public List<GameEffect> EffectsReadonly => _effects.ToList();
         
-        private void OnEffectsUpdated(SyncList<GameEffect>.Operation op, int index, GameEffect oldEffect,
-            GameEffect newEffect)
+        private void OnEffectsUpdated(SyncList<GameEffect>.Operation op, int index, GameEffect effect)
         {
             switch (op)
             {
                 case SyncList<GameEffect>.Operation.OP_ADD:
-                    newEffect.Entity = this;
-                    if (EntityOwnership) newEffect.OnAddOwner();
-                    newEffect.OnAddClient();
+                    effect.Entity = this;
+                    if(isServer) effect.OnAddServer();
+                    if (EntityOwnership) effect.OnAddOwner();
+                    effect.OnAddClient();
                     break;
                 case SyncList<GameEffect>.Operation.OP_REMOVEAT:
-                    if (EntityOwnership) oldEffect.OnRemoveOwner();
-                    oldEffect.OnRemoveClient();
+                    if (GameEffect.GameEffectIdentifiers.ContainsKey(effect.EffectIdentifier))
+                        GameEffect.GameEffectIdentifiers.Remove(effect.EffectIdentifier);
+                    if(isServer) effect.OnRemoveServer();
+                    if (EntityOwnership) effect.OnRemoveOwner();
+                    effect.OnRemoveClient();
                     break;
             }
         }
 
+        //[Command(requiresAuthority = false)]
+        public void AddEffect(GameEffect effect, GameEntity source)
+        {
+            if (!EntityOwnership)
+            {
+                Debug.LogWarning("Add effect called from non-owner! Calling command instead");
+                CmdAddEffect(effect, source);
+                return;
+            }            
+            
+            effect.Entity = this;
+            effect.Source = source;
+
+            _effects.Add(effect);
+        }
+        
         [Command(requiresAuthority = false)]
         public void CmdAddEffect(GameEffect effect, GameEntity source)
         {
-            effect.Entity = this;
-            effect.Source = this;
-
-            _effects.Add(effect);
-            effect.OnAddServer();
+            AddEffect(effect, source);
         }
-
-        [Command(requiresAuthority = false)]
-        public void CmdRemoveEffect(GameEffect effect)
+        
+        public void RemoveEffect(GameEffect effect)
         {
+            if (!EntityOwnership)
+            {
+                Debug.LogWarning("Remove effect called from non-owner!");
+                return;
+            }
+            
             if (!_effects.Contains(effect)) return;
 
             _effects.Remove(effect);
-
-            if (GameEffect.GameEffectIdentifiers.ContainsKey(effect.EffectIdentifier))
-                GameEffect.GameEffectIdentifiers.Remove(effect.EffectIdentifier);
-
-            effect.OnRemoveServer();
         }
 
         public bool HasEffect(GameEffect effect) => _effects.Contains(effect);
@@ -461,7 +533,7 @@ namespace TonyDev.Game.Core.Entities
 
             foreach (var ge in removals)
             {
-                CmdRemoveEffect(ge);
+                RemoveEffect(ge);
             }
         }
 
@@ -473,7 +545,7 @@ namespace TonyDev.Game.Core.Entities
 
             foreach (var ge in removals)
             {
-                CmdRemoveEffect(ge);
+                RemoveEffect(ge);
             }
         }
 

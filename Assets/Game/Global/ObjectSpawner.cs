@@ -95,7 +95,7 @@ namespace TonyDev.Game.Global
 
             var tower = go.GetComponent<Tower>();
 
-            tower.CmdSetParentIdentity(parent);
+            tower.SetParentIdentity(parent);
             tower.CmdSetTowerItem(towerItem);
         }
 
@@ -162,13 +162,11 @@ namespace TonyDev.Game.Global
             var enemy = Instantiate(prefab, position,
                 Quaternion.identity).GetComponent<Enemy>();
 
+            NetworkServer.Spawn(enemy.gameObject, NetworkServer.localConnection);
+
             enemy.CurrentParentIdentity = parent;
-
-            NetworkServer.Spawn(enemy.gameObject);
-
-            enemy.netIdentity.AssignClientAuthority(NetworkServer.localConnection);
-
-            enemy.CmdSetParentIdentity(parent);
+            
+            enemy.SetParentIdentity(parent);
 
             return enemy;
         }

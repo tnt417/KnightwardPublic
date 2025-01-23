@@ -16,9 +16,11 @@ namespace TonyDev.Game.Core.Entities.Towers
         [SerializeField] private ProjectileData[] projectileData; //Prefab spawned upon fire
         //
 
+        public bool targetFullHp = true;
+
         public string fireSound;
 
-        private void Start()
+        private new void Start()
         {
             base.Start();
             
@@ -32,7 +34,7 @@ namespace TonyDev.Game.Core.Entities.Towers
         {
             var rpcSent = false;
             
-            foreach (var direction in Targets.Where(t => t != null).Select(t =>
+            foreach (var direction in Targets.Where(t => t != null && (targetFullHp || !Mathf.Approximately(t.CurrentHealth, t.MaxHealth))).Select(t =>
                 (t.transform.position - transform.position).normalized))
             {
                 foreach (var projData in projectileData)

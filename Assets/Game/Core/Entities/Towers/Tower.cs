@@ -133,9 +133,9 @@ namespace TonyDev.Game.Core.Entities.Towers
             _interactableButton.Active = false;
         }
 
-        protected void Start()
+        protected new void Start()
         {
-            Init();
+            base.Start();
 
             var coll = gameObject.AddComponent<BoxCollider2D>();
             coll.size = new Vector2(0.2f, 0.2f);
@@ -151,13 +151,15 @@ namespace TonyDev.Game.Core.Entities.Towers
                 }
             }
 
-            durability = MaxHealth;
-
             foreach (var ge in myItem.itemEffects)
             {
-                CmdAddEffect(ge, this);
+                AddEffect(ge, this);
             }
 
+            durability = (int)Stats.GetStat(Stat.Health);
+            SetNetworkHealth(durability, MaxHealth);
+            //CmdSetHealth(durability, MaxDurability);
+            
             OnHealthChangedOwner += HpChangedHook;
         }
 
@@ -174,8 +176,9 @@ namespace TonyDev.Game.Core.Entities.Towers
         public override Team Team => Team.Player;
         public override bool IsInvulnerable => true;
         public override bool IsTangible => false;
-        public int MaxDurability => (int) myItem.statBonuses.First(sb => sb.stat == Stat.Health && sb.source != DurabilityNegationSource).strength;
-
+        public int MaxDurability => (int) myItem.statBonuses.FirstOrDefault(sb => sb.stat == Stat.Health && sb.source != DurabilityNegationSource).strength;
+        public override int MaxHealth => MaxDurability;
+        
         public const int InfiniteDurabilityThreshold = 1000000;
         
         [Command(requiresAuthority = false)]

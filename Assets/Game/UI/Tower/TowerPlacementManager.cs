@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
+using TMPro;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
+using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -21,10 +23,13 @@ namespace TonyDev.Game.UI.Tower
         //Editor variables
         [SerializeField] private GameObject towerPlacementIndicator;
 
-        [SerializeField] private Image rangeIndicator;
+        [SerializeField] private SpriteRenderer rangeIndicator;
+        
+        [SerializeField] private SpriteRenderer nextIndicator;
+        [SerializeField] private TMP_Text nextText;
 
         //
-        private bool Placing => towerPlacementIndicator.activeSelf;
+        public bool Placing => towerPlacementIndicator.activeSelf;
         private Camera _mainCamera;
         private Item _selectedTowerItem;
         private SpriteRenderer _indicatorSprite;
@@ -32,6 +37,7 @@ namespace TonyDev.Game.UI.Tower
 
         public List<GamePhase> placeablePhases = new();
         private bool CanPlace => placeablePhases.Contains(GameManager.GamePhase);
+        public static bool PlaceContinuous => Keyboard.current.shiftKey.isPressed;
 
         private void Start()
         {
@@ -64,6 +70,8 @@ namespace TonyDev.Game.UI.Tower
         {
             if (!CanPlace) towerPlacementIndicator.SetActive(false);
             if (!Placing) return; //Don't move on if not placing
+            
+            nextText.text = PlaceContinuous ? "NEXT" : "[SHIFT]";
 
             var mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //Get the mouse position
             towerPlacementIndicator.transform.position =
@@ -106,6 +114,9 @@ namespace TonyDev.Game.UI.Tower
                 towerPlacementIndicator.GetComponentInChildren<SpriteRenderer>(); //Get the indicator's SpriteRenderer
             _indicatorCollider = towerPlacementIndicator.GetComponent<Collider2D>();
 
+            nextIndicator.sprite = TowerUIController.Instance.GetNextSprite();
+            nextIndicator.gameObject.SetActive(nextIndicator.sprite != null);
+
             _indicatorSprite.sprite = item.uiSprite; //Update the indicator's sprite to be the tower's ui sprite
         }
 
@@ -118,17 +129,23 @@ namespace TonyDev.Game.UI.Tower
             var floorAtSpot = FindObjectsOfType<Tilemap>().Where(tm => tm.gameObject.CompareTag("Floor"))
                 .Any(tm => tm.GetTile(tm.WorldToCell(pos)) != null);
 
+            var distXFromCrystal = Mathf.Abs(pos.x - Crystal.Instance.transform.position.x);
+            var distYFromCrystal = Mathf.Abs(pos.y - Crystal.Instance.transform.position.y);
+
+            if (distXFromCrystal <= 2 && distYFromCrystal <= 1) return false;
+
             if (!floorAtSpot) return false;
 
+            // Jan 15 2025: removed this because it is really annoying when trying to place with enemies
             //Can't place if stuck in crystal or other non-trigger collider
-            var contacts = new Collider2D[100];
-            _indicatorCollider.GetContacts(contacts);
-
-            if (contacts.Any(c => c != null && !c.isTrigger)) return false;
+            // var contacts = new Collider2D[100];
+            // _indicatorCollider.GetContacts(contacts);
+            //
+            // if (contacts.Any(c => c != null && !c.isTrigger)) return false;
 
             return true;
         }
-
+        
         //Spawns a tower at the indicator position and exits from placing mode
         private async UniTask SpawnTower()
         {
@@ -142,9 +159,10 @@ namespace TonyDev.Game.UI.Tower
             SoundManager.PlaySound("interact", 0.5f, pos);
 
             if (!success) return;
-
-            TowerUIController.Instance.ConfirmPlace();
+            
             towerPlacementIndicator.SetActive(false);
+            
+            TowerUIController.Instance.ConfirmPlace();
         }
     }
 }

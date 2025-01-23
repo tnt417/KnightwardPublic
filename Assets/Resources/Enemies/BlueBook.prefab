@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 48320255391279908, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -123,6 +124,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: -9032164202199686955, guid: 04f3b5a37522a7f45a1121132b637e41, type: 3}
+    - target: {fileID: 7080094185981754643, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
       propertyPath: m_Name
       value: BlueBook
@@ -181,6 +186,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3803095840298935939, guid: c4673581ac60785459b6805764360ee4, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3493447446544982924}
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7747560100134716814}
   m_SourcePrefab: {fileID: 100100000, guid: c4673581ac60785459b6805764360ee4, type: 3}
 --- !u!1 &1591561561550776636 stripped
 GameObject:
@@ -201,6 +215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
+  inheritRotation: 0
 --- !u!114 &7747560100134716814
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -58,7 +58,7 @@ namespace TonyDev.Game.Core.Effects
         private void Trigger()
         {
             _appliedEffect = new InvisibilityEffect();
-            Entity.CmdAddEffect(_appliedEffect, Source);
+            Entity.AddEffect(_appliedEffect, Source);
             Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.MoveSpeed, MoveSpeedBonus, "PhantomCloak");
             Entity.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Damage, AttackBonus, "PhantomCloak");
         }
@@ -77,7 +77,7 @@ namespace TonyDev.Game.Core.Effects
         {
             if (_appliedEffect != null)
             {
-                Entity.CmdRemoveEffect(_appliedEffect);
+                Entity.RemoveEffect(_appliedEffect);
                 Entity.Stats.RemoveStatBonuses("PhantomCloak");
                 _appliedEffect = null;
             }

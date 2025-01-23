@@ -5,6 +5,7 @@ using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Decorations.Crystal;
+using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -161,7 +162,7 @@ namespace TonyDev.Game.Global
 
             _lagBehind = Vector2.ClampMagnitude(_lagBehind, 0.1f * playerSpeed);
 
-            var playerPos = (Vector2) PlayerTransform.position + _lagBehind;
+            var playerPos = (Vector2) PlayerTransform.position + (TowerPlacementManager.Instance.Placing ? Vector2.zero : _lagBehind);
 
             if (_fixateNext)
             {
@@ -173,8 +174,9 @@ namespace TonyDev.Game.Global
                 return;
             }
             
-            var trackCrystal = _viewCrystal || GameManager.Instance.doCrystalFocusing;
+            var trackCrystal = (_viewCrystal && !TowerPlacementManager.Instance.Placing) || GameManager.Instance.doCrystalFocusing;
             Vector2 newPos;
+            
             if (GameManager.GamePhase == GamePhase.Dungeon &&
                 trackCrystal) //This is done to prevent me from being dizzy.
             {

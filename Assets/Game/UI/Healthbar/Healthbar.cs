@@ -68,7 +68,7 @@ namespace TonyDev.Game.UI.Healthbar
                 
                 if(decayImage != null) decayImage.color = willKill ? Color.red : Color.gray;
             }
-            else
+            else if (AttachedDamageable != null)
             {
                 healthSlider.maxValue = AttachedDamageable.MaxHealth; //Update the slider values.
                 healthSlider.value = AttachedDamageable.CurrentHealth;

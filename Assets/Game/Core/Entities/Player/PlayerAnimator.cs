@@ -131,12 +131,6 @@ namespace TonyDev.Game.Core.Entities.Player
             playerAnimator.Play(playerAnimator.GetCurrentAnimatorStateInfo(0).shortNameHash, 0, normalized);
         }
 
-        [Command(requiresAuthority = false)]
-        private void CmdSetWeaponSpriteName(string newName)
-        {
-            _weaponSpriteName = newName;
-        }
-
         public override void OnStartClient()
         {
             weaponSpriteRenderer.sprite = ObjectFinder.GetSprite("broadsword_hand");
@@ -149,8 +143,14 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public void SetWeaponAnimSprite(string spriteName)
         {
+            if (!isOwned)
+            {
+                Debug.LogWarning("SetWeaponAnimSprite called on non-owner!");
+                return;
+            }
+            
             weaponSpriteRenderer.sprite = ObjectFinder.GetSprite(spriteName);
-            CmdSetWeaponSpriteName(spriteName);
+            _weaponSpriteName = spriteName;
         }
         
         private int PlayerSpriteIndex => playerAnimationValues.spriteIndex;
@@ -163,10 +163,10 @@ namespace TonyDev.Game.Core.Entities.Player
             get => _playerAnimState;
             set
             {
-                if (_playerAnimState == value || !hasAuthority) return;
+                if (_playerAnimState == value || !authority) return;
                 DirectionChanged(_playerAnimState, value);
                 _playerAnimState = value;
-                CmdSetAnimState(_playerAnimState);
+                SetAnimState(_playerAnimState);
             }
         }
         //
@@ -187,8 +187,8 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public override void OnStartAuthority()
         {
-            CmdSetSkin(CustomRoomPlayer.Local.skin);
-            CmdSetPlayerNum(CustomRoomPlayer.Local.playerNumber);
+            SetSkin(CustomRoomPlayer.Local.skin);
+            SetPlayerNum(CustomRoomPlayer.Local.playerNumber);
         }
 
         private void OnSkinChanged(PlayerSkin oldSkin, PlayerSkin newSkin)
@@ -203,15 +203,29 @@ namespace TonyDev.Game.Core.Entities.Player
             }
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdSetSkin(PlayerSkin skin)
+        [Client]
+        public void SetSkin(PlayerSkin skin)
         {
+            if (!isOwned)
+            {
+                Debug.LogWarning("Called without ownership!");
+                return;
+            }
+
+            OnSkinChanged(default, skin);
+            
             _skin = skin;
         }
         
-        [Command(requiresAuthority = false)]
-        public void CmdSetPlayerNum(int num)
+        [Client]
+        public void SetPlayerNum(int num)
         {
+            if (!isOwned)
+            {
+                Debug.LogWarning("Called without ownership!");
+                return;
+            }
+            
             _playerNum = num;
         }
 
@@ -299,8 +313,9 @@ namespace TonyDev.Game.Core.Entities.Player
             playerAnimator.Play("NotShake", 3);
         }
         
-        private void Start()
+        public override void OnStartLocalPlayer()
         {
+            base.OnStartServer();
             PlayerSpawnAnim(true, true).Forget();
         }
         
@@ -397,9 +412,16 @@ namespace TonyDev.Game.Core.Entities.Player
             weaponTransform.localScale = new Vector2(flip ? -1 : 1, 1);
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdSetAnimState(PlayerAnimState animState)
+        //[Command(requiresAuthority = false)]
+        [Client]
+        public void SetAnimState(PlayerAnimState animState)
         {
+            if (!isOwned)
+            {
+                Debug.LogWarning("Player anim state set without ownership!");
+                return;
+            }
+            
             _playerAnimState = animState;
         }
 

@@ -55,7 +55,7 @@ namespace TonyDev.Game.Level.Rooms
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (!_hostInterestVisibility && NetworkClient.isHostClient) return;
+            if (!_hostInterestVisibility && NetworkClient.activeHost) return;
             var player = other.GetComponent<Player>();
             if (player != null && player == Player.LocalInstance && other.isTrigger && IsOpen &&
                 player.CurrentParentIdentity == GetComponentInParent<NetworkIdentity>())

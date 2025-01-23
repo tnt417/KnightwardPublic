@@ -34,7 +34,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
             //GameEffect.RegisterEffect(_broadswordParticleEffect);
             Player.LocalInstance.playerAnimator.attackAnimationName = "Attack";
             
-            Entity.CmdAddEffect(_broadswordParticleEffect, Entity);
+            Entity.AddEffect(_broadswordParticleEffect, Entity);
         }
 
         private void PlaySound()
@@ -102,7 +102,7 @@ namespace TonyDev.Game.Core.Items.Weapon.Broadsword
             Entity.OnTryHurtInvulnerableOwner -= TryDeflect;
             Entity.OnHurtOwner -= ResetDeflects;
             Entity.OnAttack -= PlaySound;
-            Entity.CmdRemoveEffect(_broadswordParticleEffect);
+            Entity.RemoveEffect(_broadswordParticleEffect);
         }
 
         protected override void OnAbilityActivate()

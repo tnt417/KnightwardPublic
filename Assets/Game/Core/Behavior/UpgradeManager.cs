@@ -154,7 +154,7 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     if (serverCall)
                     {
-                        Crystal.Instance.CmdAddEffect(new AreaBuffEffect()
+                        Crystal.Instance.AddEffect(new AreaBuffEffect()
                         {
                             Radius = 7f, StatBonuses = new[]
                             {
@@ -173,7 +173,7 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     if (serverCall)
                     {
-                        Crystal.Instance.CmdAddEffect(new AreaBuffEffect()
+                        Crystal.Instance.AddEffect(new AreaBuffEffect()
                         {
                             Radius = 7f, StatBonuses = new[]
                             {
@@ -191,7 +191,7 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     if (serverCall)
                     {
-                        Crystal.Instance.CmdAddEffect(new PercentRegenEffect()
+                        Crystal.Instance.AddEffect(new PercentRegenEffect()
                         {
                             PercentRegen = 0.002f
                         }, Crystal.Instance);
@@ -205,7 +205,7 @@ namespace TonyDev.Game.Core.Behavior
                 {
                     if (serverCall)
                     {
-                        Crystal.Instance.CmdAddEffect(new AreaRepairEffect()
+                        Crystal.Instance.AddEffect(new AreaRepairEffect()
                         {
                             Cooldown = 5,
                             Percent = 0.05f,

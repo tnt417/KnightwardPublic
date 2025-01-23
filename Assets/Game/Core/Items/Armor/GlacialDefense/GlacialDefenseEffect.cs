@@ -36,7 +36,7 @@ namespace TonyDev
 
             if (_frozenEntities.ContainsKey(ge))
             {
-                ge.CmdRemoveEffect(_frozenEntities[ge]);
+                ge.RemoveEffect(_frozenEntities[ge]);
                 _frozenEntities.Remove(ge);
 
                 ge.CmdRemoveBonusesFromSource(EffectIdentifier);
@@ -75,20 +75,20 @@ namespace TonyDev
                     {
                         OverridePrefab = SlowEffectKey
                     };
-                    ge.CmdAddEffect(trail, Entity);
+                    ge.AddEffect(trail, Entity);
                     _slowedEntities.Add(ge, trail);
                 }
                 else if (!_frozenEntities.ContainsKey(ge) && ge.Stats.GetStatBonuses(Stat.MoveSpeed, false)
                         .Count(sb => sb.source == EffectIdentifier) >= 3)
                 {
-                    ge.CmdRemoveEffect(_slowedEntities[ge]);
+                    ge.RemoveEffect(_slowedEntities[ge]);
 
                     var trail = new ParticleTrailEffect()
                     {
                         OverridePrefab = FrozenEffectKey
                     };
 
-                    ge.CmdAddEffect(trail, Entity);
+                    ge.AddEffect(trail, Entity);
 
                     _slowedEntities.Remove(ge);
                     _frozenEntities.Add(ge, trail);

@@ -17,7 +17,7 @@ namespace TonyDev
     {
         public static UnlocksManager Instance;
 
-        [NonSerialized] public HashSet<string> Unlocks = new();
+        [NonSerialized] public List<string> Unlocks = new();
 
         [NonSerialized] public List<ItemData> unlockedItems = new();
         public static List<ItemData> UnlockedItems => Instance.unlockedItems;
@@ -40,13 +40,13 @@ namespace TonyDev
 
             if (PlayerPrefs.HasKey(UnlocksKey))
             {
-                Unlocks = JsonConvert.DeserializeObject<HashSet<string>>(
+                Unlocks = JsonConvert.DeserializeObject<List<string>>(
                     PlayerPrefs.GetString(UnlocksKey));
             }
             
             if (Unlocks == null || Unlocks.Count == 0)
             {
-                Unlocks = new HashSet<string>();
+                Unlocks = new List<string>();
             }
 
             UnlockAllItems(); //TODO: Comment this out if adding item unlocking

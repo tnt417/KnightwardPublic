@@ -73,7 +73,7 @@ namespace TonyDev.Game.Level
         [ServerCallback]
         public void MoveEnemyToWave(Enemy enemy)
         {
-            enemy.CmdSetParentIdentity(null);
+            enemy.SetParentIdentity(null);
             enemy.transform.position = GetSpawnpoint();
         }
 
@@ -87,7 +87,7 @@ namespace TonyDev.Game.Level
         [ServerCallback]
         private void Update()
         {
-            if (GameManager.Instance == null || _paused) return;
+            if (GameManager.Instance == null || _paused || !NetworkClient.ready) return;
 
             _waveTimer += Time.deltaTime * Timer.TickSpeedMultiplier; // * BreakPassingMultiplier; //Tick the wave timer
 

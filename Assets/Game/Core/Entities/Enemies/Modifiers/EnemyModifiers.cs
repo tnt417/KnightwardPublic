@@ -31,7 +31,7 @@ namespace TonyDev.Game.Core.Entities.Enemies.Modifiers
             if (Random.Range(0, 1) > PercentEnemiesSpecial) return; //If it fails the roll, do nothing.
             
             //Otherwise add modifiers
-            enemy.CmdAddEffect(new ExplosiveDeathEffect()
+            enemy.AddEffect(new ExplosiveDeathEffect()
             {
                 explodeHealthProportion = 0.2f,
                 explodeRadius = 2f

@@ -26,7 +26,7 @@ namespace TonyDev.Game.Core.Effects
         {
             if (Time.time > _expireTime)
             {
-                Entity.CmdRemoveEffect(this);
+                Entity.RemoveEffect(this);
             }
         }
     }

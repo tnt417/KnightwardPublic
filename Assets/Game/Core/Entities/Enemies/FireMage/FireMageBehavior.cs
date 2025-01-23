@@ -48,6 +48,8 @@ namespace TonyDev
                     
                     for (int i = 0; i < 3; i++)
                     {
+                        if (initialTarget == null) break;
+                        
                         // Record the initial position
                         var targetPosStart = initialTarget.position;
 

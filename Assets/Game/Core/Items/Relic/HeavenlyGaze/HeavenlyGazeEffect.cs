@@ -39,14 +39,14 @@ namespace TonyDev
 
             if (_highlightedEnemy != null)
             {
-                _highlightedEnemy.CmdRemoveEffect(_vfx);
+                _highlightedEnemy.RemoveEffect(_vfx);
             }
 
             if (newHighlightedEnemy == null) return;
 
             _highlightedEnemy = newHighlightedEnemy;
 
-            _highlightedEnemy.CmdAddEffect(_vfx = new ParticleTrailEffect(), Entity);
+            _highlightedEnemy.AddEffect(_vfx = new ParticleTrailEffect(), Entity);
 
             // Increase the player's next attack damage against the highlighted enemy
             Entity.OnDamageOther += IncreaseDamage;
@@ -56,7 +56,7 @@ namespace TonyDev
         {
             base.OnRemoveOwner();
             // Remove the highlight from the enemy and the OnNextAttack event
-            if(_vfx != null) _highlightedEnemy.CmdRemoveEffect(_vfx);
+            if(_vfx != null) _highlightedEnemy.RemoveEffect(_vfx);
             Entity.OnDamageOther -= IncreaseDamage;
         }
 
@@ -70,7 +70,7 @@ namespace TonyDev
                 target.CmdDamageEntity(damage * (DamageMult-1) * (wasCrit ? 2 : 1), wasCrit, null, false, DamageType.Default);
             }
             
-            if(_highlightedEnemy != null) _highlightedEnemy.CmdRemoveEffect(_vfx);
+            if(_highlightedEnemy != null) _highlightedEnemy.RemoveEffect(_vfx);
 
             Entity.OnDamageOther -= IncreaseDamage;
         }

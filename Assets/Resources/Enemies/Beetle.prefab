@@ -24,13 +24,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7316027935704092990}
+  serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: -0.18, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2329739912400454220}
-  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5726748515536175969
 SpriteRenderer:
@@ -49,6 +49,9 @@ SpriteRenderer:
   m_ReflectionProbeUsage: 1
   m_RayTracingMode: 0
   m_RayTraceProcedural: 0
+  m_RayTracingAccelStructBuildFlagsOverride: 0
+  m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -89,6 +92,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 48320255391279908, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -248,7 +252,7 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7080094185981754643, guid: c4673581ac60785459b6805764360ee4, type: 3}
-      propertyPath: m_Materials.Array.data[0]
+      propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 7365463a3c7759b459c8461c58407a41, type: 2}
     - target: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -310,6 +314,21 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 7080094185981754643, guid: c4673581ac60785459b6805764360ee4, type: 3}
     - {fileID: 7080094185981754642, guid: c4673581ac60785459b6805764360ee4, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5776122630287784441}
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1336656054451656487}
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3390096103853825705}
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4818311969024668957}
   m_SourcePrefab: {fileID: 100100000, guid: c4673581ac60785459b6805764360ee4, type: 3}
 --- !u!1 &2329739912400454215 stripped
 GameObject:
@@ -318,7 +337,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!95 &1336656054451656487
 Animator:
-  serializedVersion: 4
+  serializedVersion: 7
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -332,10 +351,12 @@ Animator:
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &3390096103853825705
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,12 +381,13 @@ MonoBehaviour:
     attackData:
       damageMultiplier: 0.5
       knockbackMultiplier: 1
-      hitboxRadius: 0
+      hitboxRadius: 0.05
       team: 0
       destroyOnApply: 1
       destroyOnCollideWall: 1
       lifetime: 1.5
       spawnOnDestroyKey: 
+      inheritRotationOnSpawn: 0
       ignoreInvincibility: 0
       inflictEffects:
         gameEffects: []
@@ -395,6 +417,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
+  inheritRotation: 0
 --- !u!4 &2329739912400454220 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7080094185981754655, guid: c4673581ac60785459b6805764360ee4, type: 3}

@@ -153,7 +153,7 @@ namespace TonyDev.Game.Global
         {
             foreach (var e in Entities.Where(e => e is Enemy))
             {
-                e.CmdUpdateTarget();
+                e.UpdateTargets();
             }
         }
 
@@ -293,7 +293,7 @@ namespace TonyDev.Game.Global
             projectiles = projectiles.Where(go => go != null).ToList();
         }
 
-        public SyncList<Vector2Int> OccupiedTowerSpots = new();
+        public readonly SyncList<Vector2Int> OccupiedTowerSpots = new();
 
         [SyncVar] private int _maxTowers = 100; //3;
 
@@ -342,7 +342,7 @@ namespace TonyDev.Game.Global
                 break;
             }
 
-            await UniTask.WaitUntil(() => TowerUIController.Instance.towers.Contains(pickingUpItem));
+            await UniTask.WaitUntil(() => TowerUIController.Instance.Towers.ContainsValue(pickingUpItem));
 
             return SpawnTower(towerItem, pos, parent);
         }
@@ -589,7 +589,7 @@ namespace TonyDev.Game.Global
             RoomManager.Instance.DeactivateRoomPhase();
             GamePhase = GamePhase.Arena;
             Player.LocalInstance.gameObject.transform.position = arenaSpawnPos;
-            CmdReTargetEnemies();
+            //CmdReTargetEnemies();
             RoomManager.OnActiveRoomChanged.Invoke();
         }
 
@@ -652,7 +652,7 @@ namespace TonyDev.Game.Global
         {
             RoomManager.Instance.TeleportPlayerToStart(); //Move the player to the starting room and activate it
             GamePhase = GamePhase.Dungeon;
-            CmdReTargetEnemies();
+            //CmdReTargetEnemies();
         }
 
         private bool _busyRegen;

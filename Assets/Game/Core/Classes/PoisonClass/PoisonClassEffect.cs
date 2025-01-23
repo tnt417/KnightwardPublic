@@ -49,7 +49,7 @@ namespace TonyDev
         private void OnDamageOther(float dmg, GameEntity entity, bool crit, DamageType damageType)
         { 
             if (damageType == DamageType.DoT || entity == null) return;
-            entity.CmdAddEffect(new PoisonEffect
+            entity.AddEffect(new PoisonEffect
             {
                 Damage = dmg / 20, Frequency = 1f, Ticks = 20
             }, Entity);

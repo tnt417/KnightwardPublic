@@ -38,7 +38,7 @@ namespace TonyDev.Game.Core.Effects
             _nextCycleTime = Time.time + CycleCd;
             
             _trailEffect = new ParticleTrailEffect();
-            Entity.CmdAddEffect(_trailEffect, Entity);
+            Entity.AddEffect(_trailEffect, Entity);
             _trailEffect.SetVisible(false);
 
             Entity.OnDamageOther += TryLeech;
@@ -52,7 +52,7 @@ namespace TonyDev.Game.Core.Effects
         {
             _trailEffect.SetVisible(false);
             ClearEffects();
-            Entity.CmdRemoveEffect(_trailEffect);
+            Entity.RemoveEffect(_trailEffect);
         }
 
         private SpeedEffect _speedEffect;
@@ -117,14 +117,14 @@ namespace TonyDev.Game.Core.Effects
                 Ticks = Ticks
             };
 
-            other.CmdAddEffect(_burnEffect, Entity);
+            other.AddEffect(_burnEffect, Entity);
         }
 
         private void InflictSlow(float dmg, GameEntity other, bool crit, DamageType dt)
         {
             if (dmg <= 0) return;
             
-            other.CmdRemoveEffect(_speedEffect);
+            other.RemoveEffect(_speedEffect);
             
             _speedEffect = new SpeedEffect
             {
@@ -133,7 +133,7 @@ namespace TonyDev.Game.Core.Effects
                 Source = Entity
             };
 
-            other.CmdAddEffect(_speedEffect, Entity);
+            other.AddEffect(_speedEffect, Entity);
         }
 
         protected void TryLeech(float dmg, GameEntity other, bool isCrit, DamageType dt)

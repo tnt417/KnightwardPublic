@@ -39,7 +39,7 @@ namespace TonyDev.Game.Core.Items.Relics.Stopwatch
             
             foreach (var ge in inRange)
             {
-                ge.CmdAddEffect(new StatBuffEffect()
+                ge.AddEffect(new StatBuffEffect()
                 {
                     Duration = 0.1f,
                     StatBonuses = new []
@@ -57,7 +57,7 @@ namespace TonyDev.Game.Core.Items.Relics.Stopwatch
                     VisibleGlobal = true
                 };
                 
-                ge.CmdAddEffect(particleEffect, Entity);
+                ge.AddEffect(particleEffect, Entity);
                 
                 Trails.Add(ge, particleEffect);
             }
@@ -66,7 +66,7 @@ namespace TonyDev.Game.Core.Items.Relics.Stopwatch
 
             foreach (var ge in scan.Where(ge => !inRange.Contains(ge) && Trails.ContainsKey(ge)))
             {
-                ge.CmdRemoveEffect(Trails[ge]);
+                ge.RemoveEffect(Trails[ge]);
                 Trails.Remove(ge);
             }
             

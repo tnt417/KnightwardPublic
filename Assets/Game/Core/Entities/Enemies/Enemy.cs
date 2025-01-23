@@ -34,9 +34,7 @@ namespace TonyDev.Game.Core.Entities.Enemies
             
             InitContactDamage(enemyData.contactAttackData);
             
-            Init();
-            
-            if(EntityOwnership) CmdAddEffect(new EnemyScalingEffect(), this);
+            if(EntityOwnership) AddEffect(new EnemyScalingEffect(), this);
             //EnemyModifiers.ModifyEnemy(this);
         }
 
@@ -46,9 +44,11 @@ namespace TonyDev.Game.Core.Entities.Enemies
         }
         
         //Initialize variables and events
-        private void Start()
+        protected new void Start()
         {
             SetEnemyData(enemyData);
+
+            base.Start();
             
             enemyAnimator = GetComponent<EnemyAnimator>();
 

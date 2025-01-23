@@ -260,7 +260,7 @@ namespace TonyDev.Game.Level.Rooms
             _smoothCameraFollow.SetCameraBounds(currentActiveRoom.RoomRect); //Update the camera bounds
             currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
 
-            Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
+            Player.LocalInstance.SetParentIdentity(newRoom.netIdentity);
             
             OnActiveRoomChanged?.Invoke();
         }
@@ -271,7 +271,7 @@ namespace TonyDev.Game.Level.Rooms
             currentActiveRoomIndex = Vector2Int.zero;
             if (_smoothCameraFollow != null) _smoothCameraFollow.SetCameraBounds(Rect.zero);
 
-            Player.LocalInstance.CmdSetParentIdentity(null);
+            Player.LocalInstance.SetParentIdentity(null);
 
             currentActiveRoom = null;
         }

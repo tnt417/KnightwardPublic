@@ -114,6 +114,7 @@ MonoBehaviour:
   targetRange: 4
   targetIntangible: 1
   <Team>k__BackingField: 0
+  invulnerable: 0
   towerAnimator: {fileID: 6938340393128323355}
   myItem:
     uiSprite: {fileID: 0}
@@ -154,6 +155,7 @@ MonoBehaviour:
     childOfOwner: 0
     doNotRotate: 0
     effects: []
+  targetFullHp: 0
   fireSound: dagger
   references:
     version: 2

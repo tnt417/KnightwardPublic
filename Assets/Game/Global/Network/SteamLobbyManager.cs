@@ -31,7 +31,6 @@ namespace TonyDev
         {
             if (Singleton != null)
             {
-                Destroy(this);
                 return;
             }
             

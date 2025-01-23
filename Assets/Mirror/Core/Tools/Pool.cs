@@ -26,17 +26,21 @@ namespace Mirror
                 objects.Push(objectGenerator());
         }
 
-        // DEPRECATED 2022-03-10
-        [Obsolete("Take() was renamed to Get()")]
-        public T Take() => Get();
-
         // take an element from the pool, or create a new one if empty
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public T Get() => objects.Count > 0 ? objects.Pop() : objectGenerator();
 
         // return an element to the pool
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Return(T item) => objects.Push(item);
+        public void Return(T item)
+        {
+            // make sure we can't accidentally insert null values into the pool.
+            // debugging this would be hard since it would only show on get().
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            objects.Push(item);
+        }
 
         // count to see how many objects are in the pool. useful for tests.
         public int Count => objects.Count;
