@@ -212,8 +212,6 @@ namespace TonyDev.Game.Core.Items
         [Command(requiresAuthority = false)]
         private void CmdRequestPickup(int senderMoney, NetworkConnectionToClient sender = null)
         {
-            Debug.Log("Sender money: " + senderMoney + " Cost: " + cost + " Pickupable: " + _pickupAble + " Pickup pending: " + _pickupPending + " Sender: " + sender);
-            
             if (senderMoney < cost || !_pickupAble || _pickupPending)
                 return; //If the item is too expensive, don't allow pickup.
 

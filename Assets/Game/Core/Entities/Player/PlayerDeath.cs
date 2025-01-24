@@ -20,11 +20,25 @@ namespace TonyDev.Game.Core.Entities.Player
         private Rigidbody2D _rb2d;
         //
     
-        [SyncVar] public bool dead;
+        [SyncVar (hook = nameof(DeadHook))] public bool dead;
         private float _deathTimer;
         
         public bool disableDeathHandling;
 
+        private void DeadHook(bool oldVal, bool isDead)
+        {
+            healthBarObject.SetActive(!isDead); //Hide health bar
+            _rb2d.simulated = !isDead; //De-activate Rigidbody
+            if (!isDead) walkParticleSystem.Play();
+            else walkParticleSystem.Stop(); //Turn on/off walk particles
+
+            if (isDead) return;
+            
+            // Revive code
+            _deathTimer = 0; //Reset the death timer
+            deathTimerText.text = string.Empty; //Clear the death timer text
+        }
+        
         private void Awake()
         {
             _rb2d = GetComponent<Rigidbody2D>();
@@ -32,7 +46,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public override void OnStartLocalPlayer()
         {
-            Player.LocalInstance.OnDeathOwner += (float f) => DieLocal();
+            Player.LocalInstance.OnDeathOwner += _ => DieLocal();
         }
 
         private void Update()
@@ -50,21 +64,26 @@ namespace TonyDev.Game.Core.Entities.Player
         
         private void DieLocal()
         {
-            if (disableDeathHandling) return;
-            if(isLocalPlayer) CmdDie();
+            if (disableDeathHandling || !isLocalPlayer) return;
+
+            dead = true;
+
+            CmdMoveEnemiesFromRoom(Player.LocalInstance.currentParentIdentityLocal);
+            
+            ObjectSpawner.SpawnMoney((int)(GameManager.Money * 0.8f), Player.LocalInstance.transform.position, Player.LocalInstance.CurrentParentIdentity); //Drop money on the ground
+            GameManager.Money = 0; //Reset money
+            Player.LocalInstance.playerMovement.DoMovement = false;
+            Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
+            GameManager.Instance.CmdReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
+            GameManager.Instance.EnterArenaPhase();
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdDie()
+        public void CmdMoveEnemiesFromRoom(NetworkIdentity roomNetId)
         {
-            if (disableDeathHandling) return;
-            dead = true;
-
-            var player = gameObject.GetComponent<Player>();
-
-            if (player.CurrentParentIdentity != null)
+            if (roomNetId != null)
             {
-                var room = player.CurrentParentIdentity.GetComponent<Room>();
+                var room = roomNetId.GetComponent<Room>();
 
                 if (room.PlayerCount <= 1)
                 {
@@ -74,53 +93,19 @@ namespace TonyDev.Game.Core.Entities.Player
                     }
                 }
             }
-
-            RpcDie();
         }
 
-        [ClientRpc]
-        private void RpcDie()
-        {
-            if (disableDeathHandling) return;
-            if (isLocalPlayer)
-            {
-                ObjectSpawner.SpawnMoney(GameManager.Money, Player.LocalInstance.transform.position, Player.LocalInstance.CurrentParentIdentity); //Drop money on the ground
-                GameManager.Money = 0; //Reset money
-                Player.LocalInstance.playerMovement.DoMovement = false;
-                Player.LocalInstance.playerAnimator.PlayDeadAnimation(); //Play death animation
-                GameManager.Instance.CmdReTargetEnemies(); //Set new targets for all enemies, so that they don't target the dead player
-                GameManager.Instance.EnterArenaPhase();
-            }
-            healthBarObject.SetActive(false); //Hide health bar
-            _rb2d.simulated = false; //De-activate Rigidbody
-            walkParticleSystem.Stop(); //Turn off walk particles
-        }
-        
         public void ReviveLocal()
         {
-            if(isLocalPlayer) CmdRevive();
-        }
-
-        [Command(requiresAuthority = false)]
-        private void CmdRevive()
-        {
-            dead = false;
-            RpcRevive();
-        }
-
-        [ClientRpc]
-        private void RpcRevive()
-        {
-            if (isLocalPlayer)
-            {
-                Player.LocalInstance.playerMovement.DoMovement = true;
-                Player.LocalInstance.SetHealth(Player.LocalInstance.NetworkMaxHealth); //Fully heal the player
-            }
+            if (!isLocalPlayer) return;
             
-            healthBarObject.SetActive(true); //Re-active the health bar
-            _deathTimer = 0; //Reset the death timer
-            deathTimerText.text = string.Empty; //Clear the death timer text
-            _rb2d.simulated = true; //Re-activate the RigidBody
+            dead = false;
+            
+            _deathTimer = 0;
+            deathTimerText.text = string.Empty;
+            
+            Player.LocalInstance.playerMovement.DoMovement = true;
+            Player.LocalInstance.SetHealth(Player.LocalInstance.NetworkMaxHealth); //Fully heal the player
         }
     }
 }

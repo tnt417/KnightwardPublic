@@ -259,8 +259,8 @@ namespace TonyDev.Game.Level.Rooms
             CmdUncoverRoom(new Vector2Int(x, y)); //Uncover the room on the minimap
             _smoothCameraFollow.SetCameraBounds(currentActiveRoom.RoomRect); //Update the camera bounds
             currentActiveRoomIndex = new Vector2Int(x, y); //Update currentActiveRoomIndex variable
-
-            Player.LocalInstance.SetParentIdentity(newRoom.netIdentity);
+            
+            Player.LocalInstance.CmdSetParentIdentity(newRoom.netIdentity);
             
             OnActiveRoomChanged?.Invoke();
         }
@@ -271,7 +271,7 @@ namespace TonyDev.Game.Level.Rooms
             currentActiveRoomIndex = Vector2Int.zero;
             if (_smoothCameraFollow != null) _smoothCameraFollow.SetCameraBounds(Rect.zero);
 
-            Player.LocalInstance.SetParentIdentity(null);
+            Player.LocalInstance.CmdSetParentIdentity(null);
 
             currentActiveRoom = null;
         }

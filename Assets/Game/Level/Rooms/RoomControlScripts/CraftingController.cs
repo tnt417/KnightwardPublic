@@ -123,5 +123,11 @@ namespace TonyDev.Game.Level.Rooms.RoomControlScripts
         {
             purchaseButton.DestroyInteractableObjectAll();
         }
+
+        [ServerCallback]
+        private void OnDestroy()
+        {
+            NetworkServer.Destroy(_groundItem.gameObject);
+        }
     }
 }

@@ -178,7 +178,10 @@ namespace TonyDev.Game.Level.Rooms
             while (this != null)
             {
                 await UniTask.WaitUntil(() => this == null || this != null && PlayerCount > 0);
-                if(this != null) CheckShouldLockDoors();
+                if (this != null)
+                {
+                    CheckShouldLockDoors();
+                }
                 await UniTask.WaitForFixedUpdate();
             }
         }
@@ -288,7 +291,8 @@ namespace TonyDev.Game.Level.Rooms
 
             if (shouldLock)
             {
-                CmdOnLock(); //Lock doors while enemies are alive in the room.
+                cleared = false;
+                //CmdOnLock(); //Lock doors while enemies are alive in the room.
                 LockAllDoors();
             }
             else
@@ -302,13 +306,13 @@ namespace TonyDev.Game.Level.Rooms
             LockAllDoors();
         }
 
-        [Command(requiresAuthority = false)]
-        private void CmdOnLock()
-        {
-            if (this == null || !enabled) return;
-
-            cleared = false;
-        }
+        // [Command(requiresAuthority = false)]
+        // private void CmdOnLock()
+        // {
+        //     if (this == null || !enabled) return;
+        //
+        //     cleared = false;
+        // }
 
         [Command(requiresAuthority = false)]
         private void CmdOnClear()

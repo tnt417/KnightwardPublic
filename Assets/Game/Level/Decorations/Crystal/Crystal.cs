@@ -58,7 +58,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         }
         #endregion
 
-        [Command]
+        [Command (requiresAuthority = false)]
         public void CmdSetInvulnerable(bool invuln)
         {
             if(!isOwned)
@@ -73,8 +73,7 @@ namespace TonyDev.Game.Level.Decorations.Crystal
         [GameCommand(Keyword = "ci", PermissionLevel = PermissionLevel.Cheat, SuccessMessage = "Toggled crystal invulnerability.")]
         public static void ToggleInvulnerable()
         {
-                var crystal = FindObjectOfType<Crystal>();
-                Instance.CmdSetInvulnerable(!Instance.IsInvulnerable);
+            Instance.CmdSetInvulnerable(!Instance.IsInvulnerable);
         }
     }
 }

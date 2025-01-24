@@ -48,6 +48,7 @@ namespace TonyDev.Game.Global.Network
 
         public override bool OnCheckObserver(NetworkIdentity identity, NetworkConnectionToClient newObserver)
         {
+
             if (identity == newObserver.identity) return true;
 
             var identityParentRoom = RoomManager.Instance.GetRoomFromID(identity.netId);

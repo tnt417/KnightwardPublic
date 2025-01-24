@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
@@ -6,6 +7,7 @@ using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Towers
 {
@@ -20,11 +22,9 @@ namespace TonyDev.Game.Core.Entities.Towers
 
         public string fireSound;
 
-        private new void Start()
+        public override void OnStartAuthority()
         {
-            base.Start();
-            
-            if (!EntityOwnership) return;
+            base.OnStartAuthority();
 
             OnAttack += CmdFire;
         }

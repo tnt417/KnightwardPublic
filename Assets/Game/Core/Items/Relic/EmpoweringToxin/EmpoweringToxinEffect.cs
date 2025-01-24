@@ -24,7 +24,7 @@ namespace TonyDev.Game.Core.Items.Relics.EmpoweringToxin
         
         public override void OnAddOwner()
         {
-            Entity.OnParentIdentityChange += OnNewRoomEnter;
+            Entity.OnParentIdentityChange += (old, newId) => OnNewRoomEnter(newId);
             WaveManager.Instance.OnWaveBegin += OnWaveBegin;
         }
         

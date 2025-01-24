@@ -4,6 +4,6 @@ namespace TonyDev.Game.Global.Network
 {
     public interface IHideable
     {
-        NetworkIdentity CurrentParentIdentity { get; set; }
+        NetworkIdentity CurrentParentIdentity { get; }
     }
 }

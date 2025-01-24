@@ -73,7 +73,7 @@ namespace TonyDev.Game.Level
         [ServerCallback]
         public void MoveEnemyToWave(Enemy enemy)
         {
-            enemy.SetParentIdentity(null);
+            enemy.CmdSetParentIdentity(null);
             enemy.transform.position = GetSpawnpoint();
         }
 

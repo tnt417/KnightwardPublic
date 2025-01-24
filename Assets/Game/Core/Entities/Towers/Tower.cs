@@ -25,11 +25,39 @@ namespace TonyDev.Game.Core.Entities.Towers
         [HideInInspector] [SyncVar] public Item myItem;
 
         [HideInInspector] [SyncVar(hook=nameof(DurabilityHook))] public int durability;
+
+        private bool _itemSet = false;
         
         [Command(requiresAuthority = false)]
         public void CmdSetTowerItem(Item newItem)
         {
+            if (_itemSet)
+            {
+                Debug.LogWarning("Set item called twice!");
+                return;
+            }
+            
+            Stats.ReadOnly = false;
+            
+            _itemSet = true;
+            
             myItem = newItem;
+            
+            if (myItem.statBonuses != null)
+            {
+                foreach (var sb in myItem.statBonuses)
+                {
+                    Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, myItem.itemName, sb.hidden);
+                }
+            }
+
+            foreach (var ge in myItem.itemEffects)
+            {
+                AddEffect(ge, this);
+            }
+            
+            durability = (int)Stats.GetStat(Stat.Health);
+            SetNetworkHealth(durability, MaxHealth);
         }
 
         private new void Awake()
@@ -87,7 +115,7 @@ namespace TonyDev.Game.Core.Entities.Towers
 
                 myItem.statBonuses = sb.ToArray();
             }
-            
+
             _initialDurabilitySet = true;
 
             SetBrokenMaterial(durability <= 0);
@@ -133,38 +161,28 @@ namespace TonyDev.Game.Core.Entities.Towers
             _interactableButton.Active = false;
         }
 
-        protected new void Start()
+        public new void Start()
         {
             base.Start();
-
+            
             var coll = gameObject.AddComponent<BoxCollider2D>();
             coll.size = new Vector2(0.2f, 0.2f);
             coll.isTrigger = true;
 
-            if (!EntityOwnership) return;
+            SetBrokenMaterial(false);
+        }
 
-            if (myItem.statBonuses != null)
-            {
-                foreach (var sb in myItem.statBonuses)
-                {
-                    Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, myItem.itemName, sb.hidden);
-                }
-            }
+        public override void OnStartAuthority()
+        {
+            base.OnStartAuthority();
 
-            foreach (var ge in myItem.itemEffects)
-            {
-                AddEffect(ge, this);
-            }
-
-            durability = (int)Stats.GetStat(Stat.Health);
-            SetNetworkHealth(durability, MaxHealth);
-            //CmdSetHealth(durability, MaxDurability);
-            
             OnHealthChangedOwner += HpChangedHook;
         }
 
         public override void OnStopAuthority()
         {
+            base.OnStopAuthority();
+            
             OnHealthChangedOwner -= HpChangedHook;
         }
 

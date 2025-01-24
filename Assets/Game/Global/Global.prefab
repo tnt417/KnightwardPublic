@@ -524,6 +524,7 @@ MonoBehaviour:
   arenaSpawnPos: {x: 4978.5, y: -6}
   timeSeconds: 0
   dungeonFloor: 1
+  uiCanvas: {fileID: 0}
   waveProgress: 0
   wave: 0
   projectiles: []
@@ -544,7 +545,7 @@ MonoBehaviour:
   sceneId: 0
   _assetId: 2530396883
   serverOnly: 0
-  visible: 2
+  visibility: 2
   hasSpawned: 0
 --- !u!114 &8211467678594754312
 MonoBehaviour:

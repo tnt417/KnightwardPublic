@@ -65,25 +65,6 @@ namespace TonyDev.Game.Core.Entities.Player
         private bool _damageOnCooldown;
         private const float PlayerDamageCooldown = 0.25f;
 
-        protected override void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
-        {
-            base.ParentIdentityHook(oldIdentity, newIdentity);
-
-            if (!isServer) return;
-
-            if (oldIdentity != null)
-            {
-                var oldRoom = RoomManager.Instance.GetRoomFromID(oldIdentity.netId);
-                if (oldRoom != null) oldRoom.CmdSetPlayerCount(oldRoom.PlayerCount - 1);
-            }
-
-            if (newIdentity != null)
-            {
-                var newRoom = RoomManager.Instance.GetRoomFromID(newIdentity.netId);
-                if (newRoom != null) newRoom.CmdSetPlayerCount(newRoom.PlayerCount + 1);
-            }
-        }
-
         public override float ApplyDamage(float damage, out bool successful, bool ignoreInvincibility)
         {
             if (damage > 0 && _damageOnCooldown && !ignoreInvincibility)
@@ -142,15 +123,45 @@ namespace TonyDev.Game.Core.Entities.Player
         
         public static Action<NetworkIdentity> LocalPlayerChangeIdentity;
 
+        public override void OnStartServer()
+        {
+            base.OnStartServer();
+
+            OnParentIdentityChange += ParentIdChangeHookServer;
+        }
+
+        public override void OnStopServer()
+        {
+            base.OnStopServer();
+            
+            OnParentIdentityChange -= ParentIdChangeHookServer;
+        }
+
+        [Server]
+        private void ParentIdChangeHookServer(NetworkIdentity old, NetworkIdentity newId)
+        {
+            if (old != null)
+            {
+                var oldRoom = RoomManager.Instance.GetRoomFromID(old.netId);
+                if (oldRoom != null) oldRoom.CmdSetPlayerCount(oldRoom.PlayerCount - 1);
+            }
+
+            if (newId != null)
+            {
+                var newRoom = RoomManager.Instance.GetRoomFromID(newId.netId);
+                if (newRoom != null) newRoom.CmdSetPlayerCount(newRoom.PlayerCount + 1);
+            }
+        }
+
         public override void OnStartLocalPlayer()
         {
             Team = Team.Player;
             LocalInstance = this;
             OnLocalPlayerCreated?.Invoke();
 
-            OnParentIdentityChange += a => LocalPlayerChangeIdentity?.Invoke(a);
+            OnParentIdentityChange += (old, newId) => LocalPlayerChangeIdentity?.Invoke(newId);
 
-            OnParentIdentityChange += (a) => { LocalInstance.StartCoroutine(PauseDamageForSeconds(1f)); };
+            OnParentIdentityChange += (old, newId) => { LocalInstance.StartCoroutine(PauseDamageForSeconds(1f)); };
 
             OnAttack += () =>
             {

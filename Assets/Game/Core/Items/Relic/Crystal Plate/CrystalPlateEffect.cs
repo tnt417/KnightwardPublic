@@ -11,7 +11,8 @@ using UnityEngine;
 
 namespace TonyDev
 {
-    public class CrystalPlateEffect : GameEffect
+    public class 
+        CrystalPlateEffect : GameEffect
     {
         public Vector2 DamageProportionRange;
         public float PercentHealthThreshold;

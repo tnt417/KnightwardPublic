@@ -28,7 +28,7 @@ namespace TonyDev.Game.Core.Items.Relics.BerserkersBrew
         
         public override void OnAddOwner()
         {
-            Entity.OnParentIdentityChange += OnNewRoomEnter;
+            Entity.OnParentIdentityChange += (old,newId) => OnNewRoomEnter(newId);
             WaveManager.Instance.OnWaveBegin += OnWaveBegin;
         }
         

@@ -42,20 +42,27 @@ namespace TonyDev.Game.UI.Tower
 
         public Sprite GetNextSprite()
         {
-            return Towers.Count > 1 ? Towers.First(t => t.Key != _selectedTowerSlot).Value.uiSprite : null;
+            if (Towers.Count <= 1) return null;
+            
+            // Prioritize towers of the same name
+            var (key, value) = Towers.FirstOrDefault(t => t.Value.itemName == _selectedTowerSlot.Item.itemName && t.Key != _selectedTowerSlot);
+
+            return key != null ? value.uiSprite : Towers.First(t => t.Key != _selectedTowerSlot).Value.uiSprite;
         }
 
         public void ConfirmPlace()
         {
             var continuous = TowerPlacementManager.PlaceContinuous;
+
+            var oldTowerName = _selectedTowerSlot.Item.itemName;
             
             Towers.Remove(_selectedTowerSlot);
             Destroy(_selectedTowerSlot.gameObject); //Called when clicking while placing. Destroys the UI tower that was just placed.
 
             if (Towers.Count <= 0 || !continuous) return;
             
-            var kvp = Towers.First();
-            StartPlacingTower(kvp.Key, kvp.Value);
+            var (key, value) = Towers.Any(t => t.Value.itemName == oldTowerName) ? Towers.First(t => t.Value.itemName == oldTowerName) : Towers.First();
+            StartPlacingTower(key, value);
         }
     }
 }

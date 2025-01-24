@@ -1,4 +1,5 @@
 using System;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using UnityEngine;
@@ -53,8 +54,8 @@ namespace TonyDev.Game.UI.Healthbar
                 healthSlider.value = gameEntity.NetworkCurrentHealth + gameEntity.ClientHealthDisparity;
                 
                 fillImage.color = gameEntity.IsInvulnerable
-                    ? Color.blue//new Color(0.572549f, 0.909804f, 0.7529413f)
-                    : new Color(0.3882353f, 0.6705883f, 0.2470588f);
+                    ? new Color(146f/255f, 232f/255f, 192f/255f)//new Color(0.572549f, 0.909804f, 0.7529413f)
+                    : (gameEntity.Team == Team.Player ? new Color(0.3882353f, 0.6705883f, 0.2470588f) : new Color(47f/255f, 87f/255f, 83f/255f));
                 
                 var dmg = PoisonEffect.GetPoisonDamage(gameEntity);
 
@@ -63,10 +64,6 @@ namespace TonyDev.Game.UI.Healthbar
                     decaySlider.maxValue = gameEntity.NetworkCurrentHealth;
                     decaySlider.value = dmg;
                 }
-
-                var willKill = dmg > gameEntity.NetworkCurrentHealth;
-                
-                if(decayImage != null) decayImage.color = willKill ? Color.red : Color.gray;
             }
             else if (AttachedDamageable != null)
             {

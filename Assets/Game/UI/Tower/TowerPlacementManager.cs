@@ -39,10 +39,14 @@ namespace TonyDev.Game.UI.Tower
         private bool CanPlace => placeablePhases.Contains(GameManager.GamePhase);
         public static bool PlaceContinuous => Keyboard.current.shiftKey.isPressed;
 
+        private IEnumerable<Tilemap> _floorTilemaps;
+        
         private void Start()
         {
             Instance = this;
 
+            _floorTilemaps = FindObjectsOfType<Tilemap>().Where(tm => tm.gameObject.CompareTag("Floor"));
+            
             placeablePhases.Add(GamePhase.Arena);
 
             _mainCamera = Camera.main;
@@ -125,9 +129,10 @@ namespace TonyDev.Game.UI.Tower
             //Don't place on top of occupied spots
             //if (GameManager.Instance.OccupiedTowerSpots.Contains(vec2Int)) return false; //Commented out to allow for tower swapping
 
+            if (Vector2.Distance(Player.LocalInstance.transform.position, pos) > 10f) return false;
+            
             //Only place on floor tiles
-            var floorAtSpot = FindObjectsOfType<Tilemap>().Where(tm => tm.gameObject.CompareTag("Floor"))
-                .Any(tm => tm.GetTile(tm.WorldToCell(pos)) != null);
+            var floorAtSpot = _floorTilemaps.Any(tm => tm.GetTile(tm.WorldToCell(pos)) != null);
 
             var distXFromCrystal = Mathf.Abs(pos.x - Crystal.Instance.transform.position.x);
             var distYFromCrystal = Mathf.Abs(pos.y - Crystal.Instance.transform.position.y);

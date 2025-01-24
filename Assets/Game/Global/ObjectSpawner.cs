@@ -95,7 +95,7 @@ namespace TonyDev.Game.Global
 
             var tower = go.GetComponent<Tower>();
 
-            tower.SetParentIdentity(parent);
+            tower.CmdSetParentIdentity(parent);
             tower.CmdSetTowerItem(towerItem);
         }
 
@@ -166,7 +166,7 @@ namespace TonyDev.Game.Global
 
             enemy.CurrentParentIdentity = parent;
             
-            enemy.SetParentIdentity(parent);
+            enemy.CmdSetParentIdentity(parent);
 
             return enemy;
         }

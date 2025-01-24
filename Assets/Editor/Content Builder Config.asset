@@ -12,9 +12,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0c7c695651be6f340a32fef05a7d7c9a, type: 3}
   m_Name: Content Builder Config
   m_EditorClassIdentifier: 
-  username: 
-  rememberPassword: 0
-  password: 
-  targetApp: 480
+  username: W64KJ11u9GK+J/wxfLL1TH8lUsC9L6Em7mainH1zvJ7Cmg0Vhc/QFsTKlUmKj5UR7JcvgM68t2yDIcdRC2QAqx6XP2husBtdXUfofhO1PDps9reDEGSzXXwvJr2aEoaF
+  rememberPassword: 1
+  password: Yrp9a1KJ9iYFnlILszsNIp9J8LcUjGPa6eGnTA+Uo0oE+L76mMzC+Kp0ht3N3fKIS/tuCpU4i5iHZqv4DsNzKhAWXxQTEFnDA9gkG1zQiOCErB7byYpfX+i1b4ZfUGet
+  targetApp: 2250460
   lastDepot: 0
-  depots: []
+  depots:
+  - name: Windows Depot
+    id: 2250461
+    target: 19
+    extension: .exe
+  - name: MacOS Depot
+    id: 2250462
+    target: 2
+    extension: .app

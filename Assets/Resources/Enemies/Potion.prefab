@@ -5,6 +5,7 @@ PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
+    serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 48320255391279908, guid: c4673581ac60785459b6805764360ee4, type: 3}
@@ -192,6 +193,15 @@ PrefabInstance:
       value: 04c0c5d0ef3b2da499c5c86ae4303dd5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: -8453588589962416134}
+    - targetCorrespondingSourceObject: {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 391586794741510673}
   m_SourcePrefab: {fileID: 100100000, guid: c4673581ac60785459b6805764360ee4, type: 3}
 --- !u!1 &6888245627200159414 stripped
 GameObject:
@@ -212,6 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seconds: 0
   spawnPrefabOnDestroy: {fileID: 4462548143996179487, guid: 2e8e1f51887ebc8408df6656b6e72677, type: 3}
+  inheritRotation: 0
 --- !u!114 &391586794741510673
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,6 +251,7 @@ MonoBehaviour:
       destroyOnCollideWall: 0
       lifetime: 0.001
       spawnOnDestroyKey: potionSplash
+      inheritRotationOnSpawn: 0
       ignoreInvincibility: 0
       inflictEffects:
         gameEffects: []

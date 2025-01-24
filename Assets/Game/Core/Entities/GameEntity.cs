@@ -99,7 +99,7 @@ namespace TonyDev.Game.Core.Entities
         [ServerCallback]
         protected void Start()
         {
-            if (NetworkServer.active && this is not Player.Player)
+            if (NetworkServer.active && this is not Player.Player && !authority)
             {
                 netIdentity.AssignClientAuthority(NetworkServer.localConnection);
             }
@@ -147,49 +147,37 @@ namespace TonyDev.Game.Core.Entities
         }
 
         #endregion
-
-        [SyncVar(hook = nameof(ParentIdentityHook))]
-        private NetworkIdentity _currentParentIdentity;
+        
+        public NetworkIdentity currentParentIdentityLocal;
 
         public NetworkIdentity CurrentParentIdentity
         {
-            get => _currentParentIdentity;
+            get => currentParentIdentityLocal;
             set
-            {
-                _currentParentIdentity = CurrentParentIdentity;
-                if (netId == 0) return;
-                SetParentIdentity(value);
+            { 
+                CmdSetParentIdentity(value);
             }
         }
 
-        public Action<NetworkIdentity> OnParentIdentityChange;
+        public Action<NetworkIdentity, NetworkIdentity> OnParentIdentityChange;
 
-        protected virtual void ParentIdentityHook(NetworkIdentity oldIdentity, NetworkIdentity newIdentity)
+        [Command]
+        public void CmdSetParentIdentity(NetworkIdentity roomIdentity)
         {
-            OnParentIdentityChange?.Invoke(newIdentity);
-        }
-
-        //[Command(requiresAuthority = false)]
-        [Client]
-        public void SetParentIdentity(NetworkIdentity roomIdentity)
-        {
-            if (!isOwned)
+            if (currentParentIdentityLocal != null)
             {
-                Debug.LogWarning("Set parent identity called without ownership!");
-                //return;
-            }
-            
-            if (_currentParentIdentity != null)
-            {
-                var oldRoom = RoomManager.Instance.GetRoomFromID(_currentParentIdentity.netId);
+                var oldRoom = RoomManager.Instance.GetRoomFromID(currentParentIdentityLocal.netId);
                 if (oldRoom != null)
                 {
                     oldRoom.roomChildObjects.Remove(gameObject);
                 }
             }
 
-            _currentParentIdentity = roomIdentity;
-
+            var oldId = currentParentIdentityLocal;
+            currentParentIdentityLocal = roomIdentity;
+            OnParentIdentityChange?.Invoke(oldId, roomIdentity);
+            RpcSetParentIdentity(roomIdentity);
+            
             if (roomIdentity != null)
             {
                 var room = RoomManager.Instance.GetRoomFromID(roomIdentity.netId);
@@ -200,6 +188,19 @@ namespace TonyDev.Game.Core.Entities
             }
 
             ParentInterestManagement.Instance.ForceRebuild();
+        }
+
+        [ClientRpc]
+        private void RpcSetParentIdentity(NetworkIdentity identity)
+        {
+            if (identity == currentParentIdentityLocal)
+            {
+                return;
+            }
+
+            var oldId = currentParentIdentityLocal;
+            currentParentIdentityLocal = identity;
+            OnParentIdentityChange?.Invoke(oldId, identity);
         }
 
         #region Attack
