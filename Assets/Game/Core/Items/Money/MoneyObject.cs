@@ -26,29 +26,46 @@ namespace TonyDev.Game.Core.Items.Money
 
         public int amount;
 
+        private void Start()
+        {
+            DoCombineLogic();
+        }
+
         private void FixedUpdate()
         {
             var myPos = transform.position;
             var playerPos = Player.LocalInstance.transform.position;
 
-            var distance = Vector2.Distance(myPos, playerPos);
+            var sqrDistance = (myPos - playerPos).sqrMagnitude;
+            var sqrAttractRange = attractRange * attractRange;
 
-            DoCombineLogic();
+            //DoCombineLogic();
 
-            if (distance > attractRange || Player.LocalInstance.CurrentParentIdentity != CurrentParentIdentity) return;
+            if (sqrDistance > sqrAttractRange || Player.LocalInstance.CurrentParentIdentity != CurrentParentIdentity) return;
 
-            rb2d.transform.Translate((playerPos - myPos).normalized * Mathf.Sqrt(attractRange - distance) *
-                                     attractSpeed * Time.fixedDeltaTime);
+            var direction = (playerPos - myPos).normalized;
+            var scaledSpeed = Mathf.Sqrt(attractRange - Mathf.Sqrt(sqrDistance)) * attractSpeed * Time.fixedDeltaTime;
+            
+            rb2d.transform.Translate(direction * scaledSpeed);
         }
 
         private void DoCombineLogic()
         {
-            var nearbyMoney = GetCombineable(MoneyObjectPool.Select(kv => kv.Value)
-                .Where(obj => obj != null &&
-                    obj.isActiveAndEnabled && obj.CurrentParentIdentity == CurrentParentIdentity &&
-                    Vector2.Distance(transform.position, obj.transform.position) < CombineRange).ToList());
-
-            if (nearbyMoney.FirstOrDefault() == null) return;
+            var nearbyMoney = new List<MoneyObject>();
+            foreach (var kv in MoneyObjectPool)
+            {
+                var obj = kv.Value;
+                if (obj != null &&
+                    obj.isActiveAndEnabled &&
+                    obj.CurrentParentIdentity == CurrentParentIdentity &&
+                    Vector2.SqrMagnitude(transform.position - obj.transform.position) < CombineRange * CombineRange)
+                {
+                    nearbyMoney.Add(obj);
+                }
+            }
+            
+            var combineableMoney = GetCombineable(nearbyMoney);
+            if (combineableMoney.Count == 0) return;
 
             var nearAmount = nearbyMoney.Sum(money => money.amount);
 
@@ -60,17 +77,49 @@ namespace TonyDev.Game.Core.Items.Money
             ObjectSpawner.SpawnMoney(nearAmount,
                 GameTools.GetMeanVector(nearbyMoney.Select(mon => mon.transform.position).ToList()),
                 nearbyMoney.First().CurrentParentIdentity);
+            
+            DoCombineLogic();
         }
 
         private List<MoneyObject> GetCombineable(List<MoneyObject> unfiltered)
         {
-            var combineto5 = unfiltered.Count(money => money.amount == 1) >= 5;
-            var combineto25 = unfiltered.Count(money => money.amount == 5) >= 5;
-            var combineto100 = unfiltered.Count(money => money.amount == 25) >= 4;
+            bool combineto5 = false, combineto25 = false, combineto100 = false;
+            int count1 = 0, count5 = 0, count25 = 0;
 
-            return unfiltered.Where(money =>
-                money.amount != 100 && ((money.amount == 1 && combineto5) || (money.amount == 5 && combineto25) &&
-                (money.amount == 25 && combineto100))).ToList();
+            foreach (var money in unfiltered)
+            {
+                switch (money.amount)
+                {
+                    case 1: count1++; break;
+                    case 5: count5++; break;
+                    case 25: count25++; break;
+                }
+            }
+
+            combineto5 = count1 >= 5;
+            combineto25 = count5 >= 5;
+            combineto100 = count25 >= 4;
+
+            var result = new List<MoneyObject>();
+            foreach (var money in unfiltered)
+            {
+                if (money.amount != 100 && 
+                    ((money.amount == 1 && combineto5) || 
+                     (money.amount == 5 && combineto25) || 
+                     (money.amount == 25 && combineto100)))
+                {
+                    result.Add(money);
+                }
+            }
+
+            return result;
+            // var combineto5 = unfiltered.Count(money => money.amount == 1) >= 5;
+            // var combineto25 = unfiltered.Count(money => money.amount == 5) >= 5;
+            // var combineto100 = unfiltered.Count(money => money.amount == 25) >= 4;
+            //
+            // return unfiltered.Where(money =>
+            //     money.amount != 100 && ((money.amount == 1 && combineto5) || (money.amount == 5 && combineto25) &&
+            //     (money.amount == 25 && combineto100))).ToList();
         }
 
         private void OnTriggerEnter2D(Collider2D other)

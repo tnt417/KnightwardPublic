@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using HeathenEngineering.SteamworksIntegration.API;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using UnityEngine;
@@ -35,16 +37,12 @@ namespace TonyDev.Game.Core.Entities
     {
         public EntityStats()
         {
-            OnStatsChanged += UpdateStatValues;
+            OnStatChanged += UpdateStatValue;
         }
 
-        private List<StatBonus> _activeStatBonuses = new();
+        private readonly Dictionary<Stat, List<StatBonus>> _activeStatBonuses = new();
 
-        public delegate void StatAction();
-
-        public event StatAction OnStatsChanged;
-
-        private delegate float StatHandler();
+        public Action<Stat> OnStatChanged;
 
         #region Stat Properties
 
@@ -75,6 +73,12 @@ namespace TonyDev.Game.Core.Entities
         
         public void ReplaceStatValueDictionary(Stat[] keys, float[] values)
         {
+            if (!ReadOnly)
+            {
+                Debug.LogWarning("This method should only be called for ReadOnly stats for updating over the network!");
+                return;
+            }
+            
             var newDictionary = new Dictionary<Stat, float>();
             for (var i = 0; i < keys.Length; i++)
             {
@@ -85,67 +89,100 @@ namespace TonyDev.Game.Core.Entities
         
         public float GetStat(Stat stat)
         {
-            if (_buffTimers.Count > 0 && !ReadOnly)
-                RemoveBuffs(_buffTimers.Where(kv => kv.Value < Time.time).Select(kv => kv.Key)); //Remove expired buffs
+            if (!ReadOnly) RemoveExpiredBuffs();
 
-            if (!StatValues.ContainsKey(stat)) return 0;
-            return StatValues[stat];
+            return StatValues.GetValueOrDefault(stat, 0);
         }
 
-        private void UpdateStatValues()
+        private void UpdateStatValue(Stat stat)
         {
             if (ReadOnly) return;
             
-            foreach (Stat stat in Enum.GetValues(typeof(Stat)))
-            {
-                StatValues[stat] = GetStatValue(stat);
-            }
+            StatValues[stat] = GetStatValue(stat);
         }
 
+        private Dictionary<Stat, bool> _statValueCached = new();
+        
         private float GetStatValue(Stat stat)
         {
             if (ReadOnly) return 0;
+
+            var statList = _activeStatBonuses.GetValueOrDefault(stat, null);
+
+            if (statList == null) return 0;
             
+            
+            //TODO: place override logic in merging logic to allow caching the override
             //Check if there is an override for the given stat
-            var overrideBonus = _activeStatBonuses.Where(s => s.statType == StatType.Override && s.stat == stat)
+            var overrideBonus = statList.Where(s => s.statType == StatType.Override)
                 .ToArray();
             if (overrideBonus.Any()) return overrideBonus.FirstOrDefault().strength;
             //
 
-            var bonusDictionary = MergeStatBonuses(_activeStatBonuses.Where(s => s.stat == stat));
-
-            return bonusDictionary.ContainsKey(stat) ? bonusDictionary[stat] : 0;
+            if (!_statValueCached.ContainsKey(stat) || !_statValueCached[stat])
+            {
+                StatValues[stat] = CalculateStatValue(statList);
+                _statValueCached[stat] = true;
+            }
+            
+            return StatValues[stat];
         }
 
         //Combines similar stats while doing calculations between the stat types. Returns a dictionary with combined value of each unique stat.
-        public static Dictionary<Stat, float> MergeStatBonuses(IEnumerable<StatBonus> statBonuses)
+        private static float CalculateStatValue(List<StatBonus> statBonuses)
         {
-            Dictionary<Stat, float> bonusDictionary = new();
+            // Dictionary<Stat, float> bonusDictionary = new();
+            //
+            // var statBonusEnumerable = statBonuses.ToList();
+            // foreach (var stat in statBonusEnumerable.Select(s => s.stat).Distinct())
+            // {
+            //     var flatBonuses = statBonusEnumerable.Where(s => s.statType == StatType.Flat && s.stat == stat)
+            //         .ToList();
+            //     var flatBonus = flatBonuses.Any() ? flatBonuses.Sum(s => s.strength) : 0;
+            //
+            //     var additivePercentBonuses = statBonusEnumerable
+            //         .Where(s => s.statType == StatType.AdditivePercent && s.stat == stat).ToList();
+            //     var additivePercentBonus =
+            //         additivePercentBonuses.Any() ? additivePercentBonuses.Sum(s => s.strength) : 0;
+            //
+            //     var multiplyBonuses = statBonusEnumerable
+            //         .Where(s => s.statType == StatType.Multiplicative && s.stat == stat).ToList();
+            //     var multiply = multiplyBonuses.Any()
+            //         ? multiplyBonuses
+            //             .Select(s => s.strength)
+            //             .Aggregate((x, y) => x * y)
+            //         : 1;
+            //
+            //     bonusDictionary[stat] = flatBonus * (1 + additivePercentBonus) * multiply;
+            // }
+            //
+            // return bonusDictionary;
 
-            var statBonusEnumerable = statBonuses.ToList();
-            foreach (var stat in statBonusEnumerable.Select(s => s.stat).Distinct())
+            float flatBonus = 0;
+            float additivePercentBonus = 0;
+            float multiplyBonus = 1;
+            
+            foreach (var sb in statBonuses)
             {
-                var flatBonuses = statBonusEnumerable.Where(s => s.statType == StatType.Flat && s.stat == stat)
-                    .ToList();
-                var flatBonus = flatBonuses.Any() ? flatBonuses.Sum(s => s.strength) : 0;
-
-                var additivePercentBonuses = statBonusEnumerable
-                    .Where(s => s.statType == StatType.AdditivePercent && s.stat == stat).ToList();
-                var additivePercentBonus =
-                    additivePercentBonuses.Any() ? additivePercentBonuses.Sum(s => s.strength) : 0;
-
-                var multiplyBonuses = statBonusEnumerable
-                    .Where(s => s.statType == StatType.Multiplicative && s.stat == stat).ToList();
-                var multiply = multiplyBonuses.Any()
-                    ? multiplyBonuses
-                        .Select(s => s.strength)
-                        .Aggregate((x, y) => x * y)
-                    : 1;
-
-                bonusDictionary[stat] = flatBonus * (1 + additivePercentBonus) * multiply;
+                switch (sb.statType)
+                {
+                    case StatType.Flat:
+                        flatBonus += sb.strength;
+                        break;
+                    case StatType.AdditivePercent:
+                        additivePercentBonus += sb.strength;
+                        break;
+                    case StatType.Multiplicative:
+                        multiplyBonus *= sb.strength;
+                        break;
+                    case StatType.Override:
+                        return sb.strength;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
-            return bonusDictionary;
+            return flatBonus * (1 + additivePercentBonus) * multiplyBonus;
         }
 
         public void
@@ -153,25 +190,57 @@ namespace TonyDev.Game.Core.Entities
         {
             if (ReadOnly) return;
             
-            _activeStatBonuses.Add(new StatBonus(statType, stat, strength, source, hidden));
-            OnStatsChanged?.Invoke();
+            if(!_activeStatBonuses.ContainsKey(stat)) _activeStatBonuses[stat] = new List<StatBonus>();
+            
+            _activeStatBonuses[stat].Add(new StatBonus(statType, stat, strength, source, hidden));
+            _statValueCached[stat] = false;
+            
+            OnStatChanged?.Invoke(stat);
+        }
+
+        public void ForceInvokeStatsChanged()
+        {
+            foreach (var stat in Enum.GetValues(typeof(Stat)))
+            {
+                OnStatChanged?.Invoke((Stat)stat);
+            }
         }
 
         public void RemoveStatBonuses(string source) //Removes all stat bonuses from a specific source.
         {
             if (ReadOnly) return;
+
+            var statCopy = _activeStatBonuses.Keys.ToList();
             
-            var removed = _activeStatBonuses.Where(s => s.source == source).ToList();
-            _activeStatBonuses = _activeStatBonuses.Where(sb => sb.source != source).ToList();
-            OnStatsChanged?.Invoke();
+            foreach (var stat in statCopy)
+            {
+                var didAlterStat = false;
+
+                var statBonusListCopy = _activeStatBonuses[stat].ToList();
+                
+                foreach (var sb in statBonusListCopy)
+                {
+                    if (sb.source != source) continue;
+                    
+                    _activeStatBonuses[stat].Remove(sb);
+                    _statValueCached[stat] = false;
+                    didAlterStat = true;
+                }
+                
+                if(didAlterStat) OnStatChanged?.Invoke(stat);
+            }
         }
 
         public void ClearStatBonuses()
         {
             if (ReadOnly) return;
+
+            IEnumerable<Stat> statsCleared = _activeStatBonuses.Keys;
             
             _activeStatBonuses.Clear();
-            OnStatsChanged?.Invoke();
+            
+            foreach(var s in statsCleared)
+                OnStatChanged?.Invoke(s);
         }
 
         public IEnumerable<StatBonus>
@@ -179,10 +248,11 @@ namespace TonyDev.Game.Core.Entities
                 bool returnEmptyBonus) //Returns an array of stat bonuses of stat specified. If returnEmptyBonus is true and no bonuses are found, empty ones will be created.
         {
             if (ReadOnly) return null;
-            
-            var foundBonuses = _activeStatBonuses.Where(sb => sb.stat == stat).ToArray();
-            if (foundBonuses.Length != 0) return foundBonuses;
-            return returnEmptyBonus ? new[] {new StatBonus(StatType.Flat, stat, 0, "Empty Bonus")} : foundBonuses;
+
+            if (!_activeStatBonuses.ContainsKey(stat) && returnEmptyBonus)
+                return new[] { new StatBonus(StatType.Flat, stat, 0, "Empty Bonus") };
+
+            return _activeStatBonuses[stat];
         }
 
         #endregion
@@ -193,6 +263,8 @@ namespace TonyDev.Game.Core.Entities
             _buffTimers = new(); //string is the source of the buff, float is the Time.time that the buff will expire
 
         private int _buffIndex = 0; //Used to ensure unique buff source IDs
+        
+        private readonly SortedDictionary<float, HashSet<string>> _buffExpireTimes = new();
 
         public void AddBuff(StatBonus bonus, float time)
         {
@@ -201,43 +273,69 @@ namespace TonyDev.Game.Core.Entities
             var source = bonus.source + "_BUFF" + _buffIndex;
             _buffIndex++;
 
-            AddStatBonus(bonus.statType, bonus.stat, bonus.strength, source);
-            _buffTimers.Add(source, Time.time + time);
-            OnStatsChanged?.Invoke();
-        }
+            var expirationTime = Time.time + time;
 
-        public void ClearBuffs()
-        {
-            if (ReadOnly) return;
+            _buffTimers[source] = expirationTime;
             
-            _activeStatBonuses.RemoveAll(sb => sb.source.Contains("_BUFF"));
-            
-            OnStatsChanged?.Invoke();
-        }
-
-        public void RemoveBuffs(IEnumerable<string> buffIDs)
-        {
-            if (ReadOnly) return;
-            
-            foreach (var bid in buffIDs.ToArray())
+            if (!_buffExpireTimes.ContainsKey(expirationTime))
             {
-                if (!_buffTimers.ContainsKey(bid))
-                {
-                    continue;
-                }
+                _buffExpireTimes[expirationTime] = new HashSet<string>();
+            }
+            _buffExpireTimes[expirationTime].Add(source);
 
-                _buffTimers.Remove(bid);
-                RemoveStatBonuses(bid);
+            AddStatBonus(bonus.statType, bonus.stat, bonus.strength, source);
+            OnStatChanged?.Invoke(bonus.stat);
+        }
+        
+        public void RemoveExpiredBuffs()
+        {
+            var curTime = Time.time;
+            
+            var keysToRemove = new List<float>();
+            
+            foreach (var pair in _buffExpireTimes)
+            {
+                if (pair.Key > curTime)
+                {
+                    break;
+                }
+                
+                keysToRemove.Add(pair.Key);
+                
+                RemoveBuffs(pair.Value);
+            }
+
+            foreach (var timeToRemove in keysToRemove)
+            {
+                _buffExpireTimes.Remove(timeToRemove);
+            }
+        }
+
+        public void RemoveBuffs(HashSet<string> buffIDs)
+        {
+            if (ReadOnly) return;
+            
+            foreach (var bid in buffIDs)
+            {
+                var wasInDict = _buffTimers.Remove(bid);
+                if(wasInDict) RemoveStatBonuses(bid);
             }
         }
         
         public void RemoveBuffsOfSource(string source)
         {
             if (ReadOnly) return;
-            
-            var keys = _buffTimers.Where(kv => kv.Key.StartsWith(source + "_BUFF")).Select(kv => kv.Key);
 
-            RemoveBuffs(keys);
+            HashSet<string> removeBuffs = new();
+            
+            foreach (var src in _buffTimers.Keys)
+            {
+                if(!src.StartsWith(source + "_BUFF")) continue;
+
+                removeBuffs.Add(src);
+            }
+
+            RemoveBuffs(removeBuffs);
         }
 
         #endregion

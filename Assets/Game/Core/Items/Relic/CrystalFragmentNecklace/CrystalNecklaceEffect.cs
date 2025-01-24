@@ -15,7 +15,13 @@ namespace TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace
         
         public override void OnAddServer()
         {
-            Entity.Stats.OnStatsChanged += UpdateArmorBonus;
+            //TODO: unsure if OnStatChanged gets called when receiving new stats for a non-owned GameEntity, if not this won't work
+            Entity.Stats.OnStatChanged += (statChanged) =>
+            {
+                if (statChanged != Stat.Armor) return;
+                UpdateArmorBonus();
+            };
+            
             UpdateArmorBonus();
         }
 
@@ -33,6 +39,12 @@ namespace TonyDev.Game.Core.Items.Relic.CrystalFragmentNecklace
         public override void OnRemoveServer() //Runs when an item is unequipped
         {
             Crystal.Instance.Stats.RemoveStatBonuses(EffectIdentifier);
+            
+            Entity.Stats.OnStatChanged -= (statChanged) =>
+            {
+                if (statChanged != Stat.Armor) return;
+                UpdateArmorBonus();
+            };
         }
         
         public override void OnRemoveOwner() //Runs when an item is unequipped

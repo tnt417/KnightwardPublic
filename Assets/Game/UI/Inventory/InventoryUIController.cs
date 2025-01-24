@@ -56,7 +56,7 @@ namespace TonyDev.Game.UI.Inventory
 
         private void Init()
         {
-            Player.LocalInstance.Stats.OnStatsChanged += UpdateStatText;
+            Player.LocalInstance.Stats.OnStatChanged += UpdateStatText;
             towerInventoryObject.SetActive(false);
             gearInventoryObject.SetActive(true);
             statInventoryObject.SetActive(false);
@@ -89,18 +89,24 @@ namespace TonyDev.Game.UI.Inventory
             Player.OnLocalPlayerCreated -= Init;
         }
 
-        private void UpdateStatText()
+        private void UpdateStatText(Stat statToBeUpdated)
         {
-            damageText.text = PlayerStats.GetStatsText(new[] {Stat.Damage}, false, false);
-            healthText.text = PlayerStats.GetStatsText(new[] {Stat.Health}, false, false);
-            regenText.text = PlayerStats.GetStatsText(new[] {Stat.HpRegen}, false, false);
-            aoeText.text = PlayerStats.GetStatsText(new[] {Stat.AoeSize}, false, false);
-            armorText.text = PlayerStats.GetStatsText(new[] {Stat.Armor}, false, false);
-            speedText.text = PlayerStats.GetStatsText(new[] {Stat.MoveSpeed}, false, false);
-            critText.text = PlayerStats.GetStatsText(new[] {Stat.CritChance}, false, false);
-            dodgeText.text = PlayerStats.GetStatsText(new[] {Stat.Dodge}, false, false);
-            attackSpeedText.text = PlayerStats.GetStatsText(new[] {Stat.AttackSpeed}, false, false);
-            cooldownText.text = PlayerStats.GetStatsText(new[] {Stat.CooldownReduce}, false, false);
+            var statText = statToBeUpdated switch
+            {
+                Stat.Damage => damageText,
+                Stat.Health => healthText,
+                Stat.HpRegen => regenText,
+                Stat.AoeSize => aoeText,
+                Stat.Armor => armorText,
+                Stat.MoveSpeed => speedText,
+                Stat.CritChance => critText,
+                Stat.Dodge => dodgeText,
+                Stat.AttackSpeed => attackSpeedText,
+                Stat.CooldownReduce => cooldownText,
+                _ => throw new ArgumentOutOfRangeException(nameof(statToBeUpdated), statToBeUpdated, null)
+            };
+
+            statText.text = PlayerStats.GetStatsText(new[] { statToBeUpdated }, false, false);
         }
 
         private bool m_Minimized = true;

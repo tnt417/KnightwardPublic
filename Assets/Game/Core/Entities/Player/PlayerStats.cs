@@ -12,6 +12,7 @@ namespace TonyDev.Game.Core.Entities.Player
 {
     [Serializable]
     public struct StatBonus //Holds stat type, strength, and source.
+        : IEquatable<StatBonus>
     {
         public StatType statType;
         public Stat stat;
@@ -46,11 +47,26 @@ namespace TonyDev.Game.Core.Entities.Player
             statBonuses.AddRange(bonus2);
             return statBonuses;
         }
+
+        public bool Equals(StatBonus other)
+        {
+            return statType == other.statType && stat == other.stat && strength.Equals(other.strength) && source == other.source && hidden == other.hidden;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is StatBonus other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine((int)statType, (int)stat, strength, source, hidden);
+        }
     }
 
     public static class PlayerStats
     {
-        public static EntityStats Stats => Player.LocalInstance == null ? null : Player.LocalInstance.Stats;
+        public static EntityStats LocalStats => Player.LocalInstance == null ? null : Player.LocalInstance.Stats;
 
         #region Item Stats
 
@@ -58,8 +74,10 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             foreach (var sb in item.statBonuses)
             {
-                Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, item.itemName);
+                LocalStats.AddStatBonus(sb.statType, sb.stat, sb.strength, item.itemName);
             }
+
+            LocalStats.ForceInvokeStatsChanged();
         }
 
         public static Stat
@@ -86,7 +104,7 @@ namespace TonyDev.Game.Core.Entities.Player
             var statBonuses = new List<StatBonus>();
             foreach (var t in stats)
             {
-                var statBonusArray = Stats.GetStatBonuses(t, true).Where(sb => !sb.hidden);
+                var statBonusArray = LocalStats.GetStatBonuses(t, true).Where(sb => !sb.hidden);
                 statBonuses.AddRange(statBonusArray);
             }
 
@@ -109,7 +127,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
             if (!separateTypes)
             {
-                var mergedStatBonuses = EntityStats.MergeStatBonuses(statBonusList);
+                var mergedStatBonuses = MergeStatValuesForUI(statBonusList);
 
                 foreach (var (key, value) in mergedStatBonuses)
                 {
@@ -160,6 +178,36 @@ namespace TonyDev.Game.Core.Entities.Player
             }
 
             return stringBuilder.ToString();
+        }
+
+        private static Dictionary<Stat, float> MergeStatValuesForUI(List<StatBonus> statBonuses)
+        {
+            Dictionary<Stat, float> bonusDictionary = new();
+
+            var statBonusEnumerable = statBonuses.ToList();
+            foreach (var stat in statBonusEnumerable.Select(s => s.stat).Distinct())
+            {
+                var flatBonuses = statBonusEnumerable.Where(s => s.statType == StatType.Flat && s.stat == stat)
+                    .ToList();
+                var flatBonus = flatBonuses.Any() ? flatBonuses.Sum(s => s.strength) : 0;
+
+                var additivePercentBonuses = statBonusEnumerable
+                    .Where(s => s.statType == StatType.AdditivePercent && s.stat == stat).ToList();
+                var additivePercentBonus =
+                    additivePercentBonuses.Any() ? additivePercentBonuses.Sum(s => s.strength) : 0;
+
+                var multiplyBonuses = statBonusEnumerable
+                    .Where(s => s.statType == StatType.Multiplicative && s.stat == stat).ToList();
+                var multiply = multiplyBonuses.Any()
+                    ? multiplyBonuses
+                        .Select(s => s.strength)
+                        .Aggregate((x, y) => x * y)
+                    : 1;
+
+                bonusDictionary[stat] = flatBonus * (1 + additivePercentBonus) * multiply;
+            }
+
+            return bonusDictionary;
         }
 
         private static readonly Dictionary<Stat, string> StatFormattingKey = new Dictionary<Stat, string>()

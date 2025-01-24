@@ -15,14 +15,14 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         public override void OnAddOwner()
         {
-            PlayerStats.Stats.AddStatBonus(StatType.Flat, Stat.Armor, ArmorBonusFlatFinal, "ArmoredBoot");
-            PlayerStats.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Armor, ArmorBonusMultFinal, "ArmoredBoot");
-            PlayerStats.Stats.AddStatBonus(StatType.AdditivePercent, Stat.MoveSpeed, -moveSpeedPenalty, "ArmoredBoot");
+            PlayerStats.LocalStats.AddStatBonus(StatType.Flat, Stat.Armor, ArmorBonusFlatFinal, "ArmoredBoot");
+            PlayerStats.LocalStats.AddStatBonus(StatType.AdditivePercent, Stat.Armor, ArmorBonusMultFinal, "ArmoredBoot");
+            PlayerStats.LocalStats.AddStatBonus(StatType.AdditivePercent, Stat.MoveSpeed, -moveSpeedPenalty, "ArmoredBoot");
         }
 
         public override void OnRemoveOwner()
         {
-            PlayerStats.Stats.RemoveStatBonuses("ArmoredBoot");
+            PlayerStats.LocalStats.RemoveStatBonuses("ArmoredBoot");
         }
 
         public override void OnUpdateOwner()

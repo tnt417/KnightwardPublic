@@ -552,7 +552,7 @@ namespace TonyDev.Game.Global
             if (SessionPlayCount > 0) Player.OnLocalPlayerCreated -= Instance.Init;
 
             if (PlayerInventory.Instance != null) PlayerInventory.Instance.Clear();
-            if (PlayerStats.Stats != null) PlayerStats.Stats.ClearStatBonuses();
+            if (PlayerStats.LocalStats != null) PlayerStats.LocalStats.ClearStatBonuses();
         }
 
         //Switches back and forth between Arena and Dungeon phases

@@ -341,8 +341,8 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             //playerSpriteRenderers[0].sprite = playerSprites[PlayerSpriteIndex];
 
-            playerAnimator.SetFloat("moveSpeed", PlayerStats.Stats.GetStat(Stat.MoveSpeed));
-            playerAnimator.SetFloat("attackSpeed", PlayerStats.Stats.GetStat(Stat.AttackSpeed));
+            playerAnimator.SetFloat("moveSpeed", PlayerStats.LocalStats.GetStat(Stat.MoveSpeed));
+            playerAnimator.SetFloat("attackSpeed", PlayerStats.LocalStats.GetStat(Stat.AttackSpeed));
 
             if (PlayerAnimState == _lastAnimState && _lastAttack == (Player.LocalInstance.CanAttack || attackingOverride)) return;
             _lastAnimState = PlayerAnimState;

@@ -288,6 +288,11 @@ namespace TonyDev.Game.Core.Entities
             {
                 Attack();
             }
+
+            if (!Stats.ReadOnly && _statsDirty)
+            {
+                CmdSendStatsToClients(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
+            }
             
             if (this is Player.Player || !isOwned) return;
             
@@ -315,9 +320,10 @@ namespace TonyDev.Game.Core.Entities
             
             Stats.ReadOnly = false;
 
-            Stats.OnStatsChanged += UpdateStats;
-            Stats.OnStatsChanged += () =>
+            Stats.OnStatChanged += (_) => FlagStatsAsDirty(true) ;
+            Stats.OnStatChanged += (stat) =>
             {
+                if (stat != Stat.Health) return;
                 SetNetworkHealth(CurrentHealth, MaxHealth);
                 //CmdSetHealth(CurrentHealth, MaxHealth);
             };
@@ -327,7 +333,7 @@ namespace TonyDev.Game.Core.Entities
                 Stats.AddStatBonus(sb.statType, sb.stat, sb.strength, "GameEntity");
             }
 
-            UpdateStats();
+            FlagStatsAsDirty(true);
 
             UpdateTargets();
             
@@ -352,10 +358,17 @@ namespace TonyDev.Game.Core.Entities
         public Action<float, GameEntity, bool, DamageType>
             OnDamageOther; //TODO: Damage types: Contact, Projectile, DoT, AoE, etc. (Use to better control PoisonInflictEffect)
 
-        private void UpdateStats()
+        private bool _statsDirty = false;
+        
+        private void FlagStatsAsDirty(bool dirty)
+        {
+            _statsDirty = true;
+        }
+        
+        private void UpdateStat(Stat stat)
         {
             //if (Stats.ReadOnly) return;
-            CmdUpdateStats(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
+            CmdSendStatsToClients(Stats.StatValues.Keys.ToArray(), Stats.StatValues.Values.ToArray());
         }
 
         public override void OnStartClient()
@@ -378,7 +391,7 @@ namespace TonyDev.Game.Core.Entities
         }
 
         [Command(requiresAuthority = false)]
-        private void CmdUpdateStats(Stat[] keys, float[] values)
+        private void CmdSendStatsToClients(Stat[] keys, float[] values)
         {
             RpcUpdateStats(keys, values);
         }

@@ -16,9 +16,9 @@ namespace TonyDev.Game.Core.Items.Relics.BerserkersBrew
         private float DamageMultiplier => LinearScale(0.8f, 1.5f, 50);
         protected void OnAbilityActivate()
         {
-            PlayerStats.Stats.RemoveBuffsOfSource("BerserkersBrew");
-            PlayerStats.Stats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.HpRegen, RegenMultiplier, "BerserkersBrew"), _duration);
-            PlayerStats.Stats.AddBuff(new StatBonus(StatType.AdditivePercent, Stat.Damage, DamageMultiplier, "BerserkersBrew"), _duration);
+            PlayerStats.LocalStats.RemoveBuffsOfSource("BerserkersBrew");
+            PlayerStats.LocalStats.AddBuff(new StatBonus(StatType.Multiplicative, Stat.HpRegen, RegenMultiplier, "BerserkersBrew"), _duration);
+            PlayerStats.LocalStats.AddBuff(new StatBonus(StatType.AdditivePercent, Stat.Damage, DamageMultiplier, "BerserkersBrew"), _duration);
         }
 
         private float _duration = 8f;

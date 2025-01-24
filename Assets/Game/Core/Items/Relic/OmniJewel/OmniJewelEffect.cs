@@ -10,15 +10,15 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
         public float additivePercentBonus = 0.1f;
         public override void OnAddOwner()
         {
-            PlayerStats.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Damage, additivePercentBonus, "OmniJewel");
-            PlayerStats.Stats.AddStatBonus(StatType.AdditivePercent, Stat.AttackSpeed, additivePercentBonus, "OmniJewel");
-            PlayerStats.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Armor, additivePercentBonus, "OmniJewel");
-            PlayerStats.Stats.AddStatBonus(StatType.AdditivePercent, Stat.Health, additivePercentBonus, "OmniJewel");
+            PlayerStats.LocalStats.AddStatBonus(StatType.AdditivePercent, Stat.Damage, additivePercentBonus, "OmniJewel");
+            PlayerStats.LocalStats.AddStatBonus(StatType.AdditivePercent, Stat.AttackSpeed, additivePercentBonus, "OmniJewel");
+            PlayerStats.LocalStats.AddStatBonus(StatType.AdditivePercent, Stat.Armor, additivePercentBonus, "OmniJewel");
+            PlayerStats.LocalStats.AddStatBonus(StatType.AdditivePercent, Stat.Health, additivePercentBonus, "OmniJewel");
         }
 
         public override void OnRemoveOwner()
         {
-            PlayerStats.Stats.RemoveStatBonuses("OmniJewel");
+            PlayerStats.LocalStats.RemoveStatBonuses("OmniJewel");
         }
 
         public override void OnUpdateOwner()

@@ -55,66 +55,82 @@ namespace TonyDev.Game.Core.Behavior
             return hit.transform != null && target != null && hit.transform.root == target;
         }
 
+        private Pathfinding GetPathfinding()
+        {
+            if (Enemy.CurrentParentIdentity == null)
+            {
+                return Pathfinding.ArenaPathfinding;
+            }
+
+            var room = RoomManager.Instance.GetRoomFromID(Enemy.CurrentParentIdentity.netId);
+
+            return room.RoomPathfinding;
+        }
+        
         protected async UniTask PathfindFollow(Func<Transform> followTransform, Func<float> speed, Func<bool> predicate)
         {
+            var pathfinding = GetPathfinding();
+
+            List<Vector2> curPath = null;
+            
+            int pathIdx = 0;
+
+            var lastTargetPos = Vector2.zero;
+            
             while (Enemy != null)
             {
                 await UniTask.WaitForFixedUpdate();
 
-                if (followTransform.Invoke() == null)
+                var newTransform = followTransform.Invoke();
+                
+                if (newTransform == null)
                 {
                     continue; // Wait for a target
                 }
 
                 if (!predicate.Invoke()) return; // Check our predicate
 
-                // Arena pathfinding or room pathfinding?
+                pathfinding = GetPathfinding();
+                
+                Vector2 newTargetPos = newTransform.position;
 
-                Pathfinding pathfinding;
-
-                if (Enemy.CurrentParentIdentity == null)
+                var sqrDistanceTravelledTarget = (newTargetPos - lastTargetPos).sqrMagnitude;
+                
+                if (sqrDistanceTravelledTarget > 1)
                 {
-                    pathfinding = Pathfinding.ArenaPathfinding;
+                    curPath = pathfinding.GetPath(Enemy.transform.position, newTargetPos);
+                    pathIdx = 0;
+                    lastTargetPos = newTargetPos;
                 }
-                else
+                
+                // If the path is empty or invalid, recalculate
+                if (curPath == null || curPath.Count == 0 || pathIdx >= curPath.Count)
                 {
-                    var room = RoomManager.Instance.GetRoomFromID(Enemy.CurrentParentIdentity.netId);
-
-                    if (room == null) continue;
-
-                    pathfinding = room.RoomPathfinding;
+                    curPath = pathfinding.GetPath(Enemy.transform.position, newTargetPos);
+                    pathIdx = 0;
                 }
 
-                var t = followTransform.Invoke();
+                var point = curPath.Count > 0 ? curPath[pathIdx] : newTargetPos;
 
-                Vector2 lastTargetPos = t.position;
-
-                var path = pathfinding.GetPath(Enemy.transform.position, lastTargetPos);
-
-                var pathLength = path.Count;
-
-                for (var i = 1; i < pathLength; i++)
+                // Move forward in path if we reached the point
+                if (Vector2.Distance(Enemy.transform.position, point) < 0.5f) 
                 {
-                    var point = path[i];
-
-                    if (t == null || followTransform.Invoke() != t) break;
-
-                    var newTargetPos = (Vector2) t.position;
-
-                    if (lastTargetPos != newTargetPos)
+                    pathIdx++;
+                    if (pathIdx < curPath.Count)
                     {
-                        break;
+                        point = curPath[pathIdx];
                     }
-
-                    await UniTask.WaitUntil(
-                        () =>
-                        {
-                            return (!GameManager.EntitiesReadonly.Any(e =>
-                                e is Enemy && e != Enemy && Vector2.Distance(e.transform.position, point) < 0.7f)) || Random.Range(0f, 1f) > 0.98f;
-                        }, PlayerLoopTiming.FixedUpdate);
-
-                    await Goto(point, speed, 1f / speed.Invoke());
                 }
+
+                // await UniTask.WaitUntil(
+                //     () =>
+                //     {
+                //         return (!GameManager.EntitiesReadonly.Any(e =>
+                //             e is Enemy && e != Enemy && Vector2.Distance(e.transform.position, point) < 0.7f)) || Random.Range(0f, 1f) > 0.98f;
+                //     }, PlayerLoopTiming.FixedUpdate);
+
+                // TODO: maxTime may mess this up, since we aren't guaranteed to have reached the tile in time
+                await Goto(point, speed, 1f / speed.Invoke());
             }
         }
 

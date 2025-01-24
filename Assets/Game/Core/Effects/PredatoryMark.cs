@@ -60,7 +60,7 @@ namespace TonyDev.Game.Core.Effects
             var oldestMaxSb = sbs.Where(s => s.source.StartsWith("PredatoryMark_BUFF"))
                 .OrderBy(s => s.source.Split("_BUFF").Last()).ElementAtOrDefault(MaximumEnemies-1);
 
-            if(!string.IsNullOrEmpty(oldestMaxSb.source)) Entity.Stats.RemoveBuffs(new List<string>{ oldestMaxSb.source });
+            if(!string.IsNullOrEmpty(oldestMaxSb.source)) Entity.Stats.RemoveBuffs(new HashSet<string>{ oldestMaxSb.source });
             
             Entity.Stats.AddBuff(new StatBonus(StatType.AdditivePercent, Stat.Damage, BonusDamagePerEnemy, "PredatoryMark"), BonusDuration);
         }

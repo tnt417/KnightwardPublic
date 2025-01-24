@@ -166,7 +166,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public float GetSpeedMultiplier()
         {
-            return speedMultiplier * PlayerStats.Stats.GetStat(Stat.MoveSpeed);
+            return speedMultiplier * PlayerStats.LocalStats.GetStat(Stat.MoveSpeed);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
@@ -51,7 +52,7 @@ namespace TonyDev.Game.Core.Effects.ItemEffects
 
         protected override void OnAbilityDeactivate()
         {
-            Entity.Stats.RemoveBuffs(new[] {"daggerEffect"});
+            Entity.Stats.RemoveBuffs(new HashSet<string> {"daggerEffect"});
         }
     }
 }

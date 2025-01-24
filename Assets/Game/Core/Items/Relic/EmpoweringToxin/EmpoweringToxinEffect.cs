@@ -30,13 +30,13 @@ namespace TonyDev.Game.Core.Items.Relics.EmpoweringToxin
         
         private void OnAbilityActivate()
         {
-            PlayerStats.Stats.RemoveBuffsOfSource("EmpoweringToxin");
-            PlayerStats.Stats.AddBuff(
+            PlayerStats.LocalStats.RemoveBuffsOfSource("EmpoweringToxin");
+            PlayerStats.LocalStats.AddBuff(
                 new StatBonus(StatType.Flat, Stat.MoveSpeed, MoveSpeedStrength, "EmpoweringToxin"),
                 _duration);
-            PlayerStats.Stats.AddBuff(
+            PlayerStats.LocalStats.AddBuff(
                 new StatBonus(StatType.Flat, Stat.CritChance, CritChanceStrength, "EmpoweringToxin"), _duration);
-            PlayerStats.Stats.AddBuff(
+            PlayerStats.LocalStats.AddBuff(
                 new StatBonus(StatType.AdditivePercent, Stat.AttackSpeed, AttackSpeedStrength, "EmpoweringToxin"),
                 _duration);
         }
