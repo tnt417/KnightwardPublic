@@ -22,7 +22,7 @@ namespace TonyDev
     {
         public static SteamLobbyManager Singleton;
 
-        private bool _isSteamServer = true;
+        private bool _isSteamServer = false;
         public static bool IsSteamServer => Singleton._isSteamServer;
         
         public const int MaxConnections = 4;
@@ -34,9 +34,9 @@ namespace TonyDev
                 return;
             }
             
-            if (NetworkManager.singleton is CustomNetworkManager { TelepathyServer: true })
+            if (NetworkManager.singleton is CustomNetworkManager { TelepathyServer: false })
             {
-                _isSteamServer = false;
+                _isSteamServer = true;
             }
 
             Singleton = this;

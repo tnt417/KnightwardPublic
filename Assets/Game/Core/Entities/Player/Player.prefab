@@ -759,7 +759,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0.05
+  syncInterval: 0
   targetTag: 
   targetTeam: 0
   maxTargets: 0
@@ -933,7 +933,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0.05
+  syncInterval: 0
   deathCooldown: 5
   healthBarObject: {fileID: 7021041495485311875}
   deathTimerText: {fileID: 2684003557218082394}
@@ -971,7 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0.05
+  syncInterval: 0
   playerSprites:
   - {fileID: 9119549463136492614, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: 4059640450490198499, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
@@ -1085,7 +1085,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0.05
+  syncInterval: 0
   clientAuthority: 1
   animator: {fileID: 29065221820089324}
 --- !u!114 &6969937559770791317

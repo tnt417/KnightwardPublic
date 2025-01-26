@@ -309,7 +309,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 301799387}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c7424c1070fad4ba2a7a96b02fbeb4bb, type: 3}
   m_Name: 
@@ -326,17 +326,6 @@ MonoBehaviour:
   clientMaxReceivesPerTick: 1000
   clientSendQueueLimit: 10000
   clientReceiveQueueLimit: 10000
---- !u!114 &301799395 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1057266554955491540, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
-  m_PrefabInstance: {fileID: 1971188471}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 301799387}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e6e55fca1f4e4844593a3dd65a3ecb39, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &576721531
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,50 +804,6 @@ MonoBehaviour:
   m_PointerBehavior: 0
   m_CursorLockBehavior: 0
   m_ScrollDeltaPerTick: 6
---- !u!1 &1138793621
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1138793623}
-  - component: {fileID: 1138793622}
-  m_Layer: 0
-  m_Name: SteamManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1138793622
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1138793621}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 503e05d10675ce943885a71831fb18a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &1138793623
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1138793621}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5003.9873, y: -8.278788, z: -0.03189482}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1951688045 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 6313302411393055942, guid: af071955a02125e4ea21467db71d3474, type: 3}
@@ -917,7 +862,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1057266554955491540, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1057266554955491540, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
       propertyPath: AllowSteamRelay
@@ -925,6 +870,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1057266554955491540, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
       propertyPath: UseNextGenSteamNetworking
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2062337069869111294, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7946368391365645780, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
@@ -944,9 +893,13 @@ PrefabInstance:
       value: NetworkManager
       objectReference: {fileID: 0}
     - target: {fileID: 7946368391397325074, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
+      propertyPath: sendRate
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7946368391397325074, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
       propertyPath: transport
       value: 
-      objectReference: {fileID: 301799395}
+      objectReference: {fileID: 301799392}
     - target: {fileID: 7946368391397325074, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
       propertyPath: offlineScene
       value: Assets/Scenes/GameOver.unity
@@ -1001,6 +954,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 984172327396941035, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
+    - {fileID: 1057266554955491540, guid: 4ae2496e18e268b479cdd5c397e3772d, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -1607,4 +1561,3 @@ SceneRoots:
   - {fileID: 1971188471}
   - {fileID: 4234467417400119827}
   - {fileID: 2044785519}
-  - {fileID: 1138793623}

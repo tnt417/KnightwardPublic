@@ -33,7 +33,7 @@ namespace TonyDev.Game.Global.Network
 
         [SyncVar] public string classEffectName;
 
-        private static int _numPlayersServer;
+        public static int NumPlayersServer;
         [SyncVar] public int playerNumber;
         
         public readonly SyncList<string> UnlockedItemNames = new();
@@ -120,7 +120,6 @@ namespace TonyDev.Game.Global.Network
             if (isServer)
             {
                 CmdChangeReadyState(true);
-                _numPlayersServer = 0;
             }
 
             actionButton.onClick.AddListener(() =>
@@ -150,8 +149,8 @@ namespace TonyDev.Game.Global.Network
         [Server]
         public override void OnStartServer()
         {
-            _numPlayersServer++;
-            playerNumber = _numPlayersServer;
+            NumPlayersServer++;
+            playerNumber = NumPlayersServer;
 
             if (!SteamLobbyManager.IsSteamServer)
             {

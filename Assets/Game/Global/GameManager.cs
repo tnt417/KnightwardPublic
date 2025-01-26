@@ -544,6 +544,7 @@ namespace TonyDev.Game.Global
             //Essence = 0;
             MoneyDropBonusFactor = 0;
             Timer.GameTimer = 0;
+            CustomRoomPlayer.NumPlayersServer = 0;
 
             AllItems?.Clear();
             Entities?.Clear();
