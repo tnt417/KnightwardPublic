@@ -99,15 +99,16 @@ namespace TonyDev.Game.Core.Behavior
                 if (sqrDistanceTravelledTarget > 1)
                 {
                     curPath = pathfinding.GetPath(Enemy.transform.position, newTargetPos);
-                    pathIdx = 0;
+                    pathIdx = curPath.Count > 1 ? 1 : 0;
                     lastTargetPos = newTargetPos;
                 }
                 
                 // If the path is empty or invalid, recalculate
-                if (curPath == null || curPath.Count == 0 || pathIdx >= curPath.Count)
+                if (curPath == null || curPath.Count == 0 || pathIdx >= curPath.Count || _needRecalculatePath)
                 {
                     curPath = pathfinding.GetPath(Enemy.transform.position, newTargetPos);
-                    pathIdx = 0;
+                    pathIdx = curPath.Count > 1 ? 1 : 0;
+                    _needRecalculatePath = false;
                 }
 
                 var point = curPath.Count > 0 ? curPath[pathIdx] : newTargetPos;
@@ -291,8 +292,15 @@ namespace TonyDev.Game.Core.Behavior
                 ? _forceVectors.Select(x => x.Force * x.Direction).Aggregate((x, y) => x + y)
                 : Vector2.zero;
 
+            if (forceSum != Vector2.zero)
+            {
+                _needRecalculatePath = true;
+            }
+            
             Rb2d.AddForce(forceSum);
         }
+
+        private bool _needRecalculatePath;
 
         public void Dash(float distance, Vector2 direction)
         {
@@ -301,7 +309,7 @@ namespace TonyDev.Game.Core.Behavior
 
         private void AddForce(Vector2 direction, float units)
         {
-            _forceVectors.Add(new GameForce(direction, 15f, units));
+            _forceVectors.Add(new GameForce(direction, 30f, units));
         }
     }
 }

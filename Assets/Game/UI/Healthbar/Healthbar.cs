@@ -55,7 +55,7 @@ namespace TonyDev.Game.UI.Healthbar
                 
                 fillImage.color = gameEntity.IsInvulnerable
                     ? new Color(146f/255f, 232f/255f, 192f/255f)//new Color(0.572549f, 0.909804f, 0.7529413f)
-                    : (gameEntity.Team == Team.Player ? new Color(0.3882353f, 0.6705883f, 0.2470588f) : new Color(47f/255f, 87f/255f, 83f/255f));
+                    : (/*gameEntity.Team == Team.Player*/true ? new Color(0.3882353f, 0.6705883f, 0.2470588f) : new Color(47f/255f, 87f/255f, 83f/255f));
                 
                 var dmg = PoisonEffect.GetPoisonDamage(gameEntity);
 

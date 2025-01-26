@@ -121,13 +121,18 @@ namespace TonyDev.Game.Level.Rooms
             OnRoomsChanged += DoDoorClosing;
             OnRoomsChanged?.Invoke();
 
-            OnActiveRoomChanged += () => CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom);
+            OnActiveRoomChanged += CallBroadcastRoomChange;
+        }
+
+        private void CallBroadcastRoomChange()
+        {
+            CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom);
         }
 
         public override void OnStopClient()
         {
             base.OnStopClient();
-            OnActiveRoomChanged -= () => CmdBroadcastRoomChange(Player.LocalInstance, currentActiveRoom);
+            OnActiveRoomChanged -= CallBroadcastRoomChange;
         }
 
         [Command(requiresAuthority = false)]

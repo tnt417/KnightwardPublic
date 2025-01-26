@@ -245,7 +245,7 @@ namespace TonyDev.Game.Core.Attacks
             var eb = ge.GetComponent<EnemyBehavior>();
             if (eb != null)
             {
-                if(percentDealt > 0.05) eb.PauseMovement(0.2f);
+                if(percentDealt > 0.05) eb.PauseMovement(0.5f);
                 eb.Dash((Random.Range(0.5f, 0.7f) + percentDealt * 0.5f) * knockbackMultiplier,
                     GameTools.Rotate(ge.transform.position - transform.position, Random.Range(-0.2f, 0.2f))
                         .normalized);

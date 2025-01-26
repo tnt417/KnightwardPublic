@@ -51,14 +51,6 @@ namespace TonyDev.Game.Global.Network
 
         private int _skinIndex = 0;
 
-        private void Awake()
-        {
-            if (isOwned && isServer)
-            {
-                _numPlayersServer = 0;
-            }
-        }
-
         private void OnSkinChanged(PlayerSkin oldSkin, PlayerSkin newSkin)
         {
             foreach (var playerImage in playerImages)
@@ -128,6 +120,7 @@ namespace TonyDev.Game.Global.Network
             if (isServer)
             {
                 CmdChangeReadyState(true);
+                _numPlayersServer = 0;
             }
 
             actionButton.onClick.AddListener(() =>
