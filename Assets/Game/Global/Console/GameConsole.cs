@@ -198,6 +198,12 @@ namespace TonyDev.Game.Global.Console
 
             if (gameCommand?.PermissionLevel == PermissionLevel.Cheat)
             {
+                if (GameManager.IsDemo)
+                {
+                    Log("<color=red>Cheat commands are disabled in the demo!</color>");
+                    return;
+                }
+                
                 GameObject.FindWithTag("CheatDisclaimer").GetComponent<TextMeshProUGUI>().enabled = true;
             }
             

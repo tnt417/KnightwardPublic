@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
+using TonyDev.Game.Global;
 
 namespace TonyDev.Game.Level
 {
@@ -23,6 +24,12 @@ namespace TonyDev.Game.Level
             //
         
             _transitionAnimator = GetComponent<Animator>(); //Initialize animator component
+
+            if (GameManager.IsDemo)
+            {
+                _transitionAnimator.Play("SceneBlackout");
+                return;
+            }
             
             _transitionAnimator.Play("SceneFadeIn"); //Fade in when scene is loaded
         }
@@ -32,6 +39,11 @@ namespace TonyDev.Game.Level
             OutTransitionDone = false;
             _transitionAnimator.SetBool("ready", true);
             _transitionAnimator.Play("SceneFadeOut"); //Play the animation
+        }
+
+        public void BlackoutUntilFadeIn()
+        {
+            _transitionAnimator.Play("SceneBlackout");
         }
 
         public void FadeOut()

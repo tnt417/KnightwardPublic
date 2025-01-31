@@ -103,10 +103,29 @@ namespace TonyDev.Game.Global.Network
             StartHost();
 
             if(SteamLobbyManager.IsSteamServer) SteamLobbyManager.Singleton.OnLobbyCreateSuccessful -= OnLobbyCreateSuccessful;
+
+            if (GameManager.IsDemo)
+            {
+                maxConnections = 1;
+                //ServerChangeScene(GameplayScene);
+            }
+        }
+
+        public override void OnStartHost()
+        {
+            base.OnStartHost();
+            if (GameManager.IsDemo)
+            {
+                //ServerChangeScene(GameplayScene);
+            }
         }
 
         public override void OnRoomServerPlayersReady()
         {
+            if (GameManager.IsDemo)
+            {
+                ServerChangeScene(GameplayScene);
+            }
         }
 
         [Server]

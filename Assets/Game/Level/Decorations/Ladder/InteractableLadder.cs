@@ -20,8 +20,9 @@ namespace TonyDev.Game.Level.Decorations.Ladder
         {
             if (Player.LocalInstance.playerAnimator.isInLadderAnim) return;
             
-            if (winGame)
+            if (winGame || (GameManager.IsDemo && GameManager.DungeonFloor == 5 && regen))
             {
+                Player.LocalInstance.playerAnimator.JumpIntoLadderTask(gameObject, regen).Forget();
                 GameManager.Instance.GameWin();
                 return;
             }

@@ -23,7 +23,7 @@ namespace TonyDev
         public static SteamLobbyManager Singleton;
 
         private bool _isSteamServer = false;
-        public static bool IsSteamServer => Singleton._isSteamServer;
+        public static bool IsSteamServer => Singleton._isSteamServer && !GameManager.IsDemo;
         
         public const int MaxConnections = 4;
 

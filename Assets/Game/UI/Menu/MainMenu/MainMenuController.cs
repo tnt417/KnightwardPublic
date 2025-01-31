@@ -21,6 +21,16 @@ namespace TonyDev.Game.UI.Menu.MainMenu
             GameManager.ResetGame();
 
             Debug.unityLogger.logEnabled = PlayerPrefs.GetInt("errorLog", 1) == 1;
+            
+            if (GameManager.IsDemo)
+            {
+                var customNetManager = NetworkManager.singleton as CustomNetworkManager;
+            
+                if (customNetManager != null)
+                {
+                    customNetManager.CreateAndHost().Forget();
+                }
+            }
         }
 
         private bool _hostClicked = false;

@@ -44,6 +44,8 @@ namespace TonyDev.Game.Global
     public class GameManager : NetworkBehaviour
     {
         public static GameManager Instance;
+        
+        public const bool IsDemo = true;
 
         #region Items
 

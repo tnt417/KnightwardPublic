@@ -25,6 +25,7 @@ namespace TonyDev
         public const string UnlocksKey = "item-unlocks";
 
         public List<ItemData> defaultUnlocks;
+        public List<ItemData> demoUnlocks;
 
         public void Awake()
         {
@@ -37,6 +38,11 @@ namespace TonyDev
             DontDestroyOnLoad(gameObject);
             Instance = this;
 
+            if (GameManager.IsDemo)
+            {
+                unlockedItems = demoUnlocks;
+                return;
+            }
 
             if (PlayerPrefs.HasKey(UnlocksKey))
             {
@@ -86,7 +92,7 @@ namespace TonyDev
         
         public void AddUnlock(string itemName)
         {
-            if (Unlocks.Contains(itemName)) return;
+            if (Unlocks.Contains(itemName) || GameManager.IsDemo) return;
 
             var item = GameManager.AllItems.First(i => i.item.itemName == itemName);
             
