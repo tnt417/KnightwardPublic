@@ -45,7 +45,7 @@ namespace TonyDev.Game.Global
     {
         public static GameManager Instance;
         
-        public const bool IsDemo = true;
+        public const bool IsDemo = false;
 
         #region Items
 

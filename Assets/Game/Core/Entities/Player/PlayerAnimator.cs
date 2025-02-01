@@ -6,7 +6,11 @@ using Mirror;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
+using TonyDev.Game.UI.Healthbar;
 using UnityEngine;
+using UnityEngine.U2D;
+using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Player
 {
@@ -125,6 +129,8 @@ namespace TonyDev.Game.Core.Entities.Player
 
         [SyncVar (hook = nameof(WeaponSpriteUpdateHook))] [NonSerialized] private string _weaponSpriteName = "broadsword_hand";
 
+        public GameObject usernameObject;
+        
         public void SetAttackAnimProgress(float normalized)
         {
             Player.LocalInstance.SetAttackProgress(normalized);
@@ -181,14 +187,22 @@ namespace TonyDev.Game.Core.Entities.Player
 
         [SyncVar(hook = nameof(OnSkinChanged))]
         private PlayerSkin _skin;
-        
-        [SyncVar]
-        private int _playerNum;
 
         public override void OnStartAuthority()
         {
             SetSkin(CustomRoomPlayer.Local.skin);
-            SetPlayerNum(CustomRoomPlayer.Local.playerNumber);
+        }
+
+        private void Start()
+        {
+            playerAnimator.Play("Hidden");
+        }
+
+        public override void OnStartLocalPlayer()
+        {
+            if (!Player.LocalInstance.playerAnimator == this) return;
+            Debug.Log("On start local player");
+            PlayerSpawnAnim(true, true).Forget();
         }
 
         private void OnSkinChanged(PlayerSkin oldSkin, PlayerSkin newSkin)
@@ -215,18 +229,6 @@ namespace TonyDev.Game.Core.Entities.Player
             OnSkinChanged(default, skin);
             
             _skin = skin;
-        }
-        
-        [Client]
-        public void SetPlayerNum(int num)
-        {
-            if (!isOwned)
-            {
-                Debug.LogWarning("Called without ownership!");
-                return;
-            }
-            
-            _playerNum = num;
         }
 
         public void SetOpacity(float value)
@@ -312,23 +314,44 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             playerAnimator.Play("NotShake", 3);
         }
-        
-        public override void OnStartLocalPlayer()
-        {
-            base.OnStartServer();
-            PlayerSpawnAnim(true, true).Forget();
-        }
+
+        public GameObject transformVisiblityObject;
+        public Canvas healthbarCanvas;
+        public GameObject shadowVisiblityObject;
         
         public async UniTask PlayerSpawnAnim(bool focusCrystal = false, bool scaleDelayWithPlayers = false)
         {
+            //_overriding = true;
             _overriding = true;
             Player.LocalInstance.stopPlayerAttack = true;
             Player.LocalInstance.playerMovement.DoMovement = false;
-            if(focusCrystal) GameManager.Instance.doCrystalFocusing = true;
-            await UniTask.WaitUntil(() => _playerNum > 0);
-            if(scaleDelayWithPlayers) await UniTask.Delay(TimeSpan.FromSeconds(0.5f * _playerNum));
+            if (focusCrystal)
+            {
+                GameManager.Instance.doCrystalFocusing = true;
+            }
+
+            float storedSpeed = playerAnimator.speed;
+            playerAnimator.speed = 0;
+            
+            if (scaleDelayWithPlayers)
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(0.5f * (CustomRoomPlayer.Local.playerNumber)));
+            }
+            PlayerAnimState = Random.Range(0, 2) switch
+            {
+                0 => PlayerAnimState.Left,
+                1 => PlayerAnimState.Right,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+
+            playerAnimator.speed = storedSpeed;
+            
+            SetFlip(PlayerAnimState == PlayerAnimState.Left);
             playerAnimator.Play("PlayerSpawnInitial");
-            await UniTask.Delay(TimeSpan.FromSeconds(2.5f));
+            Debug.Log("PlayerSpawnInitial");
+            await UniTask.Delay(TimeSpan.FromSeconds(1.3333f));
+            SoundManager.PlaySoundPitchVariant("footstep",0.5f,transform.position,1.45f, 1.55f);
+            await UniTask.Delay(TimeSpan.FromSeconds(1.1667f));
             if(focusCrystal) GameManager.Instance.doCrystalFocusing = false;
             _lastAnimState = PlayerAnimState.Dead;
             Player.LocalInstance.playerMovement.DoMovement = true;
