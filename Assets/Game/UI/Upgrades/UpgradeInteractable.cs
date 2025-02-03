@@ -49,10 +49,5 @@ namespace TonyDev
         }
 
         public GameObject notificationObject;
-
-        public void SetActive(bool active)
-        {
-            Indicator.gameObject.SetActive(active);
-        }
     }
 }

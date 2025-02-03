@@ -24,17 +24,16 @@ namespace TonyDev.Game.Level.Decorations
         Pickup,
         Repair
     }
+    
     public abstract class Interactable : MonoBehaviour
     {
         [SerializeField] public UnityEvent<InteractType> onInteract = new();
-        [SerializeField] protected int cost;
+        [SerializeField] public int cost;
         [SerializeField] protected bool scaleCost;
-        [SerializeField] private string label;
+        [SerializeField] public string label;
 
         [FormerlySerializedAs("IsInteractable")] public bool isInteractable = true;
-
-        private GameObject _indicatorObject;
-        protected Indicator Indicator;
+        
         protected Dictionary<Key, InteractType> _interactKeys = new ();
 
         public void AddInteractKey(Key keyCode, InteractType type)
@@ -66,16 +65,8 @@ namespace TonyDev.Game.Level.Decorations
             _controlText = sb.ToString();
         }
 
-        protected void PlayInteractSound()
-        {
-            SoundManager.PlaySound("interact",0.5f, transform.position);
-        }
-
         protected void Start()
         {
-            _indicatorObject = Instantiate(ObjectFinder.GetPrefab("indicator"), transform);
-            Indicator = _indicatorObject.GetComponent<Indicator>();
-            
             AddInteractKey(Key.E, InteractType.Interact);
 
             SetCost((int)(scaleCost ? cost*ItemGenerator.DungeonInteractMultiplier : cost));
@@ -130,18 +121,6 @@ namespace TonyDev.Game.Level.Decorations
 
                 onInteract?.Invoke(value);
             }
-
-            if (_costChanged)
-            {
-                Indicator.SetCost(cost);
-                _costChanged = false;
-            }
-
-            if (_labelChanged)
-            {
-                Indicator.SetLabel(label);
-                _labelChanged = false;
-            }
         }
 
         protected virtual void OnInteract(InteractType type)
@@ -149,21 +128,18 @@ namespace TonyDev.Game.Level.Decorations
             PlayInteractSound();
         }
 
-        private bool _active = true;
-
-        public bool Active
+        protected void PlayInteractSound()
         {
-            set
-            {
-                if (_active == value) return;
-                _active = value;
-                SetActive(value);
-            }
-            get => _active;
+            SoundManager.PlaySoundPitchVariant("interact", 0.5f, GameManager.MainCamera.transform.position, 0.95f, 1.05f);
         }
 
+        private bool _active = true;
+        public bool Active;
         public bool overrideCurrent;
-        
+        private int _cost;
+        private UnityEvent<InteractType> _onInteract;
+        private string _label;
+
         public static Interactable Current;
         
         private void OnTriggerEnter2D(Collider2D other)
@@ -173,6 +149,7 @@ namespace TonyDev.Game.Level.Decorations
             if (Current != null && Current.overrideCurrent)
             {
                 Active = false;
+                TryCallToUpdate();
                 return;
             }
             
@@ -186,6 +163,7 @@ namespace TonyDev.Game.Level.Decorations
             {
                 Current = this;
                 Active = true;
+                TryCallToUpdate();
                 return;
             }
             
@@ -200,9 +178,11 @@ namespace TonyDev.Game.Level.Decorations
                 {
                     Current.Active = false;
                     Current = this;
-                    Active = true;   
+                    Active = true;
                 }
             }
+            
+            TryCallToUpdate();
         }
 
         private void OnTriggerStay2D(Collider2D other)
@@ -211,7 +191,7 @@ namespace TonyDev.Game.Level.Decorations
             
             if (Current != null && Current.overrideCurrent)
             {
-                Active = false;
+                TryCallToUpdate();
                 return;
             }
             
@@ -221,6 +201,7 @@ namespace TonyDev.Game.Level.Decorations
             {
                 Active = false;
                 if (Current == this) Current = null;
+                TryCallToUpdate();
                 return;
             }
             
@@ -232,6 +213,7 @@ namespace TonyDev.Game.Level.Decorations
             {
                 Active = true;
                 Current = this;
+                TryCallToUpdate();
                 return;
             }
             
@@ -246,6 +228,8 @@ namespace TonyDev.Game.Level.Decorations
                 Active = true;
                 Current = this;
             }
+            
+            TryCallToUpdate();
         }
 
         private void OnTriggerExit2D(Collider2D other)
@@ -255,6 +239,7 @@ namespace TonyDev.Game.Level.Decorations
             if (Current != null && Current.overrideCurrent)
             {
                 Active = false;
+                TryCallToUpdate();
                 return;
             }
             
@@ -270,25 +255,20 @@ namespace TonyDev.Game.Level.Decorations
             {
                 Current = null;
             }
-        }
-
-        private void SetActive(bool active)
-        {
-            if (_indicatorObject == null)
-            {
-                SetActiveOnceIndicator(active).Forget();
-                return;
-            }
             
-            _indicatorObject.SetActive(active);
-            foreach (var img in _indicatorObject.GetComponentsInChildren<Image>())
-                img.enabled = active;
+            TryCallToUpdate();
         }
-
-        private async UniTask SetActiveOnceIndicator(bool active)
+        
+        protected void TryCallToUpdate()
         {
-            await UniTask.WaitUntil(() => _indicatorObject != null);
-            SetActive(active);
+            if (Current == this)
+            {
+                Indicator.Instance.UpdateCurrentInteractable(this);
+            }
+            else if (Current == null)
+            {
+                Indicator.Instance.UpdateCurrentInteractable(null);
+            }
         }
     }
 }

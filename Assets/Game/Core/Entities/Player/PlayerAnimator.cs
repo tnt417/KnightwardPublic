@@ -329,13 +329,15 @@ namespace TonyDev.Game.Core.Entities.Player
             {
                 GameManager.Instance.doCrystalFocusing = true;
             }
-
-            float storedSpeed = playerAnimator.speed;
-            playerAnimator.speed = 0;
+            
+            playerAnimator.Play("PlayerSpawnInitial");
             
             if (scaleDelayWithPlayers)
             {
+                float storedSpeed = playerAnimator.speed;
+                playerAnimator.speed = 0;
                 await UniTask.Delay(TimeSpan.FromSeconds(0.5f * (CustomRoomPlayer.Local.playerNumber)));
+                playerAnimator.speed = storedSpeed;
             }
             PlayerAnimState = Random.Range(0, 2) switch
             {
@@ -343,12 +345,8 @@ namespace TonyDev.Game.Core.Entities.Player
                 1 => PlayerAnimState.Right,
                 _ => throw new ArgumentOutOfRangeException()
             };
-
-            playerAnimator.speed = storedSpeed;
             
             SetFlip(PlayerAnimState == PlayerAnimState.Left);
-            playerAnimator.Play("PlayerSpawnInitial");
-            Debug.Log("PlayerSpawnInitial");
             await UniTask.Delay(TimeSpan.FromSeconds(1.3333f));
             SoundManager.PlaySoundPitchVariant("footstep",0.5f,transform.position,1.45f, 1.55f);
             await UniTask.Delay(TimeSpan.FromSeconds(1.1667f));
