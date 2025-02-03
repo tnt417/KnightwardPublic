@@ -13,6 +13,7 @@ using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.UI.Minimap;
+using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.PlayerLoop;
@@ -36,7 +37,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public bool stopPlayerAttack = false;
         public bool fireKeyHeld = false;
-        public override bool CanAttack => (!stopPlayerAttack) && fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused;
+        public override bool CanAttack => (!stopPlayerAttack) && fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused && !TowerPlacementManager.Instance.Placing;
 
         public void SetAttackProgress(float normalized)
         {

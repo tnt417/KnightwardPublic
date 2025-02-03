@@ -6,6 +6,8 @@ using Mirror;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
+using TonyDev.Game.Level.Decorations;
+using TonyDev.Game.UI;
 using TonyDev.Game.UI.Healthbar;
 using UnityEngine;
 using UnityEngine.U2D;
@@ -200,8 +202,8 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public override void OnStartLocalPlayer()
         {
-            if (!Player.LocalInstance.playerAnimator == this) return;
-            Debug.Log("On start local player");
+            if (!Player.LocalInstance.playerAnimator == this || GameManager.QuickTestMode) return;
+
             PlayerSpawnAnim(true, true).Forget();
         }
 
@@ -248,6 +250,8 @@ namespace TonyDev.Game.Core.Entities.Player
             var goingToArena = GameManager.GamePhase == GamePhase.Dungeon && !regen;
             
             isInLadderAnim = true;
+
+            Interactable.DisableInteractablesForSeconds(0.5f).Forget();
             
             _overriding = true;
             Player.LocalInstance.playerMovement.DoMovement = false;
@@ -258,8 +262,8 @@ namespace TonyDev.Game.Core.Entities.Player
             playerAnimator.Play(goingToArena ? "LadderClimb" : "JumpIntoLadder");
             
             var initial = Time.time;
-
-            while (Time.time - initial < 0.3333f)
+            
+            while (Time.time - initial < 0.3333333f)
             {
                 await UniTask.Yield(PlayerLoopTiming.Update);
                 Player.LocalInstance.transform.position = Vector2.MoveTowards(

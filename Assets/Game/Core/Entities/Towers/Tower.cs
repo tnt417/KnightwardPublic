@@ -9,6 +9,7 @@ using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations;
 using TonyDev.Game.Level.Decorations.Crystal;
+using TonyDev.Game.UI;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -100,6 +101,7 @@ namespace TonyDev.Game.Core.Entities.Towers
             _interactableButton.overrideCurrent = true;
             Interactable.Current = _interactableButton;
             _interactableButton.Active = true;
+            Indicator.Instance.UpdateCurrentInteractable(_interactableButton);
         }
 
         public const string DurabilityNegationSource = "DurabilityNegated";
@@ -159,6 +161,7 @@ namespace TonyDev.Game.Core.Entities.Towers
             _interactableButton.overrideCurrent = false;
             Interactable.Current = null;
             _interactableButton.Active = false;
+            Indicator.Instance.UpdateCurrentInteractable(null);
         }
 
         public new void Start()
@@ -184,6 +187,11 @@ namespace TonyDev.Game.Core.Entities.Towers
             base.OnStopAuthority();
             
             OnHealthChangedOwner -= HpChangedHook;
+
+            if (Interactable.Current == _interactableButton)
+            {
+                Indicator.Instance.UpdateCurrentInteractable(null);
+            }
         }
 
         private void HpChangedHook(float newHp)

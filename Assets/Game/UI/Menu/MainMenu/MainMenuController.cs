@@ -22,7 +22,7 @@ namespace TonyDev.Game.UI.Menu.MainMenu
 
             Debug.unityLogger.logEnabled = PlayerPrefs.GetInt("errorLog", 1) == 1;
             
-            if (GameManager.IsDemo)
+            if (GameManager.IsDemo || GameManager.QuickTestMode)
             {
                 var customNetManager = NetworkManager.singleton as CustomNetworkManager;
             

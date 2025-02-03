@@ -25,7 +25,7 @@ namespace TonyDev.Game.Level
         
             _transitionAnimator = GetComponent<Animator>(); //Initialize animator component
 
-            if (GameManager.IsDemo)
+            if (GameManager.IsDemo || GameManager.QuickTestMode)
             {
                 _transitionAnimator.Play("SceneBlackout");
                 return;

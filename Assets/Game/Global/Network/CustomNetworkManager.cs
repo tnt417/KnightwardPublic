@@ -122,7 +122,7 @@ namespace TonyDev.Game.Global.Network
 
         public override void OnRoomServerPlayersReady()
         {
-            if (GameManager.IsDemo)
+            if (GameManager.IsDemo || GameManager.QuickTestMode)
             {
                 ServerChangeScene(GameplayScene);
             }

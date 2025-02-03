@@ -29,8 +29,7 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             healthBarObject.SetActive(!isDead); //Hide health bar
             _rb2d.simulated = !isDead; //De-activate Rigidbody
-            if (!isDead) walkParticleSystem.Play();
-            else walkParticleSystem.Stop(); //Turn on/off walk particles
+            walkParticleSystem.gameObject.SetActive(!isDead);
 
             if (isDead) return;
             

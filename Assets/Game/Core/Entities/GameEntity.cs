@@ -13,6 +13,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
+using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.Profiling;
 using UnityEngine.Serialization;
@@ -31,7 +32,7 @@ namespace TonyDev.Game.Core.Entities
         public const float EntityTargetUpdatingRate = 0.1f;
         private float _targetUpdateTimer;
 
-        public virtual bool CanAttack => IsAlive || this is Tower;
+        public virtual bool CanAttack => (IsAlive || this is Tower);
 
         //Editor fields
         [Header("Targeting")] [SerializeField] private string targetTag;

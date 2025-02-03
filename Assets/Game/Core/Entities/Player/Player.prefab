@@ -971,7 +971,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncDirection: 1
   syncMode: 0
-  syncInterval: 0.05
+  syncInterval: 0
   playerSprites:
   - {fileID: 9119549463136492614, guid: c919c046031386e40994177b8d6fb6d7, type: 3}
   - {fileID: 4059640450490198499, guid: c919c046031386e40994177b8d6fb6d7, type: 3}

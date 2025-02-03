@@ -36,6 +36,15 @@ namespace TonyDev.Game.Level.Decorations
         
         protected Dictionary<Key, InteractType> _interactKeys = new ();
 
+        private static bool _canInteract = true;
+        
+        public static async UniTask DisableInteractablesForSeconds(float seconds)
+        {
+            _canInteract = false;
+            await UniTask.Delay(TimeSpan.FromSeconds(seconds));
+            _canInteract = true;
+        }
+        
         public void AddInteractKey(Key keyCode, InteractType type)
         {
             if (!(_interactKeys.ContainsKey(keyCode) && _interactKeys[keyCode] == type)) //If key hasn't been added yet for this interact type, add it
@@ -101,6 +110,13 @@ namespace TonyDev.Game.Level.Decorations
 
         protected void Update()
         {
+            if (!_canInteract && Current == this)
+            {
+                Active = false;
+                Current = null;
+                Indicator.Instance.UpdateCurrentInteractable(null);
+            }
+            
             if (!Active) return;
             
             foreach (var (_, value) in _interactKeys.Where(kv => Active && GameManager.GameControlsActive && Keyboard.current[kv.Key].wasPressedThisFrame && isInteractable))

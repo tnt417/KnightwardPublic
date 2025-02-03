@@ -1,5 +1,7 @@
 using System;
+using Cysharp.Threading.Tasks;
 using Edgegap;
+using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
@@ -33,15 +35,15 @@ namespace TonyDev.Game.UI
 
         private void Start()
         {
-            Player.LocalPlayerChangeIdentity += (_) => TeleportToPlayer();
+            Player.LocalPlayerChangeIdentity += TeleportToPlayer;
         }
 
         private void OnDestroy()
         {
-            Player.LocalPlayerChangeIdentity -= (_) => TeleportToPlayer();
+            Player.LocalPlayerChangeIdentity -= TeleportToPlayer;
         }
 
-        private void TeleportToPlayer()
+        private void TeleportToPlayer(NetworkIdentity id)
         {
             transform.position = Player.LocalInstance.transform.position;
         }
@@ -71,7 +73,7 @@ namespace TonyDev.Game.UI
             var cost = interactable.cost;
 
             costObject.SetActive(cost != 0);
-            costLabel.text = cost < 0 ? "+" : "" + cost;
+            costLabel.text = cost < 0 ? "+" + -cost : "" + cost;
 
             if (interactable is InteractableItem ii)
             {

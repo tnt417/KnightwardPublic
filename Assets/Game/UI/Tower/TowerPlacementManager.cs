@@ -70,17 +70,24 @@ namespace TonyDev.Game.UI.Tower
             RoomManager.OnActiveRoomChanged -= PickupDungeonTowers;
         }
 
+        private Vector2 _indicatorVelocity = Vector3.zero;
+        private Vector2 _indicatorVelocityMouse = Vector3.zero;
+        
         private void Update()
         {
             if (!CanPlace) towerPlacementIndicator.SetActive(false);
             if (!Placing) return; //Don't move on if not placing
+         
+            rangeIndicator.transform.localScale = Vector2.SmoothDamp(rangeIndicator.transform.localScale,
+                new Vector2(_selectedTower.targetRange * 2, _selectedTower.targetRange * 2), ref _indicatorVelocity, 0.03f );
             
             nextText.text = PlaceContinuous ? "NEXT" : "[SHIFT]";
 
             var mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //Get the mouse position
-            towerPlacementIndicator.transform.position =
-                new Vector3(Mathf.Ceil(mousePos.x), Mathf.Ceil(mousePos.y), 0) -
-                new Vector3(0.5f, 0.5f, 0); //Set the indicator position, snapping to a grid
+            towerPlacementIndicator.transform.position = Vector2.SmoothDamp(towerPlacementIndicator.transform.position,
+                new Vector2(Mathf.Ceil(mousePos.x), Mathf.Ceil(mousePos.y)) -
+                new Vector2(0.5f, 0.5f), ref _indicatorVelocityMouse, 0.05f
+            ); //Set the indicator position, snapping to a grid
 
             if (Mouse.current.leftButton.wasPressedThisFrame)
                 SpawnTower().Forget(); //Spawn a tower if placing and click
@@ -90,15 +97,19 @@ namespace TonyDev.Game.UI.Tower
         private void FixedUpdate()
         {
             if (!Placing) return;
-
-            var valid = ValidSpot(towerPlacementIndicator.transform.position);
+            
+            var mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //Get the mouse position
+            var valid = ValidSpot(new Vector2(Mathf.Ceil(mousePos.x), Mathf.Ceil(mousePos.y)) -
+                                  new Vector2(0.5f, 0.5f));
 
             var color = valid ? new Color(0, 1, 0, 0.5f) : new Color(1, 0, 0, 0.5f);
             rangeIndicator.color = color;
             color.a = 1;
             _indicatorSprite.color = color;
         }
-
+        
+        private Core.Entities.Towers.Tower _selectedTower;
+        
         public void TogglePlacing(Item item)
         {
             towerPlacementIndicator.SetActive(!Placing); //Toggle the placement indicator activeness
@@ -110,9 +121,7 @@ namespace TonyDev.Game.UI.Tower
             var tower = _selectedTowerItem.SpawnablePrefab
                 .GetComponent<Core.Entities.Towers.Tower>(); //Get a reference to the tower of the prefab...
 
-            rangeIndicator.transform.localScale =
-                new Vector3(tower.targetRange * 2, tower.targetRange * 2,
-                    1); //...and update the rangeIndicator based on the tower's range.
+            _selectedTower = tower;
 
             _indicatorSprite =
                 towerPlacementIndicator.GetComponentInChildren<SpriteRenderer>(); //Get the indicator's SpriteRenderer
@@ -154,7 +163,10 @@ namespace TonyDev.Game.UI.Tower
         //Spawns a tower at the indicator position and exits from placing mode
         private async UniTask SpawnTower()
         {
-            var pos = (Vector2) towerPlacementIndicator.transform.position;
+            var mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //Get the mouse position
+            
+            var pos = new Vector2(Mathf.Ceil(mousePos.x), Mathf.Ceil(mousePos.y)) -
+                      new Vector2(0.5f, 0.5f);
 
             if (!ValidSpot(pos)) return;
 
