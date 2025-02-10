@@ -22,7 +22,8 @@ namespace TonyDev.Game.Level.Decorations
         Scrap,
         Purchase,
         Pickup,
-        Repair
+        Repair,
+        None
     }
     
     public abstract class Interactable : MonoBehaviour
@@ -45,16 +46,16 @@ namespace TonyDev.Game.Level.Decorations
             _canInteract = true;
         }
         
-        public void AddInteractKey(Key keyCode, InteractType type)
-        {
-            if (!(_interactKeys.ContainsKey(keyCode) && _interactKeys[keyCode] == type)) //If key hasn't been added yet for this interact type, add it
-            {
-                _interactKeys[keyCode] = type;
-                RebuildControlLabel();
-            }
-        }
+        // public void AddInteractKey(Key keyCode, InteractType type)
+        // {
+        //     if (!(_interactKeys.ContainsKey(keyCode) && _interactKeys[keyCode] == type)) //If key hasn't been added yet for this interact type, add it
+        //     {
+        //         _interactKeys[keyCode] = type;
+        //         RebuildControlLabel();
+        //     }
+        // }
         
-        public void OverrideInteractKey(Key keyCode, InteractType type)
+        public void SetInteractKey(Key keyCode, InteractType type)
         {
             _interactKeys[keyCode] = type;
             RebuildControlLabel();
@@ -67,6 +68,7 @@ namespace TonyDev.Game.Level.Decorations
             StringBuilder sb = new();
             foreach (var (key, value) in _interactKeys)
             {
+                if (value == InteractType.None) continue;
                 sb.AppendLine("[" + Enum.GetName(typeof(Key), key) + "] " +
                               Enum.GetName(typeof(InteractType), value));
             }
@@ -76,7 +78,7 @@ namespace TonyDev.Game.Level.Decorations
 
         protected void Start()
         {
-            AddInteractKey(Key.E, InteractType.Interact);
+            SetInteractKey(Key.E, InteractType.Interact);
 
             SetCost((int)(scaleCost ? cost*ItemGenerator.DungeonInteractMultiplier : cost));
             SetLabel(label, true);

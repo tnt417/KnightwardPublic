@@ -43,7 +43,7 @@ namespace TonyDev.Game.Core.Items
 
             _interactable = GetComponent<InteractableItem>();
 
-            if(cost == 0) _interactable.AddInteractKey(Key.F, InteractType.Scrap);
+            _interactable.SetInteractKey(Key.F, cost < 0 ? InteractType.Scrap : InteractType.None);
 
             _interactable.onInteract.AddListener((type) =>
             {
@@ -145,23 +145,23 @@ namespace TonyDev.Game.Core.Items
         [SerializeField] [SyncVar(hook = nameof(OnCostChangeHook))]
         private int cost;
 
-        [SerializeField] [SyncVar(hook = nameof(OnSellPriceChangeHook))]
-        private int sellPrice;
+        // [SerializeField] [SyncVar(hook = nameof(OnSellPriceChangeHook))]
+        // private int sellPrice;
 
         private void OnCostChangeHook(int oldCost, int newCost)
         {
-            if (oldCost > 0 && newCost == 0)
-            {
-                _interactable.AddInteractKey(Key.F, InteractType.Scrap);
-            }
-            
-            _interactable.SetCost(newCost);
+            _interactable.SetInteractKey(Key.F, newCost < 0 ? InteractType.Scrap : InteractType.None);
+
+            _interactable.SetInteractKey(Key.E, newCost <= 0 ? InteractType.Pickup : InteractType.Purchase);
+
+            if(newCost >= 0) _interactable.SetCost(newCost);
+            if(newCost < 0) _interactable.SetSellPrice(-newCost);
         }
 
-        private void OnSellPriceChangeHook(int oldSellPrice, int newSellPrice)
-        {
-            _interactable.SetSellPrice(newSellPrice);
-        }
+        // private void OnSellPriceChangeHook(int oldSellPrice, int newSellPrice)
+        // {
+        //     _interactable.SetSellPrice(newSellPrice);
+        // }
 
         [Command(requiresAuthority = false)]
         public void CmdSetCost(int newCost)
@@ -169,11 +169,11 @@ namespace TonyDev.Game.Core.Items
             cost = newCost;
         }
 
-        [Command(requiresAuthority = false)]
-        public void CmdSetSellPrice(int newSell)
-        {
-            sellPrice = newSell;
-        }
+        // [Command(requiresAuthority = false)]
+        // public void CmdSetSellPrice(int newSell)
+        // {
+        //     sellPrice = newSell;
+        // }
 
         public static Color CommonColor = Color.black;//new Color(43f/255f, 43f/255f, 69f/255f);
         public static Color UncommonColor = Color.green;//new Color(99f/255f, 171f/255f, 63f/255f);
@@ -219,7 +219,7 @@ namespace TonyDev.Game.Core.Items
             _pickupPending = true;
 
             RpcNotifyPickup();
-            TargetConfirmPickup(sender, cost);
+            TargetConfirmPickup(sender, cost > 0 ? cost : 0);
 
             StartCoroutine(
                 DisablePickupForSeconds(0.1f)); //Disable pickup for 0.5 seconds to prevent insta-replacing the item
@@ -233,7 +233,7 @@ namespace TonyDev.Game.Core.Items
             if (cost > 0 || !_pickupAble) return; //If the item costs money, don't allow selling it.
 
             RpcNotifyPickup();
-            TargetConfirmSell(sender, sellPrice);
+            TargetConfirmSell(sender, -cost);
 
             onPickupServer.Invoke(); //Invoke the onPickup method
         }
@@ -292,7 +292,7 @@ namespace TonyDev.Game.Core.Items
             else
             {
                 CmdSetItem(newItem); //Otherwise, replaced the item
-                CmdSetCost(0); //Don't make the player pay for their replaced item
+                CmdSetCost(-ItemGenerator.GenerateSellPrice(newItem, GameManager.DungeonFloor)); //Don't make the player pay for their replaced item
             }
         }
 

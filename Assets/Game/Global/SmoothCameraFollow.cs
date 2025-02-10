@@ -107,6 +107,8 @@ namespace TonyDev.Game.Global
 
         private bool _viewCrystal = false;
 
+        public static bool FocusedCrystalLast = false; 
+        
         public void OnViewCrystal(InputValue value)
         {
             if (!GameManager.GameControlsActive)
@@ -141,7 +143,7 @@ namespace TonyDev.Game.Global
         private Vector3 _cameraOffset = Vector2.zero;
 
         private Vector2 _lagBehind = Vector2.zero;
-
+        
         private void Update()
         {
             if (Player.LocalInstance == null) return;
@@ -158,8 +160,8 @@ namespace TonyDev.Game.Global
 
             var playerInput = Player.LocalInstance.playerMovement.DoMovement ? Player.LocalInstance.playerMovement.currentMovementInput : Vector2.zero;
 
-            _lagBehind += playerInput * Time.deltaTime * playerSpeed + GameManager.MouseDirection.normalized * Time.deltaTime;
-
+            _lagBehind += playerInput * (Time.deltaTime * playerSpeed); //+ GameManager.MouseDirection.normalized * Time.deltaTime;
+            
             _lagBehind = Vector2.ClampMagnitude(_lagBehind, 0.1f * playerSpeed);
 
             var playerPos = (Vector2) PlayerTransform.position + (TowerPlacementManager.Instance.Placing ? Vector2.zero : _lagBehind);
@@ -176,6 +178,8 @@ namespace TonyDev.Game.Global
             
             var trackCrystal = (_viewCrystal && !TowerPlacementManager.Instance.Placing) || GameManager.Instance.doCrystalFocusing;
             Vector2 newPos;
+
+            FocusedCrystalLast = trackCrystal;
             
             if (GameManager.GamePhase == GamePhase.Dungeon &&
                 trackCrystal) //This is done to prevent me from being dizzy.

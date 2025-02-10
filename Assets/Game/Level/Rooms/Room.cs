@@ -110,7 +110,7 @@ namespace TonyDev.Game.Level.Rooms
 
         private void PlayerCountHook(int oldPlayerCount, int newPlayerCount)
         {
-            MinimapManager.Instance.UpdatePlayerCount(RoomManager.Instance.Map.GetRoomPos(this), newPlayerCount);
+            //MinimapManager.Instance.UpdatePlayerCount(RoomManager.Instance.Map.GetRoomPos(this), newPlayerCount);
         }
 
         //

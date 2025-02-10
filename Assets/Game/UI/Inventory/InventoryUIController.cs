@@ -48,10 +48,13 @@ namespace TonyDev.Game.UI.Inventory
         [SerializeField] private Sprite[] buttonSprites;
         //
 
+        public static string ActivePanel = "";
+
         private void Awake()
         {
             Player.OnLocalPlayerCreated += Init;
             Minimized = true;
+            ActivePanel = "None";
         }
 
         private void Init()
@@ -200,6 +203,8 @@ namespace TonyDev.Game.UI.Inventory
             {
                 Minimized = false;
             }
+            
+            ActivePanel = "Gear";
 
             towerInventoryObject.SetActive(false);
             gearInventoryObject.SetActive(true);
@@ -231,6 +236,8 @@ namespace TonyDev.Game.UI.Inventory
             {
                 Minimized = false;
             }
+            
+            ActivePanel = "Tower";
 
             towerInventoryObject.SetActive(true);
             gearInventoryObject.SetActive(false);
@@ -262,6 +269,8 @@ namespace TonyDev.Game.UI.Inventory
             {
                 Minimized = false;
             }
+            
+            ActivePanel = "Stat";
 
             towerInventoryObject.SetActive(false);
             gearInventoryObject.SetActive(false);

@@ -31,7 +31,8 @@ namespace TonyDev.Game.Core.Items
         public override void SetCost(int newCost)
         {
             base.SetCost(newCost);
-            OverrideInteractKey(Key.E, newCost == 0 ? InteractType.Pickup : InteractType.Purchase);
+            SetInteractKey(Key.E, newCost <= 0 ? InteractType.Pickup : InteractType.Purchase);
+            SetInteractKey(Key.F, newCost < 0 ? InteractType.Scrap : InteractType.None);
             
             TryCallToUpdate();
         }

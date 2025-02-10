@@ -74,7 +74,7 @@ namespace TonyDev.Game.Core.Entities.Towers
             _normalBlock.SetFloat("_OutlineGlowIntensity", 0f);
 
             _interactableButton = gameObject.AddComponent<InteractableButton>();
-            _interactableButton.AddInteractKey(Key.R, InteractType.Repair);
+            _interactableButton.SetInteractKey(Key.R, InteractType.Repair);
             _interactableButton.onInteract.AddListener((type) =>
             {
                 if (this != null && type == InteractType.Interact) CmdRequestPickup();

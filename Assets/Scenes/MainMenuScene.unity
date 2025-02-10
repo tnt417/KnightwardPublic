@@ -1024,6 +1024,8 @@ MonoBehaviour:
     audioClip: {fileID: 8300000, guid: 5a0004f6174879b469c8dd854f870508, type: 3}
   - name: laserEnd
     audioClip: {fileID: 8300000, guid: f9e76dfd65e044b4d949c50f6a3a56e5, type: 3}
+  - name: success
+    audioClip: {fileID: 8300000, guid: 339a473ae3a9679438a70b26e1f8e6f4, type: 3}
   mainMixerGroup: {fileID: 24300002, guid: 74d7d4f8523abac48b7ef1506639a1d3, type: 2}
 --- !u!4 &2044785519
 Transform:
@@ -1295,7 +1297,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1004833699134321184, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1004833699134321184, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1363,7 +1365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3183436168595250822, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -65
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3183436168595250822, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1391,7 +1393,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3898178615743816747, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 195
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3898178615743816747, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_AnchoredPosition.x
@@ -1435,7 +1437,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5357412161321954014, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -195
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5357412161321954014, guid: af071955a02125e4ea21467db71d3474, type: 3}
       propertyPath: m_AnchoredPosition.x

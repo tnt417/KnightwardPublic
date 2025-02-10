@@ -55,7 +55,7 @@ namespace TonyDev.Game.UI
                 return;
             }
             
-            transform.position = Vector2.Lerp(transform.position, _newTargetPos.position, Time.deltaTime * 30f);
+            transform.position = Vector2.Lerp(transform.position, _newTargetPos.position, Time.deltaTime * 60f);
         }
 
         public void UpdateCurrentInteractable(Interactable interactable)

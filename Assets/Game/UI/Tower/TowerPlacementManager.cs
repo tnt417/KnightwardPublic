@@ -29,6 +29,7 @@ namespace TonyDev.Game.UI.Tower
         [SerializeField] private TMP_Text nextText;
 
         //
+        public bool BlockAttacksFromTowerPlacement { get; private set; }
         public bool Placing => towerPlacementIndicator.activeSelf;
         private Camera _mainCamera;
         private Item _selectedTowerItem;
@@ -72,12 +73,23 @@ namespace TonyDev.Game.UI.Tower
 
         private Vector2 _indicatorVelocity = Vector3.zero;
         private Vector2 _indicatorVelocityMouse = Vector3.zero;
+
+        private float _lastPlacingTime;
         
         private void Update()
         {
             if (!CanPlace) towerPlacementIndicator.SetActive(false);
-            if (!Placing) return; //Don't move on if not placing
-         
+            if (!Placing)
+            {
+                // Allow attacks 0.25 seconds after placing
+                if (Time.time - _lastPlacingTime > 0.25f && BlockAttacksFromTowerPlacement)
+                    BlockAttacksFromTowerPlacement = false;
+                return; //Don't move on if not placing
+            }
+
+            _lastPlacingTime = Time.time;
+            BlockAttacksFromTowerPlacement = true;
+            
             rangeIndicator.transform.localScale = Vector2.SmoothDamp(rangeIndicator.transform.localScale,
                 new Vector2(_selectedTower.targetRange * 2, _selectedTower.targetRange * 2), ref _indicatorVelocity, 0.03f );
             
@@ -86,7 +98,7 @@ namespace TonyDev.Game.UI.Tower
             var mousePos = _mainCamera.ScreenToWorldPoint(Mouse.current.position.ReadValue()); //Get the mouse position
             towerPlacementIndicator.transform.position = Vector2.SmoothDamp(towerPlacementIndicator.transform.position,
                 new Vector2(Mathf.Ceil(mousePos.x), Mathf.Ceil(mousePos.y)) -
-                new Vector2(0.5f, 0.5f), ref _indicatorVelocityMouse, 0.05f
+                new Vector2(0.5f, 0.5f), ref _indicatorVelocityMouse, 0.01f
             ); //Set the indicator position, snapping to a grid
 
             if (Mouse.current.leftButton.wasPressedThisFrame)

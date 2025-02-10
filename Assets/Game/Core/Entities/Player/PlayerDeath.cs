@@ -29,9 +29,14 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             healthBarObject.SetActive(!isDead); //Hide health bar
             _rb2d.simulated = !isDead; //De-activate Rigidbody
-            walkParticleSystem.gameObject.SetActive(!isDead);
 
-            if (isDead) return;
+            if (isDead)
+            {
+                walkParticleSystem.Pause();
+                return;
+            }
+            
+            walkParticleSystem.Play();
             
             // Revive code
             _deathTimer = 0; //Reset the death timer
@@ -67,7 +72,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
             dead = true;
 
-            CmdMoveEnemiesFromRoom(Player.LocalInstance.currentParentIdentityLocal);
+            //CmdMoveEnemiesFromRoom(Player.LocalInstance.currentParentIdentityLocal);
             
             ObjectSpawner.SpawnMoney((int)(GameManager.Money * 0.8f), Player.LocalInstance.transform.position, Player.LocalInstance.CurrentParentIdentity); //Drop money on the ground
             GameManager.Money = 0; //Reset money

@@ -65,6 +65,7 @@ namespace TonyDev
         {
             Time.timeScale = 1;
             NetworkManager.singleton.StopHost();
+            Application.Quit(0);
         }
     }
 }

@@ -746,6 +746,7 @@ SpriteAtlas:
     - 234a6caf800b9a14a982f5f82ca04721: 21300000
     - 7a332faf7fabcb24bbb9a5b71d56b91d: 21300000
     - ab3601bfae32c614e95140c69f2aef28: 21300000
+    - 980f18bf7f0ee4345a5acb52c20cca43: 4646281832064190020
     - 530a0fbfd218b4cdab132648d8203f4b: 21300000
     - dc0828df287bb42fcbaf94868c6acb4f: 3961849019338432227
     - dc0828df287bb42fcbaf94868c6acb4f: -7844505920409103192
@@ -1454,6 +1455,7 @@ SpriteAtlas:
   - {fileID: 21300000, guid: 234a6caf800b9a14a982f5f82ca04721, type: 3}
   - {fileID: 21300000, guid: 7a332faf7fabcb24bbb9a5b71d56b91d, type: 3}
   - {fileID: 21300000, guid: ab3601bfae32c614e95140c69f2aef28, type: 3}
+  - {fileID: 4646281832064190020, guid: 980f18bf7f0ee4345a5acb52c20cca43, type: 3}
   - {fileID: 21300000, guid: 530a0fbfd218b4cdab132648d8203f4b, type: 3}
   - {fileID: 3961849019338432227, guid: dc0828df287bb42fcbaf94868c6acb4f, type: 3}
   - {fileID: -7844505920409103192, guid: dc0828df287bb42fcbaf94868c6acb4f, type: 3}
@@ -2161,6 +2163,7 @@ SpriteAtlas:
   - border
   - abyssalcore
   - ashenidol
+  - tutorialarrow_0
   - castle_variant_5
   - repair_buff_1
   - repair_buff_0

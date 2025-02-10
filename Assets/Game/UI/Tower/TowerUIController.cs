@@ -18,6 +18,13 @@ namespace TonyDev.Game.UI.Tower
         private ItemSlot _selectedTowerSlot;
 
         public Dictionary<ItemSlot, Item> Towers = new();
+
+        public RectTransform GetTowerTransformFromIndex(int idx)
+        {
+            if (idx > Towers.Count) return null;
+            
+            return Towers.ElementAt(idx).Key.transform as RectTransform;
+        }
         
         private void Awake()
         {

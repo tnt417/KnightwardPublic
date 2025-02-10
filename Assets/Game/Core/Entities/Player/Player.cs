@@ -37,7 +37,7 @@ namespace TonyDev.Game.Core.Entities.Player
 
         public bool stopPlayerAttack = false;
         public bool fireKeyHeld = false;
-        public override bool CanAttack => (!stopPlayerAttack) && fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused && !TowerPlacementManager.Instance.Placing;
+        public override bool CanAttack => (!stopPlayerAttack) && fireKeyHeld && base.CanAttack && !playerDeath.dead && !PauseController.Paused && !TowerPlacementManager.Instance.BlockAttacksFromTowerPlacement;
 
         public void SetAttackProgress(float normalized)
         {

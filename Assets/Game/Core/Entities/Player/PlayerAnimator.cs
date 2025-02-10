@@ -366,6 +366,8 @@ namespace TonyDev.Game.Core.Entities.Player
         {
             //playerSpriteRenderers[0].sprite = playerSprites[PlayerSpriteIndex];
 
+            playerWalkParticles.gameObject.SetActive(!Player.LocalInstance.playerDeath.dead);
+            
             playerAnimator.SetFloat("moveSpeed", PlayerStats.LocalStats.GetStat(Stat.MoveSpeed));
             playerAnimator.SetFloat("attackSpeed", PlayerStats.LocalStats.GetStat(Stat.AttackSpeed));
 

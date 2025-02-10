@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
@@ -36,7 +37,7 @@ namespace TonyDev
             
             _pollingTimer = 0f;
 
-            var enemies = GameManager.GetEntitiesInRange(Crystal.Instance.transform.position, EnemyRange).Where(e => e is Enemy).ToList();
+            var enemies = GameManager.GetEntitiesInRange(Crystal.Instance.transform.position, EnemyRange).Where(e => e is Enemy && e.Team == Team.Enemy).ToList();
 
             foreach (var (k, v) in _uiObjects.ToList())
             {

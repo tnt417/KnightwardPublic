@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Xsl;
 using Mirror;
+using TonyDev.Game;
+using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
@@ -39,6 +41,8 @@ namespace TonyDev
         {
             if (_cleared) return;
             _cleared = true;
+            
+            SoundManager.PlaySoundPitchVariant("success", 0.5f, transform.position, 1.15f, 1.25f);
         
             var originPos = transform.position;
 
