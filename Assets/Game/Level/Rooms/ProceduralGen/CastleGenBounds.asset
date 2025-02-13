@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 0}
+  m_Name: CastleGenBounds
+  m_EditorClassIdentifier: TonyDev:TonyDev.Game.Level.Rooms.ProceduralGen:GenWeightsBounds
+  roomDifficulty: {x: 0, y: 0}
+  roomTreasureLevel: {x: 0, y: 0}
+  roomArea: {x: 0, y: 0}
+  roomOpenness: {x: 0, y: 0}
+  roomHorizontalBias: {x: 0, y: 0}
+  roomVerticalBias: {x: 0, y: 0}
+  roomSprawl: {x: 0, y: 0}
+  roomMoisture: {x: 0, y: 0}
+  roomVegetation: {x: 0, y: 0}
+  roomDilapidatedness: {x: 0, y: 0}
+  pathGenChance: {x: 0, y: 0}
+  roomRubbleAmount: {x: 0, y: 0}
+  roomRigidity: {x: 0, y: 0}
+  roomCoziness: {x: 0, y: 0}
+  roomBrightnessLevel: {x: 0, y: 0}
+  roomTemperature: {x: 0, y: 0}

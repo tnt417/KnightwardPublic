@@ -9,6 +9,7 @@ using UnityEngine;
 
 namespace TonyDev.Editor
 {
+    
     public class CreateEffectWindow : EditorWindow
     {
         public static void ShowWindow()

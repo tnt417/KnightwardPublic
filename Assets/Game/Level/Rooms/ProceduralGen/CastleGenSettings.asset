@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2dc90ba50105c4ab1a2494f5d107a163, type: 3}
+  m_Name: CastleGenSettings
+  m_EditorClassIdentifier: 
+  weightsBounds: {fileID: 11400000, guid: 2e78a5f2dd92f48fabd4c146bc0de65a, type: 2}
+  baseFloorTile: {fileID: 11400000, guid: 400c043aef9df4f84a56a57373ff842b, type: 2}
