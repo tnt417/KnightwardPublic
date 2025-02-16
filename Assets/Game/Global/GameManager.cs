@@ -45,7 +45,11 @@ namespace TonyDev.Game.Global
     {
         public static GameManager Instance;
         
+        #if IS_DEMO
         public const bool IsDemo = true;
+        #else
+        public const bool IsDemo = false;
+        #endif
         
         // Set true to skip menu and speed up transitions
         public const bool QuickTestMode = false;
