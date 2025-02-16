@@ -134,9 +134,10 @@ namespace TonyDev.Game.Level.Rooms
         [SerializeField] public int mapRadius;
         [SerializeField] public Vector2 roomOffset;
         [SerializeField] public MapGenConfig config;
+        [SerializeField] public MapGenConfig demoOverrideConfig;
 
         // Static accessor to use in PhaseInformationUIController.cs
-        public static MapGenConfig Config => RoomManager.Instance.roomGenerator.config;
+        public static MapGenConfig Config => GameManager.IsDemo ? RoomManager.Instance.roomGenerator.demoOverrideConfig : RoomManager.Instance.roomGenerator.config;
 
         [SerializeField] private RoomManager roomManager;
         //
@@ -151,7 +152,7 @@ namespace TonyDev.Game.Level.Rooms
             _startingRoomPos = new Vector2Int(mapRadius, mapRadius);
             _seed = Random.Range(0, 100000); //Get a random seed to generate the room based on.
 
-            foreach (var prefab in config.mapZones.SelectMany(mz => mz.roomEntries.Select(r => r.roomPrefab)))
+            foreach (var prefab in Config.mapZones.SelectMany(mz => mz.roomEntries.Select(r => r.roomPrefab)))
             {
                 NetworkClient.RegisterPrefab(prefab);
             }
@@ -169,9 +170,9 @@ namespace TonyDev.Game.Level.Rooms
 
             if (_generated) return roomManager.Map;
 
-            floor += config.floorAtLaunchOffset;
+            floor += Config.floorAtLaunchOffset;
 
-            var theme = config.mapZones.Where(z => floor % config.loopPoint >= z.startFloor)
+            var theme = Config.mapZones.Where(z => floor % Config.loopPoint >= z.startFloor)
                 .OrderByDescending(z => z.startFloor).FirstOrDefault();
 
             var remainingEntries = theme.roomEntries.ToList();
@@ -438,7 +439,7 @@ namespace TonyDev.Game.Level.Rooms
         [Server][Obsolete("Bosses are no longer implemented.")]
         public Map GenerateBossMap(int floor)
         {
-            var theme = config.mapZones.Where(z => (floor - 1) % config.loopPoint + 1 >= z.startFloor)
+            var theme = Config.mapZones.Where(z => (floor - 1) % config.loopPoint + 1 >= z.startFloor)
                 .OrderByDescending(z => z.startFloor).FirstOrDefault();
 
             var rooms = new Room[MapSize, MapSize];

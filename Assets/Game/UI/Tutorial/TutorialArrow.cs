@@ -29,6 +29,7 @@ namespace TonyDev.Game.UI.Tutorial
         public Animator animator;
 
         [Header("Transforms")] public RectTransform towerInventoryTransform;
+        public RectTransform crystalUiTransform;
         public Transform dungeonLadderTransform;
 
         public TMP_Text tutorialText;
@@ -61,6 +62,8 @@ namespace TonyDev.Game.UI.Tutorial
         
         private async UniTask DoTutorial()
         {
+            if(PlayerPrefs.GetInt("demo_tutorial_completed", 0) == 1) return;
+            
             await UniTask.WaitUntil(() => GameManager.Instance != null);
             
             GameManager.Instance.SetUi("off");
@@ -214,7 +217,7 @@ namespace TonyDev.Game.UI.Tutorial
             await UniTask.WaitUntil(() =>
                 Vector2.Distance(Player.LocalInstance.transform.position, dungeonLadderTransform.position) < 1f);
             
-            _goalPos = () => new Vector2(100000f, 100000f);
+            _goalPos = () => new Vector2(100f, 100f);
 
             await UniTask.WaitUntil(() => GameManager.GamePhase == GamePhase.Dungeon);
 
@@ -232,7 +235,30 @@ namespace TonyDev.Game.UI.Tutorial
             tutorialTextAnimator.Play("TextHide");
             
             await UniTask.Delay(TimeSpan.FromSeconds(0.5f));
+            
             await UniTask.WaitUntil(() => !SmoothCameraFollow.FocusedCrystalLast);
+            
+            
+            // Show the minimap off
+            tutorialTextAnimator.Play("TextShow");
+            tutorialText.text = "Your crystal's health and surroundings are displayed here";
+            
+            _goalPos = () =>
+            {
+                // Get button's screen position
+                var screenPos = RectTransformUtility.WorldToScreenPoint(null, crystalUiTransform.transform.position);
+
+                // Convert screen position to world position
+                Vector2 worldPos = GameManager.MainCamera.ScreenToWorldPoint(new Vector2(screenPos.x, screenPos.y)); // Adjust depth if needed
+
+                return worldPos + new Vector2(2.5f, -2.5f);
+            };
+            
+            _goalRot = 45f+90f;
+            
+            await UniTask.Delay(TimeSpan.FromSeconds(4f));
+            
+            _goalPos = () => new Vector2(100000f, 100000f);
             
             tutorialTextAnimator.Play("TextShow");
             
@@ -241,6 +267,45 @@ namespace TonyDev.Game.UI.Tutorial
             await UniTask.Delay(TimeSpan.FromSeconds(4f));
             
             tutorialTextAnimator.Play("TextHide");
+
+            bool showedDeath = false;
+            bool showedCrystal = false;
+            
+            PlayerPrefs.SetInt("demo_tutorial_completed", 1);
+            
+            // After dying
+            while (true)
+            {
+                await UniTask.Yield(PlayerLoopTiming.Update);
+
+                if (Crystal.Instance.CurrentHealth/Crystal.Instance.MaxHealth < 0.5f && !showedCrystal)
+                {
+                    showedCrystal = true;
+                    
+                    tutorialTextAnimator.Play("TextShow");
+
+                    tutorialText.text =
+                        "Your crystal is starting to get low on health. Watch out for a green healing chalice at the end of each dungeon floor!";
+                    
+                    await UniTask.Delay(TimeSpan.FromSeconds(5f));
+                    
+                    tutorialTextAnimator.Play("TextHide");
+                }
+                
+                if (Player.LocalInstance.playerDeath.dead && !showedDeath)
+                {
+                    showedDeath = true;
+                    
+                    tutorialTextAnimator.Play("TextShow");
+
+                    tutorialText.text =
+                        "Oh no! Unlike other rogue-likes, dying isn't a huge deal in Knightward. Go back to where you died to get back most of the money you had.";
+                    
+                    await UniTask.Delay(TimeSpan.FromSeconds(5f));
+                    
+                    tutorialTextAnimator.Play("TextHide");
+                }
+            }
         }
     }
 }

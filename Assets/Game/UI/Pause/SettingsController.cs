@@ -18,6 +18,7 @@ namespace TonyDev
         public TMP_Text shakeLabel;
 
         public Toggle errorLogToggle;
+        public Toggle fsToggle;
         
         private void Awake()
         {
@@ -30,6 +31,15 @@ namespace TonyDev
                 SoundManager.SetMasterVolume(newValue);
                 volLabel.text = "VOL\n" + $"{volSlider.normalizedValue*2:P0}";
             });
+
+            var fs = PlayerPrefs.GetInt("Fullscreen", 1);
+
+            if (fs == 1)
+            {
+                Screen.fullScreen = true;
+            }
+            
+            fsToggle.isOn = fs == 1;
             
             shakeSlider.value = SmoothCameraFollow.ShakeMultiplier;
             
@@ -49,6 +59,12 @@ namespace TonyDev
             {
                 PlayerPrefs.SetInt("errorLog", newVal ? 1 : 0);
                 Debug.unityLogger.logEnabled = newVal;
+            });
+            
+            fsToggle.onValueChanged.AddListener((newVal) =>
+            {
+                PlayerPrefs.SetInt("Fullscreen", newVal ? 1 : 0);
+                Screen.fullScreen = newVal;
             });
         }
     }

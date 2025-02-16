@@ -692,7 +692,6 @@ GameObject:
   - component: {fileID: 1057266554955491540}
   - component: {fileID: 2062337069869111294}
   - component: {fileID: 7946368391397325074}
-  - component: {fileID: 984172327396941035}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -758,14 +757,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   dontDestroyOnLoad: 1
   runInBackground: 1
-  autoStartServerBuild: 1
-  autoConnectClientBuild: 0
+  headlessStartMode: 0
+  editorAutoStart: 0
   sendRate: 40
   offlineScene: Assets/Scenes/MainMenuScene.unity
   onlineScene: Assets/Scenes/LobbyScene.unity
+  offlineSceneLoadDelay: 0
   transport: {fileID: 1057266554955491540}
   networkAddress: localhost
   maxConnections: 4
+  disconnectInactiveConnections: 0
+  disconnectInactiveTimeout: 60
   authenticator: {fileID: 0}
   playerPrefab: {fileID: 4981228928076747058, guid: 72b85c659924a5d4abc2ee6ab8b460a1, type: 3}
   autoCreatePlayer: 1
@@ -774,6 +776,20 @@ MonoBehaviour:
   - {fileID: 6097897818081006955, guid: 4c493b66d2d662742bf60ed6050984a0, type: 3}
   - {fileID: 1295298609159820296, guid: 12e52aed3e36ce34f9507c02bf551ed0, type: 3}
   - {fileID: 7080094185981754644, guid: c4673581ac60785459b6805764360ee4, type: 3}
+  exceptionsDisconnect: 1
+  snapshotSettings:
+    bufferTimeMultiplier: 2
+    bufferLimit: 32
+    catchupNegativeThreshold: -1
+    catchupPositiveThreshold: 1
+    catchupSpeed: 0.019999999552965164
+    slowdownSpeed: 0.03999999910593033
+    driftEmaDuration: 1
+    dynamicAdjustment: 1
+    dynamicAdjustmentTolerance: 1
+    deliveryTimeEmaDuration: 2
+  evaluationMethod: 0
+  evaluationInterval: 3
   timeInterpolationGui: 0
   showRoomGUI: 0
   minPlayers: 1
@@ -781,20 +797,7 @@ MonoBehaviour:
   RoomScene: Assets/Scenes/LobbyScene.unity
   GameplayScene: Assets/Scenes/CastleScene.unity
   _allPlayersReady: 0
-  roomSlots: []
   clientIndex: 0
---- !u!114 &984172327396941035
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7946368391397325072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 503e05d10675ce943885a71831fb18a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &7946368391477807326
 GameObject:
   m_ObjectHideFlags: 0
