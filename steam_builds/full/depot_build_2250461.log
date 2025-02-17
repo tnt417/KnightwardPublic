@@ -1,0 +1,240 @@
+[2025-02-16 20:39:22]: Starting build for depot 2250461, content path is "/Users/tonyrutherford/Documents/GitHub/Knightward/Builds/Full/Windows", build flags 0x0
+[2025-02-16 20:39:22]: Building file listing for depot 2250461 ...
+[2025-02-16 20:39:22]: Found 230 files for mapping: /Users/tonyrutherford/Documents/GitHub/Knightward/Builds/Full/Windows * -> .
+[2025-02-16 20:39:22]: Found 230 files (126 MB) for depot 2250461
+[2025-02-16 20:39:22]: Building depot 2250461, no baseline manifest
+[2025-02-16 20:39:23]: Found 302 chunks ( 0 used previously ) for depot 2250461, took 0 minutes, 0 seconds
+[2025-02-16 20:39:23]: Changes to baseline manifest 0 :
+[2025-02-16 20:39:23]: Added  : "D3D12" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "D3D12\D3D12Core.dll" 5486 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward.exe" 657 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_BurstDebugInformation_DoNotShip" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_BurstDebugInformation_DoNotShip\Data" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_BurstDebugInformation_DoNotShip\Data\Plugins" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_BurstDebugInformation_DoNotShip\Data\Plugins\x86_64" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_BurstDebugInformation_DoNotShip\Data\Plugins\x86_64\lib_burst_generated.txt" 181 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\app.info" 1 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\boot.config" 1 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\globalgamemanagers" 278 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\globalgamemanagers.assets" 946 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\globalgamemanagers.assets.resS" 3876 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\level0" 35 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\level1" 29 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\level2" 248 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\level3" 16 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\com.rlabrecque.steamworks.net.dll" 47 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\com.rlabrecque.steamworks.net.pdb" 27 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\FizzySteamworks.dll" 36 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\FizzySteamworks.pdb" 25 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\kcp2k.dll" 37 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\kcp2k.pdb" 28 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\MiddlewareTransport.dll" 7 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\MiddlewareTransport.pdb" 17 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.Authenticators.dll" 31 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.Authenticators.pdb" 18 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.BouncyCastle.Cryptography.dll" 732 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.Components.dll" 180 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.Components.pdb" 62 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.dll" 202 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.pdb" 82 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.Transports.dll" 75 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mirror.Transports.pdb" 39 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Mono.Security.dll" 118 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\mscorlib.dll" 2618 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\MultiplexTransport.dll" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\MultiplexTransport.pdb" 19 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Newtonsoft.Json.dll" 379 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Configuration.dll" 64 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Core.dll" 398 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Data.dll" 612 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.dll" 1281 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Drawing.dll" 68 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Numerics.dll" 38 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Runtime.Serialization.dll" 6 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Xml.dll" 1521 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\System.Xml.Linq.dll" 35 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Telepathy.dll" 21 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Telepathy.pdb" 22 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\TonyDev.dll" 501 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\TonyDev.pdb" 174 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UniRx.dll" 451 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UniRx.pdb" 218 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UniTask.dll" 88 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UniTask.pdb" 51 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.Animation.Runtime.dll" 86 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.Animation.Runtime.pdb" 49 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.Common.Runtime.dll" 28 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.Common.Runtime.pdb" 27 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.SpriteShape.Runtime.dll" 94 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.SpriteShape.Runtime.pdb" 56 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.Tilemap.Extras.dll" 33 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.2D.Tilemap.Extras.pdb" 27 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.Burst.dll" 28 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.Burst.pdb" 27 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.Burst.Unsafe.dll" 3 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.Collections.dll" 76 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.Collections.pdb" 46 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.InputSystem.dll" 1088 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.InputSystem.ForUI.dll" 15 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.InputSystem.ForUI.pdb" 18 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.InputSystem.pdb" 407 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.InternalAPIEngineBridge.001.dll" 5 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.InternalAPIEngineBridge.001.pdb" 15 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.Mathematics.dll" 35 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.Mathematics.pdb" 29 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipeline.Universal.ShaderLibrary.dll" 7 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipeline.Universal.ShaderLibrary.pdb" 15 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Core.Runtime.dll" 820 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Core.Runtime.pdb" 323 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Core.Runtime.Shared.dll" 4 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Core.Runtime.Shared.pdb" 15 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.GPUDriven.Runtime.dll" 173 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.GPUDriven.Runtime.pdb" 77 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Universal.2D.Runtime.dll" 244 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Universal.2D.Runtime.pdb" 128 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Universal.Runtime.dll" 762 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.RenderPipelines.Universal.Runtime.pdb" 264 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.TextMeshPro.dll" 431 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\Unity.TextMeshPro.pdb" 179 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AccessibilityModule.dll" 22 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AccessibilityModule.pdb" 17 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AIModule.dll" 11 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AIModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AndroidJNIModule.dll" 57 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AndroidJNIModule.pdb" 30 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AnimationModule.dll" 32 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AnimationModule.pdb" 16 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AssetBundleModule.dll" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AssetBundleModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AudioModule.dll" 16 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.AudioModule.pdb" 11 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.CoreModule.dll" 772 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.CoreModule.pdb" 246 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.DirectorModule.dll" 15 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.DirectorModule.pdb" 11 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.dll" 87 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.GridModule.dll" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.GridModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.HierarchyCoreModule.dll" 37 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.HierarchyCoreModule.pdb" 20 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.IMGUIModule.dll" 129 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.IMGUIModule.pdb" 59 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.InputForUIModule.dll" 39 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.InputForUIModule.pdb" 23 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.InputLegacyModule.dll" 20 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.InputLegacyModule.pdb" 13 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.InputModule.dll" 13 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.InputModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.JSONSerializeModule.dll" 13 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.JSONSerializeModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.ParticleSystemModule.dll" 20 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.ParticleSystemModule.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.Physics2DModule.dll" 28 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.Physics2DModule.pdb" 13 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.PhysicsModule.dll" 53 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.PhysicsModule.pdb" 16 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.PropertiesModule.dll" 113 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.PropertiesModule.pdb" 49 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SharedInternalsModule.dll" 17 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SharedInternalsModule.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SpriteMaskModule.dll" 11 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SpriteMaskModule.pdb" 9 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SpriteShapeModule.dll" 14 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SpriteShapeModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SubsystemsModule.dll" 16 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.SubsystemsModule.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TerrainModule.dll" 20 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TerrainModule.pdb" 13 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TextCoreFontEngineModule.dll" 38 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TextCoreFontEngineModule.pdb" 18 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TextCoreTextEngineModule.dll" 298 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TextCoreTextEngineModule.pdb" 123 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TextRenderingModule.dll" 21 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TextRenderingModule.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TilemapModule.dll" 23 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.TilemapModule.pdb" 14 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UI.dll" 258 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UI.pdb" 133 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UIElementsModule.dll" 1604 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UIElementsModule.pdb" 744 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UIModule.dll" 26 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UIModule.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityAnalyticsCommonModule.dll" 18 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityAnalyticsCommonModule.pdb" 13 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityAnalyticsModule.dll" 13 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityAnalyticsModule.pdb" 11 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityWebRequestAssetBundleModule.dll" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityWebRequestAssetBundleModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityWebRequestModule.dll" 34 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityWebRequestModule.pdb" 19 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityWebRequestWWWModule.dll" 15 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.UnityWebRequestWWWModule.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.VFXModule.dll" 18 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.VFXModule.pdb" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.VideoModule.dll" 14 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.VideoModule.pdb" 11 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.VRModule.dll" 12 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.VRModule.pdb" 10 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.XRModule.dll" 27 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\UnityEngine.XRModule.pdb" 14 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\where-allocations.dll" 7 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Managed\where-allocations.pdb" 17 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Plugins" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Plugins\Steamworks.NET.txt" 1 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Plugins\x86_64" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Plugins\x86_64\lib_burst_generated.dll" 612 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Plugins\x86_64\steam_api64.dll" 294 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Resources" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\resources.assets" 582 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\resources.assets.resS" 362 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Resources\unity default resources" 7062 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\Resources\unity_builtin_extra" 361 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\RuntimeInitializeOnLoads.json" 6 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\ScriptingAssemblies.json" 5 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets0.assets" 35039 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets0.assets.resS" 1301 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets0.resource" 447 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets1.assets" 16 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets2.assets" 5874 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets2.assets.resS" 666 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets2.resource" 21 KB 
+[2025-02-16 20:39:23]: Added  : "Knightward_Data\sharedassets3.assets" 1 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\EmbedRuntime" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\EmbedRuntime\mono-2.0-bdwgc.dll" 7645 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\EmbedRuntime\MonoPosixHelper.dll" 596 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\2.0" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\2.0\Browsers" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\2.0\Browsers\Compat.browser" 2 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\2.0\DefaultWsdlHelpGenerator.aspx" 60 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\2.0\machine.config" 29 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\2.0\settings.map" 3 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\2.0\web.config" 12 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.0" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.0\Browsers" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.0\Browsers\Compat.browser" 2 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.0\DefaultWsdlHelpGenerator.aspx" 60 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.0\machine.config" 33 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.0\settings.map" 3 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.0\web.config" 19 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.5" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.5\Browsers" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.5\Browsers\Compat.browser" 2 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.5\DefaultWsdlHelpGenerator.aspx" 60 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.5\machine.config" 34 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.5\settings.map" 3 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\4.5\web.config" 19 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\browscap.ini" 305 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\config" 4 KB 
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\mconfig" 0 KB ,Flags: 64
+[2025-02-16 20:39:23]: Added  : "MonoBleedingEdge\etc\mono\mconfig\config.xml" 26 KB 
+[2025-02-16 20:39:23]: Added  : "UnityCrashHandler64.exe" 1496 KB 
+[2025-02-16 20:39:23]: Added  : "UnityPlayer.dll" 32819 KB 
+[2025-02-16 20:39:23]: Summary: 230 files added (126.35 MB), 0 files changed (0 bytes), 0 files removed (0 bytes)
+[2025-02-16 20:39:23]: Uploading new manifest to 208.78.164.214:80 (handle 17508408201276042196, 37233 bytes).
+[2025-02-16 20:39:24]: Success! New manifestID 4223864298855678535 created and 0 new chunks uploaded.
