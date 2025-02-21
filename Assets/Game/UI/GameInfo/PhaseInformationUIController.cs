@@ -1,10 +1,5 @@
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using Mirror;
 using TMPro;
-using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Rooms;

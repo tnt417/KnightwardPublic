@@ -1,13 +1,10 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Mirror;
-using Mirror.FizzySteam;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.UI.Menu.MainMenu
 {

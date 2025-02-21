@@ -1,27 +1,20 @@
-using System;
 using System.Collections;
 using Cysharp.Threading.Tasks;
 using Mirror;
-using TMPro;
-using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations;
-using TonyDev.Game.Level.Decorations.Chests;
-using TonyDev.Game.Level.Rooms;
-using TonyDev.Game.UI;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.Serialization;
-using Random = System.Random;
 
 namespace TonyDev.Game.Core.Items
 {
     public class GroundItem : NetworkBehaviour, IHideable
     {
-        //Editor variables
+        // Editor variables
         [SerializeField] private int rarityBoost;
         [SerializeField] private Animator animator;
 

@@ -1,12 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using TonyDev.Game.Core.Effects;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 
 namespace TonyDev
 {

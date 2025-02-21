@@ -1,9 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
-using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
@@ -13,10 +11,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
-using TonyDev.Game.UI.Tower;
 using UnityEngine;
-using UnityEngine.Profiling;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities

@@ -1,6 +1,4 @@
 using TonyDev.Game.Level.Decorations;
-using TonyDev.Game.UI;
-using UnityEngine;
 using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.Core.Items

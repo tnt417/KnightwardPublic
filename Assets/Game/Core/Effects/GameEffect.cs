@@ -1,18 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using JetBrains.Annotations;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Global.Console;
-using System.Reflection;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Serialization;
-using Object = UnityEngine.Object;
 
 namespace TonyDev.Game.Core.Effects
 {

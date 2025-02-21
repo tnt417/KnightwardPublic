@@ -1,6 +1,5 @@
 using JetBrains.Annotations;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Global;
 using UnityEngine;
 

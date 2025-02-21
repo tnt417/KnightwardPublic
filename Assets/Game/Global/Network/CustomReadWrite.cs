@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Player;
 using UnityEngine;
 
 namespace TonyDev.Game.Global.Network

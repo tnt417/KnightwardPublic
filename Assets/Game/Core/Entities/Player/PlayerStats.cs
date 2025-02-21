@@ -5,7 +5,6 @@ using System.Text;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using UnityEngine;
-using UnityEngine.Rendering;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Player

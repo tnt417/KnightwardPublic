@@ -1,8 +1,5 @@
-using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.UI.Tower;
-using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects
 {

@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
@@ -19,17 +18,12 @@ using TonyDev.Game.Level;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
-using TonyDev.Game.UI.GameInfo;
 using TonyDev.Game.UI.Menu.GameOver;
 using TonyDev.Game.UI.Tower;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.Audio;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
@@ -51,8 +45,12 @@ namespace TonyDev.Game.Global
         public const bool IsDemo = false;
         #endif
         
+        #if UNITY_EDITOR
         // Set true to skip menu and speed up transitions
+        public const bool QuickTestMode = true;
+        #else
         public const bool QuickTestMode = false;
+        #endif
 
         #region Items
 

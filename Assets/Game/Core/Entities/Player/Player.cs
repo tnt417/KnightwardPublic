@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
-using TonyDev.Game.Core.Behavior;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
@@ -12,13 +11,9 @@ using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
-using TonyDev.Game.UI.Minimap;
 using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.PlayerLoop;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Player
 {

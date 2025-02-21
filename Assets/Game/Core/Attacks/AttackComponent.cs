@@ -6,7 +6,6 @@ using TonyDev.Game.Core.Behavior;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
-using TonyDev.Game.Core.Entities.Enemies.Attack;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;

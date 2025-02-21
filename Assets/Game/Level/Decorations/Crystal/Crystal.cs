@@ -2,7 +2,6 @@ using System;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
 using UnityEngine;
 

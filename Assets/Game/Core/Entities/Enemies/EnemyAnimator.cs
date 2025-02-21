@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
-using TonyDev.Game.Global;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies

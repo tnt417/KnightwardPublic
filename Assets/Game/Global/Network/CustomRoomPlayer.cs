@@ -1,19 +1,13 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using Steamworks;
 using TMPro;
-using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
-using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace TonyDev.Game.Global.Network

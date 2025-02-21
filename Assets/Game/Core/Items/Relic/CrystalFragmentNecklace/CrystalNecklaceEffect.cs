@@ -1,6 +1,5 @@
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using UnityEngine;

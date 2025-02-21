@@ -1,14 +1,9 @@
-using System;
 using Mirror;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
-using TonyDev.Game.Global.Console;
 using TonyDev.Game.Global.Network;
-using TonyDev.Game.Level.Rooms;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
-using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Decorations.Chests
 {

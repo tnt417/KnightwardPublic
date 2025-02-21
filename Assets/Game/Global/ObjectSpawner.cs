@@ -1,26 +1,18 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using JetBrains.Annotations;
 using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
-using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Entities.Towers;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Core.Items.Money;
 using TonyDev.Game.Global.Console;
-using TonyDev.Game.Global.Network;
-using TonyDev.Game.Level.Decorations;
 using TonyDev.Game.Level.Decorations.Chests;
 using TonyDev.Game.Level.Rooms;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Global
 {

@@ -1,12 +1,6 @@
-using System;
-using System.Linq;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Player;
-using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using UnityEngine;
-using UnityEngine.PlayerLoop;
-using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Effects
 {

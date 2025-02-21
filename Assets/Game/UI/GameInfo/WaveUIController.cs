@@ -1,5 +1,3 @@
-using System;
-using TMPro;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level;
 using UnityEngine;

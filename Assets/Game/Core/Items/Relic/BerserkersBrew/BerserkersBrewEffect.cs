@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using Mirror;
 using TonyDev.Game.Core.Effects;
-using TonyDev.Game.Core.Effects.ItemEffects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;

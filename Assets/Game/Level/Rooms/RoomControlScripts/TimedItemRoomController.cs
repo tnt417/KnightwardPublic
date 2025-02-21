@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;

@@ -1,6 +1,5 @@
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
-using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using UnityEngine;
 

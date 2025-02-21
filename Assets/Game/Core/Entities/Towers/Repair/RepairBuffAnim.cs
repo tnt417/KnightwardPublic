@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace TonyDev
@@ -33,7 +31,7 @@ namespace TonyDev
         
         private void AddRenderer()
         {
-            var go =  GameObject.Instantiate(subBuffPrefab, transform);
+            var go =  Instantiate(subBuffPrefab, transform);
             _childSpriteRenderers.Add(go.GetComponent<SpriteRenderer>());
         }
 

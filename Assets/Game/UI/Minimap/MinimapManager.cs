@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global.Console;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
@@ -144,7 +142,7 @@ namespace TonyDev.Game.UI.Minimap
             {
                 for (var j = 0; j < RoomManager.Instance.MapSize; j++)
                 {
-                    MinimapManager.Instance.UncoverRoom(new Vector2Int(i, j));
+                    Instance.UncoverRoom(new Vector2Int(i, j));
                 }
             }
         }

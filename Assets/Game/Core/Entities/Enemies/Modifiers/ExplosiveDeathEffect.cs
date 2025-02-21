@@ -1,4 +1,3 @@
-using Mirror;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Global;

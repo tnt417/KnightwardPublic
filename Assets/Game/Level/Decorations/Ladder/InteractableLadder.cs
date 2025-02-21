@@ -1,13 +1,8 @@
-using System;
-using System.Collections;
 using Cysharp.Threading.Tasks;
-using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
-using TonyDev.Game.Level.Rooms;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace TonyDev.Game.Level.Decorations.Ladder
 {

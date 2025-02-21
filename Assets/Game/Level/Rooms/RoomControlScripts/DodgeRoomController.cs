@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Mirror;
@@ -8,11 +6,9 @@ using TMPro;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace TonyDev
 {

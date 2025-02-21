@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;

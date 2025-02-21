@@ -3,7 +3,6 @@ using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
-using TonyDev.Game.Global.Network;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Items.Weapon.Broadsword

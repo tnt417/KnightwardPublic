@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
-using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Crystal;
 using TonyDev.Game.UI.Healthbar;
 using UnityEngine;

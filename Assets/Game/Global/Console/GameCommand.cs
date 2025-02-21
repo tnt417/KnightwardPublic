@@ -7,7 +7,7 @@ namespace TonyDev.Game.Global.Console
         Default = 0,
         Cheat = 1
     }
-    [System.AttributeUsage(System.AttributeTargets.Method)]
+    [AttributeUsage(AttributeTargets.Method)]
     public class GameCommand : Attribute
     {
         public string Keyword;

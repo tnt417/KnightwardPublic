@@ -1,9 +1,6 @@
-using System;
 using System.Collections.Generic;
 using Mirror;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Enemies;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.U2D;

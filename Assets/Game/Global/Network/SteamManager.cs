@@ -9,9 +9,11 @@
 #define DISABLESTEAMWORKS
 #endif
 
+using System;
+using System.Text;
+using AOT;
 using UnityEngine;
 #if !DISABLESTEAMWORKS
-using System.Collections;
 using Steamworks;
 #endif
 
@@ -45,8 +47,8 @@ public class SteamManager : MonoBehaviour {
 
 	protected SteamAPIWarningMessageHook_t m_SteamAPIWarningMessageHook;
 
-	[AOT.MonoPInvokeCallback(typeof(SteamAPIWarningMessageHook_t))]
-	protected static void SteamAPIDebugTextHook(int nSeverity, System.Text.StringBuilder pchDebugText) {
+	[MonoPInvokeCallback(typeof(SteamAPIWarningMessageHook_t))]
+	protected static void SteamAPIDebugTextHook(int nSeverity, StringBuilder pchDebugText) {
 		//Debug.LogWarning(pchDebugText);
 	}
 
@@ -73,7 +75,7 @@ public class SteamManager : MonoBehaviour {
 			// The most common case where this happens is when SteamManager gets destroyed because of Application.Quit(),
 			// and then some Steamworks code in some other OnDestroy gets called afterwards, creating a new SteamManager.
 			// You should never call Steamworks functions in OnDestroy, always prefer OnDisable if possible.
-			throw new System.Exception("Tried to Initialize the SteamAPI twice in one session!");
+			throw new Exception("Tried to Initialize the SteamAPI twice in one session!");
 		}
 
 		// We want our SteamManager Instance to persist across scenes.
@@ -99,7 +101,7 @@ public class SteamManager : MonoBehaviour {
 				return;
 			}
 		}
-		catch (System.DllNotFoundException e) { // We catch this exception here, as it will be the first occurrence of it.
+		catch (DllNotFoundException e) { // We catch this exception here, as it will be the first occurrence of it.
 			//Debug.LogError("[Steamworks.NET] Could not load [lib]steam_api.dll/so/dylib. It's likely not in the correct location. Refer to the README for more details.\n" + e, this);
 
 			Application.Quit();

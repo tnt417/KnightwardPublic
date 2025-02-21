@@ -4,16 +4,11 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
-using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms;
-using UniRx;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
-using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Behavior
 {

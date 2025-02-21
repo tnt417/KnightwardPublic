@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Attacks;
@@ -10,11 +8,8 @@ using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Rooms.RoomControlScripts;
-using TonyDev.Game.UI.Minimap;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.InputSystem;
-using UnityEngine.Profiling;
 using UnityEngine.Tilemaps;
 using UnityEngine.U2D;
 using UnityEngine.UI;
@@ -131,7 +126,7 @@ namespace TonyDev.Game.Level.Rooms
             PlayerCount = playerCount;
         }
 
-        private void OnOpenDoorsDictionaryChange(SyncDictionary<Direction, bool>.Operation op, Direction key, bool open)
+        private void OnOpenDoorsDictionaryChange(SyncIDictionary<Direction, bool>.Operation op, Direction key, bool open)
         {
             roomDoors.FirstOrDefault(rd => rd.direction == key)?.SetOpen(open);
         }

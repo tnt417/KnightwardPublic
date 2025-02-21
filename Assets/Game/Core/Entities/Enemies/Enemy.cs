@@ -1,5 +1,4 @@
 using TonyDev.Game.Core.Attacks;
-using TonyDev.Game.Core.Entities.Enemies.Modifiers;
 using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
 using TonyDev.Game.Global;
 using UnityEngine;

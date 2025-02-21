@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using TonyDev.Game;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Effects;

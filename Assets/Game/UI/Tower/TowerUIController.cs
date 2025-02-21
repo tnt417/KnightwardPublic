@@ -3,7 +3,6 @@ using System.Linq;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.UI.Inventory;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.UI.Tower
 {

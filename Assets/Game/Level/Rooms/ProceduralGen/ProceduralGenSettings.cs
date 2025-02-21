@@ -1,11 +1,12 @@
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using TileData = UnityEngine.Rendering.Universal.TileData;
+using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Rooms.ProceduralGen
 {
 
-    [System.Serializable]
+    [Serializable]
     public struct GenWeights
     {
         [Range(0f, 1f)] public float roomDifficulty;

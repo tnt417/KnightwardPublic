@@ -1,18 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Cysharp.Threading.Tasks;
 using Mirror;
-using Steamworks;
-using TMPro;
-using TonyDev.Game.Core.Entities.Player;
-using TonyDev.Game.Global.Console;
-using TonyDev.Game.Level;
-using TonyDev.Game.UI.Lobby;
-using UnityEditor;
-using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 namespace TonyDev.Game.Global.Network
 {

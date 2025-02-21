@@ -1,11 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Mirror;
-using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace TonyDev

@@ -1,10 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Behavior;
-using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Enemies.Attack;
 using UniRx;
 using UnityEngine;

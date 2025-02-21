@@ -2,7 +2,6 @@ using System;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using TonyDev.Game.Global;
-using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
 using UnityEngine;
 using UnityEngine.SceneManagement;

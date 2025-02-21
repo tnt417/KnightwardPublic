@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 using TonyDev.Game.Core.Behavior;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities;
@@ -8,7 +9,6 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using UnityEngine;
 using Object = UnityEngine.Object;
-using Newtonsoft.Json;
 
 namespace TonyDev.Game.Core.Attacks
 {

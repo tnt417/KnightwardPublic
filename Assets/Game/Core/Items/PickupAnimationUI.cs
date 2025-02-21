@@ -1,6 +1,4 @@
-using System;
 using Cysharp.Threading.Tasks;
-using Steamworks;
 using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using UnityEngine;
@@ -44,7 +42,7 @@ namespace TonyDev
         {
             image.sprite = item.uiSprite;
 
-            image.material = GameObject.Instantiate(image.material);
+            image.material = Instantiate(image.material);
             
             image.material.SetColor("_OutlineColor", GroundItem.RarityToColor(item.itemRarity));
             

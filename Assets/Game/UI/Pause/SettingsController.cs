@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using TonyDev.Game;
 using TonyDev.Game.Global;

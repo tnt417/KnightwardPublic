@@ -8,10 +8,8 @@ using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items.Money;
 using TonyDev.Game.Global;
-using TonyDev.Game.Global.Network;
 using TonyDev.Game.UI.Minimap;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Level.Rooms
 {

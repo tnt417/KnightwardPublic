@@ -1,8 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using TonyDev.Game.Core.Effects;
 using TonyDev.Game.Core.Entities.Player;
-using UnityEngine;
 
 namespace TonyDev
 {

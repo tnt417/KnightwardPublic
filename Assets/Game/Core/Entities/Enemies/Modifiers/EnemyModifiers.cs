@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using Mirror;
-using Newtonsoft.Json;
 using TonyDev.Game.Core.Effects;
-using TonyDev.Game.Global;
-using TonyDev.Game.Global.Network;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Entities.Enemies.Modifiers

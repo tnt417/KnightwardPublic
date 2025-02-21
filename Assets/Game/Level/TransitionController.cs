@@ -1,8 +1,8 @@
 using System;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 using Cysharp.Threading.Tasks;
 using TonyDev.Game.Global;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.Level
 {

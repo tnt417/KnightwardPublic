@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using TonyDev.Game.Core.Entities;
 using TonyDev.Game.Core.Entities.Player;
-using TonyDev.Game.Core.Items;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects

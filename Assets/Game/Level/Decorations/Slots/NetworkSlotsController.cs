@@ -7,7 +7,6 @@ using TonyDev.Game.Core.Items;
 using TonyDev.Game.Global;
 using TonyDev.Game.Level.Decorations.Button;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level.Decorations.Slots

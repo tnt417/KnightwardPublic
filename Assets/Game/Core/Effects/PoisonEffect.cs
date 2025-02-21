@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
-using TonyDev.Game.Core.Effects.ItemEffects;
 using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Global;
 using UnityEngine;
 
 namespace TonyDev.Game.Core.Effects

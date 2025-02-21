@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using Mirror;
 using TMPro;
 using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Core.Items;
@@ -12,7 +10,6 @@ using TonyDev.Game.Level.Rooms;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Tilemaps;
-using UnityEngine.UI;
 
 namespace TonyDev.Game.UI.Tower
 {

@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
-using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
-using TonyDev.Game.Core.Items;
 using UnityEngine;
 using UnityEngine.U2D;
 using Object = UnityEngine.Object;

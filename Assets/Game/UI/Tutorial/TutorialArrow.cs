@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using Cysharp.Threading.Tasks;
-using Edgegap;
 using TMPro;
 using TonyDev.Game.Core.Entities.Enemies;
 using TonyDev.Game.Core.Entities.Player;

@@ -1,6 +1,4 @@
-using Mirror;
 using TonyDev.Game.Core.Attacks;
-using TonyDev.Game.Global;
 
 namespace TonyDev.Game.Core.Entities
 {

@@ -4,15 +4,9 @@ using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Core.Entities.Enemies;
-using TonyDev.Game.Core.Entities.Enemies.ScriptableObjects;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Console;
-using TonyDev.Game.Level.Decorations.Crystal;
-using TonyDev.Game.Level.Rooms;
 using UnityEngine;
-using UnityEngine.Android;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Level

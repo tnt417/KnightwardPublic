@@ -8,7 +8,6 @@ using TonyDev.Game.Global;
 using TonyDev.Game.UI.Tower;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace TonyDev.Game.UI.Inventory

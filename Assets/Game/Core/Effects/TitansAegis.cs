@@ -1,7 +1,5 @@
 using System.Linq;
 using TonyDev.Game.Core.Attacks;
-using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
 

@@ -1,10 +1,7 @@
 using System;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Attacks;
 using TonyDev.Game.Core.Behavior;
-using TonyDev.Game.Core.Items.Relics.FlamingBoot;
-using TonyDev.Game.Global;
 using UniRx;
 using UnityEngine;
 

@@ -6,7 +6,6 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace TonyDev.Game.Core.Entities.Player
 {

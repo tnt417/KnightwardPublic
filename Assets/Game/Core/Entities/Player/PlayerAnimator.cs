@@ -1,17 +1,10 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using Cysharp.Threading.Tasks;
 using Mirror;
 using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
-using TonyDev.Game.Level;
 using TonyDev.Game.Level.Decorations;
-using TonyDev.Game.UI;
-using TonyDev.Game.UI.Healthbar;
 using UnityEngine;
-using UnityEngine.U2D;
-using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace TonyDev.Game.Core.Entities.Player

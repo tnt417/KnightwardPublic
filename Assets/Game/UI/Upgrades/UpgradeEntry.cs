@@ -1,11 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using TonyDev.Game.Core.Behavior;
-using TonyDev.Game.Core.Entities;
-using TonyDev.Game.Core.Entities.Player;
 using TonyDev.Game.Global;
 using UnityEngine;
 using UnityEngine.UI;
