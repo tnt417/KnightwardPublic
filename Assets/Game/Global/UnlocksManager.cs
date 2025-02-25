@@ -16,6 +16,7 @@ namespace TonyDev
         [NonSerialized] public List<string> Unlocks = new();
 
         [NonSerialized] public List<ItemData> unlockedItems = new();
+        [NonSerialized] private List<ItemData> _allItems = new();
         public static List<ItemData> UnlockedItems => Instance.unlockedItems;
 
         public const string UnlocksKey = "item-unlocks";
@@ -30,6 +31,8 @@ namespace TonyDev
                 Destroy(this);
                 return;
             }
+            
+            _allItems = Resources.LoadAll<ItemData>("Items").Select(Instantiate).ToList();
 
             DontDestroyOnLoad(gameObject);
             Instance = this;
@@ -66,19 +69,24 @@ namespace TonyDev
 
             foreach (var s in Unlocks)
             {
-                var matchingItem = GameManager.AllItems.FirstOrDefault(i => i != null && i.item.itemName == s);
+                var matchingItem = _allItems.FirstOrDefault(i => i != null && i.item.itemName == s);
                 
                 if (matchingItem == null) continue;
                 
-                unlockedItems.Add(GameManager.AllItems.First(i => i != null && i.item.itemName == s));
+                unlockedItems.Add(_allItems.First(i => i != null && i.item.itemName == s));
             }
         }
 
+        public List<ItemData> GetLockedItems()
+        {
+            return _allItems.Where(i => !Unlocks.Contains(i.item.itemName)).ToList();
+        }
+        
         public void AddUnlockSessionOnly(string itemName)
         {
             if (unlockedItems.Any(i => i.item.itemName == itemName)) return;
 
-            var item = GameManager.AllItems.FirstOrDefault(i => i.item.itemName == itemName);
+            var item = _allItems.FirstOrDefault(i => i.item.itemName == itemName);
 
             if (item != null)
             {
@@ -90,7 +98,7 @@ namespace TonyDev
         {
             if (Unlocks.Contains(itemName) || GameManager.IsDemo) return;
 
-            var item = GameManager.AllItems.First(i => i.item.itemName == itemName);
+            var item = _allItems.First(i => i.item.itemName == itemName);
             
             Unlocks.Add(itemName);
             
@@ -101,7 +109,7 @@ namespace TonyDev
 
         public void UnlockRandomItem()
         {
-            var item = GameTools.SelectRandom(GameManager.AllItems.Where(i => !Unlocks.Contains(i.item.itemName)));
+            var item = GameTools.SelectRandom(_allItems.Where(i => !Unlocks.Contains(i.item.itemName)));
 
             if (item == null) return;
             
@@ -111,7 +119,7 @@ namespace TonyDev
         [GameCommand(Keyword = "unlockall", PermissionLevel = PermissionLevel.Cheat)]
         public static void UnlockAllItems()
         {
-            foreach (var i in GameManager.AllItems)
+            foreach (var i in Instance._allItems)
             {
                 Instance.AddUnlock(i.item.itemName);
             }

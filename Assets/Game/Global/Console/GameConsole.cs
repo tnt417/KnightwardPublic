@@ -224,7 +224,7 @@ namespace TonyDev.Game.Global.Console
 
         public static void Log(string text)
         {
-            if (string.IsNullOrEmpty(text)) return;
+            if (string.IsNullOrEmpty(text) || _instance == null) return;
 
             _instance._consoleStringBuilder.AppendLine(text);
             _instance.consoleUIText.text = _instance._consoleStringBuilder.ToString();

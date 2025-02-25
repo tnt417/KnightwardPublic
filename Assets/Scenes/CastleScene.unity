@@ -11420,11 +11420,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3238254371669715906, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: m_SizeDelta.x
-      value: 600
+      value: 800
+      objectReference: {fileID: 0}
+    - target: {fileID: 3238254371669715906, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 3238254371669715906, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -425.82
+      value: -200
       objectReference: {fileID: 0}
     - target: {fileID: 3517003859147816888, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: tutorialText
@@ -11496,7 +11500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6988970088223710242, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: m_fontSize
-      value: 24
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6988970088223710242, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: m_fontAsset
@@ -11504,7 +11508,7 @@ PrefabInstance:
       objectReference: {fileID: 11400000, guid: 96ee164463116094e96ec2f60e17122b, type: 2}
     - target: {fileID: 6988970088223710242, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: m_fontSizeBase
-      value: 24
+      value: 30
       objectReference: {fileID: 0}
     - target: {fileID: 6988970088223710242, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: m_RaycastTarget
@@ -11561,6 +11565,14 @@ PrefabInstance:
     - target: {fileID: 6988970088223710242, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
       propertyPath: m_fontColorGradient.bottomRight.r
       value: 0.6603774
+      objectReference: {fileID: 0}
+    - target: {fileID: 7418514406432277161, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7418514406432277161, guid: 2bd286def1e40f3468f98bf6957c7ff1, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
