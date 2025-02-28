@@ -42,12 +42,12 @@ namespace TonyDev.Game.Global
         #if IS_DEMO
         public const bool IsDemo = true;
         #else
-        public const bool IsDemo = true;
+        public const bool IsDemo = false;
         #endif
         
         #if UNITY_EDITOR
         // Set true to skip menu and speed up transitions
-        public const bool QuickTestMode = true;
+        public const bool QuickTestMode = false;
         #else
         public const bool QuickTestMode = false;
         #endif
