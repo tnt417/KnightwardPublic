@@ -42,7 +42,7 @@ namespace TonyDev.Game.Global
         #if IS_DEMO
         public const bool IsDemo = true;
         #else
-        public const bool IsDemo = false;
+        public const bool IsDemo = true;
         #endif
         
         #if UNITY_EDITOR

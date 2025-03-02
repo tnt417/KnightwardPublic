@@ -124,6 +124,8 @@ namespace TonyDev.Game.UI.Inventory
 
                     if (value)
                     {
+                        ActivePanel = "None";
+                        
                         var statsRectTransform = statsButton.transform.GetChild(0).GetComponent<RectTransform>();
                         statsRectTransform.anchoredPosition = new Vector2(statsRectTransform.anchoredPosition.x, 8f);
                         var towerRectTransform = towerButton.transform.GetChild(0).GetComponent<RectTransform>();

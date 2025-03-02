@@ -20,11 +20,14 @@ namespace TonyDev.Game.UI.Menu.GameOver
         public TMP_Text WinLoseText;
         public TMP_Text ProgressText;
         public TMP_Text MainMenuButtonText;
+        public GameObject wishlistButtonObject;
         public GameObject particleObject;
 
         private void Awake()
         {
             if(!PlayStats.GameWon) Destroy(particleObject);
+            
+            wishlistButtonObject.SetActive(PlayStats.GameWon);
             
             if (GameManager.IsDemo)
             {
@@ -47,11 +50,11 @@ namespace TonyDev.Game.UI.Menu.GameOver
             TransitionController.Instance.FadeOut();
             await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds));
             SceneManager.LoadScene("MainMenuScene");
-            if (GameManager.IsDemo)
-            {
-                TransitionController.Instance.BlackoutUntilFadeIn();
-                return;
-            }
+            // if (GameManager.IsDemo)
+            // {
+            //     TransitionController.Instance.BlackoutUntilFadeIn();
+            //     return;
+            // }
             TransitionController.Instance.FadeIn();
         }
         

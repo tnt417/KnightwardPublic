@@ -13,6 +13,7 @@ using TonyDev.Game.Level;
 using TonyDev.Game.Level.Rooms;
 using TonyDev.Game.UI.Tower;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace TonyDev.Game.Core.Entities.Player
@@ -42,6 +43,13 @@ namespace TonyDev.Game.Core.Entities.Player
         public void OnFire(InputValue value)
         {
             if (!isOwned) return;
+            
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                fireKeyHeld = false;
+                return;
+            }
+            
             AttackTimer = 0f;
             fireKeyHeld = value.isPressed;
         }

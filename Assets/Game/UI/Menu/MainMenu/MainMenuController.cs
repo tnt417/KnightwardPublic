@@ -5,6 +5,7 @@ using TonyDev.Game.Global;
 using TonyDev.Game.Global.Network;
 using TonyDev.Game.Level;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.UI.Menu.MainMenu
 {
@@ -19,7 +20,7 @@ namespace TonyDev.Game.UI.Menu.MainMenu
 
             Debug.unityLogger.logEnabled = PlayerPrefs.GetInt("errorLog", 1) == 1;
             
-            if (GameManager.IsDemo || GameManager.QuickTestMode)
+            if (/*GameManager.IsDemo ||*/ GameManager.QuickTestMode)
             {
                 var customNetManager = NetworkManager.singleton as CustomNetworkManager;
             
@@ -50,6 +51,11 @@ namespace TonyDev.Game.UI.Menu.MainMenu
             TransitionController.Instance.FadeOut();
             await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds));
             await manager.CreateAndHost();
+            if (GameManager.IsDemo)
+            {
+                TransitionController.Instance.BlackoutUntilFadeIn();
+                return;
+            }
             TransitionController.Instance.FadeIn();
         }
         
@@ -64,6 +70,19 @@ namespace TonyDev.Game.UI.Menu.MainMenu
         public void QuitGame()
         {
             Application.Quit(0);
+        }
+
+        public void OnUpgradesClick()
+        {
+            TransitionUpgrades().Forget();
+        }
+        
+        private async UniTask TransitionUpgrades()
+        {
+            TransitionController.Instance.FadeOut();
+            await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds));
+            await SceneManager.LoadSceneAsync("UpgradeScene");
+            TransitionController.Instance.FadeIn();
         }
     }
 }

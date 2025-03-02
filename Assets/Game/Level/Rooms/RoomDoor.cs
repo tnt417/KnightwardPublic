@@ -21,6 +21,7 @@ namespace TonyDev.Game.Level.Rooms
         public Direction direction;
         private BoxCollider2D _trigger;
         private BoxCollider2D _collider;
+        public Transform openLightTransform;
 
         [SerializeField] private Animator animator;
 
@@ -33,6 +34,15 @@ namespace TonyDev.Game.Level.Rooms
         {
             _collider = GetComponents<BoxCollider2D>().FirstOrDefault(bc => !bc.isTrigger);
             _trigger = GetComponents<BoxCollider2D>().FirstOrDefault(bc => bc.isTrigger);
+
+            if (direction == Direction.Right)
+            {
+                openLightTransform.localScale = new Vector3(-1, 1, 1);
+            }
+            if (direction == Direction.Down)
+            {
+                openLightTransform.localScale = new Vector3(1, -1, 1);
+            }
         }
 
         public void SetOpen(bool open)

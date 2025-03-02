@@ -1,7 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using TonyDev.Game.Core.Items;
+using TonyDev.Game.Level;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace TonyDev.Game.UI.Unlocks
 {
@@ -12,6 +15,19 @@ namespace TonyDev.Game.UI.Unlocks
         
         private Dictionary<UpgradeChoiceController, ItemData> _itemDatas = new ();
 
+        public void GoBackToMainMenu()
+        {
+            TransitionToMainMenu().Forget();
+        }
+        
+        private async UniTask TransitionToMainMenu()
+        {
+            TransitionController.Instance.FadeOut();
+            await UniTask.Delay(TimeSpan.FromSeconds(TransitionController.FadeOutTimeSeconds));
+            await SceneManager.LoadSceneAsync("MainMenuScene");
+            TransitionController.Instance.FadeIn();
+        }
+        
         private void Start()
         {
             UnlocksManager.ResetUnlocks();
