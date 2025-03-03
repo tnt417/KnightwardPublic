@@ -73,3 +73,11 @@ crashlytics-build.properties
 
 # (CUSTOM) Builds and Environment
 .env
+
+# Assets and sensitive content
+*.png
+*.vdf
+*.txt
+*.ase
+*.aseprite
+*.ttf
